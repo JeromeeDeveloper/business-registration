@@ -30,8 +30,8 @@
                     <div class="p-3" style="max-width: 900px;">
                         <h5 class="text-white text-uppercase mb-3 animated slideInDown">Welcome to the</h5>
                         <h1 class="display-1 text-white mb-md-4 animated zoomIn">General Assembly 2025</h1>
-                        <a href="{{route('login')}}" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Register Now</a>
-                        <a href="{{url('/agenda')}}" class="btn btn-outline-light py-md-3 px-md-5 animated slideInRight">View Agenda</a>
+                        <a href="{{route('login')}}" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Login Now</a>
+                        <a href="{{url('/detail')}}" class="btn btn-outline-light py-md-3 px-md-5 animated slideInRight">View Agenda</a>
                     </div>
                 </div>
             </div>
@@ -230,7 +230,7 @@
     <!-- Features Start -->
 
 <!-- General Assembly Start -->
-<div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+{{-- <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
     <div class="container py-5">
         <div class="section-title text-center position-relative pb-3 mb-4 mx-auto" style="max-width: 600px;">
             <h5 class="fw-bold text-primary text-uppercase">General Assembly</h5>
@@ -287,7 +287,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 <!-- General Assembly End -->
 
 

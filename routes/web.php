@@ -15,6 +15,5 @@ Route::view('/detail', 'home.detail');
 Route::view('/feature', 'home.feature');
 Route::view('/participant', 'home.participant');
 
+// Login Registration
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-
-
