@@ -2,6 +2,19 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+use App\Http\Controllers\AuthController;
+
+// Home Page
+Route::view('/', 'home.index');
+
+// Grouped routes for other pages
+Route::view('/about', 'home.about');
+Route::view('/agenda', 'home.agenda');
+Route::view('/contact', 'home.contact');
+Route::view('/detail', 'home.detail');
+Route::view('/feature', 'home.feature');
+Route::view('/participant', 'home.participant');
+
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+
+
