@@ -6,21 +6,30 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
+            $table->id('user_id');
+            $table->string('name')->unique();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->enum('role', ['admin', 'participant'])->default('participant');
             $table->rememberToken();
+            $table->string('cooperative');
+
+            // Relationship with cooperative
+            $table->unsignedBigInteger('coop_id');
+            $table->foreign('coop_id')->references('coop_id')->on('cooperatives')->onDelete('cascade');
+
+            // Relationship with participant (nullable for admins)
+            $table->unsignedBigInteger('participant_id')->nullable();
+            $table->foreign('participant_id')->references('participant_id')->on('participants')->onDelete('cascade');
+
             $table->timestamps();
         });
 
+        // Additional tables
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
@@ -37,9 +46,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('users');

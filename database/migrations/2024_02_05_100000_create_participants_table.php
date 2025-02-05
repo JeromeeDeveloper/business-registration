@@ -1,0 +1,38 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration {
+    public function up()
+    {
+        Schema::create('participants', function (Blueprint $table) {
+            $table->id('participant_id');
+
+            $table->unsignedBigInteger('coop_id');
+            $table->foreign('coop_id')->references('coop_id')->on('cooperatives')->onDelete('cascade');
+
+            $table->string('first_name');
+            $table->string('middle_name')->nullable();
+            $table->string('last_name');
+            $table->string('nickname')->nullable();
+            $table->enum('gender', ['Male', 'Female', 'Other']);
+            $table->string('phone_number')->nullable();
+            $table->string('designation')->nullable();
+            $table->string('congress_type')->nullable();
+            $table->string('religious_affiliation')->nullable();
+            $table->enum('tshirt_size', ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'])->nullable();
+            $table->enum('is_msp_officer', ['Yes', 'No']);
+            $table->string('msp_officer_position')->nullable();
+            $table->enum('delegate_type', ['Voting', 'Non-Voting']);
+            $table->timestamps();
+        });
+    }
+
+    public function down()
+    {
+        Schema::dropIfExists('participants');
+    }
+};
+
