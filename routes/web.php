@@ -25,5 +25,7 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Dashboard
 Route::get('/Participant/Dashboard', [DashboardController::class, 'participant'])->name('userDashboard');
-Route::get('/Admin/Dashboard', [DashboardController::class, 'admin'])->name('adminDashboard');
 
+
+Route::get('/Admin/Dashboard', [DashboardController::class, 'admin'])->name('adminDashboard');
+Route::get('/Admin/Register', [DashboardController::class, 'register'])->name('adminregister');
