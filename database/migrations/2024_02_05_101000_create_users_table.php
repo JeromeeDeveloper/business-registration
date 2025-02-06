@@ -16,15 +16,11 @@ return new class extends Migration
             $table->string('password');
             $table->enum('role', ['admin', 'participant'])->default('participant');
             $table->rememberToken();
-            $table->string('cooperative');
 
             // Relationship with cooperative
-            $table->unsignedBigInteger('coop_id');
-            $table->foreign('coop_id')->references('coop_id')->on('cooperatives')->onDelete('cascade');
-
             // Relationship with participant (nullable for admins)
-            $table->unsignedBigInteger('participant_id')->nullable();
-            $table->foreign('participant_id')->references('participant_id')->on('participants')->onDelete('cascade');
+            // $table->unsignedBigInteger('participant_id')->nullable();
+            // $table->foreign('participant_id')->references('participant_id')->on('participants')->onDelete('cascade');
 
             $table->timestamps();
         });

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\Cooperative;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -12,8 +11,7 @@ class AuthController extends Controller
 {
     public function showLogin()
     {
-        $cooperatives = Cooperative::all(); // Fetch all cooperatives
-        return view('auth.login', compact('cooperatives'));
+        return view('auth.login');
     }
 
     public function showRegister()
@@ -29,11 +27,12 @@ class AuthController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
-            return $this->redirectToDashboard();
+            return redirect()->route('adminDashboard')->with('success', 'Welcome back!');
         }
 
-        return back()->withErrors(['email' => 'Invalid credentials']);
+        return redirect()->route('login')->with('error', 'Invalid email or password.');
     }
+
 
     public function register(Request $request)
     {
@@ -41,18 +40,14 @@ class AuthController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6',
-            'coop_id' => 'required|exists:cooperatives,coop_id'
         ]);
 
-        $cooperative = Cooperative::find($request->coop_id);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'coop_id' => $request->coop_id,
-            'cooperative' => $cooperative->name,
-            'role' => 'participant', // Default role set to participant
+            'role' => 'participant',
         ]);
 
         Auth::login($user);
@@ -77,5 +72,11 @@ class AuthController extends Controller
         }
 
         return redirect('/login')->withErrors(['email' => 'Unauthorized role. Contact support.']);
+    }
+
+    public function user()
+    {
+        $user = Auth::user(); // Get the authenticated user
+        return view('layouts.adminnav', compact('user')); // Pass the user data to the view
     }
 }

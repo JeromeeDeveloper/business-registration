@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Mass Specc Login</title>
     <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
@@ -16,7 +16,6 @@
     <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
     <link href="css/style.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet">
 
 
     <link rel="stylesheet" href="{{asset('css/auth.css')}}">
@@ -62,7 +61,7 @@
                     <input type="password" name="password" placeholder="Enter your password" required>
                 </div>
                 <div class="button input-box">
-                    <input type="submit" value="Login">
+                    <input type="button" value="Login" onclick="showAgreement()">
                 </div>
                 <div class="text sign-up-text">Don't have an account? <label for="flip">Sign up</label></div>
             </form>
@@ -90,15 +89,6 @@
                 <div class="input-box">
                     <i class="fas fa-lock"></i>
                     <input type="password" name="password" placeholder="Enter your password" required>
-                </div>
-
-                <div class="dropdown-container">
-                    <select name="coop_id" id="cooperative-select" required>
-                        <option value="">Select Cooperative</option>
-                        @foreach ($cooperatives as $cooperative)
-                            <option value="{{ $cooperative->coop_id }}">{{ $cooperative->name }}</option>
-                        @endforeach
-                    </select>
                 </div>
 
                 <div class="button input-box">
@@ -152,16 +142,48 @@
 <!-- Template Javascript -->
 <script src="js/main.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-$(document).ready(function() {
-    $('#cooperative-select').select2({
-        placeholder: "Select Cooperative",
-        allowClear: true,
-        width: '100%'
+function showAgreement() {
+    Swal.fire({
+        title: "Disclosure Agreement",
+        html: `
+            <p>By proceeding, you agree to the terms and conditions of this platform.</p>
+            <label>
+                <input type="checkbox" id="agreeCheckbox"> I agree to the terms and conditions
+            </label>
+        `,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Proceed",
+        cancelButtonText: "Cancel",
+        preConfirm: () => {
+            if (!document.getElementById('agreeCheckbox').checked) {
+                Swal.showValidationMessage("You must agree before proceeding.");
+                return false;
+            }
+            return true;
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.querySelector(".login-form form").submit();
+        }
     });
-});
+}
 </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Show error alert if login fails
+        @if(session('error'))
+        Swal.fire({
+            icon: 'error',
+            title: 'Login Failed',
+            text: '{{ session("error") }}'
+        });
+        @endif
+    });
+</script>
+
   </body>
 </html>

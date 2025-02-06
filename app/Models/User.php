@@ -19,9 +19,6 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
-        'coop_id',
-        'participant_id',
-        'cooperative',
     ];
 
     protected $hidden = [
@@ -34,13 +31,4 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function cooperative()
-    {
-        return $this->belongsTo(Cooperative::class, 'coop_id');
-    }
-
-    public function participant()
-    {
-        return $this->belongsTo(Participant::class, 'participant_id');
-    }
 }

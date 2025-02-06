@@ -22,10 +22,6 @@ class Cooperative extends Model
         'share_capital_balance', 'no_of_entitled_votes', 'services_availed'
     ];
 
-    public function users()
-    {
-        return $this->hasMany(User::class, 'coop_id');
-    }
 
     public function participants()
     {

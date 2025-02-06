@@ -13,7 +13,7 @@ class Participant extends Model
 
     protected $primaryKey = 'participant_id';
     protected $fillable = [
-        'coop_id', 'first_name', 'middle_name', 'last_name', 'nickname', 'gender',
+        'coop_id', 'user_id', 'first_name', 'middle_name', 'last_name', 'nickname', 'gender',
         'phone_number', 'designation', 'congress_type', 'religious_affiliation',
         'tshirt_size', 'is_msp_officer', 'msp_officer_position', 'delegate_type'
     ];
@@ -23,10 +23,9 @@ class Participant extends Model
         return $this->belongsTo(Cooperative::class, 'coop_id');
     }
 
-    // Corrected: Participant has one user
     public function user()
     {
-        return $this->hasOne(User::class, 'participant_id', 'participant_id');
+        return $this->belongsTo(User::class, 'user_id'); // A participant belongs to one user
     }
 
     public function uploadedDocuments()

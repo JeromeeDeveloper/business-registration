@@ -7,11 +7,16 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up()
     {
+       // Migration for participants table
         Schema::create('participants', function (Blueprint $table) {
             $table->id('participant_id');
 
             $table->unsignedBigInteger('coop_id');
             $table->foreign('coop_id')->references('coop_id')->on('cooperatives')->onDelete('cascade');
+
+            // Relationship with user
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
 
             $table->string('first_name');
             $table->string('middle_name')->nullable();
@@ -28,6 +33,7 @@ return new class extends Migration {
             $table->enum('delegate_type', ['Voting', 'Non-Voting']);
             $table->timestamps();
         });
+
     }
 
     public function down()
