@@ -73,9 +73,9 @@
                 <div class="collapse" id="participant">
                   <ul class="nav nav-collapse">
                     <li>
-                        <a href="#">
-                          <span class="sub-item">Manage Participant</span>
-                        </a>
+                        <a href="{{route('participants.index')}}">
+                            <span class="sub-item">Manage Participant</span>
+                          </a>
                       </li>
                   </ul>
                 </div>
@@ -89,7 +89,7 @@
                 <div class="collapse" id="user">
                   <ul class="nav nav-collapse">
                     <li>
-                        <a href="#">
+                        <a href="{{route('users.index')}}">
                           <span class="sub-item">Manage User</span>
                         </a>
                       </li>
@@ -329,7 +329,7 @@
                     </div>
                 </form>
 
-
+            </div>
 
                   </div>
                 </div>
@@ -338,7 +338,7 @@
           </div>
         </div>
 
-        @include('layouts.adminfooter')
+
       </div>
 
     </div>

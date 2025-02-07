@@ -96,9 +96,7 @@
                 </div>
                 <div class="text sign-up-text">Already have an account? <label for="flip">Login now</label></div>
             </form>
-
-
-
+            
       </div>
       </div>
       </div>

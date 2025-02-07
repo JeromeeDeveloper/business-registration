@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\Participant;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
@@ -30,5 +31,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function participant()
+    {
+        return $this->hasOne(Participant::class, 'user_id'); // The foreign key is 'user_id' in the Participant table
+    }
 
 }

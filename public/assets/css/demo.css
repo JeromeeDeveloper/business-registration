@@ -313,3 +313,9 @@ body[data-background-color="dark"] .demo-icon .icon-class {
 .logo-mass-specc {
     width: 190px;
 }
+
+.d-flex.justify-content-end {
+    position: relative;
+    bottom: 69px;
+    right: 15px;
+}

@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Log;
+use App\Models\User;
 use App\Models\Cooperative;
+use App\Models\Participant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class DashboardController extends Controller
 {
@@ -12,6 +17,76 @@ class DashboardController extends Controller
     public function admin()
     {
         return view('dashboard.admin.admin');
+    }
+
+
+    public function participant()
+    {
+        // Get the logged-in user
+        $user = Auth::user();
+
+        // Find the participant associated with the logged-in user, including its cooperative relationship
+        $participant = $user->participant()->with('cooperative')->first();
+
+        // Check if the participant exists and has a cooperative associated
+        if (!$participant || !$participant->cooperative) {
+            return view('dashboard.participant.participant', ['participant' => null]);
+        }
+
+        // Pass the participant to the view
+        return view('dashboard.participant.participant', compact('participant'));
+    }
+
+
+    public function cooperativeprofile($participant_id, $cooperative_id)
+    {
+        // Retrieve participant and cooperative data based on the IDs
+        $participant = Participant::findOrFail($participant_id); // Find participant by participant_id
+        $cooperative = Cooperative::findOrFail($cooperative_id); // Find cooperative by cooperative_id
+
+        // Pass data to the view
+        return view('dashboard.participant.cooperativeprofile', compact('participant', 'cooperative'));
+    }
+
+
+    public function participantregister()
+{
+    $cooperatives = Cooperative::all();
+    return view('dashboard.participant.register', compact('cooperatives'));
+}
+
+public function store(Request $request)
+{
+
+    // Validate the form data
+    $validatedData = $request->validate([
+        'coop_id' => 'required|exists:cooperatives,coop_id',
+        'user_id' => 'required|exists:users,user_id',
+        'first_name' => 'required|string|max:255',
+        'middle_name' => 'nullable|string|max:255',
+        'last_name' => 'required|string|max:255',
+        'nickname' => 'nullable|string|max:255',
+        'gender' => 'required|string|max:255',
+        'phone_number' => 'required|string|max:15',
+        'designation' => 'nullable|string|max:255',
+        'congress_type' => 'nullable|string|max:255',
+        'religious_affiliation' => 'nullable|string|max:255',
+        'tshirt_size' => 'nullable|string|max:5',
+        'is_msp_officer' => 'required|string|max:3',
+        'msp_officer_position' => 'nullable|string|max:255',
+        'delegate_type' => 'required|string|max:10',
+    ]);
+
+    // Store the participant data
+    Participant::create($validatedData);
+
+    return redirect()->route('participant.register')->with('success', 'Participant registered successfully!');
+}
+
+
+    public function documents()
+    {
+        return view('dashboard.participant.documents');
     }
 
     // Show the cooperative registration form
@@ -132,6 +207,32 @@ class DashboardController extends Controller
 
         // Pass the cooperative data to the view
         return view('dashboard.admin.view', compact('coop'));
+    }
+
+    public function userregister(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:6',
+        ]);
+
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => 'participant',
+        ]);
+
+        Auth::login($user);
+
+        return redirect()->route('users.index')->with('success', 'Registration successful');
+    }
+
+    public function registerform()
+    {
+        return view('dashboard.admin.user.register');
     }
 
     }
