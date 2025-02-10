@@ -54,7 +54,7 @@
                       <p>Cooperative</p>
                       <span class="caret"></span>
                     </a>
-                    <div class="collapse show" id="cooperative">
+                    <div class="collapse" id="cooperative">
                       <ul class="nav nav-collapse">
                         <li class="active">
                             <a href="{{route('adminview')}}">
@@ -96,6 +96,41 @@
                       </ul>
                     </div>
 
+                  </li>
+
+                  <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#speaker">
+                      <i class="fas fa-microphone"></i>
+                      <p>Speakers</p>
+                      <span class="caret"></span>
+                    </a>
+                    <div class="collapse show" id="speaker">
+                      <ul class="nav nav-collapse">
+                        <li class="active">
+                            <a href="{{ route('speakers.index') }}">
+                                <span class="sub-item">Manage Speaker</span>
+                            </a>
+                        </li>
+
+                      </ul>
+                    </div>
+                  </li>
+
+                  <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#events">
+                      <i class="fas fa-calendar"></i>
+                      <p>Events</p>
+                      <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="events">
+                      <ul class="nav nav-collapse">
+                        <li>
+                            <a href="#">
+                              <span class="sub-item">Manage Events</span>
+                            </a>
+                          </li>
+                      </ul>
+                    </div>
                   </li>
               </ul>
           </div>
@@ -157,7 +192,7 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="card">
-                  <div class="card-header">
+                  <div class="card-header coop">
                     <div class="d-flex align-items-center">
                       <h4 class="card-title">Cooperative</h4>
                     </div>
@@ -172,10 +207,10 @@
                     <!-- Modal -->
                     <form method="GET" action="{{ route('speakers.index') }}" class="mb-3">
                         <div class="d-flex justify-content-end">
-                            <div class="input-group flex-nowrap w-50 w-md-50 w-lg-25 ms-auto">
+                            {{-- <div class="input-group flex-nowrap w-50 w-md-50 w-lg-25 ms-auto">
                                 <input type="text" name="search" class="form-control" placeholder="Search..." value="{{ request('search') }}">
                                 <button type="submit" class="btn btn-primary">Search</button>
-                            </div>
+                            </div> --}}
                         </div>
 
                         <div class="table-responsive">

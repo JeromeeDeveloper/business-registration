@@ -326,3 +326,10 @@ body[data-background-color="dark"] .demo-icon .icon-class {
     align-items: center;
     justify-content: space-between;
 }
+
+.coop{
+    display: flex
+    ;
+        align-items: center;
+        justify-content: space-between;
+}
