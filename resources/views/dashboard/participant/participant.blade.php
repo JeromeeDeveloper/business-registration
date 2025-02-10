@@ -127,7 +127,7 @@
                     <span>No Cooperative Associated</span>
                 @endif
 
-                  <a href="#" class="btn btn-primary btn-round">Upload Documents</a>
+                  <a href="{{route('documents.view')}}" class="btn btn-primary btn-round">View Uploaded documents</a>
                 </div>
               </div>
 
@@ -168,7 +168,17 @@
                             <div class="numbers">
                             <p class="card-category">Registration Open (March 15-17, 2025)</p>
                             {{-- <h4 class="card-title">March 15-17, 2025</h4> --}}
-                            <a href="{{route('participant.register')}}" class="btn btn-sm btn-outline-info mt-2">Register Now</a>
+                            @php
+                            $user = Auth::user();
+                            $hasParticipant = $user->participant()->exists();
+                            @endphp
+
+                            @if ($hasParticipant)
+                                <p class="text-success mt-2">Already registered.</p>
+                            @else
+                                <a href="{{ route('participant.register') }}" class="btn btn-sm btn-outline-info mt-2">Register Now</a>
+                            @endif
+
                             </div>
                         </div>
                         </div>
@@ -190,7 +200,17 @@
                             <div class="numbers">
                               <p class="card-category">Required Documents</p>
                               {{-- <h4 class="card-title text-danger">Pending</h4> --}}
-                              <a href="{{route('documents')}}" class="btn btn-sm btn-outline-primary mt-2">Upload Now</a>
+                              @php
+                              $user = Auth::user();
+                              $participant = $user->participant ?? null;
+                              $hasDocuments = $participant ? $participant->uploadedDocuments()->exists() : false;
+                                @endphp
+
+                                @if ($hasDocuments)
+                                    <p class="text-success mt-2">Already uploaded.</p>
+                                @else
+                                    <a href="{{ route('documents') }}" class="btn btn-sm btn-outline-primary mt-2">Upload Now</a>
+                                @endif
                             </div>
                           </div>
                         </div>
@@ -210,11 +230,13 @@
                           </div>
                         </div>
                         <div class="col col-stats ms-3 ms-sm-0">
-                          <div class="numbers">
-                            <p class="card-category">Committee & Voting</p>
-                            {{-- <h4 class="card-title">Finance Committee</h4> --}}
-                            <span class="text-success">Eligible to Vote</span>
-                          </div>
+                            <div class="numbers">
+                                <p class="card-category">Committee & Voting</p>
+                                <span class="text-success">
+                                    {{ $participant->delegate_type ?? 'N/A' }}
+                                </span>
+                            </div>
+
                         </div>
                       </div>
                     </div>

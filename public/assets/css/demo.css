@@ -319,3 +319,10 @@ body[data-background-color="dark"] .demo-icon .icon-class {
     bottom: 69px;
     right: 15px;
 }
+
+.alignment{
+    display: flex
+;
+    align-items: center;
+    justify-content: space-between;
+}

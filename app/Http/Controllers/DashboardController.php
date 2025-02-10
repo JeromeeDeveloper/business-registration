@@ -16,38 +16,90 @@ class DashboardController extends Controller
     // Show the admin dashboard view
     public function admin()
     {
-        return view('dashboard.admin.admin');
+        $totalParticipants = Participant::count(); // Get total participants
+        $totalUsers = User::count(); // Get total users
+
+        return view('dashboard.admin.admin', compact('totalParticipants', 'totalUsers'));
     }
 
 
     public function participant()
     {
-        // Get the logged-in user
+
         $user = Auth::user();
 
-        // Find the participant associated with the logged-in user, including its cooperative relationship
         $participant = $user->participant()->with('cooperative')->first();
 
-        // Check if the participant exists and has a cooperative associated
+
         if (!$participant || !$participant->cooperative) {
             return view('dashboard.participant.participant', ['participant' => null]);
         }
 
-        // Pass the participant to the view
         return view('dashboard.participant.participant', compact('participant'));
     }
 
 
     public function cooperativeprofile($participant_id, $cooperative_id)
     {
-        // Retrieve participant and cooperative data based on the IDs
-        $participant = Participant::findOrFail($participant_id); // Find participant by participant_id
-        $cooperative = Cooperative::findOrFail($cooperative_id); // Find cooperative by cooperative_id
 
-        // Pass data to the view
+        $participant = Participant::findOrFail($participant_id);
+        $cooperative = Cooperative::findOrFail($cooperative_id);
+
         return view('dashboard.participant.cooperativeprofile', compact('participant', 'cooperative'));
     }
 
+    public function editCooperativeProfile($participant_id, $cooperative_id)
+    {
+        // Fetch the participant details using the ID
+        $participant = Participant::findOrFail($participant_id);
+        $cooperative = Cooperative::findOrFail($cooperative_id);
+        // Return the edit view with participant data
+        return view('dashboard.participant.edit', compact('participant', 'cooperative'));
+    }
+
+    public function updateCooperativeProfile(Request $request, $participant_id, $coop_id)
+    {
+        // Validate the request
+        $request->validate([
+            'first_name' => 'required|string|max:255',
+            'middle_name' => 'nullable|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'nickname' => 'nullable|string|max:255',
+            'gender' => 'required|in:Male,Female,Other',
+            'phone_number' => 'nullable|string|max:20',
+            'designation' => 'nullable|string|max:255',
+            'congress_type' => 'nullable|string|max:255',
+            'religious_affiliation' => 'nullable|string|max:255',
+            'tshirt_size' => 'nullable|in:XS,S,M,L,XL,XXL,XXXL',
+            'is_msp_officer' => 'required|in:Yes,No', // Ensures only 'Yes' or 'No' are allowed
+            'msp_officer_position' => 'nullable|string|max:255',
+            'delegate_type' => 'required|in:Voting,Non-Voting',
+        ]);
+
+        // Find the participant by ID
+        $participant = Participant::findOrFail($participant_id);
+
+        // Update the participant record
+        $participant->update([
+            'first_name' => $request->first_name,
+            'middle_name' => $request->middle_name,
+            'last_name' => $request->last_name,
+            'nickname' => $request->nickname,
+            'gender' => $request->gender,
+            'phone_number' => $request->phone_number,
+            'designation' => $request->designation,
+            'congress_type' => $request->congress_type,
+            'religious_affiliation' => $request->religious_affiliation,
+            'tshirt_size' => $request->tshirt_size,
+            'is_msp_officer' => $request->is_msp_officer,
+            'msp_officer_position' => $request->msp_officer_position,
+            'delegate_type' => $request->delegate_type,
+        ]);
+
+        // Redirect back with a success message
+        return redirect()->route('cooperativeprofile', ['participant_id' => $participant_id, 'coop_id' => $participant->coop_id])
+                         ->with('success', 'Participant profile updated successfully!');
+    }
 
     public function participantregister()
 {
@@ -82,12 +134,6 @@ public function store(Request $request)
 
     return redirect()->route('participant.register')->with('success', 'Participant registered successfully!');
 }
-
-
-    public function documents()
-    {
-        return view('dashboard.participant.documents');
-    }
 
     // Show the cooperative registration form
     public function register()
@@ -163,7 +209,7 @@ public function store(Request $request)
             'services_availed' => $request->services_availed,
         ]);
 
-        // Redirect back with success message
+
         return response()->json(['success' => 'Cooperative registered successfully!']);
     }
 

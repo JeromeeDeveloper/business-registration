@@ -54,9 +54,9 @@
                       <p>Cooperative</p>
                       <span class="caret"></span>
                     </a>
-                    <div class="collapse" id="cooperative">
+                    <div class="collapse show" id="cooperative">
                       <ul class="nav nav-collapse">
-                        <li>
+                        <li class="active">
                             <a href="{{route('adminview')}}">
                               <span class="sub-item">Manage Cooperative</span>
                             </a>
@@ -70,9 +70,9 @@
                       <p>Participant</p>
                       <span class="caret"></span>
                     </a>
-                    <div class="collapse show" id="participant">
+                    <div class="collapse" id="participant">
                       <ul class="nav nav-collapse">
-                        <li class="active">
+                        <li>
                             <a href="{{route('participants.index')}}">
                                 <span class="sub-item">Manage Participant</span>
                               </a>
@@ -95,6 +95,7 @@
                           </li>
                       </ul>
                     </div>
+
                   </li>
               </ul>
           </div>
@@ -132,7 +133,7 @@
         <div class="container">
           <div class="page-inner">
             <div class="page-header">
-              <h3 class="fw-bold mb-3">Participants</h3>
+              <h3 class="fw-bold mb-3">Cooperative</h3>
               <ul class="breadcrumbs mb-3">
                 <li class="nav-home">
                   <a href="#">
@@ -143,7 +144,7 @@
                   <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                  <a href="#">Participants</a>
+                  <a href="#">Cooperative</a>
                 </li>
                 <li class="separator">
                   <i class="icon-arrow-right"></i>
@@ -158,110 +159,103 @@
                 <div class="card">
                   <div class="card-header">
                     <div class="d-flex align-items-center">
-                      <h4 class="card-title">Participants</h4>
+                      <h4 class="card-title">Cooperative</h4>
                     </div>
                   </div>
                   <div class="card-body">
                     <!-- Modal -->
-                    <form method="GET" class="mb-3">
+                    <form method="GET" action="{{ route('adminview') }}" class="mb-3">
                         <div class="d-flex justify-content-end">
                             <div class="input-group flex-nowrap w-50 w-md-50 w-lg-25 ms-auto">
-                                <input type="text" name="search" class="form-control" placeholder="Search..."
-                                       value="{{ request('search') }}">
-                                <button type="submit" class="btn btn-primary">Search</button>
-                            </div>
+                            <input type="text" name="search" class="form-control" placeholder="Search..."
+                                   value="{{ request('search') }}">
+                            <button type="submit" class="btn btn-primary">Search</button>
                         </div>
-                        <div class="table-responsive">
-                            <table id="add-row" class="display table table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>First Name</th>
-                                        <th>Middle Name</th>
-                                        <th>Last Name</th>
-                                        <th>Gender</th>
-                                        <th>Phone Number</th>
-                                        <th>Designation</th>
-                                        {{-- <th>T-shirt Size</th> --}}
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse ($participants as $participant)
-                                        <tr>
-                                            <td>{{ $participant->first_name }}</td>
-                                            <td>{{ $participant->middle_name ?? 'N/A' }}</td>
-                                            <td>{{ $participant->last_name }}</td>
-                                            <td>{{ $participant->gender }}</td>
-                                            <td>{{ $participant->phone_number }}</td>
-                                            <td>{{ $participant->designation ?? 'N/A' }}</td>
-                                            {{-- <td>{{ $participant->tshirt_size ?? 'N/A' }}</td> --}}
-                                            <td>
-                                                <div class="form-button-action">
+                     </div>
+                      <div class="table-responsive">
+                        <table id="add-row" class="display table table-striped table-hover">
+                          <thead>
+                            <tr>
+                              <th>Cooperative Name</th>
+                              <th>Cooperative Type</th>
+                              <th>Cooperative Email</th>
+                              <th>Cooperative Address</th>
+                              <th style="width: 10%">Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            @forelse ($cooperatives as $coop)
+                                <tr>
+                                    <td>{{ $coop->name }}</td>
+                                    <td>{{ $coop->type }}</td>
+                                    <td>{{ $coop->email }}</td>
+                                    <td>{{ $coop->address }}</td>
+                                    <td>
+                                        <div class="form-button-action">
+                                            <a href="{{ route('adminregister') }}" class="btn btn-link btn-info btn-lg" data-bs-toggle="tooltip" title="Add Cooperative">
+                                                <i class="fa fa-plus"></i>
+                                            </a>
+                                            <a href="{{ route('cooperatives.show', $coop->coop_id) }}" class="btn btn-link btn-info btn-lg" data-bs-toggle="tooltip" title="View Coop Details">
+                                                <i class="fa fa-eye"></i>
+                                            </a>
 
-                                                    <a href="{{ route('participantadd') }}" class="btn btn-link btn-info btn-lg" data-bs-toggle="tooltip" title="Add Cooperative">
-                                                        <i class="fa fa-plus"></i>
-                                                    </a>
+                                            <button type="button" class="btn btn-link btn-primary btn-lg" data-bs-toggle="tooltip" title="Edit Coop">
+                                                <a href="{{ route('cooperatives.edit', $coop->coop_id) }}" class="text-decoration-none text-primary">
+                                                    <i class="fa fa-edit"></i>
+                                                </a>
+                                            </button>
 
-                                                    <a href="{{ route('admin.documents.view', ['participant_id' => $participant->participant_id]) }}"
-                                                        class="btn btn-link btn-info btn-lg"
-                                                        data-bs-toggle="tooltip" title="View Uploaded Documents">
-                                                        <i class="fa fa-file"></i>
-                                                     </a>
+                                            <form action="{{ route('cooperatives.destroy', $coop->coop_id) }}" method="POST" class="delete-form" style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="button" class="btn btn-link btn-danger" data-bs-toggle="tooltip" title="Remove Coop" aria-label="Remove Coop" onclick="confirmDelete(event, this)">
+                                                    <i class="fa fa-times"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="text-center">No search results found</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
 
-                                                    <a href="{{ route('participants.show', $participant->participant_id) }}"
-                                                      class="btn btn-link btn-info btn-lg"
-                                                        data-bs-toggle="tooltip"
-                                                        title="View Participant Details">
-                                                         <i class="fa fa-eye"></i>
-                                                     </a>
+                       @if(session('success'))
+                            <script>
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: '{{ session('success') == 'Deleted!' ? 'Deleted!' : 'Success!' }}',
+                                    text: '{{ session('success') }}',
+                                    confirmButtonText: 'OK'
+                                });
+                            </script>
+                        @endif
 
-                                                     <a href="{{ route('participants.edit', $participant->participant_id) }}" class="btn btn-link btn-primary btn-lg"
-                                                        data-bs-toggle="tooltip" title="Edit Participant">
-                                                         <i class="fa fa-edit"></i>
-                                                     </a>
-                                                    <form action="{{ route('participants.destroy', $participant->participant_id) }}" method="POST" class="delete-form" style="display:inline;">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="button" class="btn btn-link btn-danger" data-bs-toggle="tooltip" title="Remove Participant" aria-label="Remove Participant" onclick="confirmDelete(event, this)">
-                                                            <i class="fa fa-times"></i>
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="8" class="text-center">No participants found</td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-
-                                @if(session('success'))
-                                    <script>
-                                        Swal.fire({
-                                            icon: 'success',
-                                            title: '{{ session('success') == 'Deleted!' ? 'Deleted!' : 'Success!' }}',
-                                            text: '{{ session('success') }}',
-                                            confirmButtonText: 'OK'
-                                        });
-                                    </script>
-                                @endif
-
-                            </table>
-                        </div>
+                        </table>
+                      </div>
                     </form>
+                  </div>
+                  <div class="d-flex justify-content-center mt-3">
+                    {{ $cooperatives->appends(['search' => request('search')])->links('pagination::bootstrap-4') }}
+                </div>
 
-                    <div class="d-flex justify-content-center mt-3">
-                        {{ $participants->appends(['search' => request('search')])->links('pagination::bootstrap-4') }}
-                    </div>
                 </div>
-                </div>
+
               </div>
+
+
             </div>
+
           </div>
+
         </div>
+
             @include('layouts.adminfooter')
+
       </div>
+
     </div>
     <script>
         function confirmDelete(event, button) {
@@ -285,6 +279,7 @@
             });
         }
     </script>
+
     @include('layouts.links')
   </body>
 </html>

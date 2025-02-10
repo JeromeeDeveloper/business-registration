@@ -63,7 +63,9 @@
                 <div class="button input-box">
                     <input type="button" value="Login" onclick="showAgreement()">
                 </div>
-                <div class="text sign-up-text">Don't have an account? <label for="flip">Sign up</label></div>
+                <div class="text sign-up-text">Sign in to access the General Assembly portal.
+                    {{-- <label for="flip">Sign up</label> --}}
+                </div>
             </form>
 
         </div>
@@ -96,7 +98,7 @@
                 </div>
                 <div class="text sign-up-text">Already have an account? <label for="flip">Login now</label></div>
             </form>
-            
+
       </div>
       </div>
       </div>

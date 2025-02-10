@@ -139,8 +139,12 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="card">
-                  <div class="card-header">
+                  <div class="card-header alignment">
                     <div class="card-title">Participant Information</div>
+                    <a href="{{ route('cooperativeprofile.edit', ['participant_id' => $participant->participant_id, 'coop_id' => $cooperative->coop_id]) }}" class="btn btn-warning btn-round me-2">
+                        Edit Cooperative Profile
+                    </a>
+
                   </div>
                   <form id="participantForm">
                     <div class="card-body">
@@ -245,7 +249,7 @@
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="is_msp_officer">Is MSP Officer</label>
-                                    <div>{{ $participant->is_msp_officer ? 'Yes' : 'No' }}</div>
+                                    <div>{{ $participant->is_msp_officer === 'Yes' ? 'Yes' : 'No' }}</div>
                                 </div>
                             </div>
 

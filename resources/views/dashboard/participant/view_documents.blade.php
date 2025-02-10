@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
- <head>
+  <head>
     @include('layouts.adminheader')
- </head>
+  </head>
   <body>
     <div class="wrapper">
       <!-- Sidebar -->
@@ -10,7 +10,7 @@
         <div class="sidebar-logo">
           <!-- Logo Header -->
           <div class="logo-header" data-background-color="dark">
-            <a href="{{route('adminDashboard')}}" class="logo">
+            <a href="{{route('participantDashboard')}}" class="logo">
                 <img class="logo-mass-specc" src="{{ asset('images/logo.png') }}" alt="">
             </a>
             <div class="nav-toggle">
@@ -30,17 +30,15 @@
         <div class="sidebar-wrapper scrollbar scrollbar-inner">
           <div class="sidebar-content">
             <ul class="nav nav-secondary">
-
-              <li class="nav-item">
-                <a
-                  href="{{route('adminDashboard')}}"
-                  class="collapsed"
-                >
-                  <i class="fas fa-home"></i>
-                  <p>Dashboard</p>
-                </a>
-              </li>
-
+                <li class="nav-item">
+                    <a
+                      href="{{route('participantDashboard')}}"
+                      class="collapsed"
+                    >
+                      <i class="fas fa-home"></i>
+                      <p>Dashboard</p>
+                    </a>
+                  </li>
               <li class="nav-section">
                 <span class="sidebar-mini-icon">
                   <i class="fa fa-ellipsis-h"></i>
@@ -51,65 +49,31 @@
               <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#cooperative">
                   <i class="fas fa-users"></i>
-                  <p>Cooperative</p>
+                  <p>Resource Speakers</p>
                   <span class="caret"></span>
                 </a>
                 <div class="collapse" id="cooperative">
                   <ul class="nav nav-collapse">
                     <li>
-                        <a href="{{route('adminview')}}">
-                          <span class="sub-item">Manage Cooperative</span>
+                        <a href="">
+                          <span class="sub-item">List of Resource Speakers</span>
                         </a>
                       </li>
                   </ul>
                 </div>
               </li>
 
-              {{-- <li>
-                <a data-bs-toggle="collapse" href="#participant">
-                    <i class="fas fa-user-cog"></i>
-                  <p>Participant</p>
+              <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#user">
+                  <i class="fas fa-user"></i>
+                  <p>Events Schedule</p>
                   <span class="caret"></span>
                 </a>
-                <div class="collapse" id="participant">
+                <div class="collapse" id="user">
                   <ul class="nav nav-collapse">
                     <li>
-                        <a href="{{route('participants.index')}}">
-                            <span class="sub-item">Manage Participant</span>
-                          </a>
-                      </li>
-                  </ul>
-                </div>
-              </li> --}}
-
-              <li class="nav-item">
-                <a data-bs-toggle="collapse" href="#participant">
-                    <i class="fas fa-user-cog"></i>
-                  <p>Participant</p>
-                  <span class="caret"></span>
-                </a>
-                <div class="collapse" id="participant">
-                    <ul class="nav nav-collapse">
-                      <li>
-                          <a href="{{route('participants.index')}}">
-                              <span class="sub-item">Manage Participant</span>
-                            </a>
-                        </li>
-                    </ul>
-                  </div>
-              </li>
-
-              <li class="nav-item">
-                <a data-bs-toggle="collapse show" href="#user">
-                  <i class="fas fa-user"></i>
-                  <p>User</p>
-                  <span class="caret"></span>
-                </a>
-                <div class="collapse show" id="user">
-                  <ul class="nav nav-collapse">
-                    <li class="active">
-                        <a href="{{route('users.index')}}">
-                          <span class="sub-item">Manage User</span>
+                        <a href="">
+                          <span class="sub-item">List of Events</span>
                         </a>
                       </li>
                   </ul>
@@ -151,7 +115,7 @@
         <div class="container">
           <div class="page-inner">
             <div class="page-header">
-              <h3 class="fw-bold mb-3">User Registration</h3>
+              <h3 class="fw-bold mb-3">Participant Documents</h3>
               <ul class="breadcrumbs mb-3">
                 <li class="nav-home">
                   <a href="#">
@@ -162,7 +126,7 @@
                   <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                  <a href="#">User</a>
+                  <a href="#">Documents</a>
                 </li>
                 <li class="separator">
                   <i class="icon-arrow-right"></i>
@@ -176,46 +140,53 @@
               <div class="col-md-12">
                 <div class="card">
                   <div class="card-header">
-                    <div class="card-title">Cooperative Registration Form</div>
+                    <div class="card-title">Uploaded Documents</div>
                   </div>
-                  <form action="{{ route('userregister') }}" method="POST">
-                    @csrf
-                    <div class="card-body">
-                        <div class="row">
-                            <!-- Name -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="name">Full Name</label>
-                                    <input type="text" class="form-control" name="name" id="name" placeholder="Enter your name" required>
-                                </div>
-                            </div>
 
-                            <!-- Email -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="email">Email</label>
-                                    <input type="email" class="form-control" name="email" id="email" placeholder="Enter your email" required>
-                                </div>
-                            </div>
+                    @if(session('error'))
+                        <div class="alert alert-danger">{{ session('error') }}</div>
+                    @endif
 
-                            <!-- Password -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="password">Password</label>
-                                    <input type="password" class="form-control" name="password" id="password" placeholder="Enter your password" required>
-                                </div>
-                            </div>
+                    @if($documents->isEmpty())
+                        <div class="alert alert-warning text-center">No documents uploaded yet.</div>
+                    @else
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover text-center align-middle">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Document Type</th>
+                                        <th>File Name</th>
+                                        <th>View</th>
+                                        <th>Download</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($documents as $document)
+                                        <tr>
+                                            <td>{{ $document->document_type }}</td>
+                                            <td>{{ $document->file_name }}</td>
+                                            <td>
+                                                <a href="{{ asset('storage/' . $document->file_path) }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-eye"></i> View
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="{{ asset('storage/' . $document->file_path) }}" download class="btn btn-sm btn-outline-success">
+                                                    <i class="fas fa-download"></i> Download
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
-                    </div>
+                    @endif
 
-                    <div class="card-action">
-                        <button type="submit" class="btn btn-success">Register</button>
-                    </div>
 
-                </form>
+
+            </div>
                   </div>
                 </div>
-            </div>
               </div>
             </div>
           </div>

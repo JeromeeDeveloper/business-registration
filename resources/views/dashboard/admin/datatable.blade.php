@@ -95,6 +95,7 @@
                           </li>
                       </ul>
                     </div>
+                    
                   </li>
               </ul>
           </div>
@@ -166,7 +167,7 @@
                     <form method="GET" action="{{ route('adminview') }}" class="mb-3">
                         <div class="d-flex justify-content-end">
                             <div class="input-group flex-nowrap w-50 w-md-50 w-lg-25 ms-auto">
-                            <input type="text" name="search" class="form-control" placeholder="Search cooperatives..."
+                            <input type="text" name="search" class="form-control" placeholder="Search..."
                                    value="{{ request('search') }}">
                             <button type="submit" class="btn btn-primary">Search</button>
                         </div>

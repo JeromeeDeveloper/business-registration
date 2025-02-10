@@ -142,21 +142,10 @@
                   <div class="card-header">
                     <div class="card-title">Upload Documents</div>
                   </div>
-                  <form id="documentUploadForm" method="POST" action="" enctype="multipart/form-data">
+                  <form id="documentUploadForm" method="POST" action="{{ route('documents.store') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="card-body">
                         <div class="row">
-                            <!-- Participant Selection -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="participant_id">Participant</label>
-                                    <select class="form-control" name="participant_id" id="participant_id">
-                                        <option value="">Select Participant</option>
-                                        <!-- Participants list should be populated dynamically -->
-                                    </select>
-                                </div>
-                            </div>
-
                             <!-- Financial Statement -->
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
@@ -165,11 +154,11 @@
                                 </div>
                             </div>
 
-                            <!-- Resolution for Voting delegates -->
+                            <!-- Resolution for Voting Delegates -->
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
-                                    <label for="resolution_voting">Resolution for Voting delegates</label>
-                                    <input type="file" class="form-control" name="documents[Resolution for Voting delegates]" id="resolution_voting" accept=".jpg,.jpeg,.png,.pdf" required />
+                                    <label for="resolution_voting">Resolution for Voting Delegates</label>
+                                    <input type="file" class="form-control" name="documents[Resolution for Voting Delegates]" id="resolution_voting" accept=".jpg,.jpeg,.png,.pdf" required />
                                 </div>
                             </div>
 
@@ -188,7 +177,6 @@
                                     <input type="file" class="form-control" name="documents[Deposit Slip for CETF Remittance]" id="cetf_remittance" accept=".jpg,.jpeg,.png,.pdf" required />
                                 </div>
                             </div>
-
                         </div>
                     </div>
 
@@ -196,6 +184,7 @@
                         <button class="btn btn-success">Upload Documents</button>
                     </div>
                 </form>
+
             </div>
                   </div>
                 </div>

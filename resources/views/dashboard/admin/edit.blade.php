@@ -327,6 +327,7 @@
 
                     <div class="card-action">
                         <button class="btn btn-success" type="submit">Submit</button>
+                        <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ route('adminview') }}'">Back</button>
                     </div>
                 </form>
 
