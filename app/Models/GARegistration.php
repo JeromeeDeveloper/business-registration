@@ -11,6 +11,8 @@ class GARegistration extends Model
 {
     use HasFactory;
 
+    protected $table = 'ga_registrations'; // Explicitly set the correct table name
+
     protected $primaryKey = 'registration_id';
     protected $fillable = ['coop_id', 'participant_id', 'status', 'payment_status'];
 
@@ -24,4 +26,5 @@ class GARegistration extends Model
         return $this->belongsTo(Participant::class, 'participant_id');
     }
 }
+
 

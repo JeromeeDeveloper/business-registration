@@ -96,6 +96,42 @@
                       </ul>
                     </div>
                   </li>
+
+                  <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#speaker">
+                      <i class="fas fa-microphone"></i>
+                      <p>Speakers</p>
+                      <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="speaker">
+                      <ul class="nav nav-collapse">
+                        <li>
+                            <a href="{{ route('speakers.index') }}">
+                                <span class="sub-item">Manage Speaker</span>
+                            </a>
+                        </li>
+
+                      </ul>
+                    </div>
+                  </li>
+
+                  <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#events">
+                      <i class="fas fa-calendar"></i>
+                      <p>Events</p>
+                      <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="events">
+                      <ul class="nav nav-collapse">
+                        <li>
+                            <a href="{{'events.index'}}">
+                              <span class="sub-item">Manage Events</span>
+                            </a>
+                          </li>
+                      </ul>
+                    </div>
+                  </li>
+
               </ul>
           </div>
         </div>
@@ -172,9 +208,19 @@
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
                                         <label for="coop_id">Cooperative</label>
-                                        <input type="text" class="form-control" value="{{ $participant->cooperative->name ?? 'N/A' }}" disabled>
+                                        <select class="form-control" name="coop_id">
+                                            <option value="" disabled>Select Cooperative</option>
+                                            @foreach ($cooperatives as $cooperative)
+                                                <option value="{{ $cooperative->coop_id }}"
+                                                    {{ $participant->coop_id == $cooperative->coop_id ? 'selected' : '' }}>
+                                                    {{ $cooperative->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
+
+
 
                                 <!-- User Display -->
                                 <div class="col-md-6 col-lg-4">

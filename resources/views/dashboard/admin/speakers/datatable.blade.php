@@ -125,7 +125,7 @@
                     <div class="collapse" id="events">
                       <ul class="nav nav-collapse">
                         <li>
-                            <a href="#">
+                            <a href="{{route('events.index')}}">
                               <span class="sub-item">Manage Events</span>
                             </a>
                           </li>
@@ -219,7 +219,7 @@
                                     <tr>
                                         <th>Name</th>
                                         <th>Topic</th>
-                                        <th>Event</th>
+                                        <th>Assigned Event</th>
                                         <th style="width: 10%">Action</th>
                                     </tr>
                                 </thead>
@@ -287,16 +287,16 @@
                                     @csrf
                                     <div class="mb-3">
                                         <label class="form-label">Name</label>
-                                        <input type="text" name="name" class="form-control" required>
+                                        <input type="text" name="name" class="form-control" placeholder="Enter Full Name..." required>
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">Topic</label>
-                                        <input type="text" name="topic" class="form-control" required>
+                                        <input type="text" name="topic" class="form-control" placeholder="Enter Topic..." required>
                                     </div>
                                     <div class="mb-3">
-                                        <label class="form-label">Event</label>
+                                        <label class="form-label">Assign Event</label>
                                         <select name="event_id" class="form-control" required>
-                                            <option value="">Select Event</option>
+                                            <option value="">List of Events</option>
                                             @foreach($events as $event)
                                                 <option value="{{ $event->event_id }}">{{ $event->title }}</option> <!-- Display the event title -->
                                             @endforeach

@@ -96,6 +96,41 @@
                       </ul>
                     </div>
                   </li>
+
+                  <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#speaker">
+                      <i class="fas fa-microphone"></i>
+                      <p>Speakers</p>
+                      <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="speaker">
+                      <ul class="nav nav-collapse">
+                        <li>
+                            <a href="{{ route('speakers.index') }}">
+                                <span class="sub-item">Manage Speaker</span>
+                            </a>
+                        </li>
+
+                      </ul>
+                    </div>
+                  </li>
+
+                  <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#events">
+                      <i class="fas fa-calendar"></i>
+                      <p>Events</p>
+                      <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="events">
+                      <ul class="nav nav-collapse">
+                        <li>
+                            <a href="{{'events.index'}}">
+                              <span class="sub-item">Manage Events</span>
+                            </a>
+                          </li>
+                      </ul>
+                    </div>
+                  </li>
               </ul>
           </div>
         </div>
@@ -163,93 +198,130 @@
                   </div>
                   <div class="card-body">
                     <!-- Modal -->
-                    <form method="GET" class="mb-3">
-                        <div class="d-flex justify-content-end">
-                            <div class="input-group flex-nowrap w-50 w-md-50 w-lg-25 ms-auto">
-                                <input type="text" name="search" class="form-control" placeholder="Search..."
-                                       value="{{ request('search') }}">
-                                <button type="submit" class="btn btn-primary">Search</button>
-                            </div>
+                  <!-- Search Form -->
+<form method="GET" class="mb-3">
+    <div class="d-flex justify-content-end">
+        <div class="input-group flex-nowrap w-50 w-md-50 w-lg-25 ms-auto">
+            <input type="text" name="search" class="form-control" placeholder="Search..."
+                   value="{{ request('search') }}">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </div>
+</form>
+
+<!-- Table Display -->
+<div class="table-responsive">
+    <table id="add-row" class="display table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Registration Status</th>
+                <th>Cooperative Department</th>
+                <th>User Account</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Designation</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse ($participants as $participant)
+                <tr>
+                    <td>{{ $participant->registration->status ?? 'N/A' }}</td>
+                    <td>{{ optional($participant->cooperative)->name ?? 'N/A' }}</td>
+                    <td>{{ optional($participant->user)->name ?? 'N/A' }}</td>
+                    <td>{{ $participant->first_name }}</td>
+                    <td>{{ $participant->last_name }}</td>
+                    <td>{{ $participant->designation ?? 'N/A' }}</td>
+                    <td>
+                        <div class="form-button-action">
+                            <a href="{{ route('participantadd') }}" class="btn btn-link btn-info btn-lg" data-bs-toggle="tooltip" title="Add Cooperative">
+                                <i class="fa fa-plus"></i>
+                            </a>
+
+                            <a href="{{ route('admin.documents.view', ['participant_id' => $participant->participant_id]) }}"
+                                class="btn btn-link btn-info btn-lg"
+                                data-bs-toggle="tooltip" title="View Uploaded Documents">
+                                <i class="fa fa-file"></i>
+                             </a>
+
+                            <a href="{{ route('participants.show', $participant->participant_id) }}"
+                              class="btn btn-link btn-info btn-lg"
+                                data-bs-toggle="tooltip"
+                                title="View Participant Details">
+                                 <i class="fa fa-eye"></i>
+                             </a>
+
+                             <a href="{{ route('participants.edit', $participant->participant_id) }}" class="btn btn-link btn-primary btn-lg"
+                                data-bs-toggle="tooltip" title="Edit Participant">
+                                 <i class="fa fa-edit"></i>
+                             </a>
+
+                            <form action="{{ route('participants.destroy', $participant->participant_id) }}" method="POST" class="delete-form" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="button" class="btn btn-link btn-danger" data-bs-toggle="tooltip" title="Remove Participant" aria-label="Remove Participant" onclick="confirmDelete(event, this)">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </form>
+
+                            <button
+                            class="btn btn-success approve-btn"
+                            data-bs-toggle="modal"
+                            data-bs-target="#approveModal"
+                            data-participant-id="{{ $participant->participant_id }}"
+                            data-name="{{ $participant->first_name }}"
+                            data-status="{{ $participant->registration ? $participant->registration->status : 'Pending' }}"
+                            data-has-documents="{{ $participant->uploadedDocuments()->exists() ? 'true' : 'false' }}"
+                            {{ !$participant->uploadedDocuments()->exists() ? 'disabled' : '' }}>
+                            {{ $participant->registration && $participant->registration->status === 'Confirmed' ? 'Reject' : 'Approve' }}
+                        </button>
+
+
                         </div>
-                        <div class="table-responsive">
-                            <table id="add-row" class="display table table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>First Name</th>
-                                        <th>Middle Name</th>
-                                        <th>Last Name</th>
-                                        <th>Gender</th>
-                                        <th>Phone Number</th>
-                                        <th>Designation</th>
-                                        {{-- <th>T-shirt Size</th> --}}
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse ($participants as $participant)
-                                        <tr>
-                                            <td>{{ $participant->first_name }}</td>
-                                            <td>{{ $participant->middle_name ?? 'N/A' }}</td>
-                                            <td>{{ $participant->last_name }}</td>
-                                            <td>{{ $participant->gender }}</td>
-                                            <td>{{ $participant->phone_number }}</td>
-                                            <td>{{ $participant->designation ?? 'N/A' }}</td>
-                                            {{-- <td>{{ $participant->tshirt_size ?? 'N/A' }}</td> --}}
-                                            <td>
-                                                <div class="form-button-action">
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="8" class="text-center">No participants found</td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
+</div>
 
-                                                    <a href="{{ route('participantadd') }}" class="btn btn-link btn-info btn-lg" data-bs-toggle="tooltip" title="Add Cooperative">
-                                                        <i class="fa fa-plus"></i>
-                                                    </a>
+@if(session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: '{{ session('success') == 'Deleted!' ? 'Deleted!' : 'Success!' }}',
+            text: '{{ session('success') }}',
+            confirmButtonText: 'OK'
+        });
+    </script>
+@endif
 
-                                                    <a href="{{ route('admin.documents.view', ['participant_id' => $participant->participant_id]) }}"
-                                                        class="btn btn-link btn-info btn-lg"
-                                                        data-bs-toggle="tooltip" title="View Uploaded Documents">
-                                                        <i class="fa fa-file"></i>
-                                                     </a>
 
-                                                    <a href="{{ route('participants.show', $participant->participant_id) }}"
-                                                      class="btn btn-link btn-info btn-lg"
-                                                        data-bs-toggle="tooltip"
-                                                        title="View Participant Details">
-                                                         <i class="fa fa-eye"></i>
-                                                     </a>
+                 <!-- Approval Modal -->
+<div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="approveModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="approveModalLabel">Update Participant Status</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to <strong id="statusActionText"></strong> participant <strong id="participantName"></strong>?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" id="confirmApproveBtn">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-                                                     <a href="{{ route('participants.edit', $participant->participant_id) }}" class="btn btn-link btn-primary btn-lg"
-                                                        data-bs-toggle="tooltip" title="Edit Participant">
-                                                         <i class="fa fa-edit"></i>
-                                                     </a>
-                                                    <form action="{{ route('participants.destroy', $participant->participant_id) }}" method="POST" class="delete-form" style="display:inline;">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="button" class="btn btn-link btn-danger" data-bs-toggle="tooltip" title="Remove Participant" aria-label="Remove Participant" onclick="confirmDelete(event, this)">
-                                                            <i class="fa fa-times"></i>
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="8" class="text-center">No participants found</td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
 
-                                @if(session('success'))
-                                    <script>
-                                        Swal.fire({
-                                            icon: 'success',
-                                            title: '{{ session('success') == 'Deleted!' ? 'Deleted!' : 'Success!' }}',
-                                            text: '{{ session('success') }}',
-                                            confirmButtonText: 'OK'
-                                        });
-                                    </script>
-                                @endif
 
-                            </table>
-                        </div>
-                    </form>
 
                     <div class="d-flex justify-content-center mt-3">
                         {{ $participants->appends(['search' => request('search')])->links('pagination::bootstrap-4') }}
@@ -285,6 +357,63 @@
             });
         }
     </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let participantId = null;
+        let newStatus = "Confirmed"; // Default status
+
+        document.querySelectorAll(".approve-btn").forEach(button => {
+            button.addEventListener("click", function () {
+                participantId = this.getAttribute("data-participant-id");
+                const participantName = this.getAttribute("data-name");
+                const currentStatus = this.getAttribute("data-status");
+
+                // Determine new status based on button text
+                newStatus = currentStatus === "Confirmed" ? "Rejected" : "Confirmed";
+
+                // Update modal content
+                document.getElementById("participantName").textContent = participantName;
+                document.getElementById("statusActionText").textContent = newStatus === "Confirmed" ? "Confirm" : "Reject";
+                document.getElementById("confirmApproveBtn").textContent = newStatus;
+
+                // Disable button if participant lacks documents
+                const confirmBtn = document.getElementById("confirmApproveBtn");
+                const hasDocuments = this.getAttribute("data-has-documents") === "true";
+                confirmBtn.disabled = !hasDocuments;
+
+                if (!hasDocuments) {
+                    Swal.fire("Error", "This participant has no required documents.", "error");
+                }
+            });
+        });
+
+        document.getElementById("confirmApproveBtn").addEventListener("click", function () {
+            if (!participantId) return;
+
+            fetch(`/participants/${participantId}/approve`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({ status: newStatus })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire("Success", `Participant status updated to ${newStatus}!`, "success")
+                        .then(() => location.reload());
+                } else {
+                    Swal.fire("Error", data.message || "Something went wrong!", "error");
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        });
+    });
+    </script>
+
+
     @include('layouts.links')
   </body>
 </html>

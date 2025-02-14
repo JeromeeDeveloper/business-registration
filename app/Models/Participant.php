@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Models\Cooperative;
+use App\Models\GARegistration;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -32,5 +33,16 @@ class Participant extends Model
     {
         return $this->hasMany(UploadedDocument::class, 'participant_id');
     }
+
+    public function registration()
+    {
+        return $this->hasOne(GARegistration::class, 'participant_id');
+    }
+
+    public function documents()
+    {
+        return $this->hasMany(UploadedDocument::class, 'participant_id', 'participant_id');
+    }
+
 }
 

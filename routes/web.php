@@ -4,9 +4,10 @@ use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\EventsController;
+use App\Http\Controllers\SpeakersController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ParticipantController;
-use App\Http\Controllers\SpeakersController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 // Home Page
@@ -55,6 +56,8 @@ Route::put('/user/{user_id}', [AuthController::class, 'update'])->name('user.upd
 
 //participant admin crude
 
+Route::post('/participants/{participant}/approve', [ParticipantController::class, 'approve'])->name('participants.approve');
+
 Route::get('/participants', [ParticipantController::class, 'index'])->name('participants.index');
 
 Route::get('/add/participant', [ParticipantController::class, 'participantadd'])->name('participantadd');
@@ -86,7 +89,7 @@ Route::get('/participant/documents', [ParticipantController::class, 'viewDocumen
 
 Route::get('/admin/documents/view/{participant_id?}', [ParticipantController::class, 'viewadminDocuments'])->name('admin.documents.view');
 
-Route::get('/speakers', [SpeakersController::class, 'index'])->name('speakers.index');
+Route::get('/admin/speakers', [SpeakersController::class, 'index'])->name('speakers.index');
 
 Route::post('/speakers', [SpeakersController::class, 'store'])->name('speakers.store');
 Route::put('/speakers/{speaker_id}', [SpeakersController::class, 'update'])->name('speakers.update');
@@ -94,5 +97,15 @@ Route::get('/speakers/{speaker}/edit', [SpeakersController::class, 'edit'])->nam
 Route::delete('/speakers/{speaker}', [SpeakersController::class, 'destroy'])->name('speakers.destroy');
 
 
+Route::get('/events', [EventsController::class, 'index'])->name('events.index');
 
+Route::post('/events', [EventsController::class, 'store'])->name('events.store');
+Route::put('/events/{event_id}', [EventsController::class, 'update'])->name('events.update');
+Route::get('/events/{event}/edit', [EventsController::class, 'edit'])->name('events.edit');
+Route::delete('/events/{event}', [EventsController::class, 'destroy'])->name('events.destroy');
+
+
+Route::get('/participant/speakers', [ParticipantController::class, 'speakerlist'])->name('speakerlist');
+
+Route::get('/Schedules', [EventsController::class, 'schedule'])->name('schedule');
 

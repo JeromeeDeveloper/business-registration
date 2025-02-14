@@ -96,6 +96,42 @@
                       </ul>
                     </div>
                   </li>
+
+                  <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#speaker">
+                      <i class="fas fa-microphone"></i>
+                      <p>Speakers</p>
+                      <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="speaker">
+                      <ul class="nav nav-collapse">
+                        <li>
+                            <a href="{{ route('speakers.index') }}">
+                                <span class="sub-item">Manage Speaker</span>
+                            </a>
+                        </li>
+
+                      </ul>
+                    </div>
+                  </li>
+
+                  <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#events">
+                      <i class="fas fa-calendar"></i>
+                      <p>Events</p>
+                      <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="events">
+                      <ul class="nav nav-collapse">
+                        <li>
+                            <a href="{{route('events.index')}}">
+                              <span class="sub-item">Manage Events</span>
+                            </a>
+                          </li>
+                      </ul>
+                    </div>
+                  </li>
+
               </ul>
           </div>
         </div>
@@ -176,6 +212,7 @@
                                 <thead>
                                     <tr>
                                         <th>Name</th>
+                                        <th>Assigned Participant</th>
                                         <th>Email</th>
                                         <th>Role</th>
                                         <th>Date Created</th>
@@ -186,6 +223,7 @@
                                     @forelse ($users as $user)
                                         <tr>
                                             <td>{{ $user->name }}</td>
+                                            <td>{{ $user->participant ? $user->participant->first_name . ' ' . $user->participant->last_name : 'N/A' }}</td>
                                             <td>{{ $user->email }}</td>
                                             <td>{{ ucfirst($user->role) }}</td>
                                             <td>{{ $user->created_at->format('F d, Y') }}</td>

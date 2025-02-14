@@ -60,12 +60,6 @@ class SpeakersController extends Controller
 
         return redirect()->route('speakers.index')->with('success', 'Speaker updated successfully.');
     }
-
-
-
-
-
-
     /**
      * Remove the specified speaker from storage.
      */

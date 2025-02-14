@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Log;
 use App\Models\User;
+use App\Models\Speaker;
+use App\Models\Event;
 use App\Models\Cooperative;
 use App\Models\Participant;
 use Illuminate\Http\Request;
@@ -18,26 +20,26 @@ class DashboardController extends Controller
     {
         $totalParticipants = Participant::count(); // Get total participants
         $totalUsers = User::count(); // Get total users
+        $totalSpeakers = Speaker::count(); // Get total users
+        $totalEvents = Event::count(); // Get total users
 
-        return view('dashboard.admin.admin', compact('totalParticipants', 'totalUsers'));
+        return view('dashboard.admin.admin', compact('totalParticipants', 'totalUsers', 'totalSpeakers', 'totalEvents'));
     }
 
 
     public function participant()
-    {
+{
+    $user = Auth::user();
+    $participant = $user ? $user->participant()->with('cooperative')->first() : null;
 
-        $user = Auth::user();
+    // Fetch the latest event (most recent based on start_date)
+    $latestEvent = Event::with('speakers')->orderBy('start_date', 'desc')->first();
 
-        $participant = $user->participant()->with('cooperative')->first();
-
-
-        if (!$participant || !$participant->cooperative) {
-            return view('dashboard.participant.participant', ['participant' => null]);
-        }
-
-        return view('dashboard.participant.participant', compact('participant'));
-    }
-
+    return view('dashboard.participant.participant', [
+        'participant' => $participant,
+        'event' => $latestEvent, // Ensure the correct variable is passed
+    ]);
+}
 
     public function cooperativeprofile($participant_id, $cooperative_id)
     {

@@ -122,7 +122,7 @@
                 <div class="collapse" id="events">
                   <ul class="nav nav-collapse">
                     <li>
-                        <a href="#">
+                        <a href="{{route('events.index')}}">
                           <span class="sub-item">Manage Events</span>
                         </a>
                       </li>
@@ -213,7 +213,7 @@
                       <div class="col col-stats ms-3 ms-sm-0">
                         <div class="numbers">
                           <p class="card-category">Events</p>
-                          <h4 class="card-title">1303</h4>
+                          <h4 class="card-title">{{ number_format($totalEvents) }}</h4>
                         </div>
                       </div>
                     </div>
@@ -234,7 +234,7 @@
                       <div class="col col-stats ms-3 ms-sm-0">
                         <div class="numbers">
                           <p class="card-category">Speakers</p>
-                          <h4 class="card-title">1,345</h4>
+                          <h4 class="card-title">{{ number_format($totalSpeakers) }}</h4>
                         </div>
                       </div>
                     </div>

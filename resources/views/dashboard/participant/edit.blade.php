@@ -54,7 +54,7 @@
                     <div class="collapse" id="cooperative">
                       <ul class="nav nav-collapse">
                         <li>
-                            <a href="">
+                            <a href="{{route('speakerlist')}}">
                               <span class="sub-item">List of Resource Speakers</span>
                             </a>
                           </li>
@@ -71,7 +71,7 @@
                     <div class="collapse" id="user">
                       <ul class="nav nav-collapse">
                         <li>
-                            <a href="">
+                            <a href="{{route('schedule')}}">
                               <span class="sub-item">List of Events</span>
                             </a>
                           </li>

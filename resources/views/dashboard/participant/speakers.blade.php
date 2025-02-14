@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+ <head>
     @include('layouts.adminheader')
-  </head>
+ </head>
   <body>
     <div class="wrapper">
       <!-- Sidebar -->
@@ -52,9 +52,9 @@
                   <p>Resource Speakers</p>
                   <span class="caret"></span>
                 </a>
-                <div class="collapse" id="cooperative">
+                <div class="collapse show" id="cooperative">
                   <ul class="nav nav-collapse">
-                    <li>
+                    <li class="active">
                         <a href="{{route('speakerlist')}}">
                           <span class="sub-item">List of Resource Speakers</span>
                         </a>
@@ -90,8 +90,8 @@
           <div class="main-header-logo">
             <!-- Logo Header -->
             <div class="logo-header" data-background-color="dark">
-                <a href="{{route('adminDashboard')}}" class="logo">
-                    <img class="logo-mass-specc" src="{{ asset('images/logo.png') }}" alt="">
+                <a href="{{route('participantDashboard')}}" class="logo">
+                <img class="logo-mass-specc" src="{{ asset('images/logo.png') }}" alt="">
               </a>
               <div class="nav-toggle">
                 <button class="btn btn-toggle toggle-sidebar">
@@ -115,7 +115,7 @@
         <div class="container">
           <div class="page-inner">
             <div class="page-header">
-              <h3 class="fw-bold mb-3">Participant Documents</h3>
+              <h3 class="fw-bold mb-3">List of Speakers</h3>
               <ul class="breadcrumbs mb-3">
                 <li class="nav-home">
                   <a href="#">
@@ -126,13 +126,13 @@
                   <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                  <a href="#">Documents</a>
+                  <a href="#">Dashboard</a>
                 </li>
                 <li class="separator">
                   <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                  <a href="#">Registration</a>
+                  <a href="#">Speaker</a>
                 </li>
               </ul>
             </div>
@@ -140,63 +140,59 @@
               <div class="col-md-12">
                 <div class="card">
                   <div class="card-header">
-                    <div class="card-title">Upload Documents</div>
+                    <div class="d-flex align-items-center">
+                      <h4 class="card-title">Speakers</h4>
+                    </div>
                   </div>
-                  <form id="documentUploadForm" method="POST" action="{{ route('documents.store') }}" enctype="multipart/form-data">
-                    @csrf
-                    <div class="card-body">
-                        <div class="row">
-                            <!-- Financial Statement -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="financial_statement">Financial Statement</label>
-                                    <input type="file" class="form-control" name="documents[Financial Statement]" id="financial_statement" accept=".jpg,.jpeg,.png,.pdf" required />
-                                </div>
-                            </div>
-
-                            <!-- Resolution for Voting Delegates -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="resolution_voting">Resolution for Voting Delegates</label>
-                                    <input type="file" class="form-control" name="documents[Resolution for Voting Delegates]" id="resolution_voting" accept=".jpg,.jpeg,.png,.pdf" required />
-                                </div>
-                            </div>
-
-                            <!-- Deposit Slip for Registration Fee -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="registration_fee">Deposit Slip for Registration Fee</label>
-                                    <input type="file" class="form-control" name="documents[Deposit Slip for Registration Fee]" id="registration_fee" accept=".jpg,.jpeg,.png,.pdf" required />
-                                </div>
-                            </div>
-
-                            <!-- Deposit Slip for CETF Remittance -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="cetf_remittance">Deposit Slip for CETF Remittance</label>
-                                    <input type="file" class="form-control" name="documents[Deposit Slip for CETF Remittance]" id="cetf_remittance" accept=".jpg,.jpeg,.png,.pdf" required />
-                                </div>
+                  <div class="card-body">
+                    <!-- Modal -->
+                    <form method="GET" class="mb-3">
+                        <div class="d-flex justify-content-end">
+                            <div class="input-group flex-nowrap w-50 w-md-50 w-lg-25 ms-auto">
+                                <input type="text" name="search" class="form-control" placeholder="Search..."
+                                       value="{{ request('search') }}">
+                                <button type="submit" class="btn btn-primary">Search</button>
                             </div>
                         </div>
-                    </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Speaker Name</th>
+                                        <th>Topic</th>
+                                        <th>Event</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ($speakers as $speaker)
+                                        <tr>
+                                            <td>{{ $speaker->name }}</td>
+                                            <td>{{ $speaker->topic }}</td>
+                                            <td>{{ $speaker->event->title ?? 'N/A' }}</td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="3" class="text-center">No speakers found</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
 
-                    <div class="card-action">
-                        <button class="btn btn-success">Upload Documents</button>
-                    </div>
-                </form>
+                    </form>
 
-            </div>
-                  </div>
+                    <div class="mt-3">
+                        {{ $speakers->appends(['search' => request()->search])->links() }}
+                    </div>
+                </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
-        @include('layouts.adminfooter')
+            @include('layouts.adminfooter')
       </div>
-
     </div>
-  @include('layouts.links')
+    @include('layouts.links')
   </body>
 </html>

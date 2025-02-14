@@ -333,3 +333,30 @@ body[data-background-color="dark"] .demo-icon .icon-class {
         align-items: center;
         justify-content: space-between;
 }
+
+.fc-button {
+    background-color: #007bff !important;  /* Blue */
+    color: white !important;
+    border-radius: 5px;
+    border: none;
+}
+
+/* Hover effect */
+.fc-button:hover {
+    background-color: #0056b3 !important;  /* Darker blue */
+}
+
+/* Today button */
+.fc-today-button {
+    background-color: #28a745 !important;  /* Green */
+}
+
+/* Active button */
+.fc-button-active {
+    background-color: #ff5733 !important;  /* Orange */
+    color: white !important;
+}
+
+.fc-h-event .fc-event-title-container {
+    cursor: pointer !important;
+}

@@ -54,7 +54,7 @@
                       <p>Cooperative</p>
                       <span class="caret"></span>
                     </a>
-                    <div class="collapse show" id="cooperative">
+                    <div class="collapse" id="cooperative">
                       <ul class="nav nav-collapse">
                         <li class="active">
                             <a href="{{route('adminview')}}">
@@ -96,6 +96,41 @@
                       </ul>
                     </div>
 
+                  </li>
+
+                  <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#speaker">
+                      <i class="fas fa-microphone"></i>
+                      <p>Speakers</p>
+                      <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="speaker">
+                      <ul class="nav nav-collapse">
+                        <li>
+                            <a href="{{ route('speakers.index') }}">
+                                <span class="sub-item">Manage Speaker</span>
+                            </a>
+                        </li>
+
+                      </ul>
+                    </div>
+                  </li>
+
+                  <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#events">
+                      <i class="fas fa-calendar"></i>
+                      <p>Events</p>
+                      <span class="caret"></span>
+                    </a>
+                    <div class="collapse show" id="events">
+                      <ul class="nav nav-collapse">
+                        <li class="active">
+                            <a href="{{'events.index'}}">
+                              <span class="sub-item">Manage Events</span>
+                            </a>
+                          </li>
+                      </ul>
+                    </div>
                   </li>
               </ul>
           </div>
@@ -157,89 +192,185 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="card">
-                  <div class="card-header">
+                  <div class="card-header coop">
                     <div class="d-flex align-items-center">
                       <h4 class="card-title">Cooperative</h4>
                     </div>
+                    <div class="d-flex justify-content-start mb-3">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addEventModal">
+                            Add Speaker
+                        </button>
+                    </div>
                   </div>
                   <div class="card-body">
+
                     <!-- Modal -->
-                    <form method="GET" action="{{ route('adminview') }}" class="mb-3">
+                    <form method="GET" action="{{ route('events.index') }}" class="mb-3">
                         <div class="d-flex justify-content-end">
-                            <div class="input-group flex-nowrap w-50 w-md-50 w-lg-25 ms-auto">
-                            <input type="text" name="search" class="form-control" placeholder="Search..."
-                                   value="{{ request('search') }}">
-                            <button type="submit" class="btn btn-primary">Search</button>
+                            {{-- <div class="input-group flex-nowrap w-50 w-md-50 w-lg-25 ms-auto">
+                                <input type="text" name="search" class="form-control" placeholder="Search..." value="{{ request('search') }}">
+                                <button type="submit" class="btn btn-primary">Search</button>
+                            </div> --}}
+                        </div>
+
+                        <div class="table-responsive">
+                            <table id="add-row" class="display table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Location</th>
+                                        <th style="width: 10%">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ($events as $event)
+                                        <tr>
+                                            <td>{{ $event->title }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($event->start_date)->format('F j, Y') }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($event->end_date)->format('F j, Y') }}</td>
+                                            <td>{{ $event->location }}</td>
+                                            <td>
+                                                <div class="form-button-action">
+                                                    <!-- Edit Speaker -->
+                                                    <button type="button" class="btn btn-link btn-primary btn-lg edit-event-btn"
+                                                        data-id="{{ $event->event_id }}" data-bs-toggle="modal" data-bs-target="#editEventModal"
+                                                        title="Edit Event">
+                                                        <i class="fa fa-edit"></i>
+                                                    </button>
+
+
+                                                    <!-- Delete Event -->
+                                                    <form action="{{ route('events.destroy', $event->event_id) }}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button" class="btn btn-link btn-danger" onclick="confirmDelete(event, this)"
+                                                            title="Remove Event">
+                                                            <i class="fa fa-times"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="4" class="text-center">No Events found</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+
+                    @if(session('success'))
+                    <script>
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: '{{ session('success') }}',
+                            confirmButtonText: 'OK'
+                        });
+                    </script>
+                    @endif
+
+                    <!-- Add Speaker Button -->
+
+
+                    <!-- Add Speaker Modal -->
+                    <div class="modal fade" id="addEventModal" tabindex="-1" aria-labelledby="addEventModalLabel" aria-hidden="true">
+                     <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Add Events</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{{ route('events.store') }}" method="POST">
+                                    @csrf
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Event Title</label>
+                                        <input type="text" name="title" class="form-control" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Event Description</label>
+                                        <input type="text" name="description" class="form-control" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Start Date</label>
+                                        <input type="date" name="start_date" class="form-control" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">End Date</label>
+                                        <input type="date" name="end_date" class="form-control" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Event Location</label>
+                                        <input type="text" name="location" class="form-control" required>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary">Add Event</button>
+                                </form>
+                            </div>
                         </div>
                      </div>
-                      <div class="table-responsive">
-                        <table id="add-row" class="display table table-striped table-hover">
-                          <thead>
-                            <tr>
-                              <th>Cooperative Name</th>
-                              <th>Cooperative Type</th>
-                              <th>Cooperative Email</th>
-                              <th>Cooperative Address</th>
-                              <th style="width: 10%">Action</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            @forelse ($cooperatives as $coop)
-                                <tr>
-                                    <td>{{ $coop->name }}</td>
-                                    <td>{{ $coop->type }}</td>
-                                    <td>{{ $coop->email }}</td>
-                                    <td>{{ $coop->address }}</td>
-                                    <td>
-                                        <div class="form-button-action">
-                                            <a href="{{ route('adminregister') }}" class="btn btn-link btn-info btn-lg" data-bs-toggle="tooltip" title="Add Cooperative">
-                                                <i class="fa fa-plus"></i>
-                                            </a>
-                                            <a href="{{ route('cooperatives.show', $coop->coop_id) }}" class="btn btn-link btn-info btn-lg" data-bs-toggle="tooltip" title="View Coop Details">
-                                                <i class="fa fa-eye"></i>
-                                            </a>
+                    </div>
 
-                                            <button type="button" class="btn btn-link btn-primary btn-lg" data-bs-toggle="tooltip" title="Edit Coop">
-                                                <a href="{{ route('cooperatives.edit', $coop->coop_id) }}" class="text-decoration-none text-primary">
-                                                    <i class="fa fa-edit"></i>
-                                                </a>
-                                            </button>
+                    <!-- Edit Event Modal -->
+                    <div class="modal fade" id="editEventModal" tabindex="-1" aria-labelledby="editEventModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Edit Events</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                                    <div class="modal-body">
+                                        <form id="editEventForm" method="POST" action="{{ route('events.update',  ['event_id' => $event->event_id]) }}">
+                                            @csrf
+                                            @method('PUT')
 
-                                            <form action="{{ route('cooperatives.destroy', $coop->coop_id) }}" method="POST" class="delete-form" style="display:inline;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="button" class="btn btn-link btn-danger" data-bs-toggle="tooltip" title="Remove Coop" aria-label="Remove Coop" onclick="confirmDelete(event, this)">
-                                                    <i class="fa fa-times"></i>
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="5" class="text-center">No search results found</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
+                                            <input type="hidden" name="event_id" id="editEventId" value="{{ $event->event_id }}">
 
-                       @if(session('success'))
-                            <script>
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: '{{ session('success') == 'Deleted!' ? 'Deleted!' : 'Success!' }}',
-                                    text: '{{ session('success') }}',
-                                    confirmButtonText: 'OK'
-                                });
-                            </script>
-                        @endif
+                                            <div class="mb-3">
+                                                <label class="form-label">Event Title</label>
+                                                <input type="text" name="title" id="editEventTitle" class="form-control" value="{{ $event->title }}" required>
+                                            </div>
 
-                        </table>
-                      </div>
-                    </form>
+                                            <div class="mb-3">
+                                                <label class="form-label">Event Description</label>
+                                                <input type="text" name="description" id="editEventDescription" class="form-control" value="{{ $event->description }}" required>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label">Start Date</label>
+                                                <input type="date" name="start_date" id="editEventStartDate" class="form-control" value="{{ $event->start_date }}" required>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label">End Date</label>
+                                                <input type="date" name="end_date" id="editEventEndDate" class="form-control" value="{{ $event->end_date }}" required>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label">Event Location</label>
+                                                <input type="text" name="location" id="editEventLocation" class="form-control" value="{{ $event->location }}" required>
+                                            </div>
+
+                                            <button type="submit" class="btn btn-primary">Update Event</button>
+                                        </form>
+                                    </div>
+                        </div>
+                    </div>
+                    </div>
                   </div>
-                  <div class="d-flex justify-content-center mt-3">
+                  {{-- <div class="d-flex justify-content-center mt-3">
                     {{ $cooperatives->appends(['search' => request('search')])->links('pagination::bootstrap-4') }}
-                </div>
+                </div> --}}
 
                 </div>
 
@@ -257,27 +388,46 @@
       </div>
 
     </div>
-    <script>
-        function confirmDelete(event, button) {
-            event.preventDefault(); // Prevent form from submitting
 
-            // Show SweetAlert confirmation dialog
+    <script>
+
+        function confirmDelete(event, button) {
+            event.preventDefault();
             Swal.fire({
-                title: 'Are you sure?',
+                title: "Are you sure?",
                 text: "You won't be able to revert this!",
-                icon: 'warning',
+                icon: "warning",
                 showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Yes, delete it!',
-                cancelButtonText: 'Cancel'
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Yes, delete it!"
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // If confirmed, submit the form
-                    button.closest('form').submit();
+                    button.closest("form").submit();
                 }
             });
         }
+
+        // Load event data into edit modal
+        document.querySelectorAll('.edit-event-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                let eventId = this.getAttribute('data-id');
+                let url = `{{ url('/events') }}/${eventId}/edit`;
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('editEventId').value = data.event_id;
+                        document.getElementById('editEventTitle').value = data.title;
+                        document.getElementById('editEventDescription').value = data.title;
+                        document.getElementById('editEventStartDate').value = data.start_date;
+                        document.getElementById('editEventEndDate').value = data.end_date;
+                        document.getElementById('editEventLocation').value = data.location;
+                        document.getElementById('editEventForm').action = `{{ url('/events') }}/${data.event_id}`;
+                    })
+                    .catch(error => console.error("Error fetching event data:", error));
+            });
+        });
     </script>
 
     @include('layouts.links')

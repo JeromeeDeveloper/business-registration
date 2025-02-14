@@ -32,7 +32,7 @@
             <ul class="nav nav-secondary">
                 <li class="nav-item">
                     <a
-                      href=""
+                      href="{{route('participantDashboard')}}"
                       class="collapsed"
                     >
                       <i class="fas fa-home"></i>
@@ -55,7 +55,7 @@
                 <div class="collapse" id="cooperative">
                   <ul class="nav nav-collapse">
                     <li>
-                        <a href="">
+                        <a href="{{route('speakerlist')}}">
                           <span class="sub-item">List of Resource Speakers</span>
                         </a>
                       </li>
@@ -72,7 +72,7 @@
                 <div class="collapse" id="user">
                   <ul class="nav nav-collapse">
                     <li>
-                        <a href="">
+                        <a href="{{route('schedule')}}">
                           <span class="sub-item">List of Events</span>
                         </a>
                       </li>
@@ -124,10 +124,10 @@
                     @if ($participant && $participant->cooperative)
                     <a href="{{ route('cooperativeprofile', ['participant_id' => $participant->participant_id, 'coop_id' => $participant->cooperative->coop_id]) }}" class="btn btn-label-info btn-round me-2">Cooperative Profile</a>
                 @else
-                    <span>No Cooperative Associated</span>
+                    <a class="btn btn-info btn-round">No Cooperative Associated Yet</a>
                 @endif
 
-                  <a href="{{route('documents.view')}}" class="btn btn-primary btn-round">View Uploaded documents</a>
+                <a href="#" id="viewDocumentsBtn" class="btn btn-primary btn-round">View Uploaded Documents</a>
                 </div>
               </div>
 
@@ -189,34 +189,33 @@
                  <!-- Upload Required Documents -->
                  <div class="col-sm-6 col-md-3">
                     <div class="card card-stats card-round">
-                      <div class="card-body">
-                        <div class="row align-items-center">
-                          <div class="col-icon">
-                            <div class="icon-big text-center icon-warning bubble-shadow-small">
-                              <i class="fas fa-file-upload"></i>
-                            </div>
-                          </div>
-                          <div class="col col-stats ms-3 ms-sm-0">
-                            <div class="numbers">
-                              <p class="card-category">Required Documents</p>
-                              {{-- <h4 class="card-title text-danger">Pending</h4> --}}
-                              @php
-                              $user = Auth::user();
-                              $participant = $user->participant ?? null;
-                              $hasDocuments = $participant ? $participant->uploadedDocuments()->exists() : false;
-                                @endphp
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-icon">
+                                    <div class="icon-big text-center icon-warning bubble-shadow-small">
+                                        <i class="fas fa-file-upload"></i>
+                                    </div>
+                                </div>
+                                <div class="col col-stats ms-3 ms-sm-0">
+                                    <div class="numbers">
+                                        <p class="card-category">Required Documents</p>
+                                        @php
+                                            $user = Auth::user();
+                                            $participant = $user->participant ?? null;
+                                            $hasDocuments = $participant ? $participant->uploadedDocuments()->exists() : false;
+                                        @endphp
 
-                                @if ($hasDocuments)
-                                    <p class="text-success mt-2">Already uploaded.</p>
-                                @else
-                                    <a href="{{ route('documents') }}" class="btn btn-sm btn-outline-primary mt-2">Upload Now</a>
-                                @endif
+                                        @if ($hasDocuments)
+                                            <p class="text-success mt-2">Already uploaded.</p>
+                                        @else
+                                            <button id="uploadBtn" class="btn btn-sm btn-outline-primary mt-2">Upload Now</button>
+                                        @endif
+                                    </div>
+                                </div>
                             </div>
-                          </div>
                         </div>
-                      </div>
                     </div>
-                  </div>
+                </div>
 
 
                 <!-- Assigned Committees & Voting Status -->
@@ -233,7 +232,7 @@
                             <div class="numbers">
                                 <p class="card-category">Committee & Voting</p>
                                 <span class="text-success">
-                                    {{ $participant->delegate_type ?? 'N/A' }}
+                                    {{ Auth::user()->participant->delegate_type ?? 'N/A' }}
                                 </span>
                             </div>
 
@@ -291,46 +290,51 @@
                   </div>
 
               <div class="col-md-4">
+                @if($event)
                 <div class="card card-primary card-round">
                     <div class="card-header">
-                      <div class="card-head-row">
-                        <div class="card-title">General Assembly</div>
-                        <div class="card-tools">
-                          <div class="dropdown">
-                            <button
-                              class="btn btn-sm btn-label-light dropdown-toggle"
-                              type="button"
-                              id="dropdownMenuButton"
-                              data-bs-toggle="dropdown"
-                              aria-haspopup="true"
-                              aria-expanded="false"
-                            >
-                              More Options
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                              <a class="dropdown-item" href="#">View Details</a>
-                              <a class="dropdown-item" href="#">Register</a>
-                              <a class="dropdown-item" href="#">Export Schedule</a>
+                        <div class="card-head-row">
+                            <div class="card-title">{{ $event->title }}</div>
+                            <div class="card-tools">
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-label-light dropdown-toggle" type="button"
+                                        id="dropdownMenuButton{{ $event->event_id }}" data-bs-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">
+                                        More Options
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $event->event_id }}">
+                                        <a class="dropdown-item" href="{{route('schedule')}}">View Details</a>
+                                    </div>
+                                </div>
                             </div>
-                          </div>
                         </div>
-                      </div>
-                      <div class="card-category">March 25 - April 02, 2025</div>
+                        <div class="card-category">
+                            {{ \Carbon\Carbon::parse($event->start_date)->format('F d, Y') }} -
+                            {{ \Carbon\Carbon::parse($event->end_date)->format('F d, Y') }}
+                        </div>
                     </div>
                     <div class="card-body">
-                      <p>
-                        Join us for the **Annual General Assembly**, where we will discuss key updates,
-                        organizational progress, and future plans. All members are encouraged to attend.
-                      </p>
-                      <ul>
-                        <li><strong>📍 Venue:</strong> Grand Convention Center</li>
-                        <li><strong>🕒 Time:</strong> 9:00 AM - 5:00 PM</li>
-                        <li><strong>🎤 Guest Speakers:</strong> Industry Experts & Leadership Panel</li>
-                        <li><strong>📌 Activities:</strong> Presentations, Q&A Sessions, Voting</li>
-                      </ul>
-                      <a href="#" class="btn btn-sm btn-outline-primary mt-2">Register Now</a>
+                        <p>{{ $event->description }}</p>
+                        <ul>
+                            <li><strong>📍 Venue:</strong> {{ $event->location }}</li>
+                            <li><strong>🕒 Time:</strong> 9:00 AM - 5:00 PM</li>
+                            <li><strong>🎤 Guest Speakers:</strong>
+                                @if($event->speakers->count() > 0)
+                                    {{ $event->speakers->pluck('name')->implode(', ') }}
+                                @else
+                                    No speakers listed
+                                @endif
+                            </li>
+                            <li><strong>📌 Activities:</strong> Presentations, Q&A Sessions, Voting</li>
+                        </ul>
+                        <a href="#" class="btn btn-sm btn-outline-primary mt-2">Register Now</a>
                     </div>
-                  </div>
+                </div>
+                @else
+                <p>No upcoming events at the moment.</p>
+                @endif
+
+
 
                   <div class="card card-round">
                     <div class="card-body pb-0">
@@ -351,147 +355,7 @@
               </div>
             </div>
 
-            <div class="row">
-                <div class="col-md-12">
-                  <div class="card card-round">
-                    <div class="card-body">
-                      <div class="card-head-row card-tools-still-right">
-                        <div class="card-title">Resource Speakers</div>
-                        <div class="card-tools">
-                          <div class="dropdown">
-                            <button
-                              class="btn btn-icon btn-clean me-0"
-                              type="button"
-                              id="dropdownMenuButton"
-                              data-bs-toggle="dropdown"
-                              aria-haspopup="true"
-                              aria-expanded="false"
-                            >
-                              <i class="fas fa-ellipsis-h"></i>
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                              <a class="dropdown-item" href="#">Action</a>
-                              <a class="dropdown-item" href="#">Another action</a>
-                              <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="card-list py-4">
-                        <!-- Resource Speaker 1 -->
-                        <div class="item-list">
-                          <div class="avatar">
-                            <span class="avatar-title rounded-circle border border-white">CF</span>
-                          </div>
-                          <div class="info-user ms-3">
-                            <div class="username">Jimmy Denis</div>
-                            <div class="status">Keynote Speaker</div>
-                          </div>
-                          <button class="btn btn-icon btn-link op-8 me-1">
-                            <i class="far fa-envelope"></i>
-                          </button>
-                          <button class="btn btn-icon btn-link btn-danger op-8">
-                            <i class="fas fa-ban"></i>
-                          </button>
-                        </div>
 
-                        <!-- Resource Speaker 2 -->
-                        <div class="item-list">
-                          <div class="avatar">
-                            <span class="avatar-title rounded-circle border border-white">CF</span>
-                          </div>
-                          <div class="info-user ms-3">
-                            <div class="username">Chandra Felix</div>
-                            <div class="status">Guest Speaker</div>
-                          </div>
-                          <button class="btn btn-icon btn-link op-8 me-1">
-                            <i class="far fa-envelope"></i>
-                          </button>
-                          <button class="btn btn-icon btn-link btn-danger op-8">
-                            <i class="fas fa-ban"></i>
-                          </button>
-                        </div>
-
-                        <!-- Resource Speaker 3 -->
-                        <div class="item-list">
-                          <div class="avatar">
-                            <span class="avatar-title rounded-circle border border-white">CF</span>
-                          </div>
-                          <div class="info-user ms-3">
-                            <div class="username">Talha</div>
-                            <div class="status">Panelist</div>
-                          </div>
-                          <button class="btn btn-icon btn-link op-8 me-1">
-                            <i class="far fa-envelope"></i>
-                          </button>
-                          <button class="btn btn-icon btn-link btn-danger op-8">
-                            <i class="fas fa-ban"></i>
-                          </button>
-                        </div>
-
-                        <!-- Resource Speaker 4 -->
-                        <div class="item-list">
-                          <div class="avatar">
-                            <span class="avatar-title rounded-circle border border-white">CF</span>
-                          </div>
-                          <div class="info-user ms-3">
-                            <div class="username">Chad</div>
-                            <div class="status">Speaker</div>
-                          </div>
-                          <button class="btn btn-icon btn-link op-8 me-1">
-                            <i class="far fa-envelope"></i>
-                          </button>
-                          <button class="btn btn-icon btn-link btn-danger op-8">
-                            <i class="fas fa-ban"></i>
-                          </button>
-                        </div>
-
-                        <!-- Resource Speaker 5 -->
-                        <div class="item-list">
-                          <div class="avatar">
-                            <span
-                              class="avatar-title rounded-circle border border-white bg-primary"
-                              >H</span
-                            >
-                          </div>
-                          <div class="info-user ms-3">
-                            <div class="username">Hizrian</div>
-                            <div class="status">Workshop Facilitator</div>
-                          </div>
-                          <button class="btn btn-icon btn-link op-8 me-1">
-                            <i class="far fa-envelope"></i>
-                          </button>
-                          <button class="btn btn-icon btn-link btn-danger op-8">
-                            <i class="fas fa-ban"></i>
-                          </button>
-                        </div>
-
-                        <!-- Resource Speaker 6 -->
-                        <div class="item-list">
-                          <div class="avatar">
-                            <span
-                              class="avatar-title rounded-circle border border-white bg-secondary"
-                              >F</span
-                            >
-                          </div>
-                          <div class="info-user ms-3">
-                            <div class="username">Farrah</div>
-                            <div class="status">Moderator</div>
-                          </div>
-                          <button class="btn btn-icon btn-link op-8 me-1">
-                            <i class="far fa-envelope"></i>
-                          </button>
-                          <button class="btn btn-icon btn-link btn-danger op-8">
-                            <i class="fas fa-ban"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-          </div>
         </div>
 
 
@@ -501,6 +365,48 @@
 
 
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('uploadBtn')?.addEventListener('click', function () {
+                @if (!$participant)
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Registration Required',
+                        text: 'You need to register first before uploading documents.',
+                        confirmButtonText: 'OK'
+                    });
+                @else
+                    window.location.href = "{{ route('documents') }}"; // Redirect if registered
+                @endif
+            });
+        });
+    </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('viewDocumentsBtn')?.addEventListener('click', function () {
+            @if (!$participant)
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Registration Required',
+                    text: 'You need to register first before viewing documents.',
+                    confirmButtonText: 'OK'
+                });
+            @elseif (!$hasDocuments)
+                Swal.fire({
+                    icon: 'info',
+                    title: 'No Documents Found',
+                    text: 'You have not uploaded any documents yet.',
+                    confirmButtonText: 'OK'
+                });
+            @else
+                window.location.href = "{{ route('documents.view') }}"; // Redirect if registered & has documents
+            @endif
+        });
+    });
+</script>
+
     <script>
         function calculateCETF() {
           let totalIncome = parseFloat(document.getElementById('totalIncome').value) || 0;

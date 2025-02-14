@@ -91,13 +91,15 @@ class AuthController extends Controller
     {
         $search = $request->input('search');
 
-        $users = User::where('name', 'like', '%' . $search . '%')
+        $users = User::with('participant') // Eager-load participant relationship
+            ->where('name', 'like', '%' . $search . '%')
             ->orWhere('email', 'like', '%' . $search . '%')
             ->orderBy('created_at', 'desc')
-            ->paginate(2);
+            ->paginate(5); // Increased pagination limit for better listing
 
         return view('dashboard.admin.user.datatable', compact('users'));
     }
+
 
     public function destroy($user_id)
     {

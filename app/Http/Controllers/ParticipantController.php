@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Speaker;
 use App\Models\Cooperative;
 use App\Models\Participant;
 use Illuminate\Http\Request;
+use App\Models\GARegistration;
 use App\Models\UploadedDocument;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,14 +16,17 @@ class ParticipantController extends Controller
     // Display a listing of participants
     public function index(Request $request)
     {
-        $participants = Participant::when($request->search, function($query) use ($request) {
-            return $query->where('first_name', 'like', '%' . $request->search . '%')
-                         ->orWhere('last_name', 'like', '%' . $request->search . '%')
-                         ->orWhere('middle_name', 'like', '%' . $request->search . '%');
-        })->paginate(10);  // or use another number based on your preference for per-page items
+        $participants = Participant::with(['registration', 'cooperative', 'user']) // Eager load cooperative
+            ->when($request->search, function ($query) use ($request) {
+                return $query->where('first_name', 'like', '%' . $request->search . '%')
+                    ->orWhere('last_name', 'like', '%' . $request->search . '%')
+                    ->orWhere('middle_name', 'like', '%' . $request->search . '%');
+            })->paginate(10);
 
         return view('dashboard.admin.participant.participant', compact('participants'));
     }
+
+
 
     public function participantadd()
     {
@@ -70,12 +75,15 @@ class ParticipantController extends Controller
     }
 
 
-    // Show the form for editing a participant
+   // Show the form for editing a participant
     public function edit($participant_id)
     {
         $participant = Participant::where('participant_id', $participant_id)->firstOrFail();
-        return view('dashboard.admin.participant.edit', compact('participant')); // ✅ Corrected path
+        $cooperatives = Cooperative::all(); // Fetch all cooperatives
+
+        return view('dashboard.admin.participant.edit', compact('participant', 'cooperatives'));
     }
+
 
     // Update the specified participant
     public function update(Request $request, $participant_id)
@@ -176,6 +184,61 @@ class ParticipantController extends Controller
 
         return view('dashboard.admin.participant.documents', compact('documents', 'participant_id'));
     }
+
+    public function speakerlist(Request $request)
+    {
+        $search = $request->input('search');
+
+        $speakers = Speaker::with('event') // Eager load event details
+            ->when($search, function ($query) use ($search) {
+                return $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('topic', 'like', '%' . $search . '%')
+                    ->orWhereHas('event', function ($query) use ($search) {
+                        $query->where('name', 'like', '%' . $search . '%');
+                    });
+            })
+            ->orderBy('name', 'asc')
+            ->paginate(10); // Ensure pagination is applied
+
+        return view('dashboard.participant.speakers', compact('speakers', 'search'));
+    }
+
+    public function approve(Request $request, Participant $participant)
+{
+    // Ensure the participant has uploaded documents
+    if (!$participant->uploadedDocuments()->exists()) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Participant has no uploaded documents.'
+        ], 400);
+    }
+
+    // Determine if the participant has an existing registration
+    $registration = $participant->registration;
+
+    // Get the requested status (default to 'Confirmed' if not provided)
+    $status = $request->input('status', 'Confirmed');
+
+    // If no registration exists, create one
+    if (!$registration) {
+        $registration = GARegistration::create([
+            'participant_id' => $participant->participant_id,
+            'coop_id' => $participant->coop_id, // Ensure this field is available
+            'status' => $status, // Set the provided status (Confirmed/Rejected)
+            'delegate_type' => 'Voting', // Default delegate type (change if needed)
+            'date_submitted' => now(), // Set current timestamp
+        ]);
+    } else {
+        // If registration exists, update the status
+        $registration->status = $status;
+        $registration->save();
+    }
+
+    return response()->json([
+        'success' => true,
+        'message' => "Participant status updated to $status."
+    ]);
+}
 
 
 }
