@@ -10,17 +10,17 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id('user_id');
+
+            $table->unsignedBigInteger('coop_id')->nullable();
+            $table->foreign('coop_id')->references('coop_id')->on('cooperatives')->onDelete('cascade');
+
+
             $table->string('name')->unique();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('role', ['admin', 'participant'])->default('participant');
+            $table->enum('role', ['admin', 'cooperative'])->default('cooperative');
             $table->rememberToken();
-
-            // Relationship with cooperative
-            // Relationship with participant (nullable for admins)
-            // $table->unsignedBigInteger('participant_id')->nullable();
-            // $table->foreign('participant_id')->references('participant_id')->on('participants')->onDelete('cascade');
 
             $table->timestamps();
         });

@@ -90,7 +90,7 @@
           <div class="main-header-logo">
             <!-- Logo Header -->
             <div class="logo-header" data-background-color="dark">
-                <a href="{{route('adminDashboard')}}" class="logo">
+                <a href="{{route('participantDashboard')}}" class="logo">
                     <img class="logo-mass-specc" src="{{ asset('images/logo.png') }}" alt="">
               </a>
               <div class="nav-toggle">
@@ -268,6 +268,24 @@
                                     <div>{{ $participant->delegate_type ?? 'N/A' }}</div>
                                 </div>
                             </div>
+
+                            <div class="col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="qr_code">QR Code</label>
+                                    <div class="Qr">
+                                        <!-- QR Code Image -->
+                                        <img src="https://api.qrserver.com/v1/create-qr-code/?data={{ urlencode(route('adminDashboard', ['participant_id' => $participant->participant_id])) }}&size=200x200" alt="QR Code" id="qrCodeImage"/>
+
+                                        <!-- Download Button -->
+                                        <a href="{{ route('download.qr', ['participant_id' => $participant->participant_id]) }}" class="btn btn-info btn-sm mt-2">
+                                            Download QR Code
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
                         </div>
                     </div>
                     <div class="card-action">

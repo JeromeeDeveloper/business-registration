@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->foreign('coop_id')->references('coop_id')->on('cooperatives')->onDelete('cascade');
 
             // Relationship with user
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
 
             $table->string('first_name');
@@ -32,6 +32,7 @@ return new class extends Migration {
             $table->string('msp_officer_position')->nullable();
             $table->enum('delegate_type', ['Voting', 'Non-Voting']);
             $table->timestamps();
+            $table->string('qr_code')->nullable();
         });
 
     }

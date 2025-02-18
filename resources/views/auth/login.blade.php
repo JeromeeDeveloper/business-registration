@@ -64,7 +64,7 @@
                     <input type="button" value="Login" onclick="showAgreement()">
                 </div>
                 <div class="text sign-up-text">Sign in to access the General Assembly portal.
-                    {{-- <label for="flip">Sign up</label> --}}
+                    <label for="flip">Sign up</label>
                 </div>
             </form>
 

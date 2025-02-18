@@ -360,3 +360,18 @@ body[data-background-color="dark"] .demo-icon .icon-class {
 .fc-h-event .fc-event-title-container {
     cursor: pointer !important;
 }
+
+.btnsize{
+    width: 111px;
+    padding: 10px;
+    position: relative;
+    left: 10px;
+    bottom: 6px;
+}
+
+.Qr {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+}

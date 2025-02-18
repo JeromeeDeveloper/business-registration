@@ -41,8 +41,8 @@
                     <div class="p-3" style="max-width: 900px;">
                         <h5 class="text-white text-uppercase mb-3 animated slideInDown">Join Us Online</h5>
                         <h1 class="display-1 text-white mb-md-4 animated zoomIn">Engage, Collaborate, and Grow</h1>
-                        <a href="livestream.html" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Join Live</a>
-                        <a href="contact.html" class="btn btn-outline-light py-md-3 px-md-5 animated slideInRight">Get Support</a>
+                        <a href="https://www.facebook.com/MASS.SPECC" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Join Live</a>
+                        <a href="contact" class="btn btn-outline-light py-md-3 px-md-5 animated slideInRight">Get Support</a>
                     </div>
                 </div>
             </div>
@@ -160,7 +160,7 @@
                             <h4 class="text-primary mb-0">March 2025</h4>
                         </div>
                     </div>
-                    <a href="{{url('/register')}}" class="btn btn-primary py-3 px-5 mt-3 wow zoomIn" data-wow-delay="0.9s">Register Now</a>
+                    <a href="login" class="btn btn-primary py-3 px-5 mt-3 wow zoomIn" data-wow-delay="0.9s">Login Now</a>
                 </div>
                 <div class="col-lg-5" style="min-height: 500px;">
                     <div class="position-relative h-100">

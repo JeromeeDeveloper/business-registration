@@ -2,7 +2,6 @@
 <html lang="en">
   <head>
     @include('layouts.adminheader')
-    <script src="https://cdn.jsdelivr.net/npm/instascan@1.0.0-beta.5/instascan.min.js"></script>
   </head>
   <body>
     <div class="wrapper">
@@ -11,7 +10,7 @@
         <div class="sidebar-logo">
           <!-- Logo Header -->
           <div class="logo-header" data-background-color="dark">
-            <a href="{{route('adminDashboard')}}" class="logo">
+            <a href="{{route('participantDashboard')}}" class="logo">
                 <img class="logo-mass-specc" src="{{ asset('images/logo.png') }}" alt="">
             </a>
             <div class="nav-toggle">
@@ -33,7 +32,7 @@
             <ul class="nav nav-secondary">
                 <li class="nav-item">
                     <a
-                      href="{{route('adminDashboard')}}"
+                      href="{{route('participantDashboard')}}"
                       class="collapsed"
                     >
                       <i class="fas fa-home"></i>
@@ -50,87 +49,53 @@
               <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#cooperative">
                   <i class="fas fa-users"></i>
-                  <p>Cooperative</p>
+                  <p>Resource Speakers</p>
                   <span class="caret"></span>
                 </a>
                 <div class="collapse" id="cooperative">
                   <ul class="nav nav-collapse">
                     <li>
-                        <a href="{{route('adminview')}}">
-                          <span class="sub-item">Manage Cooperative</span>
+                        <a href="{{route('speakerlist')}}">
+                          <span class="sub-item">List of Resource Speakers</span>
                         </a>
                       </li>
                   </ul>
                 </div>
               </li>
+
               <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#participant">
-                    <i class="fas fa-user-cog"></i>
+                  <i class="fas fa-users"></i>
                   <p>Participant</p>
                   <span class="caret"></span>
                 </a>
                 <div class="collapse" id="participant">
                   <ul class="nav nav-collapse">
                     <li>
-                        <a href="{{route('participants.index')}}">
-                          <span class="sub-item">Manage Participant</span>
+                        <a href="{{route('coop.index')}}">
+                          <span class="sub-item">Participants</span>
                         </a>
                       </li>
                   </ul>
                 </div>
               </li>
+
               <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#user">
                   <i class="fas fa-user"></i>
-                  <p>User</p>
+                  <p>Events Schedule</p>
                   <span class="caret"></span>
                 </a>
                 <div class="collapse" id="user">
                   <ul class="nav nav-collapse">
                     <li>
-                        <a href="{{route('users.index')}}">
-                          <span class="sub-item">Manage User</span>
+                        <a href="{{route('schedule')}}">
+                          <span class="sub-item">List of Events</span>
                         </a>
                       </li>
                   </ul>
                 </div>
               </li>
-
-              <li class="nav-item">
-                <a data-bs-toggle="collapse" href="#speaker">
-                  <i class="fas fa-microphone"></i>
-                  <p>Speakers</p>
-                  <span class="caret"></span>
-                </a>
-                <div class="collapse" id="speaker">
-                  <ul class="nav nav-collapse">
-                    <li>
-                        <a href="{{ route('speakers.index') }}">
-                            <span class="sub-item">Manage Speaker</span>
-                        </a>
-                    </li>
-
-                  </ul>
-                </div>
-              </li>
-
-              <li class="nav-item">
-                <a data-bs-toggle="collapse" href="#events">
-                  <i class="fas fa-calendar"></i>
-                  <p>Events</p>
-                  <span class="caret"></span>
-                </a>
-                <div class="collapse" id="events">
-                  <ul class="nav nav-collapse">
-                    <li>
-                        <a href="{{route('events.index')}}">
-                          <span class="sub-item">Manage Events</span>
-                        </a>
-                      </li>
-                  </ul>
-                </div>
-              </li>
-
             </ul>
           </div>
         </div>
@@ -142,7 +107,7 @@
           <div class="main-header-logo">
             <!-- Logo Header -->
             <div class="logo-header" data-background-color="dark">
-              <a href="{{route('adminDashboard')}}" class="logo">
+              <a href="" class="logo">
                 <img class="logo-mass-specc" src="{{ asset('images/logo.png') }}" alt="">
               </a>
               <div class="nav-toggle">
@@ -200,7 +165,7 @@
                     </li>
                     <li>
                       <div class="dropdown-divider"></div>
-                      <a class="dropdown-item" href="{{ route('profile.edit') }}">My Profile</a>
+                      <a class="dropdown-item" href="{{ route('participant.profile.edit') }}">My Profile</a>
                       <div class="dropdown-divider"></div>
                       <form action="{{ route('logout') }}" method="POST" id="logout-form" style="display: none;">
                           @csrf
@@ -219,111 +184,133 @@
 
         <div class="container">
           <div class="page-inner">
-            <div
-              class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4"
-            >
-              <div>
-                <h3 class="fw-bold mb-3">Admin Dashboard</h3>
-                <h6 class="text-muted">MASS-SPECC Online Registration System</h6>
-              </div>
-              <div class="ms-md-auto py-2 py-md-0">
-                <a href="#" class="btn btn-label-info btn-round me-2">Generate Reports</a>
-                <a href="#" id="scan-qr-btn" class="btn btn-primary btn-round">Scan QR Code</a>
-                <input type="text" id="qr-input-field" style="position: absolute; opacity: 0; width: 1px; height: 1px;" />
-                <div id="qr-display"></div>
 
-              </div>
-              <div id="scanner-container" style="display:none;">
-                <video id="preview" width="100%" height="auto"></video>
-            </div>
+            <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
+                <div>
+                  <h3 class="fw-bold mb-3">Cooperative Dashboard</h3>
+                  <h6 class="op-7 mb-2">MASS-SPECC Assembly Registration Overview</h6>
+                </div>
+                <div class="ms-md-auto py-2 py-md-0 p-6">
+                    @if ($participant && $participant->cooperative)
+                    <a href="{{ route('cooperativeprofile', ['participant_id' => $participant->participant_id, 'coop_id' => $participant->cooperative->coop_id]) }}" class="btn btn-label-info btn-round me-2">Cooperative Profile</a>
+                @else
+                    <a class="btn btn-info btn-round">No Cooperative Associated Yet</a>
+                @endif
 
-            </div>
-            <div class="row">
-              <div class="col-sm-6 col-md-3">
-                <div class="card card-stats card-round">
-                  <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-icon">
-                        <div
-                          class="icon-big text-center icon-primary bubble-shadow-small"
-                        >
-                          <i class="fas fa-users"></i>
+                <a href="#" id="viewDocumentsBtn" class="btn btn-primary btn-round">View Uploaded Documents</a>
+                </div>
+              </div>
+
+              <!-- Dashboard Cards -->
+              <div class="row">
+                <!-- Registration Status -->
+                <div class="col-sm-6 col-md-3">
+                  <div class="card card-stats card-round">
+                    <div class="card-body">
+                      <div class="row align-items-center">
+                        <div class="col-icon">
+                          <div class="icon-big text-center icon-primary bubble-shadow-small">
+                            <i class="fas fa-user-check"></i>
+                          </div>
+                        </div>
+                        <div class="col col-stats ms-3 ms-sm-0">
+                            <div class="numbers">
+                                <p class="card-category">Registration Status</p>
+                                <h4 class="card-title
+                                {{ $registrationStatus === 'Confirmed' ? 'text-success' : ($registrationStatus === 'Pending' ? 'text-warning' : 'text-danger') }}">
+                                {{ $registrationStatus === 'Confirmed' ? 'Approved' : ($registrationStatus === 'Rejected' ? 'Rejected' : $registrationStatus) }}
+                            </h4>
+                            </div>
+
                         </div>
                       </div>
-                      <div class="col col-stats ms-3 ms-sm-0">
-                        <div class="numbers">
-                            <p class="card-category">Participants</p>
-                            <h4 class="card-title">{{ number_format($totalParticipants) }}</h4>
+                    </div>
+                  </div>
+                </div>
+
+              <!-- Registration Section -->
+                <div class="col-sm-6 col-md-3">
+                    <div class="card card-stats card-round">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                        <div class="col-icon">
+                            <div class="icon-big text-center icon-success bubble-shadow-small">
+                            <i class="fas fa-calendar-alt"></i>
+                            </div>
+                        </div>
+                        <div class="col col-stats ms-3 ms-sm-0">
+                            <div class="numbers">
+                            <p class="card-category">Registration Open (March 15-17, 2025)</p>
+                            {{-- <h4 class="card-title">March 15-17, 2025</h4> --}}
+                                <a href="{{ route('coop.index') }}" class="btn btn-sm btn-outline-info mt-2">Register Now</a>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                 <!-- Upload Required Documents -->
+                 <div class="col-sm-6 col-md-3">
+                    <div class="card card-stats card-round">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-icon">
+                                    <div class="icon-big text-center icon-warning bubble-shadow-small">
+                                        <i class="fas fa-file-upload"></i>
+                                    </div>
+                                </div>
+
+                                <div class="col col-stats ms-3 ms-sm-0">
+                                    <div class="numbers">
+                                        <p class="card-category">Required Documents</p>
+
+                                        @php
+                                            $cooperative = Auth::user()->cooperative; // Get the logged-in user's cooperative
+                                        @endphp
+
+                                        @if ($cooperative)
+                                            <!-- Only show the link if the user has a cooperative -->
+                                            <a href="{{ route('documents') }}" class="btn btn-sm btn-outline-primary mt-2">Upload Now</a>
+                                        @else
+                                            <!-- Optional: If user doesn't have a cooperative, show a message or a different button -->
+                                            <p class="text-warning mt-2">You need to be associated with a cooperative to upload documents.</p>
+                                        @endif
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Assigned Committees & Voting Status -->
+                <div class="col-sm-6 col-md-3">
+                  <div class="card card-stats card-round">
+                    <div class="card-body">
+                      <div class="row align-items-center">
+                        <div class="col-icon">
+                          <div class="icon-big text-center icon-secondary bubble-shadow-small">
+                            <i class="fas fa-users"></i>
+                          </div>
+                        </div>
+                        <div class="col col-stats ms-3 ms-sm-0">
+                            <div class="numbers">
+                                <p class="card-category">Committee & Voting</p>
+                                <span class="text-success">
+                                    {{ Auth::user()->participant->delegate_type ?? 'N/A' }}
+                                </span>
+                            </div>
+
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="col-sm-6 col-md-3">
-                <div class="card card-stats card-round">
-                  <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-icon">
-                        <div
-                          class="icon-big text-center icon-info bubble-shadow-small"
-                        >
-                          <i class="fas fa-calendar"></i>
-                        </div>
-                      </div>
-                      <div class="col col-stats ms-3 ms-sm-0">
-                        <div class="numbers">
-                          <p class="card-category">Events</p>
-                          <h4 class="card-title">{{ number_format($totalEvents) }}</h4>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-3">
-                <div class="card card-stats card-round">
-                  <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-icon">
-                        <div
-                          class="icon-big text-center icon-success bubble-shadow-small"
-                        >
-                          <i class="fas fa-microphone"></i>
-                        </div>
-                      </div>
-                      <div class="col col-stats ms-3 ms-sm-0">
-                        <div class="numbers">
-                          <p class="card-category">Speakers</p>
-                          <h4 class="card-title">{{ number_format($totalSpeakers) }}</h4>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-3">
-                <div class="card card-stats card-round">
-                  <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-icon">
-                        <div
-                          class="icon-big text-center icon-secondary bubble-shadow-small"
-                        >
-                          <i class="far fa-user"></i>
-                        </div>
-                      </div>
-                      <div class="col col-stats ms-3 ms-sm-0">
-                        <div class="numbers">
-                            <p class="card-category">Users</p>
-                            <h4 class="card-title">{{ number_format($totalUsers) }}</h4>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+
             <div class="row">
                 <div class="col-md-8">
                     <div class="card card-round">
@@ -370,50 +357,52 @@
                     </div>
                   </div>
 
-                  <div class="col-md-4">
-                    @if($latestEvent)
-                    <div class="card card-primary card-round">
-                        <div class="card-header">
-                            <div class="card-head-row">
-                                <div class="card-title">{{ $latestEvent->title }}</div>
-                                <div class="card-tools">
-                                    <div class="dropdown">
-                                        <button class="btn btn-sm btn-label-light dropdown-toggle" type="button"
-                                            id="dropdownMenuButton{{ $latestEvent->event_id }}" data-bs-toggle="dropdown"
-                                            aria-haspopup="true" aria-expanded="false">
-                                            More Options
-                                        </button>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $latestEvent->event_id }}">
-                                            <a class="dropdown-item" href="{{route('schedule')}}">View Details</a>
-                                        </div>
+              <div class="col-md-4">
+                @if($event)
+                <div class="card card-primary card-round">
+                    <div class="card-header">
+                        <div class="card-head-row">
+                            <div class="card-title">{{ $event->title }}</div>
+                            <div class="card-tools">
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-label-light dropdown-toggle" type="button"
+                                        id="dropdownMenuButton{{ $event->event_id }}" data-bs-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">
+                                        More Options
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $event->event_id }}">
+                                        <a class="dropdown-item" href="{{route('schedule')}}">View Details</a>
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-category">
-                                {{ \Carbon\Carbon::parse($latestEvent->start_date)->format('F d, Y') }} -
-                                {{ \Carbon\Carbon::parse($latestEvent->end_date)->format('F d, Y') }}
-                            </div>
                         </div>
-                        <div class="card-body">
-                            <p>{{ $latestEvent->description }}</p>
-                            <ul>
-                                <li><strong>📍 Venue:</strong> {{ $latestEvent->location }}</li>
-                                <li><strong>🕒 Time:</strong> 9:00 AM - 5:00 PM</li>
-                                <li><strong>🎤 Guest Speakers:</strong>
-                                    @if($latestEvent->speakers->count() > 0)
-                                        {{ $latestEvent->speakers->pluck('name')->implode(', ') }}
-                                    @else
-                                        No speakers listed
-                                    @endif
-                                </li>
-                                <li><strong>📌 Activities:</strong> Presentations, Q&A Sessions, Voting</li>
-                            </ul>
-                            <a href="#" class="btn btn-sm btn-outline-primary mt-2">Register Now</a>
+                        <div class="card-category">
+                            {{ \Carbon\Carbon::parse($event->start_date)->format('F d, Y') }} -
+                            {{ \Carbon\Carbon::parse($event->end_date)->format('F d, Y') }}
                         </div>
                     </div>
-                    @else
-                    <p>No upcoming events at the moment.</p>
-                    @endif
+                    <div class="card-body">
+                        <p>{{ $event->description }}</p>
+                        <ul>
+                            <li><strong>📍 Venue:</strong> {{ $event->location }}</li>
+                            <li><strong>🕒 Time:</strong> 9:00 AM - 5:00 PM</li>
+                            <li><strong>🎤 Guest Speakers:</strong>
+                                @if($event->speakers->count() > 0)
+                                    {{ $event->speakers->pluck('name')->implode(', ') }}
+                                @else
+                                    No speakers listed
+                                @endif
+                            </li>
+                            <li><strong>📌 Activities:</strong> Presentations, Q&A Sessions, Voting</li>
+                        </ul>
+                        <a href="#" class="btn btn-sm btn-outline-primary mt-2">Register Now</a>
+                    </div>
+                </div>
+                @else
+                <p>No upcoming events at the moment.</p>
+                @endif
+
+
 
                   <div class="card card-round">
                     <div class="card-body pb-0">
@@ -433,7 +422,8 @@
 
               </div>
             </div>
-          </div>
+
+
         </div>
 
 
@@ -443,38 +433,33 @@
 
 
     </div>
-    <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+
+
     <script>
-        const qrInput = document.getElementById('qr-input-field');
-        const qrDisplay = document.getElementById('qr-display');
-
-        // Automatically focus the hidden input field to capture Zebex input
-        qrInput.focus();
-
-        // Debugging: Check if input field is focused
-        console.log('Input field focused:', document.activeElement === qrInput);
-
-        // When input is detected from the Zebex scanner
-        qrInput.addEventListener('input', function() {
-            console.log('Input detected'); // Debug log to check if the input event is triggered
-            const scannedData = qrInput.value.trim();
-            console.log('Scanned Data:', scannedData);
-
-            if (scannedData) {
-                qrDisplay.innerHTML = 'Scanned Data: ' + scannedData;
-
-                if (isValidURL(scannedData)) {
-                    console.log('Navigating to:', scannedData);
-                    window.location.href = scannedData;
-                }
-            }
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('viewDocumentsBtn')?.addEventListener('click', function () {
+                // Check if the user has a cooperative
+                @if (!$cooperative)
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Registration Required',
+                        text: 'You need to register first before viewing documents.',
+                        confirmButtonText: 'OK'
+                    });
+                @elseif (!$hasDocuments)
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'No Documents Found',
+                        text: 'You have not uploaded any documents yet.',
+                        confirmButtonText: 'OK'
+                    });
+                @else
+                    window.location.href = "{{ route('documents.view') }}"; // Redirect if registered & has documents
+                @endif
+            });
         });
-
-        function isValidURL(string) {
-            const res = string.match(/^(ftp|http|https):\/\/[^ "]+$/);
-            return res !== null;
-        }
     </script>
+
     <script>
         function calculateCETF() {
           let totalIncome = parseFloat(document.getElementById('totalIncome').value) || 0;
@@ -485,3 +470,8 @@
    @include('layouts.links')
   </body>
 </html>
+
+
+
+
+

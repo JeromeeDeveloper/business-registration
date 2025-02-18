@@ -64,8 +64,7 @@
                   </ul>
                 </div>
               </li>
-
-              {{-- <li>
+              <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#participant">
                     <i class="fas fa-user-cog"></i>
                   <p>Participant</p>
@@ -80,34 +79,16 @@
                       </li>
                   </ul>
                 </div>
-              </li> --}}
-
-              <li class="nav-item">
-                <a data-bs-toggle="collapse" href="#participant">
-                    <i class="fas fa-user-cog"></i>
-                  <p>Participant</p>
-                  <span class="caret"></span>
-                </a>
-                <div class="collapse" id="participant">
-                    <ul class="nav nav-collapse">
-                      <li>
-                          <a href="{{route('participants.index')}}">
-                              <span class="sub-item">Manage Participant</span>
-                            </a>
-                        </li>
-                    </ul>
-                  </div>
               </li>
-
               <li class="nav-item">
-                <a data-bs-toggle="collapse show" href="#user">
+                <a data-bs-toggle="collapse" href="#user">
                   <i class="fas fa-user"></i>
                   <p>User</p>
                   <span class="caret"></span>
                 </a>
-                <div class="collapse show" id="user">
+                <div class="collapse" id="user">
                   <ul class="nav nav-collapse">
-                    <li class="active">
+                    <li>
                         <a href="{{route('users.index')}}">
                           <span class="sub-item">Manage User</span>
                         </a>
@@ -162,9 +143,8 @@
           <div class="main-header-logo">
             <!-- Logo Header -->
             <div class="logo-header" data-background-color="dark">
-                <a href="{{route('adminDashboard')}}" class="logo">
-                    <img class="logo-mass-specc" src="{{ asset('images/logo.png') }}" alt="">
-              </a>
+              <a href="{{route('adminDashboard')}}" class="logo">
+                <img class="logo-mass-specc" src="{{ asset('images/logo.png') }}" alt="">
               <div class="nav-toggle">
                 <button class="btn btn-toggle toggle-sidebar">
                   <i class="gg-menu-right"></i>
@@ -187,7 +167,7 @@
         <div class="container">
           <div class="page-inner">
             <div class="page-header">
-              <h3 class="fw-bold mb-3">User Registration</h3>
+              <h3 class="fw-bold mb-3">Edit Profile</h3>
               <ul class="breadcrumbs mb-3">
                 <li class="nav-home">
                   <a href="#">
@@ -198,13 +178,13 @@
                   <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                  <a href="#">User</a>
+                  <a href="#">Profile</a>
                 </li>
                 <li class="separator">
                   <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                  <a href="#">Registration</a>
+                  <a href="#">Edit</a>
                 </li>
               </ul>
             </div>
@@ -212,111 +192,64 @@
               <div class="col-md-12">
                 <div class="card">
                   <div class="card-header">
-                    <div class="card-title">User</div>
+                    <div class="card-title">Profile Edit Form</div>
                   </div>
-                  <form action="{{ route('userregister') }}" method="POST">
+
+                  <form action="{{ route('profile.update') }}" method="POST">
                     @csrf
+                    @method('PUT')
 
-                    @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
-
-                    <div class="card-body">
-                        <div class="row">
-                            <!-- Name -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="name">Full Name</label>
-                                    <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                        name="name" id="name" placeholder="Enter your name" value="{{ old('name') }}" required>
-                                    @error('name')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                          <!-- Cooperative Selection Dropdown -->
-                    <div class="col-md-6 col-lg-4">
-                        <div class="form-group">
-                            <label for="coop_id">Select Cooperative</label>
-                            <select class="form-control @error('coop_id') is-invalid @enderror" name="coop_id" id="coop_id" required>
-                                <option value="">-- Select Cooperative --</option>
-                                @foreach($cooperatives as $cooperative)
-                                <option value="{{ $cooperative->coop_id }}" {{ old('coop_id') == $cooperative->coop_id ? 'selected' : '' }}>
-                                    {{ $cooperative->name }}
-                                </option>
-                                @endforeach
-                            </select>
-                            @error('coop_id')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
-                        </div>
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" name="name" id="name" value="{{ old('name', $user->name) }}" required>
                     </div>
 
-
-                            <!-- Email -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="email">Email</label>
-                                    <input type="email" class="form-control @error('email') is-invalid @enderror"
-                                        name="email" id="email" placeholder="Enter your email" value="{{ old('email') }}" required>
-                                    @error('email')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <!-- Password -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="password">Password</label>
-                                    <input type="password" class="form-control @error('password') is-invalid @enderror"
-                                        name="password" id="password" placeholder="Enter your password" required>
-                                    @error('password')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" name="email" id="email" value="{{ old('email', $user->email) }}" required>
                     </div>
 
-                    <div class="card-action">
-                        <button type="submit" class="btn btn-success">Register</button>
+                    <div class="form-group">
+                        <label for="password">Password (Leave blank to keep current)</label>
+                        <input type="password" class="form-control" name="password" id="password">
                     </div>
+
+                    <div class="form-group">
+                        <label for="password_confirmation">Confirm Password</label>
+                        <input type="password" class="form-control" name="password_confirmation" id="password_confirmation">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
+                    <a href="{{ url()->previous() }}" class="btn btn-secondary mt-3">Previous</a>
                 </form>
 
+                @if(session('success'))
+                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                    <script>
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: '{{ session('success') }}'
+                        });
+                    </script>
+                @endif
+
+
+            </div>
                   </div>
                 </div>
-            </div>
               </div>
             </div>
           </div>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        @if (session('success'))
-            <script>
-                document.addEventListener("DOMContentLoaded", function() {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success!',
-                        text: '{{ session("success") }}',
-                        confirmButtonColor: '#28a745'
-                    });
-                });
-            </script>
-        @endif
-
-
-        @include('layouts.adminfooter')
+    </div>
+        {{-- @include('layouts.adminfooter') --}}
       </div>
 
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
   @include('layouts.links')
   </body>
 </html>

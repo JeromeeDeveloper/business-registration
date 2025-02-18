@@ -227,6 +227,26 @@
                                 </div>
                             </div>
 
+                            <!-- Cooperative Selection -->
+                            <div class="col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="coop_id">Select Cooperative</label>
+                                    <select class="form-control @error('coop_id') is-invalid @enderror" name="coop_id" id="coop_id" required>
+                                        <option value="">-- Select Cooperative --</option>
+                                        @foreach($cooperatives as $cooperative)
+                                            <option value="{{ $cooperative->coop_id }}"
+                                                {{ old('coop_id', $user->coop_id) == $cooperative->coop_id ? 'selected' : '' }}>
+                                                {{ $cooperative->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('coop_id')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+
+
                             <!-- Password -->
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
@@ -245,11 +265,12 @@
                             </div>
                             @endif
 
+                            <!-- User Role -->
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="role">User Role</label>
                                     <select class="form-control" name="role" id="role" required>
-                                        <option value="participant" {{ old('role', $user->role) == 'participant' ? 'selected' : '' }}>Participant</option>
+                                        <option value="cooperative" {{ old('role', $user->role) == 'cooperative' ? 'selected' : '' }}>Cooperative</option>
                                         <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Admin</option>
                                     </select>
                                 </div>

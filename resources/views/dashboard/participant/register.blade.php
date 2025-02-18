@@ -142,6 +142,11 @@
                   <div class="card-header">
                     <div class="card-title">Participant Registration Form</div>
                   </div>
+                {{-- @if(session('success'))
+                    <div class="alert alert-success">{{ session('success') }}</div>
+                    <img src="{{ asset('qrcodes/participant_' . $participant->id . '.png') }}" alt="Participant QR Code">
+                @endif --}}
+
                   <form id="participantForm" method="POST" action="{{ route('participant.store') }}">
                     @csrf
                     <div class="card-body">

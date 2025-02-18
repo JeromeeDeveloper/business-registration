@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Cooperative;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -31,7 +32,7 @@ class AuthController extends Controller
 
         if ($user->role === 'admin') {
             return redirect()->route('adminDashboard')->with('success', 'Welcome back, Admin!');
-        } elseif ($user->role === 'participant') {
+        } elseif ($user->role === 'cooperative') {
             return redirect()->route('participantDashboard')->with('success', 'Welcome back!');
         }
     }
@@ -54,7 +55,7 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'participant',
+            'role' => 'cooperative',
         ]);
 
         Auth::login($user);
@@ -112,36 +113,77 @@ class AuthController extends Controller
     public function edit($user_id)
     {
         $user = User::findOrFail($user_id);
-        return view('dashboard.admin.user.edit', compact('user'));
+        $cooperatives = Cooperative::all(); // Get all cooperatives to display in the dropdown
+        return view('dashboard.admin.user.edit', compact('user', 'cooperatives'));
     }
 
-
     public function update(Request $request, $user_id)
+{
+    // Validate the incoming data
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,' . $user_id . ',user_id',
+        'role' => 'required|string|in:cooperative,admin',
+        'coop_id' => 'required|exists:cooperatives,coop_id', // Validate coop_id exists in cooperatives table
+        'password' => 'nullable|string|min:6|confirmed',
+    ]);
+
+    // Find the user by user_id and update the details
+    $user = User::findOrFail($user_id);
+
+    // Only update the password if it's provided
+    if ($request->filled('password')) {
+        $user->password = bcrypt($request->password); // Hash the new password
+    } else {
+        // If no password is provided, don't include it in the update
+        unset($validated['password']);
+    }
+
+    // Update the coop_id field as well
+    $user->coop_id = $request->coop_id;
+
+    // Update the other fields
+    $user->update($validated);
+
+    // Redirect to the users page with a success message
+    return redirect()->route('users.index')->with('success', 'User updated successfully!');
+}
+
+
+    public function editProfile()
+    {
+        $user = Auth::user(); // Get the authenticated user
+        return view('dashboard.admin.myprofile', compact('user')); // Pass user data to the view
+    }
+
+    public function updateProfile(Request $request)
     {
         // Validate the incoming data
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user_id . ',user_id',
-            'role' => 'required|string|in:participant,admin', // Use 'role' instead of 'type'
-            'password' => 'nullable|string|min:6|confirmed', // Only validate confirmation if password is provided
+            'email' => 'required|email|unique:users,email,' . Auth::id() . ',user_id',
+            'password' => 'nullable|string|min:6|confirmed', // Only validate if password is provided
         ]);
 
-        // Find the user by user_id and update the details
-        $user = User::findOrFail($user_id);
+        // Get the authenticated user
+        $user = Auth::user();
 
         // Only update the password if it's provided
         if ($request->filled('password')) {
             $user->password = bcrypt($request->password); // Hash the new password
-        } else {
-            // If no password is provided, don't include it in the update
-            unset($validated['password']);
         }
 
         // Update the other fields
-        $user->update($validated);
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            // Password will be updated only if filled
+            'password' => $user->password ?? $user->password,
+        ]);
 
-        // Redirect to the users page with a success message
-        return redirect()->route('users.index')->with('success', 'User updated successfully!');
+        // Redirect back with a success message
+        return redirect()->route('profile.edit')->with('success', 'Profile updated successfully!');
     }
+
 
 }

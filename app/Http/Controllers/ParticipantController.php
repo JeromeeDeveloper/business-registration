@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use App\Models\GARegistration;
 use App\Models\UploadedDocument;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 class ParticipantController extends Controller
 {
@@ -39,33 +41,56 @@ class ParticipantController extends Controller
     }
 
 
-    public function store(Request $request)
-    {
+public function store(Request $request)
+{
+    // Validate the form data
+    $validatedData = $request->validate([
+        'coop_id' => 'required|exists:cooperatives,coop_id',
+        'user_id' => 'nullable|exists:users,user_id',
+        'first_name' => 'required|string|max:255',
+        'middle_name' => 'nullable|string|max:255',
+        'last_name' => 'required|string|max:255',
+        'nickname' => 'nullable|string|max:255',
+        'gender' => 'required|string|max:255',
+        'phone_number' => 'required|string|max:15',
+        'designation' => 'nullable|string|max:255',
+        'congress_type' => 'nullable|string|max:255',
+        'religious_affiliation' => 'nullable|string|max:255',
+        'tshirt_size' => 'nullable|string|max:5',
+        'is_msp_officer' => 'required|string|max:3',
+        'msp_officer_position' => 'nullable|string|max:255',
+        'delegate_type' => 'required|string|max:10',
+    ]);
 
-        // Validate the form data
-        $validatedData = $request->validate([
-            'coop_id' => 'required|exists:cooperatives,coop_id',
-            'user_id' => 'required|exists:users,user_id',
-            'first_name' => 'required|string|max:255',
-            'middle_name' => 'nullable|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'nickname' => 'nullable|string|max:255',
-            'gender' => 'required|string|max:255',
-            'phone_number' => 'required|string|max:15',
-            'designation' => 'nullable|string|max:255',
-            'congress_type' => 'nullable|string|max:255',
-            'religious_affiliation' => 'nullable|string|max:255',
-            'tshirt_size' => 'nullable|string|max:5',
-            'is_msp_officer' => 'required|string|max:3',
-            'msp_officer_position' => 'nullable|string|max:255',
-            'delegate_type' => 'required|string|max:10',
-        ]);
+    // Store the participant data
+    $participant = Participant::create($validatedData);
 
-        // Store the participant data
-        Participant::create($validatedData);
+    // Generate QR code data (e.g., a URL to their profile page)
+    $qrData = route('adminDashboard', ['participant_id' => $participant->participant_id]); // Adjust this route as needed
 
-        return redirect()->route('participants.index')->with('success', 'Participant registered successfully!');
+    // Call the external QR code API
+    $response = Http::get('https://api.qrserver.com/v1/create-qr-code/', [
+        'data' => $qrData,
+        'size' => '200x200' // You can adjust the size here
+    ]);
+
+    // Check if the QR code generation is successful
+    if ($response->successful()) {
+        // Save the QR code image
+        $path = 'qrcodes/participant_' . $participant->participant_id . '.png';
+        Storage::disk('public')->put($path, $response->body());
+
+        // Optionally, save the QR code path to the participant
+        $participant->qr_code = $path;
+        $participant->save();
+    } else {
+        // Handle failure if the QR code generation fails
+        return redirect()->route('participants.index')->with('error', 'Failed to generate QR code.');
     }
+
+    // Redirect or return a response
+    return redirect()->route('participants.index')->with('success', 'Participant registered successfully!');
+}
 
     // Show a specific participant
     public function show($participant_id)
@@ -108,32 +133,64 @@ class ParticipantController extends Controller
       // Show the document upload form
       public function documents()
       {
-          // Get the logged-in user's participant information
-          $participant = Auth::user()->participant;
+          // Get the logged-in user's cooperative information
+          $cooperative = Auth::user()->cooperative;
 
-          if (!$participant) {
-              return redirect()->back()->with('error', 'You are not registered as a participant.');
+          if (!$cooperative) {
+              return redirect()->back()->with('error', 'You are not associated with a cooperative.');
           }
 
-          return view('dashboard.participant.documents', compact('participant'));
+          // Pass the cooperative data to the view
+          return view('dashboard.cooperative.documents', compact('cooperative'));
       }
 
-      // Store uploaded documents
+
       public function storeDocuments(Request $request)
       {
           $request->validate([
-              'documents.*' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
+              'documents.Financial Statement' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
+              'documents.Resolution for Voting Delegates' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
+              'documents.Deposit Slip for Registration Fee' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
+              'documents.Deposit Slip for CETF Remittance' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
           ]);
 
-          // Get the logged-in user's participant ID
           $participant = Auth::user()->participant;
 
           if (!$participant) {
-              return redirect()->back()->with('error', 'You are not registered as a participant.');
+              return response()->json(['success' => false, 'message' => 'You are not registered as a participant.'], 403);
           }
 
+          $registrationStatus = $participant->registration ? $participant->registration->status : 'Pending';
+          $successMessages = [];
+
           foreach ($request->file('documents') as $documentType => $file) {
-              $filePath = $file->store('documents', 'public'); // Store in storage/app/public/documents
+              $existingDocument = UploadedDocument::where('participant_id', $participant->participant_id)
+                  ->where('document_type', $documentType)
+                  ->first();
+
+              if ($existingDocument && $registrationStatus === 'Rejected') {
+                  Storage::disk('public')->delete($existingDocument->file_path);
+                  $existingDocument->delete();
+
+                  $filePath = $file->store('documents', 'public');
+
+                  UploadedDocument::create([
+                      'participant_id' => $participant->participant_id,
+                      'document_type' => $documentType,
+                      'file_name' => $file->getClientOriginalName(),
+                      'file_path' => $filePath,
+                  ]);
+
+                  $successMessages[] = "$documentType uploaded successfully after rejection.";
+                  continue;
+              }
+
+              if ($existingDocument) {
+                  $successMessages[] = "$documentType has already been uploaded.";
+                  continue;
+              }
+
+              $filePath = $file->store('documents', 'public');
 
               UploadedDocument::create([
                   'participant_id' => $participant->participant_id,
@@ -141,10 +198,17 @@ class ParticipantController extends Controller
                   'file_name' => $file->getClientOriginalName(),
                   'file_path' => $filePath,
               ]);
+
+              $successMessages[] = "$documentType uploaded successfully.";
           }
 
-          return redirect()->back()->with('success', 'Documents uploaded successfully.');
+          return response()->json([
+              'success' => true,
+              'message' => implode('<br>', $successMessages)
+          ]);
       }
+
+
 
       public function viewDocuments()
       {
@@ -240,5 +304,39 @@ class ParticipantController extends Controller
     ]);
 }
 
+public function editProfile()
+{
+    $user = Auth::user(); // Get the authenticated user
+    return view('dashboard.admin.participantprofile', compact('user')); // Pass user data to the view
+}
+
+public function updateProfile(Request $request)
+{
+    // Validate the incoming data
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,' . Auth::id() . ',user_id',
+        'password' => 'nullable|string|min:6|confirmed', // Only validate if password is provided
+    ]);
+
+    // Get the authenticated user
+    $user = Auth::user();
+
+    // Only update the password if it's provided
+    if ($request->filled('password')) {
+        $user->password = bcrypt($request->password); // Hash the new password
+    }
+
+    // Update the other fields
+    $user->update([
+        'name' => $request->name,
+        'email' => $request->email,
+        // Password will be updated only if filled
+        'password' => $user->password ?? $user->password,
+    ]);
+
+    // Redirect back with a success message
+    return redirect()->route('participant.profile.edit')->with('success', 'Profile updated successfully!');
+}
 
 }

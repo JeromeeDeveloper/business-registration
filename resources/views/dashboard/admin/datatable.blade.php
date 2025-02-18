@@ -200,78 +200,103 @@
                   </div>
                   <div class="card-body">
                     <!-- Modal -->
-                    <form method="GET" action="{{ route('adminview') }}" class="mb-3">
-                        <div class="d-flex justify-content-end">
-                            <div class="input-group flex-nowrap w-50 w-md-50 w-lg-25 ms-auto">
-                            <input type="text" name="search" class="form-control" placeholder="Search..."
-                                   value="{{ request('search') }}">
-                            <button type="submit" class="btn btn-primary">Search</button>
-                        </div>
-                     </div>
-                      <div class="table-responsive">
-                        <table id="add-row" class="display table table-striped table-hover">
-                          <thead>
-                            <tr>
-                              <th>Cooperative Name</th>
-                              <th>Cooperative Type</th>
-                              <th>Cooperative Email</th>
-                              <th>Cooperative Address</th>
-                              <th style="width: 10%">Action</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            @forelse ($cooperatives as $coop)
-                                <tr>
-                                    <td>{{ $coop->name }}</td>
-                                    <td>{{ $coop->type }}</td>
-                                    <td>{{ $coop->email }}</td>
-                                    <td>{{ $coop->address }}</td>
-                                    <td>
-                                        <div class="form-button-action">
-                                            <a href="{{ route('adminregister') }}" class="btn btn-link btn-info btn-lg" data-bs-toggle="tooltip" title="Add Cooperative">
-                                                <i class="fa fa-plus"></i>
-                                            </a>
-                                            <a href="{{ route('cooperatives.show', $coop->coop_id) }}" class="btn btn-link btn-info btn-lg" data-bs-toggle="tooltip" title="View Coop Details">
-                                                <i class="fa fa-eye"></i>
-                                            </a>
+                    <!-- Search Form -->
+<form method="GET" action="{{ route('adminview') }}" class="mb-3">
+    <div class="d-flex justify-content-end">
+        <div class="input-group flex-nowrap w-50 w-md-50 w-lg-25 ms-auto">
+            <input type="text" name="search" class="form-control" placeholder="Search..."
+                   value="{{ request('search') }}">
+            <div class="input-group-append gap-2 d-flex">
+                <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                <a href="{{ route('adminregister') }}" class="btn btn-info text-white" data-bs-toggle="tooltip" title="Add Cooperative">
+                    <i class="fa fa-plus"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</form>
 
-                                            <button type="button" class="btn btn-link btn-primary btn-lg" data-bs-toggle="tooltip" title="Edit Coop">
-                                                <a href="{{ route('cooperatives.edit', $coop->coop_id) }}" class="text-decoration-none text-primary">
-                                                    <i class="fa fa-edit"></i>
-                                                </a>
-                                            </button>
+<!-- Table with Cooperatives -->
+<div class="table-responsive">
+    <table id="add-row" class="display table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Cooperative Name</th>
+                <th>Cooperative Type</th>
+                <th>Cooperative Email</th>
+                <th>Cooperative Address</th>
+                <th style="width: 10%">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse ($cooperatives as $coop)
+                <tr>
+                    <td>{{ $coop->name }}</td>
+                    <td>{{ $coop->type }}</td>
+                    <td>{{ $coop->email }}</td>
+                    <td>{{ $coop->address }}</td>
+                    <td>
+                        <div class="form-button-action">
 
-                                            <form action="{{ route('cooperatives.destroy', $coop->coop_id) }}" method="POST" class="delete-form" style="display:inline;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="button" class="btn btn-link btn-danger" data-bs-toggle="tooltip" title="Remove Coop" aria-label="Remove Coop" onclick="confirmDelete(event, this)">
-                                                    <i class="fa fa-times"></i>
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="5" class="text-center">No search results found</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-
-                       @if(session('success'))
-                            <script>
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: '{{ session('success') == 'Deleted!' ? 'Deleted!' : 'Success!' }}',
-                                    text: '{{ session('success') }}',
-                                    confirmButtonText: 'OK'
-                                });
-                            </script>
+                            <!-- Notify Form -->
+                            @if(session('error'))
+                            <div class="alert alert-danger">
+                                {{ session('error') }}
+                            </div>
                         @endif
 
-                        </table>
-                      </div>
-                    </form>
+                        <form action="{{ route('cooperatives.notify', $coop->coop_id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            <button type="submit" class="btn btn-link btn-warning btn-lg" data-bs-toggle="tooltip" title="Notify Coop">
+                                <i class="fa fa-bell"></i>
+                            </button>
+                        </form>
+
+
+
+                            <!-- View Coop Details -->
+                            <a href="{{ route('cooperatives.show', $coop->coop_id) }}" class="btn btn-link btn-info btn-lg" data-bs-toggle="tooltip" title="View Coop Details">
+                                <i class="fa fa-eye"></i>
+                            </a>
+
+                            <!-- Edit Coop -->
+                            <button type="button" class="btn btn-link btn-primary btn-lg" data-bs-toggle="tooltip" title="Edit Coop">
+                                <a href="{{ route('cooperatives.edit', $coop->coop_id) }}" class="text-decoration-none text-primary">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                            </button>
+
+                            <!-- Delete Coop -->
+                            <form action="{{ route('cooperatives.destroy', $coop->coop_id) }}" method="POST" class="delete-form" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="button" class="btn btn-link btn-danger" data-bs-toggle="tooltip" title="Remove Coop" aria-label="Remove Coop" onclick="confirmDelete(event, this)">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="5" class="text-center">No search results found</td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
+</div>
+
+@if(session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: '{{ session('success') == 'Deleted!' ? 'Deleted!' : 'Success!' }}',
+            text: '{{ session('success') }}',
+            confirmButtonText: 'OK'
+        });
+    </script>
+@endif
+
                   </div>
                   <div class="d-flex justify-content-center mt-3">
                     {{ $cooperatives->appends(['search' => request('search')])->links('pagination::bootstrap-4') }}

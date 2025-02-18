@@ -9,8 +9,10 @@ return new class extends Migration {
     {
         Schema::create('uploaded_documents', function (Blueprint $table) {
             $table->id('document_id');
-            $table->unsignedBigInteger('participant_id');
-            $table->foreign('participant_id')->references('participant_id')->on('participants')->onDelete('cascade');
+
+            $table->unsignedBigInteger('coop_id')->nullable();
+            $table->foreign('coop_id')->references('coop_id')->on('cooperatives')->onDelete('cascade');
+            
             $table->enum('document_type', [
                 'Financial Statement',
                 'Resolution for Voting delegates',
@@ -24,7 +26,7 @@ return new class extends Migration {
             $table->timestamps();
 
             // Ensure that each participant uploads one document for each document type
-            $table->unique(['participant_id', 'document_type']);
+            $table->unique(['coop_id', 'document_type']);
         });
     }
 

@@ -37,4 +37,10 @@ class Cooperative extends Model
     {
         return $this->hasMany(Notification::class, 'coop_id');
     }
+
+    public function uploadedDocuments()
+    {
+        return $this->hasMany(UploadedDocument::class, 'coop_id');
+    }
+
 }

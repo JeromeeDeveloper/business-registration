@@ -330,39 +330,40 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
                                     <div class="modal-body">
-                                        <form id="editEventForm" method="POST" action="{{ route('events.update',  ['event_id' => $event->event_id]) }}">
+                                        <form id="editEventForm" method="POST" action="{{ isset($event) ? route('events.update', ['event_id' => $event->event_id]) : '#' }}">
                                             @csrf
                                             @method('PUT')
 
-                                            <input type="hidden" name="event_id" id="editEventId" value="{{ $event->event_id }}">
+                                            <input type="hidden" name="event_id" id="editEventId" value="{{ $event->event_id ?? '' }}">
 
                                             <div class="mb-3">
                                                 <label class="form-label">Event Title</label>
-                                                <input type="text" name="title" id="editEventTitle" class="form-control" value="{{ $event->title }}" required>
+                                                <input type="text" name="title" id="editEventTitle" class="form-control" value="{{ $event->title ?? '' }}" required>
                                             </div>
 
                                             <div class="mb-3">
                                                 <label class="form-label">Event Description</label>
-                                                <input type="text" name="description" id="editEventDescription" class="form-control" value="{{ $event->description }}" required>
+                                                <input type="text" name="description" id="editEventDescription" class="form-control" value="{{ $event->description ?? '' }}" required>
                                             </div>
 
                                             <div class="mb-3">
                                                 <label class="form-label">Start Date</label>
-                                                <input type="date" name="start_date" id="editEventStartDate" class="form-control" value="{{ $event->start_date }}" required>
+                                                <input type="date" name="start_date" id="editEventStartDate" class="form-control" value="{{ $event->start_date ?? '' }}" required>
                                             </div>
 
                                             <div class="mb-3">
                                                 <label class="form-label">End Date</label>
-                                                <input type="date" name="end_date" id="editEventEndDate" class="form-control" value="{{ $event->end_date }}" required>
+                                                <input type="date" name="end_date" id="editEventEndDate" class="form-control" value="{{ $event->end_date ?? '' }}" required>
                                             </div>
 
                                             <div class="mb-3">
                                                 <label class="form-label">Event Location</label>
-                                                <input type="text" name="location" id="editEventLocation" class="form-control" value="{{ $event->location }}" required>
+                                                <input type="text" name="location" id="editEventLocation" class="form-control" value="{{ $event->location ?? '' }}" required>
                                             </div>
 
                                             <button type="submit" class="btn btn-primary">Update Event</button>
                                         </form>
+
                                     </div>
                         </div>
                     </div>

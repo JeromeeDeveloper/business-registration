@@ -33,17 +33,12 @@ class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bo
               <div class="u-text">
                 <h4> {{ Auth::user()->name }}</h4>
                 <p class="text-muted"> {{ Auth::user()->email }}</p>
-                <a
-                  href="profile.html"
-                  class="btn btn-xs btn-secondary btn-sm"
-                  >View Profile</a
-                >
               </div>
             </div>
           </li>
           <li>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">My Profile</a>
+            <a class="dropdown-item" href="{{ route('profile.edit') }}">My Profile</a>
             <div class="dropdown-divider"></div>
             <form action="{{ route('logout') }}" method="POST" id="logout-form" style="display: none;">
                 @csrf

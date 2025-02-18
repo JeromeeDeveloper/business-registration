@@ -318,20 +318,20 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
                             <div class="modal-body">
-                                <form id="editSpeakerForm" method="POST" action="{{ route('speakers.update', ['speaker_id' => $speaker->speaker_id]) }}">
+                                <form id="editSpeakerForm" method="POST" action="{{ isset($speaker) ? route('speakers.update', ['speaker_id' => $speaker->speaker_id]) : '#' }}">
                                     @csrf
                                     @method('PUT')
 
-                                    <input type="hidden" name="speaker_id" id="editSpeakerId" value="{{ $speaker->speaker_id }}">
+                                    <input type="hidden" name="speaker_id" id="editSpeakerId" value="{{ $speaker->speaker_id ?? '' }}">
 
                                     <div class="mb-3">
                                         <label class="form-label">Name</label>
-                                        <input type="text" name="name" id="editSpeakerName" class="form-control" value="{{ $speaker->name }}" required>
+                                        <input type="text" name="name" id="editSpeakerName" class="form-control" value="{{ $speaker->name ?? '' }}" required>
                                     </div>
 
                                     <div class="mb-3">
                                         <label class="form-label">Topic</label>
-                                        <input type="text" name="topic" id="editSpeakerTopic" class="form-control" value="{{ $speaker->topic }}" required>
+                                        <input type="text" name="topic" id="editSpeakerTopic" class="form-control" value="{{ $speaker->topic ?? '' }}" required>
                                     </div>
 
                                     <div class="mb-3">
@@ -339,7 +339,7 @@
                                         <select name="event_id" class="form-control" required>
                                             <option value="">Select Event</option>
                                             @foreach($events as $event)
-                                                <option value="{{ $event->event_id }}" {{ $event->event_id == $speaker->event_id ? 'selected' : '' }}>
+                                                <option value="{{ $event->event_id }}" {{ isset($speaker) && $event->event_id == $speaker->event_id ? 'selected' : '' }}>
                                                     {{ $event->title }}
                                                 </option>
                                             @endforeach
@@ -348,6 +348,7 @@
 
                                     <button type="submit" class="btn btn-primary">Update Speaker</button>
                                 </form>
+
                             </div>
                         </div>
                     </div>

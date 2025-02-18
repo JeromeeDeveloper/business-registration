@@ -64,6 +64,23 @@
               </li>
 
               <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#participant">
+                  <i class="fas fa-users"></i>
+                  <p>Participant</p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse" id="participant">
+                  <ul class="nav nav-collapse">
+                    <li>
+                        <a href="{{route('coop.index')}}">
+                          <span class="sub-item">Participants</span>
+                        </a>
+                      </li>
+                  </ul>
+                </div>
+              </li>
+
+              <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#user">
                   <i class="fas fa-user"></i>
                   <p>Events Schedule</p>
@@ -108,7 +125,60 @@
             <!-- End Logo Header -->
           </div>
           <!-- Navbar Header -->
-          @include('layouts.adminnav')
+          <nav
+          class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom"
+          >
+          <div class="container-fluid">
+            <nav
+              class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex"
+            >
+
+            </nav>
+
+            <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
+              <li class="nav-item topbar-user dropdown hidden-caret">
+
+                <a
+                  class="dropdown-toggle profile-pic"
+                  data-bs-toggle="dropdown"
+                  href="#"
+                  aria-expanded="false"
+                >
+                <i class="fa fa-user"></i>
+                  <span class="profile-username">
+                    <span class="op-7">Hi,</span>
+                    <span class="fw-bold" style="text-transform: capitalize;">
+                      {{ Auth::user()->name }}
+                  </span>
+
+                  </span>
+                </a>
+                <ul class="dropdown-menu dropdown-user animated fadeIn">
+                  <div class="dropdown-user-scroll scrollbar-outer">
+                    <li>
+                      <div class="user-box">
+                        <div class="u-text">
+                          <h4> {{ Auth::user()->name }}</h4>
+                          <p class="text-muted"> {{ Auth::user()->email }}</p>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="{{ route('participant.profile.edit') }}">My Profile</a>
+                      <div class="dropdown-divider"></div>
+                      <form action="{{ route('logout') }}" method="POST" id="logout-form" style="display: none;">
+                          @csrf
+                      </form>
+                      <a class="dropdown-item" href="#" onclick="document.getElementById('logout-form').submit();">Logout</a>
+                    </li>
+                  </div>
+                </ul>
+              </li>
+            </ul>
+          </div>
+          </nav>
+
           <!-- End Navbar -->
         </div>
 
@@ -117,10 +187,10 @@
 
             <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
                 <div>
-                  <h3 class="fw-bold mb-3">Participant Dashboard</h3>
+                  <h3 class="fw-bold mb-3">Cooperative Dashboard</h3>
                   <h6 class="op-7 mb-2">MASS-SPECC Assembly Registration Overview</h6>
                 </div>
-                <div class="ms-md-auto py-2 py-md-0">
+                <div class="ms-md-auto py-2 py-md-0 p-6">
                     @if ($participant && $participant->cooperative)
                     <a href="{{ route('cooperativeprofile', ['participant_id' => $participant->participant_id, 'coop_id' => $participant->cooperative->coop_id]) }}" class="btn btn-label-info btn-round me-2">Cooperative Profile</a>
                 @else
@@ -144,10 +214,14 @@
                           </div>
                         </div>
                         <div class="col col-stats ms-3 ms-sm-0">
-                          <div class="numbers">
-                            <p class="card-category">Registration Status</p>
-                            <h4 class="card-title text-success">Completed</h4>
-                          </div>
+                            <div class="numbers">
+                                <p class="card-category">Registration Status</p>
+                                <h4 class="card-title
+                                {{ $registrationStatus === 'Confirmed' ? 'text-success' : ($registrationStatus === 'Pending' ? 'text-warning' : 'text-danger') }}">
+                                {{ $registrationStatus === 'Confirmed' ? 'Approved' : ($registrationStatus === 'Rejected' ? 'Rejected' : $registrationStatus) }}
+                            </h4>
+                            </div>
+
                         </div>
                       </div>
                     </div>
@@ -168,17 +242,7 @@
                             <div class="numbers">
                             <p class="card-category">Registration Open (March 15-17, 2025)</p>
                             {{-- <h4 class="card-title">March 15-17, 2025</h4> --}}
-                            @php
-                            $user = Auth::user();
-                            $hasParticipant = $user->participant()->exists();
-                            @endphp
-
-                            @if ($hasParticipant)
-                                <p class="text-success mt-2">Already registered.</p>
-                            @else
-                                <a href="{{ route('participant.register') }}" class="btn btn-sm btn-outline-info mt-2">Register Now</a>
-                            @endif
-
+                                <a href="{{ route('coop.index') }}" class="btn btn-sm btn-outline-info mt-2">Register Now</a>
                             </div>
                         </div>
                         </div>
@@ -186,8 +250,8 @@
                     </div>
                 </div>
 
-                 <!-- Upload Required Documents -->
-                 <div class="col-sm-6 col-md-3">
+              <!-- Upload Required Documents -->
+                <div class="col-sm-6 col-md-3">
                     <div class="card card-stats card-round">
                         <div class="card-body">
                             <div class="row align-items-center">
@@ -201,12 +265,15 @@
                                         <p class="card-category">Required Documents</p>
                                         @php
                                             $user = Auth::user();
-                                            $participant = $user->participant ?? null;
-                                            $hasDocuments = $participant ? $participant->uploadedDocuments()->exists() : false;
+                                            $cooperative = $user->cooperative; // Get the cooperative of the logged-in user
+                                            $hasDocuments = $cooperative ? $cooperative->uploadedDocuments()->exists() : false;
+                                            $registrationStatus = $cooperative && $cooperative->registration ? $cooperative->registration->status : 'Pending';
                                         @endphp
 
-                                        @if ($hasDocuments)
+                                        @if ($hasDocuments && $registrationStatus !== 'Rejected')
                                             <p class="text-success mt-2">Already uploaded.</p>
+                                        @elseif ($registrationStatus === 'Rejected')
+                                            <button id="uploadBtn" class="btn btn-sm btn-outline-primary mt-2">Upload Again</button>
                                         @else
                                             <button id="uploadBtn" class="btn btn-sm btn-outline-primary mt-2">Upload Now</button>
                                         @endif
@@ -216,6 +283,7 @@
                         </div>
                     </div>
                 </div>
+
 
 
                 <!-- Assigned Committees & Voting Status -->
@@ -369,15 +437,15 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('uploadBtn')?.addEventListener('click', function () {
-                @if (!$participant)
+                @if (!$cooperative)
                     Swal.fire({
                         icon: 'warning',
-                        title: 'Registration Required',
-                        text: 'You need to register first before uploading documents.',
+                        title: 'Cooperative Required',
+                        text: 'You need to be associated with a cooperative to upload documents.',
                         confirmButtonText: 'OK'
                     });
                 @else
-                    window.location.href = "{{ route('documents') }}"; // Redirect if registered
+                    window.location.href = "{{ route('documents') }}"; // Redirect if cooperative exists
                 @endif
             });
         });
@@ -386,14 +454,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('viewDocumentsBtn')?.addEventListener('click', function () {
-            @if (!$participant)
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Registration Required',
-                    text: 'You need to register first before viewing documents.',
-                    confirmButtonText: 'OK'
-                });
-            @elseif (!$hasDocuments)
+            @if (!$hasDocuments)
                 Swal.fire({
                     icon: 'info',
                     title: 'No Documents Found',
@@ -401,11 +462,12 @@
                     confirmButtonText: 'OK'
                 });
             @else
-                window.location.href = "{{ route('documents.view') }}"; // Redirect if registered & has documents
+                window.location.href = "{{ route('documents.view') }}"; // Redirect if there are documents
             @endif
         });
     });
 </script>
+
 
     <script>
         function calculateCETF() {

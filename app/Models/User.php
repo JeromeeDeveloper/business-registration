@@ -17,6 +17,7 @@ class User extends Authenticatable
 
     protected $fillable = [
         'name',
+        'coop_id',
         'email',
         'password',
         'role',
@@ -36,5 +37,11 @@ class User extends Authenticatable
     {
         return $this->hasOne(Participant::class, 'user_id'); // The foreign key is 'user_id' in the Participant table
     }
+
+    public function cooperative()
+    {
+        return $this->belongsTo(Cooperative::class, 'coop_id');
+    }
+
 
 }

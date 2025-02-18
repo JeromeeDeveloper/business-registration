@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
- <head>
+  <head>
     @include('layouts.adminheader')
- </head>
+  </head>
   <body>
     <div class="wrapper">
       <!-- Sidebar -->
@@ -10,7 +10,7 @@
         <div class="sidebar-logo">
           <!-- Logo Header -->
           <div class="logo-header" data-background-color="dark">
-            <a href="{{route('adminDashboard')}}" class="logo">
+            <a href="{{route('participantDashboard')}}" class="logo">
                 <img class="logo-mass-specc" src="{{ asset('images/logo.png') }}" alt="">
             </a>
             <div class="nav-toggle">
@@ -30,109 +30,73 @@
         <div class="sidebar-wrapper scrollbar scrollbar-inner">
           <div class="sidebar-content">
             <ul class="nav nav-secondary">
-
                 <li class="nav-item">
-                  <a
-                    href="{{route('adminDashboard')}}"
-                    class="collapsed"
-                  >
-                    <i class="fas fa-home"></i>
-                    <p>Dashboard</p>
-                  </a>
-                </li>
-
-                <li class="nav-section">
-                  <span class="sidebar-mini-icon">
-                    <i class="fa fa-ellipsis-h"></i>
-                  </span>
-                  <h4 class="text-section">Components</h4>
-                </li>
-
-                <li class="nav-item">
-                    <a data-bs-toggle="collapse" href="#cooperative">
-                      <i class="fas fa-users"></i>
-                      <p>Cooperative</p>
-                      <span class="caret"></span>
+                    <a
+                      href="{{route('participantDashboard')}}"
+                      class="collapsed"
+                    >
+                      <i class="fas fa-home"></i>
+                      <p>Dashboard</p>
                     </a>
-                    <div class="collapse" id="cooperative">
-                      <ul class="nav nav-collapse">
-                        <li>
-                            <a href="{{route('adminview')}}">
-                              <span class="sub-item">Manage Cooperative</span>
-                            </a>
-                          </li>
-                      </ul>
-                    </div>
                   </li>
-                  <li class="nav-item">
-                    <a data-bs-toggle="collapse" href="#participant">
-                        <i class="fas fa-user-cog"></i>
-                      <p>Participant</p>
-                      <span class="caret"></span>
-                    </a>
-                    <div class="collapse show" id="participant">
-                      <ul class="nav nav-collapse">
-                        <li class="active">
-                            <a href="{{route('participants.index')}}">
-                                <span class="sub-item">Manage Participant</span>
-                              </a>
-                          </li>
-                      </ul>
-                    </div>
-                  </li>
-                  <li class="nav-item">
-                    <a data-bs-toggle="collapse" href="#user">
-                      <i class="fas fa-user"></i>
-                      <p>User</p>
-                      <span class="caret"></span>
-                    </a>
-                    <div class="collapse" id="user">
-                      <ul class="nav nav-collapse">
-                        <li>
-                            <a href="{{route('users.index')}}">
-                              <span class="sub-item">Manage User</span>
-                            </a>
-                          </li>
-                      </ul>
-                    </div>
-                  </li>
+              <li class="nav-section">
+                <span class="sidebar-mini-icon">
+                  <i class="fa fa-ellipsis-h"></i>
+                </span>
+                <h4 class="text-section">Components</h4>
+              </li>
 
-                  <li class="nav-item">
-                    <a data-bs-toggle="collapse" href="#speaker">
-                      <i class="fas fa-microphone"></i>
-                      <p>Speakers</p>
-                      <span class="caret"></span>
-                    </a>
-                    <div class="collapse" id="speaker">
-                      <ul class="nav nav-collapse">
-                        <li>
-                            <a href="{{ route('speakers.index') }}">
-                                <span class="sub-item">Manage Speaker</span>
-                            </a>
-                        </li>
+              <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#cooperative">
+                  <i class="fas fa-users"></i>
+                  <p>Resource Speakers</p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse" id="cooperative">
+                  <ul class="nav nav-collapse">
+                    <li>
+                        <a href="{{route('speakerlist')}}">
+                          <span class="sub-item">List of Resource Speakers</span>
+                        </a>
+                      </li>
+                  </ul>
+                </div>
+              </li>
 
-                      </ul>
-                    </div>
-                  </li>
+              <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#participant">
+                  <i class="fas fa-users"></i>
+                  <p>Participant</p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse show" id="participant">
+                  <ul class="nav nav-collapse">
+                    <li class="active">
+                        <a href="{{route('coop.index')}}">
+                          <span class="sub-item">Participants</span>
+                        </a>
+                      </li>
+                  </ul>
+                </div>
+              </li>
 
-                  <li class="nav-item">
-                    <a data-bs-toggle="collapse" href="#events">
-                      <i class="fas fa-calendar"></i>
-                      <p>Events</p>
-                      <span class="caret"></span>
-                    </a>
-                    <div class="collapse" id="events">
-                      <ul class="nav nav-collapse">
-                        <li>
-                            <a href="{{route('events.index')}}">
-                              <span class="sub-item">Manage Events</span>
-                            </a>
-                          </li>
-                      </ul>
-                    </div>
-                  </li>
-
-              </ul>
+              <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#user">
+                  <i class="fas fa-user"></i>
+                  <p>Events Schedule</p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse" id="user">
+                  <ul class="nav nav-collapse">
+                    <li>
+                        <a href="{{route('schedule')}}">
+                          <span class="sub-item">List of Events</span>
+                        </a>
+                      </li>
+                  </ul>
+                </div>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
@@ -341,7 +305,7 @@
                             </div>
                         </div>
                         <div class="card-action">
-                            <button class="btn btn-info" type="button" onclick="window.location.href='{{ route('participants.index') }}'">Back</button>
+                            <button class="btn btn-info" type="button" onclick="window.location.href='{{ route('coop.index') }}'">Back</button>
                         </div>
                     </form>
 

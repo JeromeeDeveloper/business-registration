@@ -4,18 +4,53 @@ namespace App\Http\Controllers;
 
 use Log;
 use App\Models\User;
-use App\Models\Speaker;
 use App\Models\Event;
+use App\Models\Speaker;
 use App\Models\Cooperative;
 use App\Models\Participant;
 use Illuminate\Http\Request;
+use App\Models\UploadedDocument;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\CooperativeNotification;
+use Illuminate\Support\Facades\Storage;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class DashboardController extends Controller
 {
 
-    // Show the admin dashboard view
+    public function sendNotification($coopId)
+    {
+        try {
+            // Log for debugging
+            \Log::info('Notification request received for Coop ID: ' . $coopId);
+
+            // Find the cooperative by ID
+            $coop = Cooperative::findOrFail($coopId);
+            \Log::info('Found cooperative: ' . $coop->name . ' with email: ' . $coop->email);
+
+            // Get the latest event for the cooperative (adjust this logic as per your requirement)
+            $event = Event::latest()->first();  // Get the most recent event (or adjust accordingly)
+
+            // Send the email notification and pass both cooperative and event data
+            Mail::to($coop->email)->send(new CooperativeNotification($coop, $event));
+            \Log::info('Notification sent to: ' . $coop->email);
+
+            // Redirect back with success message
+            return redirect()->route('adminview')->with('success', 'Notification sent to the cooperative!');
+        } catch (\Exception $e) {
+            // Log the exception
+            \Log::error('Error sending notification: ' . $e->getMessage());
+
+            // Return with error message
+            return back()->with('error', 'Error sending notification: ' . $e->getMessage());
+        }
+    }
+
+
+
     public function admin()
     {
         $totalParticipants = Participant::count(); // Get total participants
@@ -23,23 +58,42 @@ class DashboardController extends Controller
         $totalSpeakers = Speaker::count(); // Get total users
         $totalEvents = Event::count(); // Get total users
 
-        return view('dashboard.admin.admin', compact('totalParticipants', 'totalUsers', 'totalSpeakers', 'totalEvents'));
+        $latestEvent = Event::with('speakers')->orderBy('start_date', 'desc')->first();
+
+
+        // Pass all necessary data to the view
+         return view('dashboard.admin.admin', compact(
+        'totalParticipants', 'totalUsers', 'totalSpeakers', 'totalEvents', 'latestEvent',
+    ));
+
     }
 
 
     public function participant()
-{
-    $user = Auth::user();
-    $participant = $user ? $user->participant()->with('cooperative')->first() : null;
+    {
+        $user = Auth::user();
+        $participant = $user ? $user->participant()->with('cooperative', 'registration')->first() : null;
 
-    // Fetch the latest event (most recent based on start_date)
-    $latestEvent = Event::with('speakers')->orderBy('start_date', 'desc')->first();
+        // Fetch the latest event (most recent based on start_date)
+        $latestEvent = Event::with('speakers')->orderBy('start_date', 'desc')->first();
 
-    return view('dashboard.participant.participant', [
-        'participant' => $participant,
-        'event' => $latestEvent, // Ensure the correct variable is passed
-    ]);
-}
+        // Get registration status if the participant exists
+        $registrationStatus = $participant && $participant->registration ? $participant->registration->status : 'Pending';
+
+        // Get the cooperative (using coop_id) and check for uploaded documents
+        $cooperative = $participant ? $participant->cooperative : null;
+        $hasDocuments = $cooperative ? UploadedDocument::where('coop_id', $cooperative->coop_id)->exists() : false;
+
+        return view('dashboard.participant.participant', [
+            'participant' => $participant,
+            'event' => $latestEvent,
+            'registrationStatus' => $registrationStatus, // Pass registration status to the view
+            'hasDocuments' => $hasDocuments, // Pass hasDocuments to the view
+            'cooperative' => $cooperative, // Pass cooperative to the view
+        ]);
+    }
+
+
 
     public function cooperativeprofile($participant_id, $cooperative_id)
     {
@@ -111,7 +165,6 @@ class DashboardController extends Controller
 
 public function store(Request $request)
 {
-
     // Validate the form data
     $validatedData = $request->validate([
         'coop_id' => 'required|exists:cooperatives,coop_id',
@@ -132,10 +185,35 @@ public function store(Request $request)
     ]);
 
     // Store the participant data
-    Participant::create($validatedData);
+    $participant = Participant::create($validatedData);
 
+    // Generate QR code data (e.g., a URL to their profile page)
+    $qrData = route('adminDashboard', ['participant_id' => $participant->participant_id]); // Adjust this route as needed
+
+    // Call the external QR code API
+    $response = Http::get('https://api.qrserver.com/v1/create-qr-code/', [
+        'data' => $qrData,
+        'size' => '200x200' // You can adjust the size here
+    ]);
+
+    // Check if the QR code generation is successful
+    if ($response->successful()) {
+        // Save the QR code image
+        $path = 'qrcodes/participant_' . $participant->participant_id . '.png';
+        Storage::disk('public')->put($path, $response->body());
+
+        // Optionally, save the QR code path to the participant
+        $participant->qr_code = $path;
+        $participant->save();
+    } else {
+        // Handle failure if the QR code generation fails
+        return redirect()->route('participant.register')->with('error', 'Failed to generate QR code.');
+    }
+
+    // Redirect or return a response
     return redirect()->route('participant.register')->with('success', 'Participant registered successfully!');
 }
+
 
     // Show the cooperative registration form
     public function register()
@@ -261,27 +339,50 @@ public function store(Request $request)
     {
         $request->validate([
             'name' => 'required',
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
+            'coop_id' => 'required|exists:cooperatives,coop_id', // Ensure coop_id exists in cooperatives table
+        ], [
+            'name.required' => 'The name field is required.',
+            'email.required' => 'The email field is required.',
+            'email.email' => 'Enter a valid email address.',
+            'email.unique' => 'This email is already taken.',
+            'password.required' => 'The password field is required.',
+            'password.min' => 'Password must be at least 6 characters.',
+            'coop_id.required' => 'Please select a cooperative.',
+            'coop_id.exists' => 'Selected cooperative is invalid.',
         ]);
 
-
-        $user = User::create([
+        User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'participant',
+            'role' => 'cooperative',
+            'coop_id' => $request->coop_id, // Store selected cooperative
         ]);
 
-        Auth::login($user);
-
-        return redirect()->route('users.index')->with('success', 'Registration successful');
+        return redirect()->route('registerform')->with('success', 'Registration successful!');
     }
+
+
+
 
     public function registerform()
     {
-        return view('dashboard.admin.user.register');
+        $participant = Participant::all(); // Or any other data fetching logic
+        $cooperatives = Cooperative::all();
+        // Pass $participant to the view
+        return view('dashboard.admin.user.register', compact('participant', 'cooperatives'));
     }
+
+    public function showQR($id)
+    {
+        $participant = Participant::findOrFail($id);
+
+        return view('dashboard.admin.admin', compact('participant'));
+    }
+
+
 
     }
 

@@ -90,9 +90,8 @@
           <div class="main-header-logo">
             <!-- Logo Header -->
             <div class="logo-header" data-background-color="dark">
-                <a href="{{route('participantDashboard')}}" class="logo">
-                    <img class="logo-mass-specc" src="{{ asset('images/logo.png') }}" alt="">
-              </a>
+              <a href="{{route('participantDashboard')}}" class="logo">
+                <img class="logo-mass-specc" src="{{ asset('images/logo.png') }}" alt="">
               <div class="nav-toggle">
                 <button class="btn btn-toggle toggle-sidebar">
                   <i class="gg-menu-right"></i>
@@ -115,7 +114,7 @@
         <div class="container">
           <div class="page-inner">
             <div class="page-header">
-              <h3 class="fw-bold mb-3">Participant Documents</h3>
+              <h3 class="fw-bold mb-3">Edit Profile</h3>
               <ul class="breadcrumbs mb-3">
                 <li class="nav-home">
                   <a href="#">
@@ -126,13 +125,13 @@
                   <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                  <a href="#">Documents</a>
+                  <a href="#">Profile</a>
                 </li>
                 <li class="separator">
                   <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                  <a href="#">Registration</a>
+                  <a href="#">Edit</a>
                 </li>
               </ul>
             </div>
@@ -140,50 +139,48 @@
               <div class="col-md-12">
                 <div class="card">
                   <div class="card-header">
-                    <div class="card-title">Upload Documents</div>
+                    <div class="card-title">Profile Edit Form</div>
                   </div>
-                  <form id="documentUploadForm" method="POST" action="{{ route('documents.store') }}" enctype="multipart/form-data">
+
+                  <form action="{{ route('participant.profile.update') }}" method="POST">
                     @csrf
-                    <div class="card-body">
-                        <div class="row">
-                            <!-- Financial Statement -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="financial_statement">Financial Statement</label>
-                                    <input type="file" class="form-control" name="documents[Financial Statement]" id="financial_statement" accept=".jpg,.jpeg,.png,.pdf" required />
-                                </div>
-                            </div>
+                    @method('PUT')
 
-                            <!-- Resolution for Voting Delegates -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="resolution_voting">Resolution for Voting Delegates</label>
-                                    <input type="file" class="form-control" name="documents[Resolution for Voting Delegates]" id="resolution_voting" accept=".jpg,.jpeg,.png,.pdf" required />
-                                </div>
-                            </div>
-
-                            <!-- Deposit Slip for Registration Fee -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="registration_fee">Deposit Slip for Registration Fee</label>
-                                    <input type="file" class="form-control" name="documents[Deposit Slip for Registration Fee]" id="registration_fee" accept=".jpg,.jpeg,.png,.pdf" required />
-                                </div>
-                            </div>
-
-                            <!-- Deposit Slip for CETF Remittance -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="cetf_remittance">Deposit Slip for CETF Remittance</label>
-                                    <input type="file" class="form-control" name="documents[Deposit Slip for CETF Remittance]" id="cetf_remittance" accept=".jpg,.jpeg,.png,.pdf" required />
-                                </div>
-                            </div>
-                        </div>
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" name="name" id="name" value="{{ old('name', $user->name) }}" required>
                     </div>
 
-                    <div class="card-action">
-                        <button class="btn btn-success">Upload Documents</button>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" name="email" id="email" value="{{ old('email', $user->email) }}" required>
                     </div>
+
+                    <div class="form-group">
+                        <label for="password">Password (Leave blank to keep current)</label>
+                        <input type="password" class="form-control" name="password" id="password">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password_confirmation">Confirm Password</label>
+                        <input type="password" class="form-control" name="password_confirmation" id="password_confirmation">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
+                    <a href="{{ url()->previous() }}" class="btn btn-secondary mt-3">Previous</a>
                 </form>
+
+                @if(session('success'))
+                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                    <script>
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: '{{ session('success') }}'
+                        });
+                    </script>
+                @endif
+
 
             </div>
                   </div>
@@ -192,54 +189,13 @@
             </div>
           </div>
         </div>
-
-        @include('layouts.adminfooter')
+    </div>
+        {{-- @include('layouts.adminfooter') --}}
       </div>
 
     </div>
-    <!-- Include SweetAlert -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<script>
-document.getElementById("documentUploadForm").addEventListener("submit", function(event) {
-    event.preventDefault();
-
-    let formData = new FormData(this);
-
-    fetch(this.action, {
-        method: "POST",
-        body: formData,
-        headers: {
-            "X-CSRF-TOKEN": document.querySelector('input[name="_token"]').value
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            Swal.fire({
-                icon: "success",
-                title: "Success",
-                html: data.message, // Displaying multiple messages properly
-            }).then(() => {
-                location.reload(); // Reload page after successful upload
-            });
-        } else {
-            Swal.fire({
-                icon: "error",
-                title: "Upload Failed",
-                text: data.message || "Something went wrong!",
-            });
-        }
-    })
-    .catch(error => {
-        Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: "An error occurred while uploading. Please try again.",
-        });
-    });
-});
-</script>
 
   @include('layouts.links')
   </body>
