@@ -7,11 +7,13 @@ use App\Http\Controllers\AuthController;
 use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\EventsController;
+use App\Http\Controllers\ViewerController;
 use App\Http\Controllers\SpeakersController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Middleware\ParticipantMiddleware;
 use App\Http\Controllers\CooperativeController;
 use App\Http\Controllers\ParticipantController;
+use App\Http\Middleware\ParticipantUserMiddleware;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 // Home Page
@@ -35,7 +37,11 @@ Route::post('/logout', function () {Auth::logout();return redirect('/login');})-
 //store
 Route::middleware([AdminMiddleware::class])->group(function () {
 
+Route::get('/admin/reports', [DashboardController::class, 'generateReports'])->name('admin.reports');
+
 Route::post('/cooperatives/{coop_id}/notify', [DashboardController::class, 'sendNotification'])->name('cooperatives.notify');
+Route::post('/cooperatives/notify-all', [DashboardController::class, 'sendNotificationToAll'])->name('cooperatives.notifyAll');
+Route::post('/cooperatives/credentiasl/notify-all', [DashboardController::class, 'sendCredentialsToAll'])->name('cooperatives.notifyCredentialsAll');
 
 Route::get('/Admin/Dashboard', [DashboardController::class, 'admin'])->name('adminDashboard');
 Route::get('/Admin/Register/Cooperatives', [DashboardController::class, 'register'])->name('adminregister');
@@ -45,6 +51,8 @@ Route::get('/adminnav', [AuthController::class, 'user'])->name('user_data');
 //view
 Route::get('/Admin/Cooperatives', [DashboardController::class, 'view'])->name('adminview');
 Route::delete('/admin/cooperatives/{coop_id}', [DashboardController::class, 'destroy'])->name('cooperatives.destroy');
+
+Route::get('/Admin/Document/View/{coop_id?}', [CooperativeController::class, 'viewadminDocuments'])->name('admin.documents.view');
 
 //edit
 Route::get('/Admin/Cooperatives/Edit/{coop_id}', [DashboardController::class, 'edit'])->name('cooperatives.edit');
@@ -70,7 +78,7 @@ Route::get('/Admin/Participants', [ParticipantController::class, 'index'])->name
 Route::get('/Admin/Add/Participant', [ParticipantController::class, 'participantadd'])->name('participantadd');
 Route::post('/Admin/Add/Participant', [ParticipantController::class, 'store'])->name('participant.add');
 Route::get('/Admin/Participant/{participant_id}', [ParticipantController::class, 'show'])->name('participants.show');
-Route::get('/Admin/Document/View/{participant_id?}', [ParticipantController::class, 'viewadminDocuments'])->name('admin.documents.view');
+
 Route::get('/Admin/Participants/{participant_id}/edit', [ParticipantController::class, 'edit'])->name('participants.edit');
 Route::put('/Participants/{participant_id}', [ParticipantController::class, 'update'])->name('participants.update');
 Route::delete('Admin/participants/{participant_id}', [ParticipantController::class, 'destroy'])->name('participants.destroy');
@@ -105,16 +113,18 @@ Route::get('/download-qr2/{participant_id}', function ($participant_id) {
     ]);
 })->name('download.qr2');
 
+Route::put('/cooperatives/{coop_id}/update-status', [CooperativeController::class, 'updateStatus'])->name('cooperatives.updateStatus');
+
 });
 
 // participant user
 Route::middleware([ParticipantMiddleware::class])->group(function () {
 
 Route::get('/participant/dashboard', [DashboardController::class, 'participant'])->name('participantDashboard');
-Route::get('/cooperativeprofile/{participant_id}/{coop_id}', [DashboardController::class, 'cooperativeprofile'])->name('cooperativeprofile');
 
-Route::get('/cooperativeprofile/{participant_id}/{coop_id}/edit', [DashboardController::class, 'editCooperativeProfile'])->name('cooperativeprofile.edit');
-Route::put('/cooperativeprofile/{participant_id}/{coop_id}', [DashboardController::class, 'updateCooperativeProfile'])->name('cooperativeprofile.update');
+Route::get('/cooperativeprofile/{coop_id}', [DashboardController::class, 'cooperativeprofile'])->name('cooperativeprofile');
+Route::get('/cooperativeprofile/{coop_id}/edit', [DashboardController::class, 'editCooperativeProfile'])->name('cooperativeprofile.edit');
+Route::put('/cooperativeprofile/{coop_id}', [DashboardController::class, 'updateCooperativeProfile'])->name('cooperativeprofile.update');
 
 
 Route::get('/participant/register', [DashboardController::class, 'participantregister'])->name('participant.register');
@@ -148,6 +158,7 @@ Route::get('/Cooperative/Participants', [CooperativeController::class, 'index'])
 
 Route::get('/Cooperative/Add/Participant', [CooperativeController::class, 'coopparticipantadd'])->name('coopparticipantadd');
 Route::post('/Cooperative/Add/Participant', [CooperativeController::class, 'store'])->name('coopparticipant.add');
+
 Route::get('/Cooperative/Participant/{participant_id}', [CooperativeController::class, 'show'])->name('coop.participants.show');
 
 // Route::get('/Admin/Document/View/{participant_id?}', [ParticipantController::class, 'viewadminDocuments'])->name('admin.documents.view');
@@ -161,8 +172,16 @@ Route::post('/Cooperative/upload/documents', [CooperativeController::class, 'sto
 
 
 Route::get('/Cooperative/documents', [CooperativeController::class, 'viewDocuments'])->name('documents.view');
-
+Route::get('/Dashboard/Cooperative', [ParticipantController::class, 'status_coop'])->name('coop.status');
 });
 
+Route::middleware([ParticipantUserMiddleware::class])->group(function () {
 
+Route::get('/participant/view/dashboard', [ViewerController::class, 'dashboardviewer'])->name('participantViewerDashboard');
+Route::get('/Participant/Events/', [ViewerController::class, 'events_participant'])->name('events_participant');
+Route::get('/Participant/List/Speakers', [ViewerController::class, 'speakerlistparticipant'])->name('speakerlistparticipant');
 
+Route::get('/Cooperative/participant/profile/edit', [ViewerController::class, 'editProfilepart'])->name('participant.profile.user.edit');
+Route::put('/Cooperative2/participant/profile/edit', [ViewerController::class, 'updateProfileParticipant'])->name('updateProfileParticipant');
+
+});

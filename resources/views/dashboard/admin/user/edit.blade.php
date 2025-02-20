@@ -272,6 +272,7 @@
                                     <select class="form-control" name="role" id="role" required>
                                         <option value="cooperative" {{ old('role', $user->role) == 'cooperative' ? 'selected' : '' }}>Cooperative</option>
                                         <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Admin</option>
+                                        <option value="participant" {{ old('role', $user->role) == 'participant' ? 'selected' : '' }}>Participant</option>
                                     </select>
                                 </div>
                             </div>

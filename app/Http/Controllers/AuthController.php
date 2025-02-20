@@ -21,25 +21,26 @@ class AuthController extends Controller
     }
 
     public function login(Request $request)
-{
-    $credentials = $request->validate([
-        'email' => 'required|email',
-        'password' => 'required'
-    ]);
+    {
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
 
-    if (Auth::attempt($credentials)) {
-        $user = Auth::user(); // Get the authenticated user
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user(); // Get the authenticated user
 
-        if ($user->role === 'admin') {
-            return redirect()->route('adminDashboard')->with('success', 'Welcome back, Admin!');
-        } elseif ($user->role === 'cooperative') {
-            return redirect()->route('participantDashboard')->with('success', 'Welcome back!');
+            if ($user->role === 'admin') {
+                return redirect()->route('adminDashboard')->with('success', 'Welcome back, Admin!');
+            } elseif ($user->role === 'cooperative') {
+                return redirect()->route('participantDashboard')->with('success', 'Welcome back!');
+            } elseif ($user->role === 'participant') { // Add participant role
+                return redirect()->route('participantViewerDashboard')->with('success', 'Welcome to your dashboard!');
+            }
         }
+
+        return redirect()->route('login')->with('error', 'Invalid email or password.');
     }
-
-    return redirect()->route('login')->with('error', 'Invalid email or password.');
-}
-
 
 
     public function register(Request $request)
@@ -85,7 +86,10 @@ class AuthController extends Controller
     public function user()
     {
         $user = Auth::user(); // Get the authenticated user
-        return view('layouts.adminnav', compact('user')); // Pass the user data to the view
+
+        $cooperative = Cooperative::where('coop_id', $user->coop_id)->first();
+
+        return view('layouts.adminnav', compact('user', 'cooperative')); // Pass the user data to the view
     }
 
     public function index(Request $request)
@@ -123,7 +127,7 @@ class AuthController extends Controller
     $validated = $request->validate([
         'name' => 'required|string|max:255',
         'email' => 'required|email|unique:users,email,' . $user_id . ',user_id',
-        'role' => 'required|string|in:cooperative,admin',
+       'role' => 'required|string|in:cooperative,admin,participant',
         'coop_id' => 'required|exists:cooperatives,coop_id', // Validate coop_id exists in cooperatives table
         'password' => 'nullable|string|min:6|confirmed',
     ]);

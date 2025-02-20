@@ -43,4 +43,10 @@ class Cooperative extends Model
         return $this->hasMany(UploadedDocument::class, 'coop_id');
     }
 
+    public function gaRegistration()
+    {
+        return $this->hasOne(GARegistration::class, 'coop_id', 'coop_id');
+    }
+
+
 }

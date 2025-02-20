@@ -14,7 +14,7 @@ class Participant extends Model
 
     protected $primaryKey = 'participant_id';
     protected $fillable = [
-        'coop_id', 'user_id', 'first_name', 'middle_name', 'last_name', 'nickname', 'gender',
+        'coop_id', 'user_id', 'first_name', 'middle_name', 'last_name', 'email', 'nickname', 'gender',
         'phone_number', 'designation', 'congress_type', 'religious_affiliation',
         'tshirt_size', 'is_msp_officer', 'msp_officer_position', 'delegate_type'
     ];
@@ -33,6 +33,12 @@ class Participant extends Model
     // {
     //     return $this->hasMany(UploadedDocument::class, 'participant_id');
     // }
+
+    public function gaRegistrations()
+{
+    return $this->hasMany(GARegistration::class, 'coop_id', 'coop_id');
+}
+
 
     public function registration()
     {

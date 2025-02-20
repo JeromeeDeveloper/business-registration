@@ -227,7 +227,7 @@
                 <h6 class="text-muted">MASS-SPECC Online Registration System</h6>
               </div>
               <div class="ms-md-auto py-2 py-md-0">
-                <a href="#" class="btn btn-label-info btn-round me-2">Generate Reports</a>
+                <a href="{{ route('admin.reports') }}" class="btn btn-label-info btn-round me-2">Generate Reports</a>
                 <a href="#" id="scan-qr-btn" class="btn btn-primary btn-round">Scan QR Code</a>
                 <input type="text" id="qr-input-field" style="position: absolute; opacity: 0; width: 1px; height: 1px;" />
                 <div id="qr-display"></div>
@@ -239,136 +239,101 @@
 
             </div>
             <div class="row">
-              <div class="col-sm-6 col-md-3">
-                <div class="card card-stats card-round">
-                  <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-icon">
-                        <div
-                          class="icon-big text-center icon-primary bubble-shadow-small"
-                        >
-                          <i class="fas fa-users"></i>
+                <div class="col-sm-6 col-md-3">
+                    <div class="card card-stats card-round">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-icon">
+                                    <div class="icon-big text-center icon-success bubble-shadow-small">
+                                        <i class="fas fa-building"></i>
+                                    </div>
+                                </div>
+                                <div class="col col-stats ms-3 ms-sm-0">
+                                    <div class="numbers">
+                                        <p class="card-category">Cooperatives</p>
+                                        <h4 class="card-title">{{ number_format($totalCooperative) }}</h4>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                      <div class="col col-stats ms-3 ms-sm-0">
-                        <div class="numbers">
-                            <p class="card-category">Participants</p>
-                            <h4 class="card-title">{{ number_format($totalParticipants) }}</h4>
-                        </div>
-                      </div>
                     </div>
-                  </div>
                 </div>
-              </div>
-              <div class="col-sm-6 col-md-3">
-                <div class="card card-stats card-round">
-                  <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-icon">
-                        <div
-                          class="icon-big text-center icon-info bubble-shadow-small"
-                        >
-                          <i class="fas fa-calendar"></i>
+
+                <div class="col-sm-6 col-md-3">
+                    <div class="card card-stats card-round">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-icon">
+                                    <div class="icon-big text-center icon-warning bubble-shadow-small">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                </div>
+                                <div class="col col-stats ms-3 ms-sm-0">
+                                    <div class="numbers">
+                                        <p class="card-category">Participants</p>
+                                        <h4 class="card-title">{{ number_format($totalParticipants) }}</h4>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                      <div class="col col-stats ms-3 ms-sm-0">
-                        <div class="numbers">
-                          <p class="card-category">Events</p>
-                          <h4 class="card-title">{{ number_format($totalEvents) }}</h4>
-                        </div>
-                      </div>
                     </div>
-                  </div>
                 </div>
-              </div>
-              <div class="col-sm-6 col-md-3">
-                <div class="card card-stats card-round">
-                  <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-icon">
-                        <div
-                          class="icon-big text-center icon-success bubble-shadow-small"
-                        >
-                          <i class="fas fa-microphone"></i>
+
+                <div class="col-sm-6 col-md-3">
+                    <div class="card card-stats card-round">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-icon">
+                                    <div class="icon-big text-center icon-info bubble-shadow-small">
+                                        <i class="fas fa-microphone"></i>
+                                    </div>
+                                </div>
+                                <div class="col col-stats ms-3 ms-sm-0">
+                                    <div class="numbers">
+                                        <p class="card-category">Speakers</p>
+                                        <h4 class="card-title">{{ number_format($totalSpeakers) }}</h4>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                      <div class="col col-stats ms-3 ms-sm-0">
-                        <div class="numbers">
-                          <p class="card-category">Speakers</p>
-                          <h4 class="card-title">{{ number_format($totalSpeakers) }}</h4>
-                        </div>
-                      </div>
                     </div>
-                  </div>
                 </div>
-              </div>
-              <div class="col-sm-6 col-md-3">
-                <div class="card card-stats card-round">
-                  <div class="card-body">
-                    <div class="row align-items-center">
-                      <div class="col-icon">
-                        <div
-                          class="icon-big text-center icon-secondary bubble-shadow-small"
-                        >
-                          <i class="far fa-user"></i>
+
+                <div class="col-sm-6 col-md-3">
+                    <div class="card card-stats card-round">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-icon">
+                                    <div class="icon-big text-center icon-danger bubble-shadow-small">
+                                        <i class="fas fa-calendar"></i>
+                                    </div>
+                                </div>
+                                <div class="col col-stats ms-3 ms-sm-0">
+                                    <div class="numbers">
+                                        <p class="card-category">Events</p>
+                                        <h4 class="card-title">{{ number_format($totalEvents) }}</h4>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                      <div class="col col-stats ms-3 ms-sm-0">
-                        <div class="numbers">
-                            <p class="card-category">Users</p>
-                            <h4 class="card-title">{{ number_format($totalUsers) }}</h4>
-                        </div>
-                      </div>
                     </div>
-                  </div>
                 </div>
-              </div>
+
+
             </div>
             <div class="row">
                 <div class="col-md-8">
                     <div class="card card-round">
-                      <div class="card-header">
-                        <div class="card-head-row">
-                          <div class="card-title">CETF Calculator</div>
-                          <div class="card-tools">
-                            <a href="#" class="btn btn-label-success btn-round btn-sm me-2">
-                              <span class="btn-label">
-                                <i class="fa fa-pencil"></i>
-                              </span>
-                              Export
-                            </a>
-                            <a href="#" class="btn btn-label-info btn-round btn-sm">
-                              <span class="btn-label">
-                                <i class="fa fa-print"></i>
-                              </span>
-                              Print
-                            </a>
-                          </div>
+                        <div class="card-header">
+                            <div class="card-head-row">
+                                <div class="card-title">Registration Overview</div>
+                            </div>
                         </div>
-                      </div>
-                      <div class="card-body">
-                        <form id="cetfForm">
-                          <div class="form-group">
-                            <label for="totalAsset">Total Asset (Latest Audited FS)</label>
-                            <input type="number" class="form-control" id="totalAsset" required />
-                          </div>
-                          <div class="form-group">
-                            <label for="totalIncome">Total Income (Latest Audited FS)</label>
-                            <input type="number" class="form-control" id="totalIncome" required />
-                          </div>
-                          <div class="form-group">
-                            <label for="cetfRemittance">CETF Remittance to MSP</label>
-                            <input type="number" class="form-control" id="cetfRemittance" required />
-                          </div>
-                          <div class="form-group">
-                            <label for="cetfRequired">CETF Required</label>
-                            <input type="text" class="form-control" id="cetfRequired" readonly />
-                          </div>
-                          <button type="button" class="btn btn-primary mt-3" onclick="calculateCETF()">Compute</button>
-                        </form>
-                      </div>
+                        <div class="card-body">
+                            <canvas id="registrationChart"></canvas>
+                        </div>
                     </div>
-                  </div>
+                </div>
 
                   <div class="col-md-4">
                     @if($latestEvent)
@@ -415,22 +380,26 @@
                     <p>No upcoming events at the moment.</p>
                     @endif
 
-                  <div class="card card-round">
-                    <div class="card-body pb-0">
-                      <h2 class="mb-2">Event Notice</h2>
-                      <p class="text-muted">Join us for the upcoming General Assembly!</p>
-                      <div class="pull-in sparkline-fix">
-                        <!-- You can insert a related event image or a calendar icon here -->
-                        <div id="eventNoticeChart"></div>
+                    @if($latestEvent)
+                    <div class="card card-round">
+                      <div class="card-body pb-0">
+                        <h2 class="mb-2">Event Notice</h2>
+                        <p class="text-muted">Join us for the upcoming {{ $latestEvent->title }}!</p>
+                        <div class="pull-in sparkline-fix">
+                          <!-- You can insert a related event image or a calendar icon here -->
+                          <div id="eventNoticeChart"></div>
+                        </div>
                       </div>
-                    </div>
-                    <div class="card-footer">
-                      <div class="alert alert-info">
-                        <strong>Notice:</strong> The General Assembly will take place on March 15-17, 2025. Don't miss out on this important event!
+                      <div class="card-footer">
+                        <div class="alert alert-info">
+                          <strong>Notice:</strong> The {{ $latestEvent->title }} will take place on   {{ \Carbon\Carbon::parse($latestEvent->start_date)->format('F d, Y') }} -
+                          {{ \Carbon\Carbon::parse($latestEvent->end_date)->format('F d, Y') }} Don't miss out on this important event!
                       </div>
                     </div>
                   </div>
-
+                  @else
+                  <p>No upcoming events at the moment.</p>
+                  @endif
               </div>
             </div>
           </div>
@@ -443,6 +412,62 @@
 
 
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    var ctx = document.getElementById('registrationChart').getContext('2d');
+    var registrationChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [
+                'Fully Registered Coops',
+                'Partially Registered Coops',
+                'Fully Registered Participants',
+                'Partially Registered Participants',
+                // 'Total Events',
+
+            ],
+            datasets: [{
+                label: 'Number of Registrations',
+                data: [
+                    {{ $fullyRegisteredCoops }},
+                    {{ $partiallyRegisteredCoops }},
+                    {{ $fullyRegisteredParticipants }},
+                    {{ $partiallyRegisteredParticipants }},
+                    // {{ $totalEvents }},
+
+                ],
+                backgroundColor: [
+                    'rgba(40, 167, 69, 0.6)', // Green
+                    'rgba(255, 193, 7, 0.6)', // Yellow
+                    'rgba(23, 162, 184, 0.6)', // Blue
+                    'rgba(220, 53, 69, 0.6)', // Red
+                    'rgba(102, 16, 242, 0.6)', // Purple for Events
+                    'rgba(232, 62, 140, 0.6)'  // Pink for Speakers
+                ],
+                borderColor: [
+                    'rgba(40, 167, 69, 1)',
+                    'rgba(255, 193, 7, 1)',
+                    'rgba(23, 162, 184, 1)',
+                    'rgba(220, 53, 69, 1)',
+                    'rgba(102, 16, 242, 1)',
+                    'rgba(232, 62, 140, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+});
+
+</script>
     <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
     <script>
         const qrInput = document.getElementById('qr-input-field');

@@ -254,6 +254,20 @@
                                     </div>
                                 </div>
 
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="email">Email</label>
+                                        <input type="text" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email', $participant->email) }}" required>
+
+                                        @error('email')
+                                            <div class="alert alert-danger mt-1">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                </div>
+
+
                                 <!-- Nickname -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">

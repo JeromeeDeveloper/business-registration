@@ -174,11 +174,17 @@
                                     </div>
                                 </div>
 
-                               <!-- User Display -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
                                         <label for="user_id">User Account</label>
                                         <div>{{ $participant->user->name ?? 'N/A' }}</div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="email">Email</label>
+                                        <div>{{ $participant->email }}</div>
                                     </div>
                                 </div>
 
@@ -278,14 +284,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Delegate Type -->
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="delegate_type">Delegate Type</label>
-                                        <div>{{ $participant->delegate_type ?? 'N/A' }}</div>
-                                    </div>
-                                </div>
-
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
                                         <label for="qr_code">QR Code</label>
@@ -300,6 +298,16 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <!-- Delegate Type -->
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="delegate_type">Delegate Type</label>
+                                        <div>{{ $participant->delegate_type ?? 'N/A' }}</div>
+                                    </div>
+                                </div>
+
+
 
 
                             </div>

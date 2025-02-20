@@ -168,7 +168,7 @@
         <div class="container">
           <div class="page-inner">
             <div class="page-header">
-              <h3 class="fw-bold mb-3">Cooperative</h3>
+              <h3 class="fw-bold mb-3">Speaker</h3>
               <ul class="breadcrumbs mb-3">
                 <li class="nav-home">
                   <a href="#">
@@ -179,7 +179,7 @@
                   <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                  <a href="#">Cooperative</a>
+                  <a href="#">Speaker</a>
                 </li>
                 <li class="separator">
                   <i class="icon-arrow-right"></i>
@@ -194,7 +194,7 @@
                 <div class="card">
                   <div class="card-header coop">
                     <div class="d-flex align-items-center">
-                      <h4 class="card-title">Cooperative</h4>
+                      <h4 class="card-title">Speaker</h4>
                     </div>
                     <div class="d-flex justify-content-start mb-3">
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSpeakerModal">

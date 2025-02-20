@@ -6,11 +6,17 @@ use App\Models\User;
 use App\Models\Speaker;
 use App\Models\Cooperative;
 use App\Models\Participant;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\GARegistration;
+use Illuminate\Validation\Rule;
+use App\Mail\ParticipantCreated;
 use App\Models\UploadedDocument;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class ParticipantController extends Controller
@@ -18,12 +24,20 @@ class ParticipantController extends Controller
     // Display a listing of participants
     public function index(Request $request)
     {
-        $participants = Participant::with(['registration', 'cooperative', 'user']) // Eager load cooperative
-            ->when($request->search, function ($query) use ($request) {
-                return $query->where('first_name', 'like', '%' . $request->search . '%')
-                    ->orWhere('last_name', 'like', '%' . $request->search . '%')
-                    ->orWhere('middle_name', 'like', '%' . $request->search . '%');
-            })->paginate(10);
+        $participants = Participant::with(['registration', 'cooperative', 'user']) // Eager load relationships
+    ->when($request->search, function ($query) use ($request) {
+        return $query->where('first_name', 'like', '%' . $request->search . '%')
+            ->orWhere('last_name', 'like', '%' . $request->search . '%')
+            ->orWhere('middle_name', 'like', '%' . $request->search . '%')
+            ->orWhere('designation', 'like', '%' . $request->search . '%')
+            ->orWhereHas('user', function ($userQuery) use ($request) {
+                $userQuery->where('name', 'like', '%' . $request->search . '%');
+            })
+            ->orWhereHas('cooperative', function ($cooperativeQuery) use ($request) {
+                $cooperativeQuery->where('name', 'like', '%' . $request->search . '%');
+            });
+    })->paginate(5);
+
 
         return view('dashboard.admin.participant.participant', compact('participants'));
     }
@@ -41,14 +55,66 @@ class ParticipantController extends Controller
     }
 
 
+// public function store(Request $request)
+// {
+//     // Validate the form data
+//     $validatedData = $request->validate([
+//         'coop_id' => 'required|exists:cooperatives,coop_id',
+//         'user_id' => 'nullable|exists:users,user_id',
+//         'first_name' => 'required|string|max:255',
+//         'middle_name' => 'nullable|string|max:255',
+//         'email' => 'required|email|unique:participants',
+//         'last_name' => 'required|string|max:255',
+//         'nickname' => 'nullable|string|max:255',
+//         'gender' => 'required|string|max:255',
+//         'phone_number' => 'required|string|max:15',
+//         'designation' => 'nullable|string|max:255',
+//         'congress_type' => 'nullable|string|max:255',
+//         'religious_affiliation' => 'nullable|string|max:255',
+//         'tshirt_size' => 'nullable|string|max:5',
+//         'is_msp_officer' => 'required|string|max:3',
+//         'msp_officer_position' => 'nullable|string|max:255',
+//         'delegate_type' => 'required|string|max:10',
+//     ]);
+
+//     // Store the participant data
+//     $participant = Participant::create($validatedData);
+
+//     // Generate QR code data (e.g., a URL to their profile page)
+//     $qrData = route('adminDashboard', ['participant_id' => $participant->participant_id]); // Adjust this route as needed
+
+//     // Call the external QR code API
+//     $response = Http::get('https://api.qrserver.com/v1/create-qr-code/', [
+//         'data' => $qrData,
+//         'size' => '200x200' // You can adjust the size here
+//     ]);
+
+//     // Check if the QR code generation is successful
+//     if ($response->successful()) {
+//         // Save the QR code image
+//         $path = 'qrcodes/participant_' . $participant->participant_id . '.png';
+//         Storage::disk('public')->put($path, $response->body());
+
+//         // Optionally, save the QR code path to the participant
+//         $participant->qr_code = $path;
+//         $participant->save();
+//     } else {
+//         // Handle failure if the QR code generation fails
+//         return redirect()->route('participants.index')->with('error', 'Failed to generate QR code.');
+//     }
+
+//     // Redirect or return a response
+//     return redirect()->route('participants.index')->with('success', 'Participant registered successfully!');
+// }
+
 public function store(Request $request)
 {
     // Validate the form data
     $validatedData = $request->validate([
         'coop_id' => 'required|exists:cooperatives,coop_id',
-        'user_id' => 'nullable|exists:users,user_id',
         'first_name' => 'required|string|max:255',
         'middle_name' => 'nullable|string|max:255',
+        'email' => 'required|email|unique:participants,email|unique:users,email|unique:cooperatives,email',
         'last_name' => 'required|string|max:255',
         'nickname' => 'nullable|string|max:255',
         'gender' => 'required|string|max:255',
@@ -62,35 +128,56 @@ public function store(Request $request)
         'delegate_type' => 'required|string|max:10',
     ]);
 
+    // If the request does not contain a coop_id, use the authenticated user's coop_id
+    if (!$request->filled('coop_id')) {
+        $validatedData['coop_id'] = Auth::user()->coop_id;
+    }
+
     // Store the participant data
     $participant = Participant::create($validatedData);
 
-    // Generate QR code data (e.g., a URL to their profile page)
-    $qrData = route('adminDashboard', ['participant_id' => $participant->participant_id]); // Adjust this route as needed
+    // Generate a unique password
+    $generatedPassword = Str::random(12);
+
+    // Create a user linked to the participant
+    $user = User::create([
+        'name' => $validatedData['first_name'] . ' ' . $validatedData['last_name'],
+        'coop_id' => $validatedData['coop_id'],
+        'email' => $validatedData['email'],
+        'password' => Hash::make($generatedPassword),
+        'role' => 'participant',
+    ]);
+
+    // Assign user_id to the participant
+    $participant->user_id = $user->user_id;
+    $participant->save();
+
+    // Send email notification
+    Mail::to($user->email)->send(new ParticipantCreated($user, $generatedPassword));
+
+    // Generate QR code data
+    $qrData = route('adminDashboard', ['coop_id' => $participant->coop_id]);
 
     // Call the external QR code API
     $response = Http::get('https://api.qrserver.com/v1/create-qr-code/', [
         'data' => $qrData,
-        'size' => '200x200' // You can adjust the size here
+        'size' => '200x200'
     ]);
 
     // Check if the QR code generation is successful
     if ($response->successful()) {
-        // Save the QR code image
-        $path = 'qrcodes/participant_' . $participant->participant_id . '.png';
+        $path = 'qrcodes/participant_' . $participant->coop_id . '.png';
         Storage::disk('public')->put($path, $response->body());
 
-        // Optionally, save the QR code path to the participant
         $participant->qr_code = $path;
         $participant->save();
     } else {
-        // Handle failure if the QR code generation fails
         return redirect()->route('participants.index')->with('error', 'Failed to generate QR code.');
     }
 
-    // Redirect or return a response
-    return redirect()->route('participants.index')->with('success', 'Participant registered successfully!');
+    return redirect()->route('participants.index')->with('success', 'Participant registered and user account created successfully!');
 }
+
 
     // Show a specific participant
     public function show($participant_id)
@@ -113,12 +200,52 @@ public function store(Request $request)
     // Update the specified participant
     public function update(Request $request, $participant_id)
     {
-        // Use 'participant_id' for the identifier
         $participant = Participant::where('participant_id', $participant_id)->firstOrFail();
-        $participant->update($request->all());
+
+        if (Participant::where('email', $request->email)->where('participant_id', '!=', $participant_id)->exists()) {
+            return redirect()->back()->withErrors(['email' => 'This email is already in use.'])->withInput();
+        }
+
+        // Validate input with unique email check (ignoring the current participant)
+        $validatedData = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'middle_name' => 'nullable|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'nickname' => 'nullable|string|max:255',
+            'gender' => 'required|string|max:255',
+            'phone_number' => 'required|string|max:15',
+            'designation' => 'nullable|string|max:255',
+            'congress_type' => 'nullable|string|max:255',
+            'religious_affiliation' => 'nullable|string|max:255',
+            'tshirt_size' => 'nullable|string|max:5',
+            'is_msp_officer' => 'required|string|max:3',
+            'msp_officer_position' => 'nullable|string|max:255',
+            'delegate_type' => 'required|string|max:10',
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('participants', 'email')->ignore($participant->participant_id, 'participant_id'),
+                Rule::unique('users', 'email')->ignore($participant->user_id, 'user_id'),
+                function ($attribute, $value, $fail) use ($participant) {
+                    $existsInCooperatives = DB::table('cooperatives')
+                        ->where('email', $value)
+                        ->where('coop_id', '!=', $participant->coop_id) // Ignore their own cooperative
+                        ->exists();
+
+                    if ($existsInCooperatives) {
+                        $fail('The email has already been taken in another cooperative record.');
+                    }
+                }
+            ],
+            'coop_id' => 'required|exists:cooperatives,coop_id',
+        ]);
+
+        // Update only validated fields
+        $participant->update($validatedData);
 
         return redirect()->route('participants.index')->with('success', 'Participant updated successfully.');
     }
+
 
     // Remove the specified participant
     public function destroy($participant_id)
@@ -237,17 +364,17 @@ public function store(Request $request)
         return view('dashboard.participant.participant', compact('documents'));
     }
 
-    public function viewadminDocuments($participant_id = null)
-    {
-        // If participant_id is provided, filter documents
-        if ($participant_id) {
-            $documents = UploadedDocument::where('participant_id', $participant_id)->get();
-        } else {
-            $documents = UploadedDocument::all(); // Show all documents if no participant is selected
-        }
+    // public function viewadminDocuments($participant_id = null)
+    // {
+    //     // If participant_id is provided, filter documents
+    //     if ($participant_id) {
+    //         $documents = UploadedDocument::where('participant_id', $participant_id)->get();
+    //     } else {
+    //         $documents = UploadedDocument::all(); // Show all documents if no participant is selected
+    //     }
 
-        return view('dashboard.admin.participant.documents', compact('documents', 'participant_id'));
-    }
+    //     return view('dashboard.admin.participant.documents', compact('documents', 'participant_id'));
+    // }
 
     public function speakerlist(Request $request)
     {
@@ -262,7 +389,7 @@ public function store(Request $request)
                     });
             })
             ->orderBy('name', 'asc')
-            ->paginate(10); // Ensure pagination is applied
+            ->paginate(5); // Ensure pagination is applied
 
         return view('dashboard.participant.speakers', compact('speakers', 'search'));
     }

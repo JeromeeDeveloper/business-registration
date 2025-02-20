@@ -5,7 +5,9 @@ class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bo
   <nav
     class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex"
   >
-
+  <h3 class="fw-bold mb-3">
+    {{-- {{ $cooperative->name ?? 'Mass-Specc Cooperative' }} --}}
+</h3>
   </nav>
 
   <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">

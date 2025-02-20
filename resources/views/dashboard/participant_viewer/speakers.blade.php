@@ -10,7 +10,7 @@
         <div class="sidebar-logo">
           <!-- Logo Header -->
           <div class="logo-header" data-background-color="dark">
-            <a href="{{route('participantDashboard')}}" class="logo">
+            <a href="{{route('participantViewerDashboard')}}" class="logo">
                 <img class="logo-mass-specc" src="{{ asset('images/logo.png') }}" alt="">
             </a>
             <div class="nav-toggle">
@@ -32,7 +32,7 @@
             <ul class="nav nav-secondary">
                 <li class="nav-item">
                     <a
-                      href="{{route('participantDashboard')}}"
+                      href="{{route('participantViewerDashboard')}}"
                       class="collapsed"
                     >
                       <i class="fas fa-home"></i>
@@ -46,22 +46,7 @@
                 <h4 class="text-section">Components</h4>
               </li>
 
-              <li class="nav-item">
-                <a data-bs-toggle="collapse" href="#participant">
-                  <i class="fas fa-users"></i>
-                  <p>Participant</p>
-                  <span class="caret"></span>
-                </a>
-                <div class="collapse" id="participant">
-                  <ul class="nav nav-collapse">
-                    <li>
-                        <a href="{{route('coop.index')}}">
-                          <span class="sub-item">Participants</span>
-                        </a>
-                      </li>
-                  </ul>
-                </div>
-              </li>
+
 
               <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#cooperative">
@@ -72,7 +57,7 @@
                 <div class="collapse show" id="cooperative">
                   <ul class="nav nav-collapse">
                     <li class="active">
-                        <a href="{{route('speakerlist')}}">
+                        <a href="{{route('speakerlistparticipant')}}">
                           <span class="sub-item">List of Resource Speakers</span>
                         </a>
                       </li>
@@ -89,7 +74,7 @@
                 <div class="collapse" id="user">
                   <ul class="nav nav-collapse">
                     <li>
-                        <a href="{{route('schedule')}}">
+                        <a href="{{route('events_participant')}}">
                           <span class="sub-item">List of Events</span>
                         </a>
                       </li>

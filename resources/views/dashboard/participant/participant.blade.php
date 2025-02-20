@@ -47,6 +47,24 @@
               </li>
 
               <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#participant">
+                  <i class="fas fa-users"></i>
+                  <p>Participant</p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse" id="participant">
+                  <ul class="nav nav-collapse">
+                    <li>
+                        <a href="{{route('coop.index')}}">
+                          <span class="sub-item">Participants</span>
+                        </a>
+                      </li>
+                  </ul>
+                </div>
+              </li>
+
+
+              <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#cooperative">
                   <i class="fas fa-users"></i>
                   <p>Resource Speakers</p>
@@ -63,22 +81,7 @@
                 </div>
               </li>
 
-              <li class="nav-item">
-                <a data-bs-toggle="collapse" href="#participant">
-                  <i class="fas fa-users"></i>
-                  <p>Participant</p>
-                  <span class="caret"></span>
-                </a>
-                <div class="collapse" id="participant">
-                  <ul class="nav nav-collapse">
-                    <li>
-                        <a href="{{route('coop.index')}}">
-                          <span class="sub-item">Participants</span>
-                        </a>
-                      </li>
-                  </ul>
-                </div>
-              </li>
+
 
               <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#user">
@@ -132,6 +135,8 @@
             <nav
               class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex"
             >
+
+
 
             </nav>
 
@@ -188,14 +193,21 @@
             <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
                 <div>
                   <h3 class="fw-bold mb-3">Cooperative Dashboard</h3>
-                  <h6 class="op-7 mb-2">MASS-SPECC Assembly Registration Overview</h6>
+
+
                 </div>
                 <div class="ms-md-auto py-2 py-md-0 p-6">
-                    @if ($participant && $participant->cooperative)
-                    <a href="{{ route('cooperativeprofile', ['participant_id' => $participant->participant_id, 'coop_id' => $participant->cooperative->coop_id]) }}" class="btn btn-label-info btn-round me-2">Cooperative Profile</a>
+
+                    @if ($coop)
+                    <a href="{{ route('cooperativeprofile', ['coop_id' => $coop->coop_id]) }}"
+                       class="btn btn-label-info btn-round me-2">
+                        Cooperative Profile
+                    </a>
                 @else
                     <a class="btn btn-info btn-round">No Cooperative Associated Yet</a>
                 @endif
+
+
 
                 <a href="#" id="viewDocumentsBtn" class="btn btn-primary btn-round">View Uploaded Documents</a>
                 </div>
@@ -204,29 +216,55 @@
               <!-- Dashboard Cards -->
               <div class="row">
                 <!-- Registration Status -->
-                <div class="col-sm-6 col-md-3">
-                  <div class="card card-stats card-round">
-                    <div class="card-body">
-                      <div class="row align-items-center">
-                        <div class="col-icon">
-                          <div class="icon-big text-center icon-primary bubble-shadow-small">
-                            <i class="fas fa-user-check"></i>
-                          </div>
-                        </div>
-                        <div class="col col-stats ms-3 ms-sm-0">
-                            <div class="numbers">
-                                <p class="card-category">Registration Status</p>
-                                <h4 class="card-title
-                                {{ $registrationStatus === 'Confirmed' ? 'text-success' : ($registrationStatus === 'Pending' ? 'text-warning' : 'text-danger') }}">
-                                {{ $registrationStatus === 'Confirmed' ? 'Approved' : ($registrationStatus === 'Rejected' ? 'Rejected' : $registrationStatus) }}
-                            </h4>
-                            </div>
-
-                        </div>
-                      </div>
+               <!-- Registration Status -->
+<div class="col-sm-6 col-md-3">
+    <div class="card card-stats card-round">
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-icon">
+                    <div class="icon-big text-center icon-primary bubble-shadow-small">
+                        <i class="fas fa-user-check"></i>
                     </div>
-                  </div>
                 </div>
+                <div class="col col-stats ms-3 ms-sm-0">
+                    <div class="numbers">
+                        <p class="card-category">Registration Status</p>
+                        <h4 class="card-title
+                            {{ $registrationStatus === 'Fully Registered' ? 'text-success' :
+                            ($registrationStatus === 'Partial Registered' ? 'text-warning' : 'text-danger') }}">
+                            {{ $registrationStatus }}
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Membership Status -->
+<div class="col-sm-6 col-md-3">
+    <div class="card card-stats card-round">
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-icon">
+                    <div class="icon-big text-center icon-primary bubble-shadow-small">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+                <div class="col col-stats ms-3 ms-sm-0">
+                    <div class="numbers">
+                        <p class="card-category">Membership Status</p>
+                        <h4 class="card-title
+                            {{ $membershipStatus === 'Migs' ? 'text-success' : 'text-danger' }}">
+                            {{ $membershipStatus === 'Migs' ? 'Migs' : 'Non-migs' }}
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
               <!-- Registration Section -->
                 <div class="col-sm-6 col-md-3">
@@ -270,15 +308,12 @@
                                             $registrationStatus = $cooperative && $cooperative->registration ? $cooperative->registration->status : 'Pending';
                                         @endphp
 
-                                        @if ($hasDocuments && $registrationStatus !== 'Rejected')
-                                            <p class="text-success mt-2">Already uploaded.</p>
-                                        @elseif ($registrationStatus === 'Rejected')
-                                            <button id="uploadBtn" class="btn btn-sm btn-outline-primary mt-2">Upload Again</button>
-                                        @else
-                                            <button id="uploadBtn" class="btn btn-sm btn-outline-primary mt-2">Upload Now</button>
-                                        @endif
+                                        <button id="uploadBtn" class="btn btn-sm btn-outline-primary mt-2">
+                                            {{ $hasDocuments ? 'Upload Again' : 'Upload Now' }}
+                                        </button>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -286,30 +321,8 @@
 
 
 
-                <!-- Assigned Committees & Voting Status -->
-                <div class="col-sm-6 col-md-3">
-                  <div class="card card-stats card-round">
-                    <div class="card-body">
-                      <div class="row align-items-center">
-                        <div class="col-icon">
-                          <div class="icon-big text-center icon-secondary bubble-shadow-small">
-                            <i class="fas fa-users"></i>
-                          </div>
-                        </div>
-                        <div class="col col-stats ms-3 ms-sm-0">
-                            <div class="numbers">
-                                <p class="card-category">Committee & Voting</p>
-                                <span class="text-success">
-                                    {{ Auth::user()->participant->delegate_type ?? 'N/A' }}
-                                </span>
-                            </div>
 
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+
 
             <div class="row">
                 <div class="col-md-8">
@@ -403,11 +416,11 @@
                 @endif
 
 
-
+                @if($event)
                   <div class="card card-round">
                     <div class="card-body pb-0">
                       <h2 class="mb-2">Event Notice</h2>
-                      <p class="text-muted">Join us for the upcoming General Assembly!</p>
+                      <p class="text-muted">Join us for the upcoming {{ $event->title }}!</p>
                       <div class="pull-in sparkline-fix">
                         <!-- You can insert a related event image or a calendar icon here -->
                         <div id="eventNoticeChart"></div>
@@ -415,11 +428,14 @@
                     </div>
                     <div class="card-footer">
                       <div class="alert alert-info">
-                        <strong>Notice:</strong> The General Assembly will take place on March 15-17, 2025. Don't miss out on this important event!
+                        <strong>Notice:</strong> The General Assembly will take place on   {{ \Carbon\Carbon::parse($event->start_date)->format('F d, Y') }} -
+                        {{ \Carbon\Carbon::parse($event->end_date)->format('F d, Y') }} Don't miss out on this important event!
                       </div>
                     </div>
                   </div>
-
+                  @else
+                  <p>No upcoming events at the moment.</p>
+                  @endif
               </div>
             </div>
 

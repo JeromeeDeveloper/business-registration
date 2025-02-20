@@ -357,6 +357,23 @@
                                     <p>{{ $coop->services_availed }}</p>
                                 </div>
                             </div>
+
+                            <!-- GA Registration Status -->
+                            <div class="col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="ga_registration_status">GA Registration Status</label>
+                                    <p>{{ optional($coop->gaRegistration)->registration_status ?? 'N/A' }}</p>
+                                </div>
+                            </div>
+
+                            <!-- Membership Status -->
+                            <div class="col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="membership_status">Membership Status</label>
+                                    <p>{{ optional($coop->gaRegistration)->membership_status ?? 'N/A' }}</p>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
 

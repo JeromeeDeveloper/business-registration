@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
- <head>
+  <head>
     @include('layouts.adminheader')
- </head>
+  </head>
   <body>
     <div class="wrapper">
       <!-- Sidebar -->
@@ -10,7 +10,7 @@
         <div class="sidebar-logo">
           <!-- Logo Header -->
           <div class="logo-header" data-background-color="dark">
-            <a href="{{route('participantDashboard')}}" class="logo">
+            <a href="{{route('participantViewerDashboard')}}" class="logo">
                 <img class="logo-mass-specc" src="{{ asset('images/logo.png') }}" alt="">
             </a>
             <div class="nav-toggle">
@@ -32,7 +32,7 @@
             <ul class="nav nav-secondary">
                 <li class="nav-item">
                     <a
-                      href="{{route('participantDashboard')}}"
+                      href="{{route('participantViewerDashboard')}}"
                       class="collapsed"
                     >
                       <i class="fas fa-home"></i>
@@ -47,38 +47,23 @@
               </li>
 
               <li class="nav-item">
-                <a data-bs-toggle="collapse" href="#participant">
-                  <i class="fas fa-users"></i>
-                  <p>Participant</p>
-                  <span class="caret"></span>
-                </a>
-                <div class="collapse" id="participant">
-                  <ul class="nav nav-collapse">
-                    <li>
-                        <a href="{{route('coop.index')}}">
-                          <span class="sub-item">Participants</span>
-                        </a>
-                      </li>
-                  </ul>
-                </div>
-              </li>
-
-              <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#cooperative">
                   <i class="fas fa-users"></i>
                   <p>Resource Speakers</p>
                   <span class="caret"></span>
                 </a>
-                <div class="collapse show" id="cooperative">
+                <div class="collapse" id="cooperative">
                   <ul class="nav nav-collapse">
-                    <li class="active">
-                        <a href="{{route('speakerlist')}}">
+                    <li>
+                        <a href="{{route('speakerlistparticipant')}}">
                           <span class="sub-item">List of Resource Speakers</span>
                         </a>
                       </li>
                   </ul>
                 </div>
               </li>
+
+
 
               <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#user">
@@ -89,7 +74,7 @@
                 <div class="collapse" id="user">
                   <ul class="nav nav-collapse">
                     <li>
-                        <a href="{{route('schedule')}}">
+                        <a href="{{route('events_participant')}}">
                           <span class="sub-item">List of Events</span>
                         </a>
                       </li>
@@ -107,9 +92,8 @@
           <div class="main-header-logo">
             <!-- Logo Header -->
             <div class="logo-header" data-background-color="dark">
-                <a href="{{route('participantDashboard')}}" class="logo">
+              <a href="{{route('adminDashboard')}}" class="logo">
                 <img class="logo-mass-specc" src="{{ asset('images/logo.png') }}" alt="">
-              </a>
               <div class="nav-toggle">
                 <button class="btn btn-toggle toggle-sidebar">
                   <i class="gg-menu-right"></i>
@@ -132,7 +116,7 @@
         <div class="container">
           <div class="page-inner">
             <div class="page-header">
-              <h3 class="fw-bold mb-3">List of Speakers</h3>
+              <h3 class="fw-bold mb-3">Edit Profile</h3>
               <ul class="breadcrumbs mb-3">
                 <li class="nav-home">
                   <a href="#">
@@ -143,13 +127,13 @@
                   <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                  <a href="#">Dashboard</a>
+                  <a href="#">Profile</a>
                 </li>
                 <li class="separator">
                   <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                  <a href="#">Speaker</a>
+                  <a href="#">Edit</a>
                 </li>
               </ul>
             </div>
@@ -157,59 +141,69 @@
               <div class="col-md-12">
                 <div class="card">
                   <div class="card-header">
-                    <div class="d-flex align-items-center">
-                      <h4 class="card-title">Speakers</h4>
-                    </div>
+                    <div class="card-title">Profile Edit Form</div>
                   </div>
-                  <div class="card-body">
-                    <!-- Modal -->
-                    <form method="GET" class="mb-3">
-                        <div class="d-flex justify-content-end">
-                            <div class="input-group flex-nowrap w-50 w-md-50 w-lg-25 ms-auto">
-                                <input type="text" name="search" class="form-control" placeholder="Search..."
-                                       value="{{ request('search') }}">
-                                <button type="submit" class="btn btn-primary">Search</button>
-                            </div>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Speaker Name</th>
-                                        <th>Topic</th>
-                                        <th>Event</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse ($speakers as $speaker)
-                                        <tr>
-                                            <td>{{ $speaker->name }}</td>
-                                            <td>{{ $speaker->topic }}</td>
-                                            <td>{{ $speaker->event->title ?? 'N/A' }}</td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="3" class="text-center">No speakers found</td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
 
-                    </form>
+                  <form action="{{ route('updateProfileParticipant') }}" method="POST">
+                    @csrf
+                    @method('PUT')
 
-                    <div class="mt-3">
-                        {{ $speakers->appends(['search' => request()->search])->links() }}
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" name="name" id="name" value="{{ old('name', $user->name) }}" required>
                     </div>
-                </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" id="email" value="{{ old('email', $user->email) }}" required>
+
+                        @error('email')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="password">Password (Leave blank to keep current)</label>
+                        <input type="password" class="form-control" name="password" id="password">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password_confirmation">Confirm Password</label>
+                        <input type="password" class="form-control" name="password_confirmation" id="password_confirmation">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
+                    <a href="{{ url()->previous() }}" class="btn btn-secondary mt-3">Previous</a>
+                </form>
+
+                @if(session('success'))
+                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                    <script>
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: '{{ session('success') }}'
+                        });
+                    </script>
+                @endif
+
+
+            </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-            @include('layouts.adminfooter')
-      </div>
     </div>
-    @include('layouts.links')
+        {{-- @include('layouts.adminfooter') --}}
+      </div>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+  @include('layouts.links')
   </body>
 </html>

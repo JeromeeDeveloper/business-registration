@@ -375,3 +375,12 @@ body[data-background-color="dark"] .demo-icon .icon-class {
     flex-direction: column;
     gap: 10px;
 }
+
+.notify_btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    justify-content: flex-end;
+    margin-top: -65px;
+    padding: 25px 0;
+}

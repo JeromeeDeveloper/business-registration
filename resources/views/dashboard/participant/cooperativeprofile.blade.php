@@ -47,6 +47,23 @@
               </li>
 
               <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#participant">
+                  <i class="fas fa-users"></i>
+                  <p>Participant</p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse" id="participant">
+                  <ul class="nav nav-collapse">
+                    <li>
+                        <a href="{{route('coop.index')}}">
+                          <span class="sub-item">Participants</span>
+                        </a>
+                      </li>
+                  </ul>
+                </div>
+              </li>
+
+              <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#cooperative">
                   <i class="fas fa-users"></i>
                   <p>Resource Speakers</p>
@@ -115,7 +132,7 @@
         <div class="container">
           <div class="page-inner">
             <div class="page-header">
-              <h3 class="fw-bold mb-3">Participant Information</h3>
+              <h3 class="fw-bold mb-3">Cooperative Information</h3>
               <ul class="breadcrumbs mb-3">
                 <li class="nav-home">
                   <a href="#">
@@ -126,7 +143,7 @@
                   <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                  <a href="#">Participant</a>
+                  <a href="#">Cooperative</a>
                 </li>
                 <li class="separator">
                   <i class="icon-arrow-right"></i>
@@ -140,158 +157,126 @@
               <div class="col-md-12">
                 <div class="card">
                   <div class="card-header alignment">
-                    <div class="card-title">Participant Information</div>
-                    <a href="{{ route('cooperativeprofile.edit', ['participant_id' => $participant->participant_id, 'coop_id' => $cooperative->coop_id]) }}" class="btn btn-warning btn-round me-2">
+
+                    {{-- <a href="{{ route('cooperativeprofile.edit', ['participant_id' => $participant->participant_id, 'coop_id' => $cooperative->coop_id]) }}" class="btn btn-warning btn-round me-2">
                         Edit Cooperative Profile
-                    </a>
+                    </a> --}}
 
                   </div>
                   <form id="participantForm">
-                    <div class="card-body">
-                        <div class="row">
-                            <!-- Coop Selection -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="coop_id">Cooperative</label>
-                                    <div>{{ $participant->cooperative->name ?? 'N/A' }}</div> <!-- Display cooperative name -->
-                                </div>
-                            </div>
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <h4 class="mb-0">Cooperative Profile Information</h4>
+                        </div>
+                        <div class="card-body">
+                            @if ($cooperative)
+                                <table class="table table-bordered">
+                                    <tbody>
+                                        <tr>
+                                            <td class="fw-bold">Cooperative Name:</td>
+                                            <td>{{ $cooperative->name ?? 'N/A' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Cooperative ID:</td>
+                                            <td>{{ $cooperative->coop_identification_no ?? 'N/A' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Type:</td>
+                                            <td>{{ $cooperative->type ?? 'N/A' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Region:</td>
+                                            <td>{{ $cooperative->region ?? 'N/A' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Address:</td>
+                                            <td>{{ $cooperative->address ?? 'N/A' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Contact Person:</td>
+                                            <td>{{ $cooperative->contact_person ?? 'N/A' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Phone Number:</td>
+                                            <td>{{ $cooperative->phone_number ?? 'N/A' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Email:</td>
+                                            <td>{{ $cooperative->email ?? 'N/A' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">TIN:</td>
+                                            <td>{{ $cooperative->tin ?? 'N/A' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Chairperson of the Board:</td>
+                                            <td>{{ $cooperative->bod_chairperson ?? 'N/A' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">General Manager/CEO:</td>
+                                            <td>{{ $cooperative->general_manager_ceo ?? 'N/A' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">GA Registration Status:</td>
+                                            <td>{{ $cooperative->ga_registration_status ?? 'N/A' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Total Asset:</td>
+                                            <td>{{ number_format($cooperative->total_asset, 2) ?? 'N/A' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Total Income:</td>
+                                            <td>{{ number_format($cooperative->total_income, 2) ?? 'N/A' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">CETF Remittance:</td>
+                                            <td>{{ number_format($cooperative->cetf_remittance, 2) ?? 'N/A' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">CETF Required:</td>
+                                            <td>{{ number_format($cooperative->cetf_required, 2) ?? 'N/A' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">CETF Balance:</td>
+                                            <td>{{ number_format($cooperative->cetf_balance, 2) ?? 'N/A' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Share Capital Balance:</td>
+                                            <td>{{ number_format($cooperative->share_capital_balance, 2) ?? 'N/A' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Number of Entitled Votes:</td>
+                                            <td>{{ $cooperative->no_of_entitled_votes ?? 'N/A' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Membership Status:</td>
+                                            <td>{{ optional($cooperative->gaRegistration)->membership_status ?? 'N/A' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Services Availed:</td>
+                                            <td>{{ $cooperative->services_availed ?? 'N/A' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">GA Registration Status:</td>
+                                            <td>{{ optional($cooperative->gaRegistration)->registration_status ?? 'N/A' }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            @else
+                                <p class="text-muted text-center">No cooperative profile available.</p>
+                            @endif
+                        </div>
 
-                            <!-- User Display -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="user_id">User</label>
-                                    <div>{{ auth()->user()->name }}</div>
-                                </div>
-                            </div>
-
-                            <!-- First Name -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="first_name">First Name</label>
-                                    <div>{{ $participant->first_name }}</div>
-                                </div>
-                            </div>
-
-                            <!-- Middle Name -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="middle_name">Middle Name</label>
-                                    <div>{{ $participant->middle_name ?? 'N/A' }}</div>
-                                </div>
-                            </div>
-
-                            <!-- Last Name -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="last_name">Last Name</label>
-                                    <div>{{ $participant->last_name }}</div>
-                                </div>
-                            </div>
-
-                            <!-- Nickname -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="nickname">Nickname</label>
-                                    <div>{{ $participant->nickname ?? 'N/A' }}</div>
-                                </div>
-                            </div>
-
-                            <!-- Gender -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="gender">Gender</label>
-                                    <div>{{ $participant->gender }}</div>
-                                </div>
-                            </div>
-
-                            <!-- Phone Number -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="phone_number">Phone Number</label>
-                                    <div>{{ $participant->phone_number }}</div>
-                                </div>
-                            </div>
-
-                            <!-- Designation -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="designation">Designation</label>
-                                    <div>{{ $participant->designation ?? 'N/A' }}</div>
-                                </div>
-                            </div>
-
-                            <!-- Congress Type -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="congress_type">Congress Type</label>
-                                    <div>{{ $participant->congress_type ?? 'N/A' }}</div>
-                                </div>
-                            </div>
-
-                            <!-- Religious Affiliation -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="religious_affiliation">Religious Affiliation</label>
-                                    <div>{{ $participant->religious_affiliation ?? 'N/A' }}</div>
-                                </div>
-                            </div>
-
-                            <!-- T-shirt Size -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="tshirt_size">T-shirt Size</label>
-                                    <div>{{ $participant->tshirt_size ?? 'N/A' }}</div>
-                                </div>
-                            </div>
-
-                            <!-- MSP Officer -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="is_msp_officer">Is MSP Officer</label>
-                                    <div>{{ $participant->is_msp_officer === 'Yes' ? 'Yes' : 'No' }}</div>
-                                </div>
-                            </div>
-
-                            <!-- MSP Officer Position -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="msp_officer_position">MSP Officer Position</label>
-                                    <div>{{ $participant->msp_officer_position ?? 'N/A' }}</div>
-                                </div>
-                            </div>
-
-                            <!-- Delegate Type -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="delegate_type">Delegate Type</label>
-                                    <div>{{ $participant->delegate_type ?? 'N/A' }}</div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="qr_code">QR Code</label>
-                                    <div class="Qr">
-                                        <!-- QR Code Image -->
-                                        <img src="https://api.qrserver.com/v1/create-qr-code/?data={{ urlencode(route('adminDashboard', ['participant_id' => $participant->participant_id])) }}&size=200x200" alt="QR Code" id="qrCodeImage"/>
-
-                                        <!-- Download Button -->
-                                        <a href="{{ route('download.qr', ['participant_id' => $participant->participant_id]) }}" class="btn btn-info btn-sm mt-2">
-                                            Download QR Code
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-
-
-
+                        <div class="card-footer text-end">
+                            <button class="btn btn-primary" type="button" onclick="window.location.href='{{ route('participantDashboard') }}'">
+                                Back to Dashboard
+                            </button>
                         </div>
                     </div>
-                    <div class="card-action">
-                        <button class="btn btn-info" type="button" onclick="window.location.href='{{ route('participantDashboard') }}'">Back</button>
-                    </div>
                 </form>
+
+
+
 
             </div>
                   </div>

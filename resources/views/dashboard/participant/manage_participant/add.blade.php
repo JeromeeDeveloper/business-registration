@@ -168,23 +168,37 @@
                         <div class="card-body">
                             <div class="row">
                                 <!-- Coop Selection -->
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="coop_id">Cooperative</label>
-                                        <select class="form-control @error('coop_id') is-invalid @enderror" name="coop_id" id="coop_id">
-                                            <option value="">Select Cooperative</option>
-                                            @foreach($cooperatives as $coop)
-                                                <option value="{{ $coop->coop_id }}" {{ old('coop_id') == $coop->coop_id ? 'selected' : '' }}>
-                                                    {{ $coop->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        @error('coop_id')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
+                                @php
+                                $user = Auth::user();
+                                $userCoopId = $user->coop_id ?? null; // Get the logged-in user's cooperative ID
+                            @endphp
 
-                                    </div>
+                            <div class="col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="coop_id">Cooperative</label>
+                                    <select class="form-control @error('coop_id') is-invalid @enderror"
+                                            name="coop_id" id="coop_id" {{ $userCoopId ? 'disabled' : '' }}>
+                                        <option value="">Select Cooperative</option>
+                                        @foreach($cooperatives as $coop)
+                                            <option value="{{ $coop->coop_id }}"
+                                                {{ (old('coop_id', $userCoopId) == $coop->coop_id) ? 'selected' : '' }}>
+                                                {{ $coop->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+
+                                    <!-- Hidden field to submit coop_id when select is disabled -->
+                                    @if($userCoopId)
+                                        <input type="hidden" name="coop_id" value="{{ $userCoopId }}">
+                                    @endif
+
+                                    @error('coop_id')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
+                            </div>
+
+
 
                                <!-- User Display -->
                                 {{-- <div class="col-md-6 col-lg-4">
@@ -233,6 +247,16 @@
                                         <label for="last_name">Last Name</label>
                                         <input type="text" class="form-control @error('last_name') is-invalid @enderror" name="last_name" id="last_name" placeholder="Enter Last Name" value="{{ old('last_name') }}" />
                                         @error('last_name')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="email">Email</label>
+                                        <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" id="email" placeholder="Enter Email" value="{{ old('email') }}" />
+                                        @error('email')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>

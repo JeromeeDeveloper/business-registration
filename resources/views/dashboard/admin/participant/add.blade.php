@@ -222,25 +222,6 @@
                                     </div>
                                 </div>
 
-                               <!-- User Display -->
-                                {{-- <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="user_id">User</label>
-                                        <select class="form-control" name="user_id" id="user_id">
-                                            <option value="" disabled selected>Select a user</option>
-                                            @foreach($users as $user)
-                                                <option value="{{ $user->user_id }}" {{ auth()->user()->user_id == $user->user_id ? 'selected' : '' }}>
-                                                    {{ $user->name }}
-                                                </option>
-                                            @endforeach
-                                            @if($users->isEmpty())
-                                                <p>No users found.</p>
-                                            @endif
-                                        </select>
-                                    </div>
-                                </div> --}}
-
-
                                 <!-- First Name -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
@@ -269,6 +250,16 @@
                                         <label for="last_name">Last Name</label>
                                         <input type="text" class="form-control @error('last_name') is-invalid @enderror" name="last_name" id="last_name" placeholder="Enter Last Name" value="{{ old('last_name') }}" />
                                         @error('last_name')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="email">Email</label>
+                                        <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" id="email" placeholder="Enter Email" value="{{ old('email') }}" />
+                                        @error('email')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
@@ -411,10 +402,6 @@
 
                         </div>
                     </form>
-
-                    {{-- <div class="d-flex justify-content-center mt-3">
-                        {{ $participants->appends(['search' => request('search')])->links('pagination::bootstrap-4') }}
-                    </div> --}}
                 </div>
                 </div>
               </div>

@@ -47,23 +47,6 @@
               </li>
 
               <li class="nav-item">
-                <a data-bs-toggle="collapse" href="#cooperative">
-                  <i class="fas fa-users"></i>
-                  <p>Resource Speakers</p>
-                  <span class="caret"></span>
-                </a>
-                <div class="collapse" id="cooperative">
-                  <ul class="nav nav-collapse">
-                    <li>
-                        <a href="{{route('speakerlist')}}">
-                          <span class="sub-item">List of Resource Speakers</span>
-                        </a>
-                      </li>
-                  </ul>
-                </div>
-              </li>
-
-              <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#participant">
                   <i class="fas fa-users"></i>
                   <p>Participant</p>
@@ -74,6 +57,23 @@
                     <li class="active">
                         <a href="{{route('coop.index')}}">
                           <span class="sub-item">Participants</span>
+                        </a>
+                      </li>
+                  </ul>
+                </div>
+              </li>
+
+              <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#cooperative">
+                  <i class="fas fa-users"></i>
+                  <p>Resource Speakers</p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse" id="cooperative">
+                  <ul class="nav nav-collapse">
+                    <li>
+                        <a href="{{route('speakerlist')}}">
+                          <span class="sub-item">List of Resource Speakers</span>
                         </a>
                       </li>
                   </ul>
@@ -169,20 +169,31 @@
                         <div class="card-body">
                             <div class="row">
                                 <!-- Coop Selection -->
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="coop_id">Cooperative</label>
-                                        <select class="form-control" name="coop_id">
-                                            <option value="" disabled>Select Cooperative</option>
-                                            @foreach ($cooperatives as $cooperative)
-                                                <option value="{{ $cooperative->coop_id }}"
-                                                    {{ $participant->coop_id == $cooperative->coop_id ? 'selected' : '' }}>
-                                                    {{ $cooperative->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                                @php
+                                $user = Auth::user();
+                                $userCoopId = $user->coop_id ?? null; // Get the logged-in user's cooperative ID
+                            @endphp
+
+                            <div class="col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="coop_id">Cooperative</label>
+                                    <select class="form-control" name="coop_id" id="coop_id" {{ $userCoopId ? 'disabled' : '' }}>
+                                        <option value="" disabled>Select Cooperative</option>
+                                        @foreach ($cooperatives as $cooperative)
+                                            <option value="{{ $cooperative->coop_id }}"
+                                                {{ (old('coop_id', $participant->coop_id) == $cooperative->coop_id) ? 'selected' : '' }}>
+                                                {{ $cooperative->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+
+                                    <!-- Hidden input to ensure coop_id is submitted when select is disabled -->
+                                    @if($userCoopId)
+                                        <input type="hidden" name="coop_id" value="{{ $userCoopId }}">
+                                    @endif
                                 </div>
+                            </div>
+
 
 
 
@@ -225,6 +236,18 @@
                                         <input type="text" class="form-control" name="nickname" value="{{ old('nickname', $participant->nickname) }}">
                                     </div>
                                 </div>
+
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="email">Email</label>
+                                        <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" id="email" placeholder="Enter Email" value="{{ old('email', $participant->email) }}" />
+
+                                        @error('email')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+
 
                                 <!-- Gender -->
                                 <div class="col-md-6 col-lg-4">

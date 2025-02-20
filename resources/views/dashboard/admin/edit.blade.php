@@ -247,13 +247,22 @@
                                 </div>
                             </div>
 
-                            <!-- Email -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="email">Email</label>
-                                    <input type="email" class="form-control" name="email" id="email" value="{{ $coop->email }}" placeholder="Enter Email" />
+                          <!-- Email -->
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="email">Email</label>
+                                        <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" id="email" value="{{ old('email', $coop->email) }}" placeholder="Enter Email" />
+
+                                        {{-- Show error only if the email is different from the cooperative's current email --}}
+                                        @if ($errors->has('email') && old('email') !== $coop->email)
+                                            <div class="alert alert-danger">
+                                                {{ $errors->first('email') }}
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
-                            </div>
+
+
 
                             <!-- TIN -->
                             <div class="col-md-6 col-lg-4">

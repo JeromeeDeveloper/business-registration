@@ -237,7 +237,7 @@
                         </div>
 
                     @endif
-                    <button type="button" class="btn btn-info btnsize" onclick="window.location.href='{{ route('participants.index') }}'"><i class="fa fa-arrow-left"> Go Back</i></button>
+                    <button type="button" class="btn btn-info btnsize" onclick="window.location.href='{{ route('adminview') }}'"><i class="fa fa-arrow-left"> Go Back</i></button>
              </div>
 
                   </div>

@@ -12,19 +12,26 @@ class GARegistration extends Model
     use HasFactory;
 
     protected $table = 'ga_registrations'; // Explicitly set the correct table name
-
     protected $primaryKey = 'registration_id';
-    protected $fillable = ['coop_id', 'participant_id', 'status', 'payment_status'];
+    public $timestamps = true; // Ensures Laravel manages created_at and updated_at timestamps
+
+    protected $fillable = [
+        'coop_id',
+        'participant_id',
+        'date_submitted',
+        'delegate_type',
+        'registration_status',
+        'membership_status',
+    ];
+
 
     public function cooperative()
     {
-        return $this->belongsTo(Cooperative::class, 'coop_id');
+        return $this->belongsTo(Cooperative::class, 'coop_id', 'coop_id');
     }
 
     public function participant()
     {
-        return $this->belongsTo(Participant::class, 'participant_id');
+        return $this->belongsTo(Participant::class, 'participant_id', 'participant_id');
     }
 }
-
-

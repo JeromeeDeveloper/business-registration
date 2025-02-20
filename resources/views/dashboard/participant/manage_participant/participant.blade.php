@@ -47,23 +47,6 @@
               </li>
 
               <li class="nav-item">
-                <a data-bs-toggle="collapse" href="#cooperative">
-                  <i class="fas fa-users"></i>
-                  <p>Resource Speakers</p>
-                  <span class="caret"></span>
-                </a>
-                <div class="collapse" id="cooperative">
-                  <ul class="nav nav-collapse">
-                    <li>
-                        <a href="{{route('speakerlist')}}">
-                          <span class="sub-item">List of Resource Speakers</span>
-                        </a>
-                      </li>
-                  </ul>
-                </div>
-              </li>
-
-              <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#participant">
                   <i class="fas fa-users"></i>
                   <p>Participant</p>
@@ -74,6 +57,24 @@
                     <li class="active">
                         <a href="{{route('coop.index')}}">
                           <span class="sub-item">Participants</span>
+                        </a>
+                      </li>
+                  </ul>
+                </div>
+              </li>
+
+
+              <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#cooperative">
+                  <i class="fas fa-users"></i>
+                  <p>Resource Speakers</p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse" id="cooperative">
+                  <ul class="nav nav-collapse">
+                    <li>
+                        <a href="{{route('speakerlist')}}">
+                          <span class="sub-item">List of Resource Speakers</span>
                         </a>
                       </li>
                   </ul>
@@ -185,9 +186,9 @@
     <table id="add-row" class="display table table-striped table-hover">
         <thead>
             <tr>
-                <th>Registration Status</th>
+
                 <th>Cooperative Name</th>
-                {{-- <th>User Account</th> --}}
+                <th>User Account</th>
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Designation</th>
@@ -199,9 +200,9 @@
         <tbody>
             @forelse ($participants as $participant)
                 <tr>
-                    <td>{{ $participant->registration->status ?? 'Pending' }}</td>
+
                     <td>{{ optional($participant->cooperative)->name ?? 'N/A' }}</td>
-                    {{-- <td>{{ optional($participant->user)->name ?? 'N/A' }}</td> --}}
+                    <td>{{ optional($participant->user)->name ?? 'N/A' }}</td>
                     <td>{{ $participant->first_name }}</td>
                     <td>{{ $participant->last_name }}</td>
                     <td>{{ $participant->designation ?? 'N/A' }}</td>
