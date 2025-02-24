@@ -14,6 +14,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Middleware\ParticipantMiddleware;
 use App\Http\Controllers\CooperativeController;
+use App\Http\Controllers\ExcelImportController;
 use App\Http\Controllers\ParticipantController;
 use App\Http\Middleware\ParticipantUserMiddleware;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
@@ -39,7 +40,16 @@ Route::post('/logout', function () {Auth::logout();return redirect('/login');})-
 //store
 Route::middleware([AdminMiddleware::class])->group(function () {
 
+
 Route::get('/admin/reports', [DashboardController::class, 'generateReports'])->name('admin.reports');
+
+// import
+
+// Display the upload form
+Route::get('/import', [ExcelImportController::class, 'showImportForm'])->name('import.form');
+
+// Handle the file upload via POST
+Route::post('/import-excel', [ExcelImportController::class, 'importExcel'])->name('import.excel');
 
 Route::post('/cooperatives/{coop_id}/notify', [DashboardController::class, 'sendNotification'])->name('cooperatives.notify');
 Route::post('/cooperatives/notify-all', [DashboardController::class, 'sendNotificationToAll'])->name('cooperatives.notifyAll');

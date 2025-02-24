@@ -98,7 +98,7 @@
                       </ul>
                     </div>
                   </li>
-                  
+
                   <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#user">
                       <i class="fas fa-user"></i>
@@ -224,8 +224,11 @@
                                     value="{{ request('search') }}">
                                 <div class="input-group-append gap-2 d-flex">
                                     <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
-                                    <a href="{{ route('adminregister') }}" class="btn btn-info text-white" data-bs-toggle="tooltip" title="Add Cooperative">
+                                    <a href="{{ route('adminregister') }}" class="btn btn-primary text-white" data-bs-toggle="tooltip" title="Add Cooperative">
                                         <i class="fa fa-plus"></i>
+                                    </a>
+                                    <a href="{{ route('import.form') }}" class="btn btn-primary text-white" data-bs-toggle="tooltip" title="Import Cooperative">
+                                        <i class="fa fa-upload"></i>
                                     </a>
                                 </div>
                             </div>
@@ -234,7 +237,13 @@
 
 
 
+
+
                     <div class="notify_btn">
+
+
+
+
 
                         <button class="btn btn-info" onclick="openGmail()">
                             <i class="fa fa-envelope"></i> Notify Manually
@@ -243,14 +252,14 @@
 
                       <form action="{{ route('cooperatives.notifyAll') }}" method="POST" style="display:inline;">
                         @csrf
-                        <button type="submit" class="btn btn-warning text-white" data-bs-toggle="tooltip" title="Notify All Cooperatives">
+                        <button type="submit" class="btn btn-info text-white" data-bs-toggle="tooltip" title="Notify All Cooperatives">
                             <i class="fa fa-bell"></i> Notify Automatically
                         </button>
                       </form>
 
                      <form action="{{ route('cooperatives.notifyCredentialsAll') }}" method="POST" style="display:inline;">
                         @csrf
-                        <button type="submit" class="btn btn-danger text-white" data-bs-toggle="tooltip" title="Notify All Cooperatives">
+                        <button type="submit" class="btn btn-info text-white" data-bs-toggle="tooltip" title="Notify All Cooperatives">
                             <i class="fa fa-lock"></i> Notify Credentials
                         </button>
                      </form>
@@ -339,6 +348,8 @@
                                                     </button>
                                                 </form>
 
+
+
                                                     <a href="{{ route('admin.documents.view', ['coop_id' => $coop->coop_id]) }}"
                                                         class="btn btn-link btn-info btn-lg"
                                                         data-bs-toggle="tooltip" title="View Uploaded Documents">
@@ -370,7 +381,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="5" class="text-center">No search results found</td>
+                                            <td colspan="7" class="text-center">No search results found</td>
                                         </tr>
                                     @endforelse
                                 </tbody>

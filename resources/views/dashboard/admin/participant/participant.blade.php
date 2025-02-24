@@ -228,7 +228,7 @@
                                                 <div class="input-group-append gap-2 d-flex">
                                                     <button type="submit" class="btn btn-primary"> <i
                                                             class="fa fa-search"></i></button>
-                                                    <button type="button" class="btn btn-info text-white"
+                                                    <button type="button" class="btn btn-primary text-white"
                                                         data-bs-toggle="tooltip" title="Add Participant"
                                                         onclick="location.href='{{ route('participantadd') }}'">
                                                         <i class="fa fa-plus"></i>

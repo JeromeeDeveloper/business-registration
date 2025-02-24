@@ -290,7 +290,7 @@
                         <div class="card-body">
                             <div class="row align-items-center">
                                 <div class="col-icon">
-                                    <div class="icon-big text-center icon-success bubble-shadow-small">
+                                    <div class="icon-big text-center icon-info bubble-shadow-small">
                                         <i class="fas fa-building"></i>
                                     </div>
                                 </div>
@@ -310,7 +310,7 @@
                         <div class="card-body">
                             <div class="row align-items-center">
                                 <div class="col-icon">
-                                    <div class="icon-big text-center icon-warning bubble-shadow-small">
+                                    <div class="icon-big text-center icon-info bubble-shadow-small">
                                         <i class="fas fa-users"></i>
                                     </div>
                                 </div>
@@ -350,7 +350,7 @@
                         <div class="card-body">
                             <div class="row align-items-center">
                                 <div class="col-icon">
-                                    <div class="icon-big text-center icon-danger bubble-shadow-small">
+                                    <div class="icon-big text-center icon-info bubble-shadow-small">
                                         <i class="fas fa-calendar"></i>
                                     </div>
                                 </div>
@@ -395,7 +395,7 @@
                                             More Options
                                         </button>
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $latestEvent->event_id }}">
-                                            <a class="dropdown-item" href="{{route('schedule')}}">View Details</a>
+                                            <a class="dropdown-item" href="{{route('events.index')}}">View Details</a>
                                         </div>
                                     </div>
                                 </div>
