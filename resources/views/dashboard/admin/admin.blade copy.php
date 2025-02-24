@@ -252,15 +252,7 @@
     Scan QR Code
 </a>
 
-<style>
-    @media (max-width: 576px) { /* For small screens */
-        .modal-dialog {
-            max-width: 90%;
-            margin: auto;
-        }
-    }
-</style>
-
+<!-- Bootstrap Modal -->
 <div class="modal fade" id="qrScannerModal" tabindex="-1" aria-labelledby="qrScannerModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -561,58 +553,68 @@
     });
 });
 
-function handleScannedQR(decodedText, qrScanner) {
-    console.log("Scanned QR Code:", decodedText);
+        // Function to handle QR code scan results
+        function handleScannedQR(decodedText, qrScanner) {
+            console.log("Scanned QR Code:", decodedText);
 
-    let participantId;
-    try {
-        const urlParams = new URL(decodedText);
-        participantId = urlParams.searchParams.get("participant_id");
-    } catch (e) {
-        participantId = decodedText; // Assume QR contains ID directly
-    }
+            let participantId;
+            try {
+                const urlParams = new URL(decodedText);
+                participantId = urlParams.searchParams.get("participant_id");
+            } catch (e) {
+                participantId = decodedText; // Assume QR contains ID directly
+            }
 
-    if (!participantId) {
-        Swal.fire({
-            icon: "error",
-            title: "Invalid QR Code",
-            text: "No participant ID found.",
-        });
-        return;
-    }
+            if (!participantId) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Invalid QR Code",
+                    text: "No participant ID found.",
+                });
+                return;
+            }
 
-    fetch(`/scan-qr?participant_id=${participantId}`, {
-        method: "GET",
-        headers: { "Accept": "application/json" },
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.error) {
-            let iconType = data.error.includes("already recorded") ? "warning" : "error";
-            Swal.fire({
-                icon: iconType,
-                title: "Scan Error",
-                text: data.error,
-            });
-        } else {
-            Swal.fire({
-                icon: "success",
-                title: "Attendance Recorded!",
-                text: data.success,
+            fetch(`/scan-qr?participant_id=${participantId}`, {
+                method: "GET",
+                headers: { "Accept": "application/json" },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    if (data.error.includes("already recorded")) {
+                        // If attendance is already recorded
+                        Swal.fire({
+                            icon: "warning",
+                            title: "Already Scanned",
+                            text: "You have already scanned this QR code!",
+                        });
+                    } else {
+                        // Other errors
+                        Swal.fire({
+                            icon: "error",
+                            title: "Attendance Error",
+                            text: data.error,
+                        });
+                    }
+                } else {
+                    // Success
+                    Swal.fire({
+                        icon: "success",
+                        title: "Attendance Recorded!",
+                        text: data.success,
+                    });
+                }
+                qrScanner.stop();
+            })
+            .catch(error => {
+                console.error("QR Code Scan Error:", error);
+                Swal.fire({
+                    icon: "error",
+                    title: "Scan Failed",
+                    text: "Failed to record attendance.",
+                });
             });
         }
-        qrScanner.stop();
-    })
-    .catch(error => {
-        console.error("QR Code Scan Error:", error);
-        Swal.fire({
-            icon: "error",
-            title: "Scan Failed",
-            text: "Failed to record attendance.",
-        });
-    });
-}
-
 
         // Function to use DroidCam IP as a video source
         function useDroidCamIP(qrScanner, ip) {

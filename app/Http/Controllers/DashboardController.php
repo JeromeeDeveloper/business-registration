@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Log;
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Event;
 use App\Models\Speaker;
@@ -345,7 +346,8 @@ public function store(Request $request)
     $participant = Participant::create($validatedData);
 
     // Generate QR code data (e.g., a URL to their profile page)
-    $qrData = route('adminDashboard', ['participant_id' => $participant->participant_id]); // Adjust this route as needed
+    $qrData = route('scanQR', ['participant_id' => $participant->participant_id]); // Use scanQR API
+
 
     // Call the external QR code API
     $response = Http::get('https://api.qrserver.com/v1/create-qr-code/', [
@@ -370,6 +372,41 @@ public function store(Request $request)
     // Redirect or return a response
     return redirect()->route('participant.register')->with('success', 'Participant registered successfully!');
 }
+
+public function scanQR(Request $request)
+{
+    $participantId = $request->query('participant_id');
+
+    // Check if the participant exists
+    $participant = Participant::find($participantId);
+    if (!$participant) {
+        return response()->json(['error' => 'Participant not found.'], 404);
+    }
+
+    // Get the cooperative's GA registration status
+    $gaRegistration = GARegistration::where('coop_id', $participant->coop_id)->first();
+
+    // If GA registration is "Partial Registered" or NULL, prevent scanning
+    if (!$gaRegistration || $gaRegistration->registration_status === 'Partial Registered' || $gaRegistration->registration_status === null) {
+        return response()->json(['error' => 'Participant cannot be scanned. GA registration is incomplete.'], 403);
+    }
+
+    // If attendance has already been recorded, return an error
+    if ($participant->attendance_datetime !== null) {
+        return response()->json(['error' => 'Attendance already recorded.'], 400);
+    }
+
+    // If GA is fully registered and attendance datetime is NULL, record attendance
+    if ($gaRegistration->registration_status === 'Fully Registered' && is_null($participant->attendance_datetime)) {
+        $participant->attendance_datetime = Carbon::now();
+        $participant->save();
+        return response()->json(['success' => 'Attendance recorded successfully!', 'participant' => $participant]);
+    }
+
+    // Fallback error (shouldn't be reached)
+    return response()->json(['error' => 'Unexpected error.'], 500);
+}
+
 
 
     // Show the cooperative registration form

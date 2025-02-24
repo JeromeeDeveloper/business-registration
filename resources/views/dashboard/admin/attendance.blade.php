@@ -69,9 +69,9 @@
                                 <p>Participant</p>
                                 <span class="caret"></span>
                             </a>
-                            <div class="collapse show" id="participant">
+                            <div class="collapse" id="participant">
                                 <ul class="nav nav-collapse">
-                                    <li class="active">
+                                    <li>
                                         <a href="{{ route('participants.index') }}">
                                             <span class="sub-item">Manage Participant</span>
                                         </a>
@@ -86,9 +86,9 @@
                               <p>Attendance</p>
                               <span class="caret"></span>
                             </a>
-                            <div class="collapse" id="attendance">
+                            <div class="collapse show" id="attendance">
                               <ul class="nav nav-collapse">
-                                <li>
+                                <li class="active">
                                     <a href="{{ route('attendance.index') }}">
                                         <span class="sub-item">Manage attendance</span>
                                     </a>
@@ -185,7 +185,7 @@
             <div class="container">
                 <div class="page-inner">
                     <div class="page-header">
-                        <h3 class="fw-bold mb-3">Participants</h3>
+                        <h3 class="fw-bold mb-3">Attendance</h3>
                         <ul class="breadcrumbs mb-3">
                             <li class="nav-home">
                                 <a href="#">
@@ -196,7 +196,7 @@
                                 <i class="icon-arrow-right"></i>
                             </li>
                             <li class="nav-item">
-                                <a href="#">Participants</a>
+                                <a href="#">Attendance</a>
                             </li>
                             <li class="separator">
                                 <i class="icon-arrow-right"></i>
@@ -211,7 +211,7 @@
                             <div class="card">
                                 <div class="card-header">
                                     <div class="d-flex align-items-center">
-                                        <h4 class="card-title">Participants</h4>
+                                        <h4 class="card-title">Attendance</h4>
                                     </div>
                                 </div>
                                 <div class="card-body">
@@ -221,22 +221,38 @@
 
                                     </div>
                                     <form method="GET" class="mb-2">
-                                        <div class="d-flex justify-content-end">
-                                            <div class="input-group w-50 w-md-50 w-lg-25 ms-auto">
-                                                <input type="text" name="search" class="form-control"
-                                                    placeholder="Search..." value="{{ request('search') }}">
-                                                <div class="input-group-append gap-2 d-flex">
-                                                    <button type="submit" class="btn btn-primary"> <i
-                                                            class="fa fa-search"></i></button>
-                                                    <button type="button" class="btn btn-info text-white"
-                                                        data-bs-toggle="tooltip" title="Add Participant"
-                                                        onclick="location.href='{{ route('participantadd') }}'">
-                                                        <i class="fa fa-plus"></i>
-                                                    </button>
+                                        <div class="row g-2">
+                                            <!-- Start Date & Time -->
+                                            <div class="col-12 col-md-4">
+                                                <label class="form-label fw-bold">Start Date & Time</label>
+                                                <div class="input-group w-100">
+                                                    <span class="input-group-text bg-primary text-white"><i class="fa fa-calendar"></i></span>
+                                                    <input type="datetime-local" name="start_datetime" class="form-control" value="{{ request('start_datetime') }}">
+                                                </div>
+                                            </div>
+
+                                            <!-- End Date & Time -->
+                                            <div class="col-12 col-md-4">
+                                                <label class="form-label fw-bold">End Date & Time</label>
+                                                <div class="input-group w-100">
+                                                    <span class="input-group-text bg-primary text-white"><i class="fa fa-calendar"></i></span>
+                                                    <input type="datetime-local" name="end_datetime" class="form-control" value="{{ request('end_datetime') }}">
+                                                </div>
+                                            </div>
+
+                                            <!-- Search Box -->
+                                            <div class="col-12 col-md-4">
+                                                <label class="form-label fw-bold">Search</label>
+                                                <div class="input-group w-100">
+                                                    <input type="text" name="search" class="form-control" placeholder="Search..." value="{{ request('search') }}">
+                                                    <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
                                                 </div>
                                             </div>
                                         </div>
                                     </form>
+
+
+
                                     <!-- Table Display -->
                                     <div class="table-responsive">
                                         <table id="add-row" class="display table table-striped table-hover">
@@ -244,10 +260,10 @@
                                                 <tr>
                                                     {{-- <th>Registration Status</th> --}}
                                                     <th>Assigned Cooperative</th>
-                                                    <th>User Account</th>
+                                                    <th>Attendance Date & Time</th>
                                                     <th>First Name</th>
                                                     <th>Last Name</th>
-                                                    <th>Designation</th>
+                                                    <th>Congress Type</th>
                                                     <th>QR Code</th>
                                                     <th>Action</th>
                                                     {{-- <th>Manage Status</th> --}}
@@ -259,10 +275,12 @@
                                                         {{-- <td>{{ $participant->registration->status ?? 'Pending' }}</td> --}}
                                                         <td>{{ optional($participant->cooperative)->name ?? 'N/A' }}
                                                         </td>
-                                                        <td>{{ optional($participant->user)->name ?? 'N/A' }}</td>
+                                                        <td>
+                                                            {{ $participant->attendance_datetime ? \Carbon\Carbon::parse($participant->attendance_datetime)->format('F j, Y g:i A') : 'Not Attended' }}
+                                                        </td>
                                                         <td>{{ $participant->first_name }}</td>
                                                         <td>{{ $participant->last_name }}</td>
-                                                        <td>{{ $participant->designation ?? 'N/A' }}</td>
+                                                        <td>{{ $participant->congress_type ?? 'N/A' }}</td>
                                                         <td>
                                                             @if ($participant->qr_code)
                                                                 <img src="{{ asset('storage/' . $participant->qr_code) }}"
@@ -274,38 +292,16 @@
                                                         </td>
                                                         <td>
                                                             <div class="form-button-action">
-                                                                <a href="{{ route('participants.show', $participant->participant_id) }}"
+                                                                <a href="{{ route('attendance.show', $participant->participant_id) }}"
                                                                     class="btn btn-link btn-info btn-lg"
                                                                     data-bs-toggle="tooltip"
                                                                     title="View Participant Details">
                                                                     <i class="fa fa-eye"></i>
                                                                 </a>
-
-                                                                <a href="{{ route('participants.edit', $participant->participant_id) }}"
-                                                                    class="btn btn-link btn-primary btn-lg"
-                                                                    data-bs-toggle="tooltip" title="Edit Participant">
-                                                                    <i class="fa fa-edit"></i>
-                                                                </a>
-
-                                                                <form
-                                                                    action="{{ route('participants.destroy', $participant->participant_id) }}"
-                                                                    method="POST" class="delete-form"
-                                                                    style="display:inline;">
-                                                                    @csrf
-                                                                    @method('DELETE')
-                                                                    <button type="button"
-                                                                        class="btn btn-link btn-danger"
-                                                                        data-bs-toggle="tooltip"
-                                                                        title="Remove Participant"
-                                                                        aria-label="Remove Participant"
-                                                                        onclick="confirmDelete(event, this)">
-                                                                        <i class="fa fa-times"></i>
-                                                                    </button>
-                                                                </form>
                                                         </td>
 
-                                                        <td>
-                                                        </td>
+                                                <td>
+                                            </td>
                                     </div>
 
                                     </tr>
@@ -328,31 +324,6 @@
                                         });
                                     </script>
                                 @endif
-                                <!-- Approval Modal -->
-                                <div class="modal fade" id="approveModal" tabindex="-1"
-                                    aria-labelledby="approveModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="approveModalLabel">Update Participant
-                                                    Status</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p>Are you sure you want to <strong id="statusActionText"></strong>
-                                                    participant <strong id="participantName"></strong>?</p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Cancel</button>
-                                                <button type="button" class="btn"
-                                                    id="confirmApproveBtn"></button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <div class="d-flex justify-content-center mt-3">
                                     {{ $participants->appends(['search' => request('search')])->links('pagination::bootstrap-4') }}
                                 </div>
@@ -365,94 +336,6 @@
         @include('layouts.adminfooter')
     </div>
     </div>
-    <script>
-        function confirmDelete(event, button) {
-            event.preventDefault(); // Prevent form from submitting
-
-            // Show SweetAlert confirmation dialog
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Yes, delete it!',
-                cancelButtonText: 'Cancel'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // If confirmed, submit the form
-                    button.closest('form').submit();
-                }
-            });
-        }
-    </script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            let participantId = null;
-            let newStatus = "";
-
-            document.querySelectorAll(".approve-btn").forEach(button => {
-                button.addEventListener("click", function() {
-                    participantId = this.getAttribute("data-participant-id");
-                    const participantName = this.getAttribute("data-name");
-                    newStatus = this.getAttribute("data-status");
-                    const action = this.getAttribute("data-action");
-
-                    if (this.disabled) {
-                        Swal.fire("Info", `This participant is already ${newStatus.toLowerCase()}.`,
-                            "info");
-                        return;
-                    }
-
-                    // Update modal content
-                    document.getElementById("participantName").textContent = participantName;
-                    document.getElementById("statusActionText").textContent = action === "approve" ?
-                        "approve" : "reject";
-                    const confirmBtn = document.getElementById("confirmApproveBtn");
-                    confirmBtn.textContent = action === "approve" ? "Approve" : "Reject";
-                    confirmBtn.className = action === "approve" ? "btn btn-success" :
-                        "btn btn-danger";
-
-                    // Disable button if participant lacks documents
-                    const hasDocuments = this.getAttribute("data-has-documents") === "true";
-                    confirmBtn.disabled = !hasDocuments;
-
-                    if (!hasDocuments) {
-                        Swal.fire("Error", "This participant has no required documents.", "error");
-                    }
-                });
-            });
-
-            document.getElementById("confirmApproveBtn").addEventListener("click", function() {
-                if (!participantId) return;
-
-                fetch(`/participants/${participantId}/approve`, {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
-                        },
-                        body: JSON.stringify({
-                            status: newStatus
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            Swal.fire("Success", `Participant status updated to ${newStatus}!`,
-                                    "success")
-                                .then(() => location.reload());
-                        } else {
-                            Swal.fire("Error", data.message || "Something went wrong!", "error");
-                        }
-                    })
-                    .catch(error => console.error("Error:", error));
-            });
-        });
-    </script>
-
     @include('layouts.links')
 </body>
 

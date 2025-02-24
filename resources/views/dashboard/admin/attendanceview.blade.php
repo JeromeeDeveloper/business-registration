@@ -70,9 +70,9 @@
                       <p>Participant</p>
                       <span class="caret"></span>
                     </a>
-                    <div class="collapse show" id="participant">
+                    <div class="collapse" id="participant">
                       <ul class="nav nav-collapse">
-                        <li class="active">
+                        <li>
                             <a href="{{route('participants.index')}}">
                                 <span class="sub-item">Manage Participant</span>
                               </a>
@@ -87,9 +87,9 @@
                       <p>Attendance</p>
                       <span class="caret"></span>
                     </a>
-                    <div class="collapse" id="attendance">
+                    <div class="collapse show" id="attendance">
                       <ul class="nav nav-collapse">
-                        <li>
+                        <li class="active">
                             <a href="{{ route('attendance.index') }}">
                                 <span class="sub-item">Manage attendance</span>
                             </a>
@@ -340,6 +340,7 @@
                                     </div>
                                 </div>
 
+
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
                                         <label for="qr_code">QR Code</label>
@@ -377,7 +378,7 @@
                             </div>
                         </div>
                         <div class="card-action">
-                            <button class="btn btn-info" type="button" onclick="window.location.href='{{ route('participants.index') }}'">Back</button>
+                            <button class="btn btn-info" type="button" onclick="window.location.href='{{ route('attendance.index') }}'">Back</button>
                         </div>
                     </form>
 

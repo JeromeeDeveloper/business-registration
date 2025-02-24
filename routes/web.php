@@ -11,6 +11,7 @@ use App\Http\Controllers\EventsController;
 use App\Http\Controllers\ViewerController;
 use App\Http\Controllers\SpeakersController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AttendanceController;
 use App\Http\Middleware\ParticipantMiddleware;
 use App\Http\Controllers\CooperativeController;
 use App\Http\Controllers\ParticipantController;
@@ -49,6 +50,10 @@ Route::get('/Admin/Register/Cooperatives', [DashboardController::class, 'registe
 Route::post('/store-cooperative', [DashboardController::class, 'storeCooperative'])->name('admin.storeCooperative');
 Route::get('/adminnav', [AuthController::class, 'user'])->name('user_data');
 
+// attendance
+
+Route::get('/Admin/Attendance', [AttendanceController::class, 'attendance'])->name('attendance.index');
+Route::get('/Admin/Attendance/{participant_id}', [AttendanceController::class, 'showattendance'])->name('attendance.show');
 //view
 Route::get('/Admin/Cooperatives', [DashboardController::class, 'view'])->name('adminview');
 Route::delete('/admin/cooperatives/{coop_id}', [DashboardController::class, 'destroy'])->name('cooperatives.destroy');
@@ -113,6 +118,9 @@ Route::get('/download-qr2/{participant_id}', function ($participant_id) {
         'Content-Disposition' => 'attachment; filename="participant_' . $participant_id . '_qr_code.png"',
     ]);
 })->name('download.qr2');
+
+Route::get('/scan-qr', [DashboardController::class, 'scanQR'])->name('scan.qr');
+Route::post('/scan-qr', [DashboardController::class, 'scanQR'])->name('scan.qr');
 
 Route::put('/cooperatives/{coop_id}/update-status', [CooperativeController::class, 'updateStatus'])->name('cooperatives.updateStatus');
 

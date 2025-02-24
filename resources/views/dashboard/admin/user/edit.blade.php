@@ -80,6 +80,25 @@
                   </ul>
                 </div>
               </li>
+
+              <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#attendance">
+                  <i class="fas fa-calendar"></i>
+                  <p>Attendance</p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse" id="attendance">
+                  <ul class="nav nav-collapse">
+                    <li>
+                        <a href="{{ route('attendance.index') }}">
+                            <span class="sub-item">Manage attendance</span>
+                        </a>
+                    </li>
+
+                  </ul>
+                </div>
+              </li>
+
               <li class="nav-item">
                 <a data-bs-toggle="collapse show" href="#user">
                   <i class="fas fa-user"></i>
