@@ -125,7 +125,7 @@
             <!-- End Logo Header -->
           </div>
           <!-- Navbar Header -->
-          @include('layouts.adminnav')
+          @include('layouts.adminnav2')
           <!-- End Navbar -->
         </div>
 
@@ -254,7 +254,8 @@
                                         </tr>
                                         <tr>
                                             <td class="fw-bold">Services Availed:</td>
-                                            <td>{{ $cooperative->services_availed ?? 'N/A' }}</td>
+                                            <td>{{ implode(', ', json_decode($cooperative->services_availed, true ?? 'N/A')) }}</td>
+                                            {{-- <p>{{ implode(', ', json_decode($cooperative->services_availed, true)) }}</p> --}}
                                         </tr>
                                         <tr>
                                             <td class="fw-bold">GA Registration Status:</td>

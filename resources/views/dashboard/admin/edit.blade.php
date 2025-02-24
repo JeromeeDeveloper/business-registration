@@ -235,9 +235,21 @@
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="region">Region</label>
-                                    <input type="text" class="form-control" name="region" id="region" value="{{ $coop->region }}" placeholder="Enter Region" />
+                                    <select class="form-control" name="region" id="region">
+                                        <option disabled>Select Region</option>
+                                        @foreach([
+                                            'Region I', 'Region II', 'Region III', 'Region IV-A', 'Region IV-B', 'Region V',
+                                            'Region VI', 'Region VII', 'Region VIII', 'Region IX', 'Region X', 'Region XI',
+                                            'Region XII', 'Region XIII', 'NCR', 'CAR', 'BARMM'
+                                        ] as $region)
+                                            <option value="{{ $region }}" {{ $coop->region == $region ? 'selected' : '' }}>
+                                                {{ $region }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
+
 
                             <!-- Phone Number -->
                             <div class="col-md-6 col-lg-4">
@@ -296,6 +308,34 @@
                                 </div>
                             </div>
 
+                            <div class="col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="services_availed">Services Availed</label>
+                                    <div class="dropdown">
+                                        <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start" type="button" id="servicesDropdown" aria-expanded="false">
+                                            Select Services
+                                        </button>
+                                        <ul class="dropdown-menu w-100 p-2" id="dropdownMenu">
+                                            @php
+                                                // Decode JSON array properly
+                                                $selectedServices = json_decode($coop->services_availed, true) ?? [];
+                                            @endphp
+
+                                            @foreach(['CF', 'IT', 'MSU', 'ICS', 'MCU', 'ADMIN', 'GAD', 'YOUTH', 'SCOOPS', 'YAKAP', 'AGRIBEST'] as $service)
+                                                <li>
+                                                    <label class="dropdown-item">
+                                                        <input type="checkbox" class="service-checkbox" name="services_availed[]" value="{{ $service }}"
+                                                            {{ in_array($service, $selectedServices) ? 'checked' : '' }}>
+                                                        {{ $service }}
+                                                    </label>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                    <input type="hidden" name="services_availed_json" id="services_availed_json" value="{{ $coop->services_availed }}">
+                                </div>
+                            </div>
+
                             <!-- GA Registration Status -->
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
@@ -303,6 +343,8 @@
                                     <input type="text" class="form-control" name="ga_registration_status" id="ga_registration_status" value="{{ $coop->ga_registration_status }}" placeholder="Enter GA Status" />
                                 </div>
                             </div>
+
+
 
                             <!-- Total Assets -->
                             <div class="col-md-6 col-lg-4">
@@ -327,6 +369,8 @@
                                     <input type="number" class="form-control" name="cetf_remittance" id="cetf_remittance" value="{{ $coop->cetf_remittance }}" placeholder="Enter CETF Remittance" />
                                 </div>
                             </div>
+
+
 
                             <!-- CETF Required -->
                             <div class="col-md-6 col-lg-4">
@@ -360,19 +404,12 @@
                                 </div>
                             </div>
 
-                            <!-- Services Availed -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="services_availed">Services Availed</label>
-                                    <textarea class="form-control" name="services_availed" id="services_availed" rows="3" placeholder="Enter Services Availed">{{ $coop->services_availed }}</textarea>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
                     <div class="card-action">
                         <button class="btn btn-success" type="submit">Submit</button>
-                        <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ route('adminview') }}'">Back</button>
+                        <button type="button" class="btn btn-info" onclick="window.location.href='{{ route('adminview') }}'">Back</button>
                     </div>
                 </form>
 
@@ -388,6 +425,51 @@
       </div>
 
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const dropdownButton = document.getElementById("servicesDropdown");
+            const dropdownMenu = document.getElementById("dropdownMenu");
+            const checkboxes = dropdownMenu.querySelectorAll('input[type="checkbox"]');
+            const hiddenInput = document.getElementById("services_availed_json");
+
+            // Prevent dropdown from closing when clicking inside
+            dropdownMenu.addEventListener("click", function (event) {
+                event.stopPropagation();
+            });
+
+            dropdownButton.addEventListener("click", function (event) {
+                event.stopPropagation();
+                dropdownMenu.classList.toggle("show");
+            });
+
+            document.addEventListener("click", function (event) {
+                if (!dropdownMenu.contains(event.target) && event.target !== dropdownButton) {
+                    dropdownMenu.classList.remove("show");
+                }
+            });
+
+            function updateDropdownText() {
+                let selected = Array.from(checkboxes)
+                    .filter(i => i.checked)
+                    .map(i => i.value)
+                    .join(", ");
+
+                dropdownButton.innerText = selected ? selected : "Select Services";
+                hiddenInput.value = JSON.stringify(selected.split(", ").filter(Boolean)); // Store as JSON
+            }
+
+            // Update on checkbox change
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener("change", updateDropdownText);
+            });
+
+            // Load preselected values
+            updateDropdownText();
+        });
+        </script>
+
+
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>

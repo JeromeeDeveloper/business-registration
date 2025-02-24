@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HomeController;
 use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\EventsController;
@@ -17,7 +18,8 @@ use App\Http\Middleware\ParticipantUserMiddleware;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 // Home Page
-Route::view('/', 'home.index');
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/participants', [HomeController::class, 'home_participants'])->name('home_participants.index');
 
 // Grouped routes for other pages
 Route::view('/about', 'home.about');
@@ -25,7 +27,6 @@ Route::view('/agenda', 'home.agenda');
 Route::view('/contact', 'home.contact');
 Route::view('/detail', 'home.detail');
 Route::view('/feature', 'home.feature');
-Route::view('/participant', 'home.participant');
 
 // Login Registration
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');

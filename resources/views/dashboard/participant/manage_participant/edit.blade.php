@@ -125,7 +125,7 @@
             <!-- End Logo Header -->
           </div>
           <!-- Navbar Header -->
-          @include('layouts.adminnav')
+          @include('layouts.adminnav2')
           <!-- End Navbar -->
         </div>
 
@@ -289,7 +289,7 @@
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
                                         <label for="is_msp_officer">Is MSP Officer</label>
-                                        <select class="form-control" name="is_msp_officer">
+                                        <select class="form-control" name="is_msp_officer" id="is_msp_officer">
                                             <option value="Yes" {{ old('is_msp_officer', $participant->is_msp_officer) == 'Yes' ? 'selected' : '' }}>Yes</option>
                                             <option value="No" {{ old('is_msp_officer', $participant->is_msp_officer) == 'No' ? 'selected' : '' }}>No</option>
                                         </select>
@@ -300,7 +300,9 @@
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
                                         <label for="msp_officer_position">MSP Officer Position</label>
-                                        <input type="text" class="form-control" name="msp_officer_position" value="{{ old('msp_officer_position', $participant->msp_officer_position) }}">
+                                        <input type="text" class="form-control" name="msp_officer_position" id="msp_officer_position"
+                                               value="{{ old('msp_officer_position', $participant->msp_officer_position) }}"
+                                               {{ old('is_msp_officer', $participant->is_msp_officer) == 'Yes' ? '' : 'disabled' }}>
                                     </div>
                                 </div>
 
@@ -357,7 +359,29 @@
             @include('layouts.adminfooter')
       </div>
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let isMspOfficer = document.getElementById("is_msp_officer");
+            let mspOfficerPosition = document.getElementById("msp_officer_position");
 
+            function togglePositionField() {
+                if (isMspOfficer.value === "Yes") {
+                    mspOfficerPosition.removeAttribute("disabled");
+                    mspOfficerPosition.setAttribute("required", "required");
+                } else {
+                    mspOfficerPosition.setAttribute("disabled", "disabled");
+                    mspOfficerPosition.removeAttribute("required");
+                    mspOfficerPosition.value = ""; // Clear the input if disabled
+                }
+            }
+
+            // Set initial state based on loaded values
+            togglePositionField();
+
+            // Listen for dropdown changes
+            isMspOfficer.addEventListener("change", togglePositionField);
+        });
+        </script>
     @include('layouts.links')
   </body>
 </html>

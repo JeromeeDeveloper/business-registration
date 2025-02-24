@@ -236,7 +236,25 @@
                       <div class="col-md-6 col-lg-4">
                         <div class="form-group">
                           <label for="region">Region</label>
-                          <input type="text" class="form-control" name="region" name="" id="region" placeholder="Enter Region" />
+                          <select class="form-control" name="region" id="region">
+                            <option value="">Select Region</option>
+                            <option value="Region I">Region I</option>
+                            <option value="Region II">Region II</option>
+                            <option value="Region III">Region III</option>
+                            <option value="Region IV-A">Region IV-A</option>
+                            <option value="Region IV-B">Region IV-B</option>
+                            <option value="Region V">Region V</option>
+                            <option value="Region VI">Region VI</option>
+                            <option value="Region VII">Region VII</option>
+                            <option value="Region VIII">Region VIII</option>
+                            <option value="Region IX">Region IX</option>
+                            <option value="Region X">Region X</option>
+                            <option value="Region XI">Region XI</option>
+                            <option value="Region XII">Region XII</option>
+                            <option value="NCR">National Capital Region</option>
+                            <option value="CAR">Cordillera Administrative Region</option>
+                            <option value="BARMM">Bangsamoro Autonomous Region</option>
+                          </select>
                         </div>
                       </div>
 
@@ -272,6 +290,8 @@
                         </div>
                       </div>
 
+
+
                       <!-- BOD Chairperson -->
                       <div class="col-md-6 col-lg-4">
                         <div class="form-group">
@@ -287,6 +307,31 @@
                           <input type="text" class="form-control" name="general_manager_ceo" id="general_manager_ceo" placeholder="Enter Manager/CEO" />
                         </div>
                       </div>
+
+                      <div class="col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <label for="services_availed">Services Availed</label>
+                            <div class="dropdown">
+                                <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start" type="button" id="servicesDropdown" aria-expanded="false">
+                                    Select Services
+                                </button>
+                                <ul class="dropdown-menu w-100" id="dropdownMenu">
+                                    <li><label class="dropdown-item"><input type="checkbox" name="services_availed[]" value="CF"> CF</label></li>
+                                    <li><label class="dropdown-item"><input type="checkbox" name="services_availed[]" value="IT"> IT</label></li>
+                                    <li><label class="dropdown-item"><input type="checkbox" name="services_availed[]" value="MSU"> MSU</label></li>
+                                    <li><label class="dropdown-item"><input type="checkbox" name="services_availed[]" value="ICS"> ICS</label></li>
+                                    <li><label class="dropdown-item"><input type="checkbox" name="services_availed[]" value="MCU"> MCU</label></li>
+                                    <li><label class="dropdown-item"><input type="checkbox" name="services_availed[]" value="ADMIN"> ADMIN</label></li>
+                                    <li><label class="dropdown-item"><input type="checkbox" name="services_availed[]" value="GAD"> GAD</label></li>
+                                    <li><label class="dropdown-item"><input type="checkbox" name="services_availed[]" value="YOUTH"> YOUTH</label></li>
+                                    <li><label class="dropdown-item"><input type="checkbox" name="services_availed[]" value="SCOOPS"> SCOOPS</label></li>
+                                    <li><label class="dropdown-item"><input type="checkbox" name="services_availed[]" value="YAKAP"> YAKAP</label></li>
+                                    <li><label class="dropdown-item"><input type="checkbox" name="services_availed[]" value="AGRIBEST"> AGRIBEST</label></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
 
                       <!-- GA Registration Status -->
                       <div class="col-md-6 col-lg-4">
@@ -328,6 +373,7 @@
                         </div>
                       </div>
 
+
                       <!-- CETF Balance -->
                       <div class="col-md-6 col-lg-4">
                         <div class="form-group">
@@ -335,6 +381,7 @@
                           <input type="number" class="form-control" name="cetf_balance" id="cetf_balance" placeholder="Enter CETF Balance" />
                         </div>
                       </div>
+
 
                       <!-- Share Capital Balance -->
                       <div class="col-md-6 col-lg-4">
@@ -352,19 +399,11 @@
                         </div>
                       </div>
 
-                      <!-- Services Availed -->
-                      <div class="col-md-6 col-lg-4">
-                        <div class="form-group">
-                          <label for="services_availed">Services Availed</label>
-                          <input class="form-control" name="services_availed" id="services_availed" rows="3" placeholder="Enter Services Availed"></input>
-                        </div>
-                      </div>
-                    </div>
                     </div>
 
                     <div class="card-action">
                         <button class="btn btn-success">Submit</button>
-                        <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ route('adminview') }}'">Back</button>
+                        <button type="button" class="btn btn-info" onclick="window.location.href='{{ route('adminview') }}'">Back</button>
                 </form>
                   </div>
                 </div>
@@ -378,7 +417,41 @@
 
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <!-- Include Bootstrap (if not already included) -->
+    {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
+    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> --}}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const dropdownButton = document.getElementById("servicesDropdown");
+            const dropdownMenu = document.getElementById("dropdownMenu");
+            const checkboxes = dropdownMenu.querySelectorAll('input[type="checkbox"]');
 
+            // Toggle dropdown manually
+            dropdownButton.addEventListener("click", function (event) {
+                event.stopPropagation(); // Prevents event from bubbling
+                dropdownMenu.classList.toggle("show");
+            });
+
+            // Close dropdown if clicked outside
+            document.addEventListener("click", function (event) {
+                if (!dropdownMenu.contains(event.target) && event.target !== dropdownButton) {
+                    dropdownMenu.classList.remove("show");
+                }
+            });
+
+            // Update button text when checkboxes are selected
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener("change", function () {
+                    let selected = Array.from(checkboxes)
+                        .filter(i => i.checked)
+                        .map(i => i.value)
+                        .join(", ");
+
+                    dropdownButton.textContent = selected || "Select Services";
+                });
+            });
+        });
+    </script>
     <script>
         // Handle the form submission using AJAX
         document.getElementById('coopForm').addEventListener('submit', function(e) {

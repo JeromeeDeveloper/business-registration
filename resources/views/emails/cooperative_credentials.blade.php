@@ -13,11 +13,15 @@
     <p>We are notifying you about an upcoming event related to your cooperative, as well as your cooperative credentials.</p>
 
     <h2>Event Details:</h2>
-    <p>
-        <strong>Event Name:</strong> {{ $event->title }}<br>
-        <strong>Event Date:</strong> {{ \Carbon\Carbon::parse($event->start_date)->format('F j, Y') }}<br>
-        <strong>Event Location:</strong> {{ $event->location }}<br><br>
-    </p>
+    @if ($event)
+        <p>
+            <strong>Event Name:</strong> {{ $event->title }}<br>
+            <strong>Event Date:</strong> {{ $event->start_date ? \Carbon\Carbon::parse($event->start_date)->format('F j, Y') : 'TBD' }}<br>
+            <strong>Event Location:</strong> {{ $event->location ?? 'TBD' }}<br><br>
+        </p>
+    @else
+        <p><strong>No upcoming event found.</strong></p>
+    @endif
 
     <h2>User Login Credentials:</h2>
     @if ($users->isEmpty())
@@ -36,7 +40,13 @@
                     <tr>
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
-                        <td>{{ str_replace(' ', '', $user->cooperative->name) }}GA2025</td>
+                        <td>
+                            @if ($user->cooperative)
+                                {{ str_replace(' ', '', $user->cooperative->name) }}GA2025
+                            @else
+                                DefaultGA2025
+                            @endif
+                        </td>
                     </tr>
                 @endforeach
             </tbody>

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->foreign('coop_id')->references('coop_id')->on('cooperatives')->onDelete('cascade');
 
 
-            $table->string('name')->unique();
+            $table->string('name'); 
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

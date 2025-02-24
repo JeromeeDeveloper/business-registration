@@ -41,66 +41,40 @@
     </div>
     <!-- Full Screen Search End -->
 
-
 <!-- General Assembly Start -->
 <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
     <div class="container py-5">
         <div class="section-title text-center position-relative pb-3 mb-4 mx-auto" style="max-width: 600px;">
             <h5 class="fw-bold text-primary text-uppercase">General Assembly</h5>
-            <h1 class="mb-0">Meet the Participants of Our General Assembly</h1>
+            <h1 class="mb-0">Meet the Attendees of Our General Assembly</h1>
         </div>
         <div class="owl-carousel testimonial-carousel wow fadeInUp" data-wow-delay="0.6s">
-            <div class="testimonial-item bg-light my-4">
-                <div class="d-flex align-items-center border-bottom pt-5 pb-4 px-5">
-                    <img class="img-fluid rounded" src="img/participant-1.jpg" style="width: 60px; height: 60px;">
-                    <div class="ps-4">
-                        <h4 class="text-primary mb-1">John Doe</h4>
-                        <small class="text-uppercase">Department of IT</small>
+            @foreach($participants as $participant)
+                <div class="testimonial-item bg-light my-4">
+                    <div class="d-flex align-items-center border-bottom pt-5 pb-4 px-5">
+                        <div class="ps-4">
+                            <h4 class="text-primary mb-1">{{ $participant->first_name }} {{ $participant->last_name }}</h4>
+                            <small class="text-uppercase">{{ $participant->designation }}</small>
+                        </div>
+                    </div>
+                    <div class="pt-4 pb-5 px-5">
+                        <small class="text-uppercase">
+                            @if($participant->created_at)
+                                Registered on {{ \Carbon\Carbon::parse($participant->created_at)->format('F j, Y g:i A') }}
+                            @else
+                                <span class="text-danger">Registration date not available</span>
+                            @endif
+                        </small>
                     </div>
                 </div>
-                <div class="pt-4 pb-5 px-5">
-                    "Excited to collaborate and discuss new initiatives in this assembly!"
-                </div>
-            </div>
-            <div class="testimonial-item bg-light my-4">
-                <div class="d-flex align-items-center border-bottom pt-5 pb-4 px-5">
-                    <img class="img-fluid rounded" src="img/participant-2.jpg" style="width: 60px; height: 60px;">
-                    <div class="ps-4">
-                        <h4 class="text-primary mb-1">Jane Smith</h4>
-                        <small class="text-uppercase">HR Department</small>
-                    </div>
-                </div>
-                <div class="pt-4 pb-5 px-5">
-                    "A great opportunity to connect and strategize for the future!"
-                </div>
-            </div>
-            <div class="testimonial-item bg-light my-4">
-                <div class="d-flex align-items-center border-bottom pt-5 pb-4 px-5">
-                    <img class="img-fluid rounded" src="img/participant-3.jpg" style="width: 60px; height: 60px;">
-                    <div class="ps-4">
-                        <h4 class="text-primary mb-1">Michael Johnson</h4>
-                        <small class="text-uppercase">Finance Team</small>
-                    </div>
-                </div>
-                <div class="pt-4 pb-5 px-5">
-                    "Looking forward to insightful discussions in this assembly."
-                </div>
-            </div>
-            <div class="testimonial-item bg-light my-4">
-                <div class="d-flex align-items-center border-bottom pt-5 pb-4 px-5">
-                    <img class="img-fluid rounded" src="img/participant-4.jpg" style="width: 60px; height: 60px;">
-                    <div class="ps-4">
-                        <h4 class="text-primary mb-1">Emily Davis</h4>
-                        <small class="text-uppercase">Marketing & PR</small>
-                    </div>
-                </div>
-                <div class="pt-4 pb-5 px-5">
-                    "Honored to be part of this impactful gathering!"
-                </div>
-            </div>
+            @endforeach
         </div>
     </div>
 </div>
+
+
+
+
 <!-- General Assembly End -->
 
 

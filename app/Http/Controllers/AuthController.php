@@ -92,6 +92,25 @@ class AuthController extends Controller
         return view('layouts.adminnav', compact('user', 'cooperative')); // Pass the user data to the view
     }
 
+    public function user2()
+    {
+        $user = Auth::user(); // Get the authenticated user
+
+        $cooperative = Cooperative::where('coop_id', $user->coop_id)->first();
+
+        return view('layouts.adminnav2', compact('user', 'cooperative')); // Pass the user data to the view
+    }
+
+    public function user3()
+    {
+        $user = Auth::user(); // Get the authenticated user
+
+        $cooperative = Cooperative::where('coop_id', $user->coop_id)->first();
+
+        return view('layouts.adminnav2', compact('user', 'cooperative')); // Pass the user data to the view
+    }
+
+
     public function index(Request $request)
     {
         $search = $request->input('search');

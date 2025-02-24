@@ -109,7 +109,7 @@
             <!-- End Logo Header -->
           </div>
           <!-- Navbar Header -->
-          @include('layouts.adminnav')
+          @include('layouts.adminnav3')
           <!-- End Navbar -->
         </div>
 

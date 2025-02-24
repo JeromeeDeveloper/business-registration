@@ -31,7 +31,7 @@
                         <h5 class="text-white text-uppercase mb-3 animated slideInDown">Welcome to the</h5>
                         <h1 class="display-1 text-white mb-md-4 animated zoomIn">General Assembly 2025</h1>
                         <a href="{{route('login')}}" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Login Now</a>
-                        <a href="{{url('/detail')}}" class="btn btn-outline-light py-md-3 px-md-5 animated slideInRight">View Agenda</a>
+                        <a href="{{url('/about')}}" class="btn btn-outline-light py-md-3 px-md-5 animated slideInRight">View Agenda</a>
                     </div>
                 </div>
             </div>
@@ -83,6 +83,7 @@
     <div class="container-fluid facts py-5 pt-lg-0">
         <div class="container py-5 pt-lg-0">
             <div class="row gx-0">
+                <!-- Registered Participants -->
                 <div class="col-lg-4 wow zoomIn" data-wow-delay="0.1s">
                     <div class="bg-primary shadow d-flex align-items-center justify-content-center p-4" style="height: 150px;">
                         <div class="bg-white d-flex align-items-center justify-content-center rounded mb-2" style="width: 60px; height: 60px;">
@@ -90,35 +91,40 @@
                         </div>
                         <div class="ps-4">
                             <h5 class="text-white mb-0">Registered Participants</h5>
-                            <h1 class="text-white mb-0" data-toggle="counter-up">12345</h1>
+                            <h1 class="text-white mb-0" data-toggle="counter-up">{{ $participantsCount }}</h1>
                         </div>
                     </div>
                 </div>
+
+                <!-- Registered Cooperatives -->
                 <div class="col-lg-4 wow zoomIn" data-wow-delay="0.3s">
                     <div class="bg-light shadow d-flex align-items-center justify-content-center p-4" style="height: 150px;">
                         <div class="bg-primary d-flex align-items-center justify-content-center rounded mb-2" style="width: 60px; height: 60px;">
-                            <i class="fa fa-handshake text-white"></i>
+                            <i class="fa fa-building text-white"></i>
                         </div>
                         <div class="ps-4">
-                            <h5 class="text-primary mb-0">Successful Assemblies</h5>
-                            <h1 class="mb-0" data-toggle="counter-up">12345</h1>
+                            <h5 class="text-primary mb-0">Registered Cooperatives</h5>
+                            <h1 class="mb-0" data-toggle="counter-up">{{ $cooperativesCount }}</h1>
                         </div>
                     </div>
                 </div>
+
+                <!-- Speakers -->
                 <div class="col-lg-4 wow zoomIn" data-wow-delay="0.6s">
                     <div class="bg-primary shadow d-flex align-items-center justify-content-center p-4" style="height: 150px;">
                         <div class="bg-white d-flex align-items-center justify-content-center rounded mb-2" style="width: 60px; height: 60px;">
-                            <i class="fa fa-user-tie text-primary"></i>
+                            <i class="fa fa-microphone text-primary"></i>
                         </div>
                         <div class="ps-4">
-                            <h5 class="text-white mb-0">Elected Officials</h5>
-                            <h1 class="text-white mb-0" data-toggle="counter-up">12345</h1>
+                            <h5 class="text-white mb-0">Guest Speakers</h5>
+                            <h1 class="text-white mb-0" data-toggle="counter-up">{{ $speakersCount }}</h1>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 
     <!-- Facts Start -->
 
@@ -297,66 +303,38 @@
     <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
         <div class="container py-5">
             <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px;">
-                <h5 class="fw-bold text-primary text-uppercase">Agenda</h5>
-                <h1 class="mb-0">Review the Latest Topics for Discussion</h1>
+                <h5 class="fw-bold text-primary text-uppercase">Upcoming Events</h5>
+                <h1 class="mb-0">Join Our Latest Conferences and Seminars</h1>
             </div>
             <div class="row g-5">
-                <div class="col-lg-4 wow slideInUp" data-wow-delay="0.3s">
-                    <div class="agenda-item bg-light rounded overflow-hidden">
-                        <div class="agenda-img position-relative overflow-hidden">
-                            <img class="img-fluid size" src="{{asset('images/agenda-1.jpg')}}" alt="">
-                            <a class="position-absolute top-0 start-0 bg-primary text-white rounded-end mt-5 py-2 px-4" href="">Meeting Topic</a>
-                        </div>
-                        <div class="p-4">
-                            <div class="d-flex mb-3">
-                                <small class="me-3"><i class="far fa-user text-primary me-2"></i>John Doe</small>
-                                <small><i class="far fa-calendar-alt text-primary me-2"></i>01 Jan, 2045</small>
+                @foreach ($events as $event)
+                    <div class="col-lg-4 wow slideInUp" data-wow-delay="0.{{ $loop->iteration * 3 }}s">
+                        <div class="agenda-item bg-light rounded overflow-hidden">
+                            <div class="agenda-img position-relative overflow-hidden">
+                                {{-- <img class="img-fluid size" src="{{ asset('images/event-placeholder.jpg') }}" alt="{{ $event->title }}"> --}}
+                                <a class="position-absolute top-0 start-0 bg-primary text-white rounded-end mt-5 py-2 px-4" href="#">Event</a>
                             </div>
-                            <h4 class="mb-3">Strategic Planning Overview</h4>
-                            <p>Discussion on key objectives and goals for the upcoming quarter.</p>
-                            <a class="text-uppercase" href="">View Details <i class="bi bi-arrow-right"></i></a>
+                            <div class="p-4">
+                                <div class="d-flex mb-3">
+                                    <small class="me-3">
+                                        <i class="far fa-calendar-alt text-primary me-2"></i>
+                                        {{ \Carbon\Carbon::parse($event->start_date)->format('d M, Y') }}
+                                    </small>
+                                    <small>
+                                        <i class="far fa-map-marker-alt text-primary me-2"></i>
+                                        {{ $event->location }}
+                                    </small>
+                                </div>
+                                <h4 class="mb-3">{{ $event->title }}</h4>
+                                <p>{{ Str::limit($event->description, 100) }}</p>
+
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-4 wow slideInUp" data-wow-delay="0.6s">
-                    <div class="agenda-item bg-light rounded overflow-hidden">
-                        <div class="agenda-img position-relative overflow-hidden">
-                            <img class="img-fluid size" src="{{asset('images/agenda-2.jpg')}}" alt="">
-                            <a class="position-absolute top-0 start-0 bg-primary text-white rounded-end mt-5 py-2 px-4" href="">Meeting Topic</a>
-                        </div>
-                        <div class="p-4">
-                            <div class="d-flex mb-3">
-                                <small class="me-3"><i class="far fa-user text-primary me-2"></i>Jane Smith</small>
-                                <small><i class="far fa-calendar-alt text-primary me-2"></i>01 Jan, 2045</small>
-                            </div>
-                            <h4 class="mb-3">Budget Allocation Review</h4>
-                            <p>Analyzing current financials and resource distribution for projects.</p>
-                            <a class="text-uppercase" href="">View Details <i class="bi bi-arrow-right"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 wow slideInUp" data-wow-delay="0.9s">
-                    <div class="agenda-item bg-light rounded overflow-hidden">
-                        <div class="agenda-img position-relative overflow-hidden">
-                            <img class="img-fluid size" src="{{asset('images/agenda-3.jpg')}}" alt="">
-                            <a class="position-absolute top-0 start-0 bg-primary text-white rounded-end mt-5 py-2 px-4" href="">Meeting Topic</a>
-                        </div>
-                        <div class="p-4">
-                            <div class="d-flex mb-3">
-                                <small class="me-3"><i class="far fa-user text-primary me-2"></i>Michael Brown</small>
-                                <small><i class="far fa-calendar-alt text-primary me-2"></i>01 Jan, 2045</small>
-                            </div>
-                            <h4 class="mb-3">Policy and Compliance Updates</h4>
-                            <p>Review of new regulations and their impact on operations.</p>
-                            <a class="text-uppercase" href="">View Details <i class="bi bi-arrow-right"></i></a>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </div>
-
-    <!-- Agenda Start -->
 
 
     <!-- Vendor Start -->

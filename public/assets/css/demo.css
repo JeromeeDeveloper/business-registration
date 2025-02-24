@@ -384,3 +384,11 @@ body[data-background-color="dark"] .demo-icon .icon-class {
     margin-top: -65px;
     padding: 25px 0;
 }
+
+.cooperative_doc_titles {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+}

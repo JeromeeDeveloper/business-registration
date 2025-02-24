@@ -227,7 +227,7 @@
                 <h6 class="text-muted">MASS-SPECC Online Registration System</h6>
               </div>
               <div class="ms-md-auto py-2 py-md-0">
-                <a href="{{ route('admin.reports') }}" class="btn btn-label-info btn-round me-2">Generate Reports</a>
+                <a href="{{ route('admin.reports') }}" class="btn btn-label-info btn-round me-2" target="_blank">Generate Reports</a>
                 <a href="#" id="scan-qr-btn" class="btn btn-primary btn-round">Scan QR Code</a>
                 <input type="text" id="qr-input-field" style="position: absolute; opacity: 0; width: 1px; height: 1px;" />
                 <div id="qr-display"></div>

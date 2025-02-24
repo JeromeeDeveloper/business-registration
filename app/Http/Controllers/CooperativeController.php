@@ -59,7 +59,6 @@ class CooperativeController extends Controller
             'first_name' => 'required|string|max:255',
             'middle_name' => 'nullable|string|max:255',
             'email' => 'required|email|unique:participants,email|unique:cooperatives,email',
-
             'last_name' => 'required|string|max:255',
             'nickname' => 'nullable|string|max:255',
             'gender' => 'required|string|max:255',
@@ -123,6 +122,7 @@ class CooperativeController extends Controller
 
         return redirect()->route('coop.index')->with('success', 'Participant registered and user account created successfully!');
     }
+
 
 
  // Show a specific participant

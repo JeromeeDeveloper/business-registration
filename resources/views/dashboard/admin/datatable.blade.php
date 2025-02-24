@@ -213,47 +213,29 @@
                         </div>
                     </form>
 
-                    <button class="btn btn-primary" onclick="openGmail()">
-                        <i class="fa fa-envelope"></i> Send via Gmail
-                    </button>
-
-                    <script>
-                    function openGmail() {
-                        let recipient = "recipient@example.com"; // Replace with actual recipient email
-                        let subject = encodeURIComponent("52nd CO-OP LEADERS CONGRESS & 48th GENERAL ASSEMBLY");
-                        let body = encodeURIComponent(`Dear Cooperative Members,
-
-                    We are pleased to invite you to our upcoming event:
-
-                    Event Name: CO-OP Leaders Congress
-                    Date: March 15, 2025
-                    Location: Davao City
-
-                    Kindly confirm your attendance.
-
-                    Best Regards,
-                    MASS-SPECC Cooperative Development Center`);
-
-                        // Open Gmail compose window
-                        window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${recipient}&su=${subject}&body=${body}`, '_blank');
-                    }
-                    </script>
 
 
                     <div class="notify_btn">
-                    <form action="{{ route('cooperatives.notifyAll') }}" method="POST" style="display:inline;">
-                        @csrf
-                        <button type="submit" class="btn btn-primary" data-bs-toggle="tooltip" title="Notify All Cooperatives">
-                            <i class="fa fa-bell"></i> Notify All Events
-                        </button>
-                    </form>
 
-                    <form action="{{ route('cooperatives.notifyCredentialsAll') }}" method="POST" style="display:inline;">
+                        <button class="btn btn-info" onclick="openGmail()">
+                            <i class="fa fa-envelope"></i> Notify Manually
+                        </button>
+
+
+                      <form action="{{ route('cooperatives.notifyAll') }}" method="POST" style="display:inline;">
                         @csrf
                         <button type="submit" class="btn btn-warning text-white" data-bs-toggle="tooltip" title="Notify All Cooperatives">
-                            <i class="fa fa-lock"></i> Notify All Credentials
+                            <i class="fa fa-bell"></i> Notify Automatically
                         </button>
-                    </form>
+                      </form>
+
+                     <form action="{{ route('cooperatives.notifyCredentialsAll') }}" method="POST" style="display:inline;">
+                        @csrf
+                        <button type="submit" class="btn btn-danger text-white" data-bs-toggle="tooltip" title="Notify All Cooperatives">
+                            <i class="fa fa-lock"></i> Notify Credentials
+                        </button>
+                     </form>
+
                      </div>
                         <!-- Table with Cooperatives -->
                         <div class="table-responsive">
@@ -350,7 +332,7 @@
                                                     </a>
 
                                                     <!-- Edit Coop -->
-                                                    <button type="button" class="btn btn-link btn-primary btn-lg" data-bs-toggle="tooltip" title="Edit Coop">
+                                                    <button type="button" class="btn btn-link btn-info btn-lg" data-bs-toggle="tooltip" title="Edit Coop">
                                                         <a href="{{ route('cooperatives.edit', $coop->coop_id) }}" class="text-decoration-none text-primary">
                                                             <i class="fa fa-edit"></i>
                                                         </a>
@@ -408,6 +390,27 @@
       </div>
 
     </div>
+    <script>
+        function openGmail() {
+            let recipient = @json($emails); // Get emails from PHP and convert to a JavaScript array
+            let subject = encodeURIComponent("52nd CO-OP LEADERS CONGRESS & 48th GENERAL ASSEMBLY");
+            let body = encodeURIComponent(`Dear Cooperative Members,
+
+            We are pleased to invite you to our upcoming event:
+
+            Event Name: CO-OP Leaders Congress
+            Date: March 15, 2025
+            Location: Davao City
+
+            Kindly confirm your attendance.
+
+            Best Regards,
+            MASS-SPECC Cooperative Development Center`);
+
+                    window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${recipient}&su=${subject}&body=${body}`, '_blank');
+                }
+    </script>
+
     <script>
         function confirmDelete(event, button) {
             event.preventDefault(); // Prevent form from submitting

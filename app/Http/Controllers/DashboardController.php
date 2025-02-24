@@ -158,16 +158,21 @@ class DashboardController extends Controller
 
             // Send email to each cooperative with its specific users (only those with role "cooperative")
             foreach ($cooperatives as $coop) {
+                if (!$coop->email) { // Ensure cooperative has an email
+                    \Log::warning("Skipped cooperative {$coop->name} due to missing email.");
+                    continue;
+                }
+
                 // Fetch only users with role "cooperative" belonging to the current cooperative
                 $users = User::where('coop_id', $coop->coop_id)
-                             ->where('role', 'cooperative') // Only get users with the "cooperative" role
+                             ->where('role', 'cooperative')
                              ->get();
 
-                if ($users->isNotEmpty()) { // Only send email if there are cooperative users
+                if ($users->isNotEmpty()) {
                     Mail::to($coop->email)->send(new CooperativeNotificationCredentials($coop, $event, $users));
-                    \Log::info('Notification sent to: ' . $coop->email);
+                    \Log::info("Notification sent to: {$coop->email}");
                 } else {
-                    \Log::info('Skipped cooperative: ' . $coop->email . ' (No cooperative users found)');
+                    \Log::info("Skipped cooperative: {$coop->name} (No cooperative users found)");
                 }
             }
 
@@ -177,8 +182,6 @@ class DashboardController extends Controller
             return back()->with('error', 'Error sending notifications: ' . $e->getMessage());
         }
     }
-
-
 
 
     public function admin()
@@ -394,8 +397,10 @@ public function store(Request $request)
         ->orderBy('created_at', 'desc')
         ->paginate(5);
 
+        $emails = $cooperatives->pluck('email')->filter()->implode(',');
+
     // Return view with search query
-    return view('dashboard.admin.datatable', compact('cooperatives', 'search'));
+    return view('dashboard.admin.datatable', compact('cooperatives', 'search', 'emails'));
 }
 
 
@@ -409,7 +414,7 @@ public function storeCooperative(Request $request)
         'address' => 'required|string|max:255',
         'region' => 'required|string|max:255',
         'phone_number' => 'required|numeric',
-        'email' => 'required|email|unique:users,email', // Ensure email is unique for users
+        'email' => 'required|email|unique:users,email',
         'tin' => 'required|string|max:255',
         'coop_identification_no' => 'required|string|max:255',
         'bod_chairperson' => 'required|string|max:255',
@@ -422,10 +427,14 @@ public function storeCooperative(Request $request)
         'cetf_balance' => 'required|numeric',
         'share_capital_balance' => 'required|numeric',
         'no_of_entitled_votes' => 'required|numeric',
-        'services_availed' => 'required|string|max:255',
+        'services_availed' => 'required|array', // Expect an array
+        'services_availed.*' => 'string|in:CF,IT,MSU,ICS,MCU,ADMIN,GAD,YOUTH,SCOOPS,YAKAP,AGRIBEST',
     ]);
 
-    // Create a new cooperative entry
+    // Store the selected services as JSON
+    $servicesAvailed = json_encode($request->services_availed);
+
+    // Create the cooperative entry
     $cooperative = Cooperative::create([
         'name' => $request->name,
         'contact_person' => $request->contact_person,
@@ -446,26 +455,27 @@ public function storeCooperative(Request $request)
         'cetf_balance' => $request->cetf_balance,
         'share_capital_balance' => $request->share_capital_balance,
         'no_of_entitled_votes' => $request->no_of_entitled_votes,
-        'services_availed' => $request->services_availed,
+        'services_availed' => $servicesAvailed, // Save as JSON
     ]);
 
-    // Generate a sanitized password (remove spaces)
+    // Generate a sanitized password
     $sanitizedPassword = str_replace(' ', '', $cooperative->name) . 'GA2025';
 
-    // Create the User account for the cooperative
+    // Create the user account
     User::create([
         'name' => $cooperative->contact_person,
-        'coop_id' => $cooperative->coop_id, // Use `coop_id` instead of `id`
+        'coop_id' => $cooperative->coop_id,
         'email' => $cooperative->email,
-        'password' => Hash::make($sanitizedPassword), // Securely hash the password
+        'password' => Hash::make($sanitizedPassword),
         'role' => 'cooperative',
     ]);
 
     return response()->json([
         'success' => 'Cooperative and User registered successfully!',
-        'generated_password' => $sanitizedPassword, // Remove this in production
+        'generated_password' => $sanitizedPassword,
     ]);
 }
+
 
 
     public function destroy($coop_id)
@@ -496,7 +506,14 @@ public function storeCooperative(Request $request)
                 Rule::unique('cooperatives', 'email')->ignore($coop_id, 'coop_id'), // Ignore itself
             ],
             'address' => 'required|string|max:255',
+            'services_availed' => 'nullable|array', // Ensure it's an array (from checkboxes)
+            'services_availed.*' => 'string|max:255', // Ensure each item is a string
         ]);
+
+        // Store services_availed as a JSON string
+        $validated['services_availed'] = isset($request->services_availed)
+            ? json_encode($request->services_availed) // Convert array to JSON
+            : json_encode([]); // Store empty JSON array if no services selected
 
         // Find the cooperative by its ID and update the details
         $coop = Cooperative::findOrFail($coop_id);
@@ -505,6 +522,8 @@ public function storeCooperative(Request $request)
         // Redirect to the cooperatives page with a success message
         return redirect()->route('adminview')->with('success', 'Cooperative updated successfully!');
     }
+
+
 
     public function show($id)
     {

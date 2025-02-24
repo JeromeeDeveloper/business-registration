@@ -354,14 +354,15 @@
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="services_availed">Services Availed</label>
-                                    <p>{{ $coop->services_availed }}</p>
+                                    <p>{{ implode(', ', json_decode($coop->services_availed, true)) }}</p>
                                 </div>
                             </div>
+
 
                             <!-- GA Registration Status -->
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
-                                    <label for="ga_registration_status">GA Registration Status</label>
+                                    <label for="ga_registration_status">Registration Status</label>
                                     <p>{{ optional($coop->gaRegistration)->registration_status ?? 'N/A' }}</p>
                                 </div>
                             </div>

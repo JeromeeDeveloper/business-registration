@@ -28,6 +28,7 @@ return new class extends Migration {
             $table->string('designation')->nullable();
             $table->string('congress_type')->nullable();
             $table->string('religious_affiliation')->nullable();
+            $table->dateTime('attendance_datetime')->nullable();
             $table->enum('tshirt_size', ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'])->nullable();
             $table->enum('is_msp_officer', ['Yes', 'No']);
             $table->string('msp_officer_position')->nullable();

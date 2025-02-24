@@ -10,21 +10,21 @@
             <div class="navbar-nav ms-auto py-0">
                 <a href="{{ url('/') }}" class="nav-item nav-link {{ request()->is('/') ? 'active' : '' }}">Home</a>
                 <a href="{{ url('/about') }}" class="nav-item nav-link {{ request()->is('about') ? 'active' : '' }}">About</a>
-                <div class="nav-item dropdown">
+                {{-- <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Agenda</a>
                     <div class="dropdown-menu m-0">
                         <a href="{{ url('/agenda') }}" class="dropdown-item">Agenda Grid</a>
                         <a href="{{ url('/detail') }}" class="dropdown-item">Agenda Detail</a>
                     </div>
-                </div>
+                </div> --}}
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                     <div class="dropdown-menu m-0">
 
                         <a href="{{ url('/feature') }}" class="dropdown-item">Our Features</a>
 
-                        <a href="{{ url('/participant') }}" class="dropdown-item">Participants</a>
-                       
+                        <a href="{{ route('home_participants.index') }}" class="dropdown-item">Participants</a>
+
                     </div>
                 </div>
                 <a href="{{ url('/contact') }}" class="nav-item nav-link {{ request()->is('contact') ? 'active' : '' }}">Contact</a>

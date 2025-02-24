@@ -125,7 +125,7 @@
             <!-- End Logo Header -->
           </div>
           <!-- Navbar Header -->
-          @include('layouts.adminnav')
+          @include('layouts.adminnav2')
           <!-- End Navbar -->
         </div>
 
@@ -357,8 +357,8 @@
                                     <div class="form-group">
                                         <label for="is_msp_officer">Is MSP Officer</label>
                                         <select class="form-control @error('is_msp_officer') is-invalid @enderror" name="is_msp_officer" id="is_msp_officer">
-                                            <option value="Yes" {{ old('is_msp_officer') == 'Yes' ? 'selected' : '' }}>Yes</option>
                                             <option value="No" {{ old('is_msp_officer') == 'No' ? 'selected' : '' }}>No</option>
+                                            <option value="Yes" {{ old('is_msp_officer') == 'Yes' ? 'selected' : '' }}>Yes</option>
                                         </select>
                                         @error('is_msp_officer')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -370,7 +370,11 @@
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
                                         <label for="msp_officer_position">MSP Officer Position</label>
-                                        <input type="text" class="form-control @error('msp_officer_position') is-invalid @enderror" name="msp_officer_position" id="msp_officer_position" placeholder="Enter MSP Officer Position" value="{{ old('msp_officer_position') }}" />
+                                        <input type="text" class="form-control @error('msp_officer_position') is-invalid @enderror"
+                                               name="msp_officer_position" id="msp_officer_position"
+                                               placeholder="Enter MSP Officer Position"
+                                               value="{{ old('msp_officer_position') }}"
+                                               {{ old('is_msp_officer') == 'Yes' ? '' : 'disabled' }} />
                                         @error('msp_officer_position')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -399,6 +403,30 @@
 
                         </div>
                     </form>
+
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            let isMspOfficer = document.getElementById("is_msp_officer");
+                            let mspOfficerPosition = document.getElementById("msp_officer_position");
+
+                            function togglePositionField() {
+                                if (isMspOfficer.value === "Yes") {
+                                    mspOfficerPosition.removeAttribute("disabled");
+                                    mspOfficerPosition.setAttribute("required", "required");
+                                } else {
+                                    mspOfficerPosition.setAttribute("disabled", "disabled");
+                                    mspOfficerPosition.removeAttribute("required");
+                                    mspOfficerPosition.value = "";
+                                }
+                            }
+
+                            // Run on page load to set initial state
+                            togglePositionField();
+
+                            // Add event listener to the dropdown
+                            isMspOfficer.addEventListener("change", togglePositionField);
+                        });
+                    </script>
 
                     {{-- <div class="d-flex justify-content-center mt-3">
                         {{ $participants->appends(['search' => request('search')])->links('pagination::bootstrap-4') }}

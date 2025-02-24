@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     public function up()
     {
         Schema::create('cooperatives', function (Blueprint $table) {
@@ -13,7 +14,11 @@ return new class extends Migration {
             $table->string('contact_person');
             $table->string('type');
             $table->text('address');
-            $table->string('region');
+            $table->enum('region', [
+                'Region I', 'Region II', 'Region III', 'Region IV-A', 'Region IV-B', 'Region V',
+                'Region VI', 'Region VII', 'Region VIII', 'Region IX', 'Region X', 'Region XI',
+                'Region XII', 'Region XIII', 'NCR', 'CAR', 'BARMM'
+            ]);
             $table->string('phone_number');
             $table->string('email')->unique();
             $table->string('tin');
@@ -28,7 +33,7 @@ return new class extends Migration {
             $table->decimal('cetf_balance', 15, 2);
             $table->decimal('share_capital_balance', 15, 2);
             $table->integer('no_of_entitled_votes');
-            $table->text('services_availed');
+            $table->json('services_availed')->nullable();
             $table->timestamps();
         });
     }

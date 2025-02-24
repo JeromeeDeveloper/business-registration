@@ -54,9 +54,9 @@
                       <p>Cooperative</p>
                       <span class="caret"></span>
                     </a>
-                    <div class="collapse" id="cooperative">
+                    <div class="collapse show" id="cooperative">
                       <ul class="nav nav-collapse">
-                        <li>
+                        <li class="active">
                             <a href="{{route('adminview')}}">
                               <span class="sub-item">Manage Cooperative</span>
                             </a>
@@ -70,7 +70,7 @@
                       <p>Participant</p>
                       <span class="caret"></span>
                     </a>
-                    <div class="collapse show" id="participant">
+                    <div class="collapse" id="participant">
                       <ul class="nav nav-collapse">
                         <li class="active">
                             <a href="{{route('participants.index')}}">
@@ -168,7 +168,7 @@
         <div class="container">
           <div class="page-inner">
             <div class="page-header">
-              <h3 class="fw-bold mb-3">Participant Documents</h3>
+              <h3 class="fw-bold mb-3">Cooperative Documents</h3>
               <ul class="breadcrumbs mb-3">
                 <li class="nav-home">
                   <a href="#">
@@ -193,8 +193,13 @@
               <div class="col-md-12">
                 <div class="card">
                   <div class="card-header">
+                    <div class="cooperative_doc_titles">
                     <div class="card-title">Uploaded Documents</div>
+                    <button type="button" class="btn btn-info" onclick="window.location.href='{{ route('adminview') }}'">
+                        <i class="fa fa-arrow-left"></i>
+                    </button>
 
+                </div>
                     </div>
 
                     @if(session('error'))
@@ -237,7 +242,7 @@
                         </div>
 
                     @endif
-                    <button type="button" class="btn btn-info btnsize" onclick="window.location.href='{{ route('adminview') }}'"><i class="fa fa-arrow-left"> Go Back</i></button>
+
              </div>
 
                   </div>
