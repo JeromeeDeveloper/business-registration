@@ -356,12 +356,12 @@
                             </div>
 
                             <!-- GA Registration Status -->
-                            <div class="col-md-6 col-lg-4">
+                            {{-- <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="ga_registration_status">GA Registration Status</label>
                                     <input type="text" class="form-control" name="ga_registration_status" id="ga_registration_status" value="{{ $coop->ga_registration_status }}" placeholder="Enter GA Status" />
                                 </div>
-                            </div>
+                            </div> --}}
 
 
 
@@ -427,8 +427,8 @@
                     </div>
 
                     <div class="card-action">
-                        <button class="btn btn-success" type="submit">Submit</button>
-                        <button type="button" class="btn btn-info" onclick="window.location.href='{{ route('adminview') }}'">Back</button>
+                        <button class="btn btn-label-info btn-round me-2" type="submit">Submit</button>
+                        <button type="button" class="btn btn-primary btn-round" onclick="window.location.href='{{ route('adminview') }}'">Back</button>
                     </div>
                 </form>
 

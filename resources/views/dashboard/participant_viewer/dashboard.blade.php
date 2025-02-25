@@ -167,7 +167,7 @@
           <div class="page-inner">
             <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
                 <div>
-                    <h3 class="fw-bold mb-3">
+                    <h3 class="fw-bold mb-3">Assigned Cooperative:
                         {{ $cooperative->name ?? 'N/A' }}
                     </h3>
                 </div>
@@ -185,7 +185,7 @@
                             <div class="card-body">
                                 <div class="row align-items-center">
                                     <div class="col-icon">
-                                        <div class="icon-big text-center icon-success bubble-shadow-small">
+                                        <div class="icon-big text-center icon-info bubble-shadow-small">
                                             <i class="fas fa-calendar-alt"></i>
                                         </div>
                                     </div>
@@ -206,7 +206,7 @@
                             <div class="card-body">
                                 <div class="row align-items-center">
                                     <div class="col-icon">
-                                        <div class="icon-big text-center icon-primary bubble-shadow-small">
+                                        <div class="icon-big text-center icon-info bubble-shadow-small">
                                             <i class="fas fa-users"></i>
                                         </div>
                                     </div>
@@ -294,14 +294,14 @@
                             <div class="text-center mt-4">
                                 <h6 class="text-muted">QR Code</h6>
                                 <div class="p-3 border rounded bg-light d-inline-block">
-                                    <img src="https://api.qrserver.com/v1/create-qr-code/?data={{ urlencode(route('adminDashboard', ['participant_id' => $participant->participant_id])) }}&size=200x200"
+                                    <img src="https://api.qrserver.com/v1/create-qr-code/?data={{ urlencode(route('participantViewerDashboard', ['participant_id' => $participant->participant_id])) }}&size=200x200"
                                          alt="QR Code" class="img-fluid" id="qrCodeImage"/>
                                 </div>
 
                                 <!-- Download Button -->
                                 <div class="mt-3">
                                     <a href="{{ route('download.qr2', ['participant_id' => $participant->participant_id]) }}"
-                                       class="btn btn-info btn-sm">
+                                       class="btn btn-label-info btn-round">
                                         <i class="fas fa-download"></i> Download QR Code
                                     </a>
                                 </div>
@@ -330,7 +330,7 @@
                                         More Options
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $event->event_id }}">
-                                        <a class="dropdown-item" href="{{route('schedule')}}">View Details</a>
+                                        <a class="dropdown-item" href="{{route('events_participant')}}">View Details</a>
                                     </div>
                                 </div>
                             </div>
@@ -354,7 +354,7 @@
                             </li>
                             <li><strong>📌 Activities:</strong> Presentations, Q&A Sessions, Voting</li>
                         </ul>
-                        <a href="#" class="btn btn-sm btn-outline-primary mt-2">Register Now</a>
+                   
                     </div>
                 </div>
                 @else
@@ -374,7 +374,7 @@
                     </div>
                   </div>
                   <div class="card-footer">
-                    <div class="alert alert-info">
+                    <div>
                       <strong>Notice:</strong> The {{ $event->title }} will take place on   {{ \Carbon\Carbon::parse($event->start_date)->format('F d, Y') }} -
                       {{ \Carbon\Carbon::parse($event->end_date)->format('F d, Y') }} Don't miss out on this important event!
                       </div>

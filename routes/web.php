@@ -120,14 +120,14 @@ Route::put('/adminp/rofile/edit', [AuthController::class, 'updateProfile'])->nam
 
 Route::get('participantQR/{id}', [DashboardController::class, 'showQR'])->name('participant.showQR');
 
-Route::get('/download-qr2/{participant_id}', function ($participant_id) {
-    $qrCodeUrl = route('adminDashboard', ['participant_id' => $participant_id]);
+Route::get('/download-qr4/{participant_id}', function ($participant_id) {
+    $qrCodeUrl = route('participants.show', ['participant_id' => $participant_id]);
     $qrCodeImage = file_get_contents("https://api.qrserver.com/v1/create-qr-code/?data=" . urlencode($qrCodeUrl) . "&size=200x200");
     return Response::make($qrCodeImage, 200, [
         'Content-Type' => 'image/png',
         'Content-Disposition' => 'attachment; filename="participant_' . $participant_id . '_qr_code.png"',
     ]);
-})->name('download.qr2');
+})->name('download.qr4');
 
 Route::get('/scan-qr', [DashboardController::class, 'scanQR'])->name('scan.qr');
 Route::post('/scan-qr', [DashboardController::class, 'scanQR'])->name('scan.qr');
@@ -171,6 +171,15 @@ Route::get('/download-qr/{participant_id}', function ($participant_id) {
     ]);
 })->name('download.qr');
 
+Route::get('/download-qr3/{participant_id}', function ($participant_id) {
+    $qrCodeUrl = route('coop.participants.show', ['participant_id' => $participant_id]);
+    $qrCodeImage = file_get_contents("https://api.qrserver.com/v1/create-qr-code/?data=" . urlencode($qrCodeUrl) . "&size=200x200");
+    return Response::make($qrCodeImage, 200, [
+        'Content-Type' => 'image/png',
+        'Content-Disposition' => 'attachment; filename="participant_' . $participant_id . '_qr_code.png"',
+    ]);
+})->name('download.qr3');
+
 // participant crud coop
 
 Route::get('/Cooperative/Participants', [CooperativeController::class, 'index'])->name('coop.index');
@@ -202,5 +211,14 @@ Route::get('/Participant/List/Speakers', [ViewerController::class, 'speakerlistp
 
 Route::get('/Cooperative/participant/profile/edit', [ViewerController::class, 'editProfilepart'])->name('participant.profile.user.edit');
 Route::put('/Cooperative2/participant/profile/edit', [ViewerController::class, 'updateProfileParticipant'])->name('updateProfileParticipant');
+
+Route::get('/download-qr2/{participant_id}', function ($participant_id) {
+    $qrCodeUrl = route('participantViewerDashboard', ['participant_id' => $participant_id]);
+    $qrCodeImage = file_get_contents("https://api.qrserver.com/v1/create-qr-code/?data=" . urlencode($qrCodeUrl) . "&size=200x200");
+    return Response::make($qrCodeImage, 200, [
+        'Content-Type' => 'image/png',
+        'Content-Disposition' => 'attachment; filename="participant_' . $participant_id . '_qr_code.png"',
+    ]);
+})->name('download.qr2');
 
 });

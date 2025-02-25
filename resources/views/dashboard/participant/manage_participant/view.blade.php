@@ -47,6 +47,23 @@
               </li>
 
               <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#participant">
+                  <i class="fas fa-users"></i>
+                  <p>Participant</p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse show" id="participant">
+                  <ul class="nav nav-collapse">
+                    <li class="active">
+                        <a href="{{route('coop.index')}}">
+                          <span class="sub-item">Participants</span>
+                        </a>
+                      </li>
+                  </ul>
+                </div>
+              </li>
+
+              <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#cooperative">
                   <i class="fas fa-users"></i>
                   <p>Resource Speakers</p>
@@ -63,22 +80,6 @@
                 </div>
               </li>
 
-              <li class="nav-item">
-                <a data-bs-toggle="collapse" href="#participant">
-                  <i class="fas fa-users"></i>
-                  <p>Participant</p>
-                  <span class="caret"></span>
-                </a>
-                <div class="collapse show" id="participant">
-                  <ul class="nav nav-collapse">
-                    <li class="active">
-                        <a href="{{route('coop.index')}}">
-                          <span class="sub-item">Participants</span>
-                        </a>
-                      </li>
-                  </ul>
-                </div>
-              </li>
 
               <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#user">
@@ -289,10 +290,10 @@
                                         <label for="qr_code">QR Code</label>
                                         <div class="Qr">
                                             <!-- QR Code Image -->
-                                            <img src="https://api.qrserver.com/v1/create-qr-code/?data={{ urlencode(route('adminDashboard', ['participant_id' => $participant->participant_id])) }}&size=200x200" alt="QR Code" id="qrCodeImage"/>
+                                            <img src="https://api.qrserver.com/v1/create-qr-code/?data={{ urlencode(route('coop.participants.show', ['participant_id' => $participant->participant_id])) }}&size=200x200" alt="QR Code" id="qrCodeImage"/>
 
                                             <!-- Download Button -->
-                                            <a href="{{ route('download.qr2', ['participant_id' => $participant->participant_id]) }}" class="btn btn-info btn-sm mt-2">
+                                            <a href="{{ route('download.qr3', ['participant_id' => $participant->participant_id]) }}" class="btn btn-primary btn-round">
                                                 Download QR Code
                                             </a>
                                         </div>
@@ -313,7 +314,7 @@
                             </div>
                         </div>
                         <div class="card-action">
-                            <button class="btn btn-info" type="button" onclick="window.location.href='{{ route('coop.index') }}'">Back</button>
+                            <button class="btn btn-label-info btn-round" type="button" onclick="window.location.href='{{ route('coop.index') }}'">Back</button>
                         </div>
                     </form>
 

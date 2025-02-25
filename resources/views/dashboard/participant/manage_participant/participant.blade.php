@@ -174,7 +174,7 @@
                             <input type="text" name="search" class="form-control" placeholder="Search..." value="{{ request('search') }}">
                             <div class="input-group-append gap-2 d-flex">
                             <button type="submit" class="btn btn-primary">  <i class="fa fa-search"></i></button>
-                            <button type="button" class="btn btn-info text-white" data-bs-toggle="tooltip" title="Add Participant" onclick="location.href='{{ route('coopparticipantadd') }}'">
+                            <button type="button" class="btn btn-primary text-white" data-bs-toggle="tooltip" title="Add Participant" onclick="location.href='{{ route('coopparticipantadd') }}'">
                                 <i class="fa fa-plus"></i>
                             </button>
                         </div>

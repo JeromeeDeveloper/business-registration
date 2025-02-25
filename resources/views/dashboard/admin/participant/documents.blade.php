@@ -214,7 +214,7 @@
                   <div class="card-header">
                     <div class="cooperative_doc_titles">
                     <div class="card-title">Uploaded Documents</div>
-                    <button type="button" class="btn btn-info" onclick="window.location.href='{{ route('adminview') }}'">
+                    <button type="button" class="btn btn-label-info btn-round me-2" onclick="window.location.href='{{ route('adminview') }}'">
                         <i class="fa fa-arrow-left"></i>
                     </button>
 

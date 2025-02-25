@@ -269,16 +269,12 @@
                         </div>
 
                         <div class="card-footer text-end">
-                            <button class="btn btn-primary" type="button" onclick="window.location.href='{{ route('participantDashboard') }}'">
+                            <button class="btn btn-label-info btn-round" type="button" onclick="window.location.href='{{ route('participantDashboard') }}'">
                                 Back to Dashboard
                             </button>
                         </div>
                     </div>
                 </form>
-
-
-
-
             </div>
                   </div>
                 </div>

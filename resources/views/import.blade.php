@@ -221,11 +221,11 @@
                           <label for="file" class="form-label">Choose Excel File</label>
                           <input type="file" name="file" class="form-control" id="file" required>
                         </div>
-                        <button type="submit" class="btn btn-primary">Upload</button>
+                        <button type="submit" class="btn btn-label-info btn-round me-2">Upload</button>
                       </form>
 
                       <!-- Back Button -->
-                      <button class="btn btn-secondary mt-3" onclick="window.history.back();">Back</button>
+                      <button class="btn btn-primary btn-round mt-3" onclick="window.history.back();">Back</button>
                     </div>
                   </div>
                 </div>

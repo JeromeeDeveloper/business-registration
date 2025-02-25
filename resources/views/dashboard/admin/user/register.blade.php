@@ -305,7 +305,7 @@
                     </div>
 
                     <div class="card-action">
-                        <button type="submit" class="btn btn-success">Register</button>
+                        <button type="submit" class="btn btn-label-info btn-round me-2">Register</button>
                     </div>
                 </form>
 

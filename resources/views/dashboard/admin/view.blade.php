@@ -306,12 +306,12 @@
                             </div>
 
                             <!-- GA Registration Status -->
-                            <div class="col-md-6 col-lg-4">
+                            {{-- <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="ga_registration_status">GA Registration Status</label>
                                     <p>{{ $coop->ga_registration_status }}</p>
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <!-- Total Assets -->
                             <div class="col-md-6 col-lg-4">
@@ -398,7 +398,7 @@
                     </div>
 
                     <div class="card-action">
-                        <button class="btn btn-info" type="button" onclick="window.location.href='{{ route('adminview') }}'">Back</button>
+                        <button class="btn btn-label-info btn-round me-2" type="button" onclick="window.location.href='{{ route('adminview') }}'">Back</button>
                     </div>
                 </form>
 

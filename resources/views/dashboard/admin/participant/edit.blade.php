@@ -391,8 +391,8 @@
                         </div>
 
                         <div class="card-action">
-                            <button type="submit" class="btn btn-success">Update</button>
-                            <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ route('participants.index') }}'">Back</button>
+                            <button type="submit" class="btn btn-label-info btn-round">Update</button>
+                            <button type="button" class="btn btn-primary btn-round" onclick="window.location.href='{{ route('participants.index') }}'">Back</button>
                         </div>
                     </form>
 

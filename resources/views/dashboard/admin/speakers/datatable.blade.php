@@ -216,7 +216,7 @@
                       <h4 class="card-title">Speaker</h4>
                     </div>
                     <div class="d-flex justify-content-start mb-3">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSpeakerModal">
+                        <button type="button" class="btn btn-primary btn-round" data-bs-toggle="modal" data-bs-target="#addSpeakerModal">
                             Add Speaker
                         </button>
                     </div>

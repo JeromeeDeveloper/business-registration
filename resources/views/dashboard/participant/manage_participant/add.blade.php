@@ -47,23 +47,6 @@
               </li>
 
               <li class="nav-item">
-                <a data-bs-toggle="collapse" href="#cooperative">
-                  <i class="fas fa-users"></i>
-                  <p>Resource Speakers</p>
-                  <span class="caret"></span>
-                </a>
-                <div class="collapse" id="cooperative">
-                  <ul class="nav nav-collapse">
-                    <li>
-                        <a href="{{route('speakerlist')}}">
-                          <span class="sub-item">List of Resource Speakers</span>
-                        </a>
-                      </li>
-                  </ul>
-                </div>
-              </li>
-
-              <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#participant">
                   <i class="fas fa-users"></i>
                   <p>Participant</p>
@@ -74,6 +57,23 @@
                     <li class="active">
                         <a href="{{route('coop.index')}}">
                           <span class="sub-item">Participants</span>
+                        </a>
+                      </li>
+                  </ul>
+                </div>
+              </li>
+
+              <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#cooperative">
+                  <i class="fas fa-users"></i>
+                  <p>Resource Speakers</p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse" id="cooperative">
+                  <ul class="nav nav-collapse">
+                    <li>
+                        <a href="{{route('speakerlist')}}">
+                          <span class="sub-item">List of Resource Speakers</span>
                         </a>
                       </li>
                   </ul>
@@ -396,8 +396,8 @@
 
                                 </div>
                                 <div class="card-action">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                    <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ route('coop.index') }}'">Back</button>
+                                    <button type="submit" class="btn btn-label-info btn-round">Submit</button>
+                                    <button type="button" class="btn btn-primary btn-round" onclick="window.location.href='{{ route('coop.index') }}'">Back</button>
                                 </div>
                             </div>
 

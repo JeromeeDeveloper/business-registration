@@ -242,9 +242,11 @@
                         <label for="password_confirmation">Confirm Password</label>
                         <input type="password" class="form-control" name="password_confirmation" id="password_confirmation">
                     </div>
+                    <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-round">Save Changes</button>
+                    <a href="{{ url()->previous() }}" class="btn btn-label-info btn-round me-2">Previous</a>
+                </div>
 
-                    <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
-                    <a href="{{ url()->previous() }}" class="btn btn-secondary mt-3">Previous</a>
                 </form>
 
                 @if(session('success'))

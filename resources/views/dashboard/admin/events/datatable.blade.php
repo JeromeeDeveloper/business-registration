@@ -216,7 +216,7 @@
                       <h4 class="card-title">Events</h4>
                     </div>
                     <div class="d-flex justify-content-start mb-3">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addEventModal">
+                        <button type="button" class="btn btn-primary btn-round" data-bs-toggle="modal" data-bs-target="#addEventModal">
                             Add Event
                         </button>
                     </div>
@@ -274,7 +274,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="4" class="text-center">No Events found</td>
+                                            <td colspan="5" class="text-center">No Events found</td>
                                         </tr>
                                     @endforelse
                                 </tbody>

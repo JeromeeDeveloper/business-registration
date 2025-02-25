@@ -94,11 +94,11 @@
                                 <span class="sub-item">Manage attendance</span>
                             </a>
                         </li>
-    
+
                       </ul>
                     </div>
                   </li>
-                  
+
                   <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#user">
                       <i class="fas fa-user"></i>
@@ -419,8 +419,8 @@
 
                                 </div>
                                 <div class="card-action">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                    <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ route('participants.index') }}'">Back</button>
+                                    <button type="submit" class="btn btn-label-info btn-round me-2">Submit</button>
+                                    <button type="button" class="btn btn-primary btn-round" onclick="window.location.href='{{ route('participants.index') }}'">Back</button>
                                 </div>
                             </div>
 

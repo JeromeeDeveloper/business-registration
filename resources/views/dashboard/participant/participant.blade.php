@@ -238,7 +238,7 @@
                                 <div class="card-body">
                                     <div class="row align-items-center">
                                         <div class="col-icon">
-                                            <div class="icon-big text-center icon-primary bubble-shadow-small">
+                                            <div class="icon-big text-center icon-info bubble-shadow-small">
                                                 <i class="fas fa-user-check"></i>
                                             </div>
                                         </div>
@@ -267,7 +267,7 @@
                                 <div class="card-body">
                                     <div class="row align-items-center">
                                         <div class="col-icon">
-                                            <div class="icon-big text-center icon-primary bubble-shadow-small">
+                                            <div class="icon-big text-center icon-info bubble-shadow-small">
                                                 <i class="fas fa-users"></i>
                                             </div>
                                         </div>
@@ -293,7 +293,7 @@
                                 <div class="card-body">
                                     <div class="row align-items-center">
                                         <div class="col-icon">
-                                            <div class="icon-big text-center icon-success bubble-shadow-small">
+                                            <div class="icon-big text-center icon-info bubble-shadow-small">
                                                 <i class="fas fa-calendar-alt"></i>
                                             </div>
                                         </div>
@@ -316,7 +316,7 @@
                                 <div class="card-body">
                                     <div class="row align-items-center">
                                         <div class="col-icon">
-                                            <div class="icon-big text-center icon-warning bubble-shadow-small">
+                                            <div class="icon-big text-center icon-info bubble-shadow-small">
                                                 <i class="fas fa-file-upload"></i>
                                             </div>
                                         </div>
@@ -335,7 +335,7 @@
                                                             : 'Pending';
                                                 @endphp
 
-                                                <button id="uploadBtn" class="btn btn-sm btn-outline-primary mt-2">
+                                                <button id="uploadBtn" class="btn btn-sm btn-outline-info mt-2">
                                                     {{ $hasDocuments ? 'Upload Again' : 'Upload Now' }}
                                                 </button>
                                             </div>
@@ -353,18 +353,6 @@
                                         <div class="card-head-row">
                                             <div class="card-title">CETF Calculator</div>
                                             <div class="card-tools">
-                                                <a href="#" class="btn btn-label-success btn-round btn-sm me-2">
-                                                    <span class="btn-label">
-                                                        <i class="fa fa-pencil"></i>
-                                                    </span>
-                                                    Export
-                                                </a>
-                                                <a href="#" class="btn btn-label-info btn-round btn-sm">
-                                                    <span class="btn-label">
-                                                        <i class="fa fa-print"></i>
-                                                    </span>
-                                                    Print
-                                                </a>
                                             </div>
                                         </div>
                                     </div>
@@ -390,7 +378,7 @@
                                                 <input type="text" class="form-control" id="cetfRequired"
                                                     readonly />
                                             </div>
-                                            <button type="button" class="btn btn-primary mt-3"
+                                            <button type="button" class="btn btn-primary btn-round"
                                                 onclick="calculateCETF()">Compute</button>
                                         </form>
                                     </div>
@@ -460,7 +448,7 @@
                                             </div>
                                         </div>
                                         <div class="card-footer">
-                                            <div class="alert alert-info">
+                                            <div>
                                                 <strong>Notice:</strong> The General Assembly will take place on
                                                 {{ \Carbon\Carbon::parse($event->start_date)->format('F d, Y') }} -
                                                 {{ \Carbon\Carbon::parse($event->end_date)->format('F d, Y') }} Don't

@@ -17,7 +17,7 @@ class Cooperative extends Model
     protected $fillable = [
         'name', 'contact_person', 'type', 'address', 'region', 'phone_number',
         'email', 'tin', 'coop_identification_no', 'bod_chairperson',
-        'general_manager_ceo', 'ga_registration_status', 'total_asset',
+        'general_manager_ceo', 'total_asset',
         'total_income', 'cetf_remittance', 'cetf_required', 'cetf_balance',
         'share_capital_balance', 'no_of_entitled_votes', 'services_availed'
     ];

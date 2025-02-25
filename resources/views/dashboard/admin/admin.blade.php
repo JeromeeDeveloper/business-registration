@@ -248,18 +248,18 @@
               <div class="ms-md-auto py-2 py-md-0">
                 <a href="{{ route('admin.reports') }}" class="btn btn-label-info btn-round me-2" target="_blank">Generate Reports</a>
               <!-- Button to trigger modal -->
-<a href="#" id="scan-qr-btn" class="btn btn-primary btn-round" data-bs-toggle="modal" data-bs-target="#qrScannerModal">
-    Scan QR Code
-</a>
+                <a href="#" id="scan-qr-btn" class="btn btn-primary btn-round" data-bs-toggle="modal" data-bs-target="#qrScannerModal">
+                    Scan QR Code
+                </a>
 
-<style>
-    @media (max-width: 576px) { /* For small screens */
-        .modal-dialog {
-            max-width: 90%;
-            margin: auto;
-        }
-    }
-</style>
+                <style>
+                    @media (max-width: 576px) { /* For small screens */
+                        .modal-dialog {
+                            max-width: 90%;
+                            margin: auto;
+                        }
+                    }
+                </style>
 
 <div class="modal fade" id="qrScannerModal" tabindex="-1" aria-labelledby="qrScannerModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -419,7 +419,7 @@
                                 </li>
                                 <li><strong>📌 Activities:</strong> Presentations, Q&A Sessions, Voting</li>
                             </ul>
-                            <a href="#" class="btn btn-sm btn-outline-primary mt-2">Register Now</a>
+
                         </div>
                     </div>
                     @else
@@ -437,7 +437,7 @@
                         </div>
                       </div>
                       <div class="card-footer">
-                        <div class="alert alert-info">
+                      <div>
                           <strong>Notice:</strong> The {{ $latestEvent->title }} will take place on   {{ \Carbon\Carbon::parse($latestEvent->start_date)->format('F d, Y') }} -
                           {{ \Carbon\Carbon::parse($latestEvent->end_date)->format('F d, Y') }} Don't miss out on this important event!
                       </div>
@@ -565,21 +565,28 @@ function handleScannedQR(decodedText, qrScanner) {
     console.log("Scanned QR Code:", decodedText);
 
     let participantId;
+
     try {
-        const urlParams = new URL(decodedText);
-        participantId = urlParams.searchParams.get("participant_id");
+        // Try to extract ID from a URL
+        const url = new URL(decodedText);
+        const pathSegments = url.pathname.split("/"); // Split path into segments
+        participantId = pathSegments[pathSegments.length - 1]; // Get last segment (ID)
     } catch (e) {
-        participantId = decodedText; // Assume QR contains ID directly
+        // If it's not a valid URL, assume it's a direct numeric ID
+        participantId = decodedText.trim();
     }
 
-    if (!participantId) {
+    // Ensure participantId is a valid number
+    if (isNaN(participantId) || participantId === "") {
         Swal.fire({
             icon: "error",
             title: "Invalid QR Code",
-            text: "No participant ID found.",
+            text: "No valid participant ID found.",
         });
         return;
     }
+
+    console.log("Extracted Participant ID:", participantId);
 
     fetch(`/scan-qr?participant_id=${participantId}`, {
         method: "GET",
@@ -612,6 +619,8 @@ function handleScannedQR(decodedText, qrScanner) {
         });
     });
 }
+
+
 
 
         // Function to use DroidCam IP as a video source

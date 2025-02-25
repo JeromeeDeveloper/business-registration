@@ -245,21 +245,21 @@
 
 
 
-                        <button class="btn btn-info" onclick="openGmail()">
+                        <button class="btn btn-label-info btn-round me-2" onclick="openGmail()">
                             <i class="fa fa-envelope"></i> Notify Manually
                         </button>
 
 
                       <form action="{{ route('cooperatives.notifyAll') }}" method="POST" style="display:inline;">
                         @csrf
-                        <button type="submit" class="btn btn-info text-white" data-bs-toggle="tooltip" title="Notify All Cooperatives">
+                        <button type="submit" class="btn btn-label-info btn-round me-2" data-bs-toggle="tooltip" title="Notify All Cooperatives">
                             <i class="fa fa-bell"></i> Notify Automatically
                         </button>
                       </form>
 
                      <form action="{{ route('cooperatives.notifyCredentialsAll') }}" method="POST" style="display:inline;">
                         @csrf
-                        <button type="submit" class="btn btn-info text-white" data-bs-toggle="tooltip" title="Notify All Cooperatives">
+                        <button type="submit" class="btn btn-label-info btn-round me-2" data-bs-toggle="tooltip" title="Notify All Cooperatives">
                             <i class="fa fa-lock"></i> Notify Credentials
                         </button>
                      </form>
@@ -343,7 +343,7 @@
 
                                                 <form action="{{ route('cooperatives.notify', $coop->coop_id) }}" method="POST" style="display:inline;">
                                                     @csrf
-                                                    <button type="submit" class="btn btn-link btn-warning btn-lg" data-bs-toggle="tooltip" title="Notify Coop">
+                                                    <button type="submit" class="btn btn-link btn-info btn-lg" data-bs-toggle="tooltip" title="Notify Coop">
                                                         <i class="fa fa-bell"></i>
                                                     </button>
                                                 </form>

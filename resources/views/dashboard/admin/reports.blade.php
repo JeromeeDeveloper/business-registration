@@ -14,24 +14,26 @@
             background-color: #f8f9fa;
             padding: 20px;
         }
+
         .container {
-            background: white;
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            background-color: white;
         }
 
         /* Table Styling */
         table {
             width: 100%;
             border-collapse: collapse;
-            table-layout: fixed; /* Forces columns to fit within the table */
+            table-layout: fixed;
         }
         th, td {
             padding: 8px;
             border: 1px solid #dee2e6;
             text-align: center;
-            word-wrap: break-word; /* Ensures long text wraps */
+            word-wrap: break-word;
         }
         th {
             background-color: #343a40;
@@ -40,21 +42,30 @@
 
         /* Print Styling */
         @media print {
-            body {
-                background: none;
+            body, html {
+                width: 100%;
+                height: 100%;
+                margin: 0;
                 padding: 0;
             }
+
             .container {
-                box-shadow: none;
+                width: 100%;
+                max-width: 100%;
+                margin: 0;
+                padding: 0;
             }
+
             .btn {
                 display: none; /* Hide buttons when printing */
             }
+
             table {
-                font-size: 10px; /* Reduce font size for better fit */
+                font-size: 12px; /* Adjust for readability */
             }
+
             @page {
-                size: A4 landscape; /* Set print to A4 landscape */
+                size: letter portrait; /* Change to 'A4' if needed */
                 margin: 1cm;
             }
         }
@@ -76,7 +87,7 @@
         </button>
     </div>
 
-    <div id="report-content" class="p-4 bg-white shadow rounded">
+    <div id="report-content" class="p-4">
         <h4 class="text-center mb-4">Voting Delegates Status/Count</h4>
 
         <table class="table table-bordered table-striped text-center">

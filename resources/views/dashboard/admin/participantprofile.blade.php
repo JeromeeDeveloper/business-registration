@@ -188,8 +188,10 @@
                         <input type="password" class="form-control" name="password_confirmation" id="password_confirmation">
                     </div>
 
-                    <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
-                    <a href="{{ url()->previous() }}" class="btn btn-secondary mt-3">Previous</a>
+                    <div class="form-group">
+                    <button type="submit" class="btn btn-label-info btn-round">Save Changes</button>
+                    <a href="{{ url()->previous() }}" class="btn btn-primary btn-round">Previous</a>
+                </div>
                 </form>
 
                 @if(session('success'))

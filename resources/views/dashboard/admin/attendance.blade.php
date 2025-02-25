@@ -225,8 +225,10 @@
                                             <!-- Start Date & Time -->
                                             <div class="col-12 col-md-4">
                                                 <label class="form-label fw-bold">Start Date & Time</label>
-                                                <div class="input-group w-100">
-                                                    <span class="input-group-text bg-primary text-white"><i class="fa fa-calendar"></i></span>
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-primary text-white">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </span>
                                                     <input type="datetime-local" name="start_datetime" class="form-control" value="{{ request('start_datetime') }}">
                                                 </div>
                                             </div>
@@ -234,8 +236,10 @@
                                             <!-- End Date & Time -->
                                             <div class="col-12 col-md-4">
                                                 <label class="form-label fw-bold">End Date & Time</label>
-                                                <div class="input-group w-100">
-                                                    <span class="input-group-text bg-primary text-white"><i class="fa fa-calendar"></i></span>
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-primary text-white">
+                                                        <i class="fa fa-calendar"></i>
+                                                    </span>
                                                     <input type="datetime-local" name="end_datetime" class="form-control" value="{{ request('end_datetime') }}">
                                                 </div>
                                             </div>
@@ -243,16 +247,47 @@
                                             <!-- Search Box -->
                                             <div class="col-12 col-md-4">
                                                 <label class="form-label fw-bold">Search</label>
-                                                <div class="input-group w-100">
+                                                <div class="input-group">
                                                     <input type="text" name="search" class="form-control" placeholder="Search..." value="{{ request('search') }}">
-                                                    <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                                                    <button type="submit" class="btn btn-primary">
+                                                        <i class="fa fa-search"></i>
+                                                    </button>
                                                 </div>
+                                            </div>
+
+                                            <!-- QR Scanner Button -->
+                                            <div class="col-12 text-center mt-2">
+                                                <a href="#" id="scan-qr-btn" class="btn btn-primary btn-round" data-bs-toggle="modal" data-bs-target="#qrScannerModal">
+                                                    <i class="fa fa-qrcode"></i> Scan QR Code
+                                                </a>
                                             </div>
                                         </div>
                                     </form>
 
+                                    <!-- QR Scanner Modal -->
+                                    <div class="modal fade" id="qrScannerModal" tabindex="-1" aria-labelledby="qrScannerModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-sm">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="qrScannerModalLabel">Scan QR Code</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body text-center">
+                                                    <div id="qr-reader" style="width: 100%;"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
-
+                                    <!-- Responsive Modal Styling -->
+                                    <style>
+                                        @media (max-width: 576px) {
+                                            .modal-dialog {
+                                                max-width: 90%;
+                                                margin: auto;
+                                            }
+                                        }
+                                    </style>
                                     <!-- Table Display -->
                                     <div class="table-responsive">
                                         <table id="add-row" class="display table table-striped table-hover">
@@ -327,6 +362,7 @@
                                 <div class="d-flex justify-content-center mt-3">
                                     {{ $participants->appends(['search' => request('search')])->links('pagination::bootstrap-4') }}
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -337,6 +373,132 @@
     </div>
     </div>
     @include('layouts.links')
+    <script src="https://cdn.jsdelivr.net/npm/html5-qrcode/minified/html5-qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- Include SweetAlert -->
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+    let qrScanner;
+
+    document.getElementById("qrScannerModal").addEventListener("shown.bs.modal", async function () {
+        if (typeof Html5Qrcode === "undefined") {
+            console.error("Html5Qrcode is NOT loaded!");
+            return;
+        }
+
+        qrScanner = new Html5Qrcode("qr-reader");
+        try {
+            let devices = await navigator.mediaDevices.enumerateDevices();
+            let cameraId = null;
+
+            // Look for DroidCam or other cameras
+            devices.forEach(device => {
+                if (device.label.toLowerCase().includes("droidcam")) {
+                    cameraId = device.deviceId;
+                }
+            });
+
+            if (cameraId) {
+                qrScanner.start(
+                    cameraId,
+                    { fps: 10, qrbox: { width: 250, height: 250 } },
+                    decodedText => handleScannedQR(decodedText, qrScanner),
+                    errorMessage => console.warn(errorMessage)
+                ).catch(err => console.error("Error starting QR scanner:", err));
+            }
+        } catch (err) {
+            console.error("Error accessing cameras:", err);
+        }
+    });
+
+    // Stop QR scanner when modal closes
+    document.getElementById("qrScannerModal").addEventListener("hidden.bs.modal", function () {
+        if (qrScanner) {
+            qrScanner.stop().catch(err => console.warn("Error stopping scanner:", err));
+        }
+    });
+});
+
+function handleScannedQR(decodedText, qrScanner) {
+    console.log("Scanned QR Code:", decodedText);
+
+    let participantId;
+
+    try {
+        // Try to extract ID from a URL
+        const url = new URL(decodedText);
+        const pathSegments = url.pathname.split("/"); // Split path into segments
+        participantId = pathSegments[pathSegments.length - 1]; // Get last segment (ID)
+    } catch (e) {
+        // If it's not a valid URL, assume it's a direct numeric ID
+        participantId = decodedText.trim();
+    }
+
+    // Ensure participantId is a valid number
+    if (isNaN(participantId) || participantId === "") {
+        Swal.fire({
+            icon: "error",
+            title: "Invalid QR Code",
+            text: "No valid participant ID found.",
+        });
+        return;
+    }
+
+    console.log("Extracted Participant ID:", participantId);
+
+    fetch(`/scan-qr?participant_id=${participantId}`, {
+        method: "GET",
+        headers: { "Accept": "application/json" },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            let iconType = data.error.includes("already recorded") ? "warning" : "error";
+            Swal.fire({
+                icon: iconType,
+                title: "Scan Error",
+                text: data.error,
+            });
+        } else {
+            Swal.fire({
+                icon: "success",
+                title: "Attendance Recorded!",
+                text: data.success,
+            });
+        }
+        qrScanner.stop();
+    })
+    .catch(error => {
+        console.error("QR Code Scan Error:", error);
+        Swal.fire({
+            icon: "error",
+            title: "Scan Failed",
+            text: "Failed to record attendance.",
+        });
+    });
+}
+
+
+
+        // Function to use DroidCam IP as a video source
+        function useDroidCamIP(qrScanner, ip) {
+            let videoElement = document.createElement("video");
+            videoElement.src = ip;
+            videoElement.setAttribute("autoplay", "");
+            videoElement.setAttribute("playsinline", "");
+
+            videoElement.addEventListener("loadedmetadata", function () {
+                qrScanner.start(
+                    videoElement,
+                    { fps: 10, qrbox: { width: 250, height: 250 } },
+                    decodedText => handleScannedQR(decodedText, qrScanner),
+                    errorMessage => console.warn(errorMessage)
+                ).catch(err => console.error("Error starting QR scanner:", err));
+            });
+
+            document.getElementById("qr-reader").appendChild(videoElement);
+        }
+    </script>
 </body>
 
 </html>
