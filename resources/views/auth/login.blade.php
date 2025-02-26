@@ -56,16 +56,25 @@
                     <i class="fas fa-envelope"></i>
                     <input type="email" name="email" placeholder="Enter your email" required>
                 </div>
-                <div class="input-box">
+                <div class="input-box position-relative">
                     <i class="fas fa-lock"></i>
-                    <input type="password" name="password" placeholder="Enter your password" required>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                    <i class="fa fa-eye position-absolute top-50 end-0 translate-middle-y me-2" id="togglePassword" style="cursor: pointer;"></i>
                 </div>
                 <div class="button input-box">
                     <input type="button" value="Login" onclick="showAgreement()">
                 </div>
-                <div class="text sign-up-text">Sign in to access the General Assembly portal.
-                    {{-- <label for="flip">Sign up</label> --}}
+
+                <div class="text sign-up-text">
+                    Sign in to access the General Assembly portal.
+                    <br>By continuing, you agree to our
+                    <a href="terms-and-conditions.html" target="_blank" style="color: rgb(47, 0, 255);">Terms and Conditions</a>
                 </div>
+
+
+                {{-- <div class="text sign-up-text">Sign in to access the General Assembly portal.
+                    <label for="flip">Sign up</label>
+                </div> --}}
             </form>
 
         </div>
@@ -143,6 +152,23 @@
 <script src="js/main.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.getElementById("togglePassword").addEventListener("click", function () {
+        let passwordInput = document.getElementById("password");
+        let icon = this;
+
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
+        } else {
+            passwordInput.type = "password";
+            icon.classList.remove("fa-eye-slash");
+            icon.classList.add("fa-eye");
+        }
+    });
+</script>
 
 <script>
 function showAgreement() {

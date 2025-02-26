@@ -56,9 +56,6 @@
 <body>
     <div class="container">
 
-        <!-- Ensure the logo path is correct -->
-        <img class="logo" src="{{ asset('images/logo.png') }}" alt="MASS-SPECC Logo">
-
         <h1>You're Invited!</h1>
         <p><strong>Dear {{ $coop->contact_person }},</strong></p>
 
@@ -80,12 +77,10 @@
             <p>Address: {{ $coop->address }}</p>
         </div>
 
-        <p><a href="#">Confirm Attendance</a></p>
+        <p><a href="http://127.0.0.1:8000/login">Confirm Attendance</a></p>
 
         <p style="margin-top: 20px;">We look forward to your participation! If you have any questions, feel free to contact us.</p>
 
-        <!-- Displaying logo again at the bottom -->
-        <img class="logo" src="{{ asset('images/logo.png') }}" alt="MASS-SPECC Logo">
 
         <p><em>
             The contents of this email message and any attachments are intended solely for the addressee(s) and may contain confidential and/or privileged information and may be legally protected from disclosure. If you are not the intended recipient of this message or their agent, or if this message has been addressed to you in error, please immediately alert the sender by reply email and then delete this message and any attachments.

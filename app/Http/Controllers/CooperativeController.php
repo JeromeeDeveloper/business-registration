@@ -23,23 +23,34 @@ class CooperativeController extends Controller
 
     public function index(Request $request)
     {
-        $participants = Participant::with(['registration', 'cooperative', 'user']) // Eager load cooperative
+        // Get the authenticated user
+        $user = auth()->user();
+
+        // Get the cooperative of the logged-in user
+        $cooperative = $user->cooperative;
+
+        // Get total participants for the cooperative
+        $totalParticipants = $cooperative ? $cooperative->participants()->count() : 0;
+
+        // Fetch participants with filtering
+        $participants = Participant::with(['registration', 'cooperative', 'user'])
             ->when($request->search, function ($query) use ($request) {
                 return $query->where('first_name', 'like', '%' . $request->search . '%')
-            ->orWhere('last_name', 'like', '%' . $request->search . '%')
-            ->orWhere('middle_name', 'like', '%' . $request->search . '%')
-            ->orWhere('designation', 'like', '%' . $request->search . '%')
-            ->orWhereHas('user', function ($userQuery) use ($request) {
-                $userQuery->where('name', 'like', '%' . $request->search . '%');
+                    ->orWhere('last_name', 'like', '%' . $request->search . '%')
+                    ->orWhere('middle_name', 'like', '%' . $request->search . '%')
+                    ->orWhere('designation', 'like', '%' . $request->search . '%')
+                    ->orWhereHas('user', function ($userQuery) use ($request) {
+                        $userQuery->where('name', 'like', '%' . $request->search . '%');
+                    })
+                    ->orWhereHas('cooperative', function ($cooperativeQuery) use ($request) {
+                        $cooperativeQuery->where('name', 'like', '%' . $request->search . '%');
+                    });
             })
-            ->orWhereHas('cooperative', function ($cooperativeQuery) use ($request) {
-                $cooperativeQuery->where('name', 'like', '%' . $request->search . '%');
-            });
+            ->paginate(10);
 
-            })->paginate(10);
-
-        return view('dashboard.participant.manage_participant.participant', compact('participants'));
+        return view('dashboard.participant.manage_participant.participant', compact('participants', 'totalParticipants'));
     }
+
 
     public function coopparticipantadd()
     {

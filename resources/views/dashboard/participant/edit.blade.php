@@ -145,168 +145,214 @@
                   </div>
                   <div class="card-body">
                     <!-- Modal -->
-                    <form id="participantForm" action="{{ route('cooperativeprofile.update', ['participant_id' => $participant->participant_id, 'coop_id' => $participant->coop_id]) }}" method="POST">
+                    <form id="participantForm" action="{{ route('cooperativeprofile.update', ['coop_id' => $cooperative->coop_id]) }}" method="POST">
                         @csrf
                         @method('PUT')
                         <div class="card-body">
                             <div class="row">
+                                <!-- Coop Name -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label for="coop_id" class="form-label">Cooperative</label>
-                                        <div class="form-control-plaintext border rounded p-2 bg-light">
-                                            {{ $participant->cooperative->name ?? 'N/A' }}
-                                        </div>
+                                        <label for="name">Cooperative Name</label>
+                                        <input type="text" class="form-control" name="name" id="name" value="{{ $cooperative->name }}" placeholder="Enter Cooperative Name" />
                                     </div>
                                 </div>
 
-                                <!-- User Display -->
+                                <!-- Contact Person -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label for="user_id" class="form-label">User</label>
-                                        <div class="form-control-plaintext border rounded p-2 bg-light">
-                                            {{ auth()->user()->name }}
-                                        </div>
+                                        <label for="contact_person">Contact Person</label>
+                                        <input type="text" class="form-control" name="contact_person" id="contact_person" value="{{ $cooperative->contact_person }}" placeholder="Enter Contact Person" />
                                     </div>
                                 </div>
 
-                                <!-- First Name -->
+                                <!-- Cooperative Type -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label for="first_name">First Name</label>
-                                        <input type="text" class="form-control" name="first_name" value="{{ $participant->first_name }}">
+                                        <label for="type">Cooperative Type</label>
+                                        <input type="text" class="form-control" name="type" id="type" value="{{ $cooperative->type }}" placeholder="Enter Cooperative Type" />
                                     </div>
                                 </div>
 
-                                <!-- Middle Name -->
+                                <!-- Address -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label for="middle_name">Middle Name</label>
-                                        <input type="text" class="form-control" name="middle_name" value="{{ $participant->middle_name ?? '' }}">
+                                        <label for="address">Address</label>
+                                        <input class="form-control" id="address" name="address" value="{{ $cooperative->address }}" placeholder="Enter Address" />
                                     </div>
                                 </div>
 
-                                <!-- Last Name -->
+                                <!-- Region -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label for="last_name">Last Name</label>
-                                        <input type="text" class="form-control" name="last_name" value="{{ $participant->last_name }}">
-                                    </div>
-                                </div>
-
-                                <!-- Nickname -->
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="nickname">Nickname</label>
-                                        <input type="text" class="form-control" name="nickname" value="{{ $participant->nickname ?? '' }}">
-                                    </div>
-                                </div>
-
-                                <!-- Gender (Dropdown) -->
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="gender">Gender</label>
-                                        <select class="form-control" name="gender">
-                                            <option value="Male" {{ $participant->gender == 'Male' ? 'selected' : '' }}>Male</option>
-                                            <option value="Female" {{ $participant->gender == 'Female' ? 'selected' : '' }}>Female</option>
-                                            <option value="Other" {{ $participant->gender == 'Other' ? 'selected' : '' }}>Other</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <!-- Phone Number -->
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="phone_number">Phone Number</label>
-                                        <input type="text" class="form-control" name="phone_number" value="{{ $participant->phone_number }}">
-                                    </div>
-                                </div>
-
-                                <!-- Designation -->
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="designation">Designation</label>
-                                        <input type="text" class="form-control" name="designation" value="{{ $participant->designation ?? '' }}">
-                                    </div>
-                                </div>
-
-                                <!-- Congress Type (Dropdown) -->
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="congress_type">Congress Type</label>
-                                        <select class="form-control" name="congress_type">
-                                            <option value="">Select Congress Type</option>
-                                            <option value="Type A" {{ $participant->congress_type == 'Type A' ? 'selected' : '' }}>Type A</option>
-                                            <option value="Type B" {{ $participant->congress_type == 'Type B' ? 'selected' : '' }}>Type B</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <!-- Religious Affiliation (Dropdown) -->
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="religious_affiliation">Religious Affiliation</label>
-                                        <select class="form-control" name="religious_affiliation">
-                                            <option value="">Select Religious Affiliation</option>
-                                            <option value="Catholic" {{ $participant->religious_affiliation == 'Catholic' ? 'selected' : '' }}>Catholic</option>
-                                            <option value="Christian" {{ $participant->religious_affiliation == 'Christian' ? 'selected' : '' }}>Christian</option>
-                                            <option value="Muslim" {{ $participant->religious_affiliation == 'Muslim' ? 'selected' : '' }}>Muslim</option>
-                                            <option value="Other" {{ $participant->religious_affiliation == 'Other' ? 'selected' : '' }}>Other</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <!-- T-shirt Size (Dropdown) -->
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="tshirt_size">T-shirt Size</label>
-                                        <select class="form-control" name="tshirt_size">
-                                            <option value="">Select T-shirt Size</option>
-                                            @foreach (['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'] as $size)
-                                                <option value="{{ $size }}" {{ $participant->tshirt_size == $size ? 'selected' : '' }}>{{ $size }}</option>
+                                        <label for="region">Region</label>
+                                        <select class="form-control" name="region" id="region">
+                                            <option disabled>Select Region</option>
+                                            @foreach([
+                                                'Region I', 'Region II', 'Region III', 'Region IV-A', 'Region IV-B', 'Region V',
+                                                'Region VI', 'Region VII', 'Region VIII', 'Region IX', 'Region X', 'Region XI',
+                                                'Region XII', 'Region XIII', 'NCR', 'CAR', 'BARMM'
+                                            ] as $region)
+                                                <option value="{{ $region }}" {{ $cooperative->region == $region ? 'selected' : '' }}>
+                                                    {{ $region }}
+                                                </option>
                                             @endforeach
                                         </select>
                                     </div>
                                 </div>
 
-                                <!-- MSP Officer (Dropdown) -->
+
+                                <!-- Phone Number -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label for="is_msp_officer">Is MSP Officer</label>
-                                        <select class="form-control" name="is_msp_officer">
-                                            <option value="Yes" {{ $participant->is_msp_officer == 'Yes' ? 'selected' : '' }}>Yes</option>
-                                            <option value="No" {{ $participant->is_msp_officer == 'No' ? 'selected' : '' }}>No</option>
-                                        </select>
+                                        <label for="phone_number">Phone Number</label>
+                                        <input type="number" class="form-control" name="phone_number" id="phone_number" value="{{ $cooperative->phone_number }}" placeholder="Enter Phone Number" />
                                     </div>
                                 </div>
 
-                                <!-- MSP Officer Position -->
+                              <!-- Email -->
+                                    <div class="col-md-6 col-lg-4">
+                                        <div class="form-group">
+                                            <label for="email">Email</label>
+                                            <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" id="email" value="{{ old('email', $cooperative->email) }}" placeholder="Enter Email" />
+
+                                            {{-- Show error only if the email is different from the cooperative's current email --}}
+                                            @if ($errors->has('email') && old('email') !== $cooperative->email)
+                                                <div class="alert alert-danger">
+                                                    {{ $errors->first('email') }}
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+
+
+
+                                <!-- TIN -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label for="msp_officer_position">MSP Officer Position</label>
-                                        <input type="text" class="form-control" name="msp_officer_position" value="{{ $participant->msp_officer_position ?? '' }}">
+                                        <label for="tin">TIN</label>
+                                        <input type="text" class="form-control" name="tin" id="tin" value="{{ $cooperative->tin }}" placeholder="Enter TIN" />
                                     </div>
                                 </div>
 
-                                <!-- Delegate Type (Dropdown) -->
+                                <!-- Coop Identification No -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label for="delegate_type">Delegate Type</label>
-                                        <select class="form-control" name="delegate_type">
-                                            <option value="Voting" {{ $participant->delegate_type == 'Voting' ? 'selected' : '' }}>Voting</option>
-                                            <option value="Non-Voting" {{ $participant->delegate_type == 'Non-Voting' ? 'selected' : '' }}>Non-Voting</option>
-                                        </select>
+                                        <label for="coop_identification_no">Cooperative ID</label>
+                                        <input type="text" class="form-control" name="coop_identification_no" id="coop_identification_no" value="{{ $cooperative->coop_identification_no }}" placeholder="Enter Coop ID" />
                                     </div>
                                 </div>
+
+                                <!-- BOD Chairperson -->
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="bod_chairperson">BOD Chairperson</label>
+                                        <input type="text" class="form-control" name="bod_chairperson" id="bod_chairperson" value="{{ $cooperative->bod_chairperson }}" placeholder="Enter BOD Chairperson" />
+                                    </div>
+                                </div>
+
+                                <!-- General Manager/CEO -->
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="general_manager_ceo">General Manager/CEO</label>
+                                        <input type="text" class="form-control" name="general_manager_ceo" id="general_manager_ceo" value="{{ $cooperative->general_manager_ceo }}" placeholder="Enter Manager/CEO" />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="services_availed">Services Availed</label>
+                                        <div class="dropdown">
+                                            <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start" type="button" id="servicesDropdown" aria-expanded="false">
+                                                Select Services
+                                            </button>
+                                            <ul class="dropdown-menu w-100 p-2" id="dropdownMenu">
+                                                @php
+                                                    // Decode JSON array properly
+                                                    $selectedServices = json_decode($cooperative->services_availed, true) ?? [];
+                                                @endphp
+
+                                                @foreach(['CF', 'IT', 'MSU', 'ICS', 'MCU', 'ADMIN', 'GAD', 'YOUTH', 'SCOOPS', 'YAKAP', 'AGRIBEST'] as $service)
+                                                    <li>
+                                                        <label class="dropdown-item">
+                                                            <input type="checkbox" class="service-checkbox" name="services_availed[]" value="{{ $service }}"
+                                                                {{ in_array($service, $selectedServices) ? 'checked' : '' }}>
+                                                            {{ $service }}
+                                                        </label>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                        <input type="hidden" name="services_availed_json" id="services_availed_json" value="{{ $cooperative->services_availed }}">
+                                    </div>
+                                </div>
+
+                                <!-- Total Assets -->
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="total_asset">Total Assets</label>
+                                        <input type="number" class="form-control" name="total_asset" id="total_asset" value="{{ $cooperative->total_asset }}" placeholder="Enter Total Assets" />
+                                    </div>
+                                </div>
+
+                                <!-- Total Income -->
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="total_income">Total Income</label>
+                                        <input type="number" class="form-control" name="total_income" id="total_income" value="{{ $cooperative->total_income }}" placeholder="Enter Total Income" />
+                                    </div>
+                                </div>
+
+                                <!-- CETF Remittance -->
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="cetf_remittance">CETF Remittance</label>
+                                        <input type="number" class="form-control" name="cetf_remittance" id="cetf_remittance" value="{{ $cooperative->cetf_remittance }}" placeholder="Enter CETF Remittance" />
+                                    </div>
+                                </div>
+
+
+
+                                <!-- CETF Required -->
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="cetf_required">CETF Required</label>
+                                        <input type="number" class="form-control" name="cetf_required" id="cetf_required" value="{{ $cooperative->cetf_required }}" placeholder="Enter CETF Required" />
+                                    </div>
+                                </div>
+
+                                <!-- CETF Balance -->
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="cetf_balance">CETF Balance</label>
+                                        <input type="number" class="form-control" name="cetf_balance" id="cetf_balance" value="{{ $cooperative->cetf_balance }}" placeholder="Enter CETF Balance" />
+                                    </div>
+                                </div>
+
+                                <!-- Share Capital Balance -->
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="share_capital_balance">Share Capital Balance</label>
+                                        <input type="number" class="form-control" name="share_capital_balance" id="share_capital_balance" value="{{ $cooperative->share_capital_balance }}" placeholder="Enter Share Capital Balance" />
+                                    </div>
+                                </div>
+
+                                <!-- Number of Entitled Votes -->
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="no_of_entitled_votes">No of Entitled Votes</label>
+                                        <input type="number" class="form-control" name="no_of_entitled_votes" id="no_of_entitled_votes" value="{{ $cooperative->no_of_entitled_votes }}" placeholder="Enter No of Entitled Votes" />
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
+
                         <div class="card-action">
-                            <button class="btn btn-info" type="button" onclick="window.history.back()">Back</button>
-                            <button class="btn btn-primary" type="submit">Update</button>
+                            <button class="btn btn-label-info btn-round me-2" type="submit">Submit</button>
+                            <button type="button" class="btn btn-primary btn-round" onclick="window.location.href='{{ route('cooperativeprofile') }}'">Back</button>
                         </div>
                     </form>
-
-
-
                 </div>
                 </div>
               </div>

@@ -244,6 +244,14 @@
               <div>
                 <h3 class="fw-bold mb-3">Admin Dashboard</h3>
                 <h6 class="text-muted">MASS-SPECC Online Registration System</h6>
+                {{-- <p class="text-muted text-nowrap">
+                    Logged in as: <strong>{{ Auth::user()->name }}</strong>
+                    @if($coop)
+                        | Cooperative: <strong>{{ $coop->name }}</strong>
+                    @else
+                        | No Cooperative Assigned
+                    @endif
+                </p> --}}
               </div>
               <div class="ms-md-auto py-2 py-md-0">
                 <a href="{{ route('admin.reports') }}" class="btn btn-label-info btn-round me-2" target="_blank">Generate Reports</a>

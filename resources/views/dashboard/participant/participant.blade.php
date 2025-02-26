@@ -212,8 +212,20 @@
 
                     <div class="d-flex flex-column flex-md-row align-items-center text-center text-md-start pt-2 pb-4">
                         <div>
-                            <h3 class="fw-bold mb-3">Cooperative Dashboard</h3>
+                            <div>
+                                <h3 class="fw-bold mb-3 text-nowrap">Cooperative Dashboard</h3>
+                            </div>
+                            <p class="text-muted text-nowrap">
+                                Logged in as: <strong>{{ Auth::user()->name }}</strong>
+                                @if($coop)
+                                    | Cooperative: <strong>{{ $coop->name }}</strong>
+                                @else
+                                    | No Cooperative Assigned
+                                @endif
+                            </p>
                         </div>
+
+
                         <div
                             class="d-flex flex-column flex-sm-row gap-2 w-100 justify-content-center justify-content-md-end py-2 py-md-0">
                             @if ($coop)
@@ -228,6 +240,7 @@
                                 Documents</a>
                         </div>
                     </div>
+
 
                     <!-- Dashboard Cards -->
                     <div class="row">
@@ -276,7 +289,7 @@
                                                 <p class="card-category">Membership Status</p>
                                                 <h4
                                                     class="card-title
-                            {{ $membershipStatus === 'Migs' ? 'text-success' : 'text-danger' }}">
+                                                      {{ $membershipStatus === 'Migs' ? 'text-success' : 'text-danger' }}">
                                                     {{ $membershipStatus === 'Migs' ? 'Migs' : 'Non-migs' }}
                                                 </h4>
                                             </div>
@@ -461,7 +474,7 @@
                                 @endif
                             </div>
                         </div>
-
+                    </div>
                     </div>
 
                     @include('layouts.adminfooter')

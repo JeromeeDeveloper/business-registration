@@ -349,7 +349,7 @@
                                             <img src="https://api.qrserver.com/v1/create-qr-code/?data={{ urlencode(route('adminDashboard', ['participant_id' => $participant->participant_id])) }}&size=200x200" alt="QR Code" id="qrCodeImage"/>
 
                                             <!-- Download Button -->
-                                            <a href="{{ route('download.qr2', ['participant_id' => $participant->participant_id]) }}" class="btn btn-info btn-sm mt-2">
+                                            <a href="{{ route('download.qr2', ['participant_id' => $participant->participant_id]) }}" class="btn btn-label-info btn-round">
                                                 Download QR Code
                                             </a>
                                         </div>
@@ -378,7 +378,7 @@
                             </div>
                         </div>
                         <div class="card-action">
-                            <button class="btn btn-info" type="button" onclick="window.location.href='{{ route('attendance.index') }}'">Back</button>
+                            <button class="btn btn-label-info btn-round" type="button" onclick="window.location.href='{{ route('attendance.index') }}'">Back</button>
                         </div>
                     </form>
 

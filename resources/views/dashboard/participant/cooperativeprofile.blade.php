@@ -158,7 +158,7 @@
                 <div class="card">
                   <div class="card-header alignment">
 
-                    {{-- <a href="{{ route('cooperativeprofile.edit', ['participant_id' => $participant->participant_id, 'coop_id' => $cooperative->coop_id]) }}" class="btn btn-warning btn-round me-2">
+                    {{-- <a href="{{ route('cooperativeprofile.edit')}}" class="btn btn-warning btn-round me-2">
                         Edit Cooperative Profile
                     </a> --}}
 
@@ -216,10 +216,7 @@
                                             <td class="fw-bold">General Manager/CEO:</td>
                                             <td>{{ $cooperative->general_manager_ceo ?? 'N/A' }}</td>
                                         </tr>
-                                        <tr>
-                                            <td class="fw-bold">GA Registration Status:</td>
-                                            <td>{{ $cooperative->ga_registration_status ?? 'N/A' }}</td>
-                                        </tr>
+
                                         <tr>
                                             <td class="fw-bold">Total Asset:</td>
                                             <td>{{ number_format($cooperative->total_asset, 2) ?? 'N/A' }}</td>

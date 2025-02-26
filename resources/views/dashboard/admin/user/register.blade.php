@@ -259,24 +259,23 @@
                                 </div>
                             </div>
 
-                          <!-- Cooperative Selection Dropdown -->
-                    <div class="col-md-6 col-lg-4">
-                        <div class="form-group">
-                            <label for="coop_id">Select Cooperative</label>
-                            <select class="form-control @error('coop_id') is-invalid @enderror" name="coop_id" id="coop_id" required>
-                                <option value="">-- Select Cooperative --</option>
-                                @foreach($cooperatives as $cooperative)
-                                <option value="{{ $cooperative->coop_id }}" {{ old('coop_id') == $cooperative->coop_id ? 'selected' : '' }}>
-                                    {{ $cooperative->name }}
-                                </option>
-                                @endforeach
-                            </select>
-                            @error('coop_id')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
-                        </div>
-                    </div>
-
+                            <!-- Cooperative Selection Dropdown -->
+                            <div class="col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="coop_id">Select Cooperative</label>
+                                    <select class="form-control @error('coop_id') is-invalid @enderror" name="coop_id" id="coop_id" required>
+                                        <option value="">-- Select Cooperative --</option>
+                                        @foreach($cooperatives as $cooperative)
+                                        <option value="{{ $cooperative->coop_id }}" {{ old('coop_id') == $cooperative->coop_id ? 'selected' : '' }}>
+                                            {{ $cooperative->name }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                    @error('coop_id')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
 
                             <!-- Email -->
                             <div class="col-md-6 col-lg-4">
@@ -301,6 +300,22 @@
                                     @enderror
                                 </div>
                             </div>
+
+                            <!-- Role Selection Dropdown -->
+                            <div class="col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="role">Select Role</label>
+                                    <select class="form-control @error('role') is-invalid @enderror" name="role" id="role" required>
+                                        <option value="">-- Select Role --</option>
+                                        <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
+                                        <option value="participant" {{ old('role') == 'participant' ? 'selected' : '' }}>Participant</option>
+                                        <option value="cooperative" {{ old('role') == 'cooperative' ? 'selected' : '' }}>Cooperative</option>
+                                    </select>
+                                    @error('role')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -308,6 +323,7 @@
                         <button type="submit" class="btn btn-label-info btn-round me-2">Register</button>
                     </div>
                 </form>
+
 
                   </div>
                 </div>

@@ -11,10 +11,13 @@ class AttendanceController extends Controller
 
     public function attendance(Request $request)
     {
-        $participants = Participant::with(['registration', 'cooperative', 'user']) // Eager load relationships
-            ->whereNotNull('attendance_datetime') // Ensure attendance is recorded
-            ->when($request->search, function ($query) use ($request) {
-                return $query->where('first_name', 'like', '%' . $request->search . '%')
+        $participantsQuery = Participant::with(['registration', 'cooperative', 'user'])
+            ->whereNotNull('attendance_datetime'); // Filter out null attendance
+
+        // Apply search filters if provided
+        if ($request->search) {
+            $participantsQuery->where(function ($query) use ($request) {
+                $query->where('first_name', 'like', '%' . $request->search . '%')
                     ->orWhere('last_name', 'like', '%' . $request->search . '%')
                     ->orWhere('middle_name', 'like', '%' . $request->search . '%')
                     ->orWhere('designation', 'like', '%' . $request->search . '%')
@@ -24,17 +27,26 @@ class AttendanceController extends Controller
                     ->orWhereHas('cooperative', function ($cooperativeQuery) use ($request) {
                         $cooperativeQuery->where('name', 'like', '%' . $request->search . '%');
                     });
-            })
-            ->when($request->filled('start_datetime') && $request->filled('end_datetime'), function ($query) use ($request) {
-                return $query->whereBetween('attendance_datetime', [
-                    Carbon::parse($request->start_datetime),
-                    Carbon::parse($request->end_datetime)
-                ]);
-            })
-            ->paginate(5);
+            });
+        }
 
-        return view('dashboard.admin.attendance', compact('participants'));
+        // Apply date range filter if provided
+        if ($request->filled('start_datetime') && $request->filled('end_datetime')) {
+            $participantsQuery->whereBetween('attendance_datetime', [
+                Carbon::parse($request->start_datetime),
+                Carbon::parse($request->end_datetime)
+            ]);
+        }
+
+        // Get paginated participants
+        $participants = $participantsQuery->paginate(5);
+
+        // Get total count of participants with attendance
+        $totalParticipantsWithAttendance = $participantsQuery->count();
+
+        return view('dashboard.admin.attendance', compact('participants', 'totalParticipantsWithAttendance'));
     }
+
 
     public function showattendance($participant_id)
     {

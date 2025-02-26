@@ -220,12 +220,23 @@
                                     <div>
 
                                     </div>
-                                    <form method="GET" class="mb-2">
-                                        <div class="row g-2">
+                                    <form method="GET" class="mb-3">
+                                        <div class="row g-3 align-items-end">
+                                            <!-- Total Participants -->
+                                            <div class="col-md-2">
+                                                <label class="form-label fw-bold">Present Participants</label>
+                                                <div class="input-group shadow-sm">
+                                                    <span class="input-group-text bg-primary text-white">
+                                                        <i class="fa fa-users"></i>
+                                                    </span>
+                                                    <input type="text" class="form-control text-center fw-bold" value="{{ $totalParticipantsWithAttendance }}" readonly>
+                                                </div>
+                                            </div>
+
                                             <!-- Start Date & Time -->
-                                            <div class="col-12 col-md-4">
+                                            <div class="col-md-2">
                                                 <label class="form-label fw-bold">Start Date & Time</label>
-                                                <div class="input-group">
+                                                <div class="input-group shadow-sm">
                                                     <span class="input-group-text bg-primary text-white">
                                                         <i class="fa fa-calendar"></i>
                                                     </span>
@@ -234,9 +245,9 @@
                                             </div>
 
                                             <!-- End Date & Time -->
-                                            <div class="col-12 col-md-4">
+                                            <div class="col-md-2">
                                                 <label class="form-label fw-bold">End Date & Time</label>
-                                                <div class="input-group">
+                                                <div class="input-group shadow-sm">
                                                     <span class="input-group-text bg-primary text-white">
                                                         <i class="fa fa-calendar"></i>
                                                     </span>
@@ -245,9 +256,9 @@
                                             </div>
 
                                             <!-- Search Box -->
-                                            <div class="col-12 col-md-4">
-                                                <label class="form-label fw-bold">Search</label>
-                                                <div class="input-group">
+                                            <div class="col-md-3">
+                                                <label class="form-label fw-bold">Enter Participant Info</label>
+                                                <div class="input-group shadow-sm">
                                                     <input type="text" name="search" class="form-control" placeholder="Search..." value="{{ request('search') }}">
                                                     <button type="submit" class="btn btn-primary">
                                                         <i class="fa fa-search"></i>
@@ -256,20 +267,21 @@
                                             </div>
 
                                             <!-- QR Scanner Button -->
-                                            <div class="col-12 text-center mt-2">
-                                                <a href="#" id="scan-qr-btn" class="btn btn-primary btn-round" data-bs-toggle="modal" data-bs-target="#qrScannerModal">
-                                                    <i class="fa fa-qrcode"></i> Scan QR Code
+                                            <div class="col-md-3">
+                                                <label class="form-label fw-bold d-block">QR Scanner</label>
+                                                <a href="#" id="scan-qr-btn" class="btn btn-primary w-100 d-flex align-items-center justify-content-center shadow-sm gap-2" data-bs-toggle="modal" data-bs-target="#qrScannerModal">
+                                                    <i class="fa fa-qrcode"></i> Scan QR
                                                 </a>
                                             </div>
                                         </div>
                                     </form>
 
-                                    <!-- QR Scanner Modal -->
+
                                     <div class="modal fade" id="qrScannerModal" tabindex="-1" aria-labelledby="qrScannerModalLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered modal-sm">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="qrScannerModalLabel">Scan QR Code</h5>
+                                                    <h5 class="modal-title" id="qrScannerModalLabel"><i class="fa fa-qrcode"></i> Scan QR Code</h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body text-center">
@@ -478,7 +490,65 @@ function handleScannedQR(decodedText, qrScanner) {
     });
 }
 
+// dynamic scan url
 
+// function handleScannedQR(decodedText, qrScanner) {
+//     console.log("Scanned QR Code:", decodedText);
+
+//     let participantId;
+
+//     try {
+//         const url = new URL(decodedText);
+//         const pathSegments = url.pathname.split("/");
+//         participantId = pathSegments[pathSegments.length - 1];
+//     } catch (e) {
+//         participantId = decodedText.trim();
+//     }
+
+//     if (isNaN(participantId) || participantId === "") {
+//         Swal.fire({
+//             icon: "error",
+//             title: "Invalid QR Code",
+//             text: "No valid participant ID found.",
+//         });
+//         return;
+//     }
+
+//     console.log("Extracted Participant ID:", participantId);
+
+//     const baseUrl = window.location.origin; // Automatically gets the correct base URL
+
+//     fetch(`${baseUrl}/scan-qr?participant_id=${participantId}`, {
+//         method: "GET",
+//         headers: { "Accept": "application/json" },
+//     })
+//     .then(response => response.json())
+//     .then(data => {
+//         if (data.error) {
+//             let iconType = data.error.includes("already recorded") ? "warning" : "error";
+//             Swal.fire({
+//                 icon: iconType,
+//                 title: "Scan Error",
+//                 text: data.error,
+//             });
+//         } else {
+//             Swal.fire({
+//                 icon: "success",
+//                 title: "Attendance Recorded!",
+//                 text: data.success,
+//             });
+//         }
+//         qrScanner.stop();
+//     })
+//     .catch(error => {
+//         console.error("QR Code Scan Error:", error);
+//         Swal.fire({
+//             icon: "error",
+//             title: "Scan Failed",
+//             text: "Failed to record attendance.",
+//         });
+//     });
+// }
 
         // Function to use DroidCam IP as a video source
         function useDroidCamIP(qrScanner, ip) {

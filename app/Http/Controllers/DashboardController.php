@@ -261,23 +261,23 @@ class DashboardController extends Controller
     }
 
 
-    public function cooperativeprofile($cooperative_id)
+    public function cooperativeprofile($coop_id)
     {
-        $cooperative = Cooperative::findOrFail($cooperative_id);
+        $cooperative = Cooperative::findOrFail($coop_id);
 
         return view('dashboard.participant.cooperativeprofile', compact('cooperative'));
     }
 
-    public function editCooperativeProfile($cooperative_id)
+    public function editCooperativeProfile($coop_id)
     {
         // Fetch the cooperative details using the ID
-        $cooperative = Cooperative::findOrFail($cooperative_id);
+        $cooperative = Cooperative::findOrFail($coop_id);
 
         // Return the edit view with cooperative data
         return view('dashboard.participant.edit', compact('cooperative'));
     }
 
-    public function updateCooperativeProfile(Request $request, $cooperative_id)
+    public function updateCooperativeProfile(Request $request, $coop_id)
     {
         // Validate the request
         $request->validate([
@@ -304,13 +304,13 @@ class DashboardController extends Controller
         ]);
 
         // Find the cooperative by ID
-        $cooperative = Cooperative::findOrFail($cooperative_id);
+        $cooperative = Cooperative::findOrFail($coop_id);
 
         // Update the cooperative record
         $cooperative->update($request->all());
 
         // Redirect back with a success message
-        return redirect()->route('cooperativeprofile', ['cooperative_id' => $cooperative_id])
+        return redirect()->route('cooperativeprofile', ['cooperative_id' => $coop_id])
                          ->with('success', 'Cooperative profile updated successfully!');
     }
 
@@ -534,6 +534,25 @@ public function storeCooperative(Request $request)
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'type' => 'required|string|max:255',
+            'contact_person' => 'required|string|max:255',
+            'general_manager_ceo' => 'required|string|max:255',
+            'region' => [
+            'required',
+            Rule::in([
+                'Region I', 'Region II', 'Region III', 'Region IV-A', 'Region IV-B', 'Region V',
+                'Region VI', 'Region VII', 'Region VIII', 'Region IX', 'Region X', 'Region XI',
+                'Region XII', 'Region XIII', 'NCR', 'CAR', 'BARMM'
+            ]),
+        ],
+            'phone_number' => 'required|string|max:20',
+            'tin' => 'required|string|max:50',
+            'total_asset' => 'nullable|numeric|min:0',
+            'total_income' => 'nullable|numeric|min:0',
+            'cetf_remittance' => 'nullable|numeric|min:0',
+            'cetf_required' => 'nullable|numeric|min:0',
+            'cetf_balance' => 'nullable|numeric|min:0',
+            'share_capital_balance' => 'nullable|numeric|min:0',
+            'no_of_entitled_votes' => 'nullable|integer|min:0',
             'email' => [
                 'required',
                 'email',
@@ -544,6 +563,14 @@ public function storeCooperative(Request $request)
             'services_availed' => 'nullable|array', // Ensure it's an array (from checkboxes)
             'services_availed.*' => 'string|max:255', // Ensure each item is a string
         ]);
+
+        $validated['total_asset'] = $request->total_asset ? (float) str_replace(',', '', $request->total_asset) : null;
+        $validated['total_income'] = $request->total_income ? (float) str_replace(',', '', $request->total_income) : null;
+        $validated['cetf_remittance'] = $request->cetf_remittance ? (float) str_replace(',', '', $request->cetf_remittance) : null;
+        $validated['cetf_required'] = $request->cetf_required ? (float) str_replace(',', '', $request->cetf_required) : null;
+        $validated['cetf_balance'] = $request->cetf_balance ? (float) str_replace(',', '', $request->cetf_balance) : null;
+        $validated['share_capital_balance'] = $request->share_capital_balance ? (float) str_replace(',', '', $request->share_capital_balance) : null;
+        $validated['no_of_entitled_votes'] = $request->no_of_entitled_votes ? (int) $request->no_of_entitled_votes : null;
 
         // Store services_availed as a JSON string
         $validated['services_availed'] = isset($request->services_availed)
@@ -581,6 +608,7 @@ public function storeCooperative(Request $request)
             ],
             'password' => 'required|min:6',
             'coop_id' => 'required|exists:cooperatives,coop_id',
+            'role' => ['required', Rule::in(['participant', 'admin', 'cooperative'])], // Validate role
         ], [
             'name.required' => 'The name field is required.',
             'email.required' => 'The email field is required.',
@@ -590,19 +618,21 @@ public function storeCooperative(Request $request)
             'password.min' => 'Password must be at least 6 characters.',
             'coop_id.required' => 'Please select a cooperative.',
             'coop_id.exists' => 'Selected cooperative is invalid.',
+            'role.required' => 'Please select a role.',
+            'role.in' => 'Invalid role selected.',
         ]);
-
 
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'cooperative',
+            'role' => $request->role, // Assign role dynamically
             'coop_id' => $request->coop_id, // Store selected cooperative
         ]);
 
         return redirect()->route('registerform')->with('success', 'Registration successful!');
     }
+
 
 
     public function registerform()

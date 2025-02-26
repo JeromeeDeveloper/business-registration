@@ -7,12 +7,6 @@
                      <img class="logo-mass-specc" src="{{asset('images/logo.png')}}" alt="">
                     </a>
                     <p class="mt-3 mb-4">MASS-SPECC, Mindanao’s oldest and largest co-op federation, has fostered co-op growth since 1966. Originally SPECC, it merged with MASS in 1984, uniting education and support to strengthen the region’s co-op movement.</p>
-                    <form action="">
-                        <div class="input-group">
-                            <input type="text" class="form-control border-white p-3" placeholder="Your Email">
-                            <button class="btn btn-dark">Sign Up</button>
-                        </div>
-                    </form>
                 </div>
             </div>
             <div class="col-lg-8 col-md-6">
@@ -45,12 +39,11 @@
                             <h3 class="text-light mb-0">Quick Links</h3>
                         </div>
                         <div class="link-animated d-flex flex-column justify-content-start">
-                            <a class="text-light mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Home</a>
-                            <a class="text-light mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>About Us</a>
-                            <a class="text-light mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Our Services</a>
-                            <a class="text-light mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Meet The Team</a>
-                            <a class="text-light mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Latest Blog</a>
-                            <a class="text-light" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Contact Us</a>
+                            <a class="text-light mb-2" href="/"><i class="bi bi-arrow-right text-primary me-2"></i>Home</a>
+                            <a class="text-light mb-2" href="/about"><i class="bi bi-arrow-right text-primary me-2"></i>About Us</a>
+                            <a class="text-light mb-2" href="/feature"><i class="bi bi-arrow-right text-primary me-2"></i>Our Services</a>
+                            <a class="text-light mb-2" href="/participants"><i class="bi bi-arrow-right text-primary me-2"></i>Participants</a>
+                            <a class="text-light" href="/contact"><i class="bi bi-arrow-right text-primary me-2"></i>Contact Us</a>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-12 pt-0 pt-lg-5 mb-5">
@@ -58,12 +51,11 @@
                             <h3 class="text-light mb-0">Popular Links</h3>
                         </div>
                         <div class="link-animated d-flex flex-column justify-content-start">
-                            <a class="text-light mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Home</a>
-                            <a class="text-light mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>About Us</a>
-                            <a class="text-light mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Our Services</a>
-                            <a class="text-light mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Meet The Team</a>
-                            <a class="text-light mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Latest Blog</a>
-                            <a class="text-light" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Contact Us</a>
+                            <a class="text-light mb-2" href="/"><i class="bi bi-arrow-right text-primary me-2"></i>Home</a>
+                            <a class="text-light mb-2" href="/about"><i class="bi bi-arrow-right text-primary me-2"></i>About Us</a>
+                            <a class="text-light mb-2" href="/feature"><i class="bi bi-arrow-right text-primary me-2"></i>Our Services</a>
+                            <a class="text-light mb-2" href="/participants"><i class="bi bi-arrow-right text-primary me-2"></i>Participants</a>
+                            <a class="text-light" href="/contact"><i class="bi bi-arrow-right text-primary me-2"></i>Contact Us</a>
                         </div>
                     </div>
                 </div>

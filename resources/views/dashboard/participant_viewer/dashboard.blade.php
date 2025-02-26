@@ -167,9 +167,17 @@
           <div class="page-inner">
             <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
                 <div>
-                    <h3 class="fw-bold mb-3">Assigned Cooperative:
-                        {{ $cooperative->name ?? 'N/A' }}
+                    <h3 class="fw-bold mb-3">
+                       Participant Dashboard
                     </h3>
+                    <p class="text-muted text-nowrap">
+                        Logged in as: <strong>{{ Auth::user()->name }}</strong>
+                        @if($cooperative)
+                            <br> Cooperative: <strong>{{ $cooperative->name }}</strong>
+                        @else
+                            | No Cooperative Assigned
+                        @endif
+                    </p>
                 </div>
                 <div class="ms-md-auto py-2 py-md-0 p-6">
                 {{-- <a href="#" id="viewDocumentsBtn" class="btn btn-primary btn-round">View Uploaded Documents</a> --}}
@@ -354,7 +362,7 @@
                             </li>
                             <li><strong>📌 Activities:</strong> Presentations, Q&A Sessions, Voting</li>
                         </ul>
-                   
+
                     </div>
                 </div>
                 @else
