@@ -52,6 +52,8 @@ Route::get('/admin/reports', [DashboardController::class, 'generateReports'])->n
 // Display the upload form
 Route::get('/import', [ExcelImportController::class, 'showImportForm'])->name('import.form');
 
+Route::get('/participants/{id}/generate-id', [ParticipantController::class, 'generateId'])->name('participants.generateId');
+
 // Handle the file upload via POST
 Route::post('/import-excel', [ExcelImportController::class, 'importExcel'])->name('import.excel');
 
@@ -168,8 +170,8 @@ Route::get('/Participant/speakers', [ParticipantController::class, 'speakerlist'
 Route::get('/Participant/Event/Schedules', [EventsController::class, 'schedule'])->name('schedule');
 
 // profile participant
-Route::get('participant/profile/edit', [ParticipantController::class, 'editProfile'])->name('participant.profile.edit');
-Route::put('participant/profile/edit', [ParticipantController::class, 'updateProfile'])->name('participant.profile.update');
+Route::get('Cooperative/Myprofile/edit', [ParticipantController::class, 'editProfile'])->name('participant.profile.edit');
+Route::put('Cooperative/Myprofile/edit', [ParticipantController::class, 'updateProfile'])->name('participant.profile.update');
 
 Route::get('/download-qr/{participant_id}', function ($participant_id) {
     $qrCodeUrl = route('adminDashboard', ['participant_id' => $participant_id]);

@@ -23,10 +23,14 @@ class ParticipantController extends Controller
 {
     // Display a listing of participants
     public function index(Request $request)
-    {
-        $participants = Participant::with(['registration', 'cooperative', 'user']) // Eager load relationships
-    ->when($request->search, function ($query) use ($request) {
-        return $query->where('first_name', 'like', '%' . $request->search . '%')
+{
+    $perPage = $request->input('limit', 5); // Default to 5 entries per page
+
+    $query = Participant::with(['registration', 'cooperative', 'user']);
+
+    // Search functionality
+    if ($request->search) {
+        $query->where('first_name', 'like', '%' . $request->search . '%')
             ->orWhere('last_name', 'like', '%' . $request->search . '%')
             ->orWhere('middle_name', 'like', '%' . $request->search . '%')
             ->orWhere('designation', 'like', '%' . $request->search . '%')
@@ -36,11 +40,31 @@ class ParticipantController extends Controller
             ->orWhereHas('cooperative', function ($cooperativeQuery) use ($request) {
                 $cooperativeQuery->where('name', 'like', '%' . $request->search . '%');
             });
-    })->paginate(5);
-
-
-        return view('dashboard.admin.participant.participant', compact('participants'));
     }
+
+    // Sorting functionality
+    if ($request->has('sort_by')) {
+        $sortBy = $request->sort_by;
+        $sortOrder = $request->sort_order === 'desc' ? 'desc' : 'asc';
+
+        if (in_array($sortBy, ['first_name', 'last_name', 'middle_name', 'designation'])) {
+            $query->orderBy($sortBy, $sortOrder);
+        } elseif ($sortBy === 'cooperative') {
+            $query->join('cooperatives', 'participants.cooperative_id', '=', 'cooperatives.id')
+                ->orderBy('cooperatives.name', $sortOrder);
+        } elseif ($sortBy === 'user') {
+            $query->join('users', 'participants.user_id', '=', 'users.id')
+                ->orderBy('users.name', $sortOrder);
+        }
+    }
+
+    $participants = $query->paginate($perPage);
+
+    return view('dashboard.admin.participant.participant', compact('participants'));
+}
+
+
+
 
 
 
@@ -107,6 +131,13 @@ class ParticipantController extends Controller
 //     return redirect()->route('participants.index')->with('success', 'Participant registered successfully!');
 // }
 
+public function generateId($id)
+{
+    $participant = Participant::findOrFail($id);
+    return view('dashboard.admin.participant.id_card', compact('participant'));
+}
+
+
 public function store(Request $request)
 {
     // Validate the form data
@@ -118,6 +149,7 @@ public function store(Request $request)
         'last_name' => 'required|string|max:255',
         'nickname' => 'nullable|string|max:255',
         'gender' => 'required|string|max:255',
+        'reference_number' => 'unique:participants,reference_number',
         'phone_number' => 'required|string|max:15',
         'designation' => 'nullable|string|max:255',
         'congress_type' => 'nullable|string|max:255',
@@ -132,6 +164,12 @@ public function store(Request $request)
     if (!$request->filled('coop_id')) {
         $validatedData['coop_id'] = Auth::user()->coop_id;
     }
+
+    do {
+        $referenceNumber = Str::upper(Str::random(5));
+    } while (Participant::where('reference_number', $referenceNumber)->exists());
+
+    $validatedData['reference_number'] = $referenceNumber;
 
     // Store the participant data
     $participant = Participant::create($validatedData);

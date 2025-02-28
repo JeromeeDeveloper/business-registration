@@ -197,9 +197,17 @@
 
                                 <div class="card-body">
                                     <!-- Search Form -->
-
-                                    <div>
-
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <div>
+                                            <label>Show
+                                                <select id="showEntries" class="form-select form-select-sm" style="width: auto; display: inline;">
+                                                    <option value="5" {{ request('limit') == 5 ? 'selected' : '' }}>5</option>
+                                                    <option value="10" {{ request('limit') == 10 ? 'selected' : '' }}>10</option>
+                                                    <option value="25" {{ request('limit') == 25 ? 'selected' : '' }}>25</option>
+                                                    <option value="50" {{ request('limit') == 50 ? 'selected' : '' }}>50</option>
+                                                </select> entries
+                                            </label>
+                                        </div>
                                     </div>
 
                                     <!-- Table Display -->
@@ -340,6 +348,14 @@
         @include('layouts.adminfooter')
     </div>
     </div>
+    <script>
+        document.getElementById('showEntries').addEventListener('change', function() {
+            let url = new URL(window.location.href);
+            url.searchParams.set('limit', this.value);
+            window.location.href = url.href;
+        });
+    </script>
+
     <script>
         function printAttendance() {
             var tableClone = document.querySelector("table tbody").cloneNode(true);

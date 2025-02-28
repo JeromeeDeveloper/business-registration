@@ -239,26 +239,47 @@
 
 
                                 <div class="card-body">
-                                    <!-- Modal -->
-                                    <!-- Search Form -->
-
-
-                                    <!-- Table Display -->
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <div>
+                                            <label>Show
+                                                <select id="showEntries" class="form-select form-select-sm" style="width: auto; display: inline;">
+                                                    <option value="5" {{ request('limit') == 5 ? 'selected' : '' }}>5</option>
+                                                    <option value="10" {{ request('limit') == 10 ? 'selected' : '' }}>10</option>
+                                                    <option value="25" {{ request('limit') == 25 ? 'selected' : '' }}>25</option>
+                                                    <option value="50" {{ request('limit') == 50 ? 'selected' : '' }}>50</option>
+                                                </select> entries
+                                            </label>
+                                        </div>
+                                    </div>
                                     <div class="table-responsive">
                                         <table id="add-row" class="display table table-striped table-hover">
                                             <thead>
                                                 <tr>
-                                                    {{-- <th>Registration Status</th> --}}
-                                                    <th>Assigned Cooperative</th>
-                                                    <th>User Account</th>
-                                                    <th>First Name</th>
-                                                    <th>Last Name</th>
-                                                    <th>Designation</th>
+                                                    <th>
+                                                        Assigned Cooperative
+                                                    </th>
+                                                    <th>
+                                                        User Account
+                                                    </th>
+                                                    <th>
+                                                        First Name
+                                                        <a href="{{ request()->fullUrlWithQuery(['sort_by' => 'first_name', 'sort_order' => 'asc']) }}" class="btn btn-sm btn-light p-0 mx-1">↑</a>
+                                                        <a href="{{ request()->fullUrlWithQuery(['sort_by' => 'first_name', 'sort_order' => 'desc']) }}" class="btn btn-sm btn-light p-0">↓</a>
+                                                    </th>
+                                                    <th>
+                                                        Last Name
+                                                        <a href="{{ request()->fullUrlWithQuery(['sort_by' => 'last_name', 'sort_order' => 'asc']) }}" class="btn btn-sm btn-light p-0 mx-1">↑</a>
+                                                        <a href="{{ request()->fullUrlWithQuery(['sort_by' => 'last_name', 'sort_order' => 'desc']) }}" class="btn btn-sm btn-light p-0">↓</a>
+                                                    </th>
+                                                    <th>
+                                                        Designation
+                                                    </th>
                                                     <th>QR Code</th>
                                                     <th>Action</th>
-                                                    {{-- <th>Manage Status</th> --}}
                                                 </tr>
                                             </thead>
+
+
                                             <tbody>
                                                 @forelse ($participants as $participant)
                                                     <tr>
@@ -280,6 +301,14 @@
                                                         </td>
                                                         <td class="no-print">
                                                             <div class="form-button-action no-print">
+
+                                                                <button class="btn btn-link btn-success btn-lg no-print"
+                                                                        data-bs-toggle="tooltip"
+                                                                        title="Generate & Print ID"
+                                                                        onclick="printParticipantID({{ $participant->participant_id }}, '{{ $participant->first_name }}', '{{ $participant->last_name }}', '{{ $participant->designation ?? 'N/A' }}', '{{ $participant->reference_number ?? 'N/A' }}', '{{ optional($participant->cooperative)->name ?? 'N/A' }}', '{{ asset('storage/' . $participant->qr_code) }}')">
+                                                                    <i class="fa fa-id-card"></i>
+                                                                </button>
+
                                                                 <a href="{{ route('participants.show', $participant->participant_id) }}"
                                                                     class="btn btn-link btn-info btn-lg"
                                                                     data-bs-toggle="tooltip"
@@ -368,6 +397,65 @@
         @include('layouts.adminfooter')
     </div>
     </div>
+    <script>
+        document.getElementById('showEntries').addEventListener('change', function() {
+            let url = new URL(window.location.href);
+            url.searchParams.set('limit', this.value);
+            window.location.href = url.href;
+        });
+    </script>
+
+    <script>
+        function printParticipantID(id, firstName, lastName, designation, reference_number, cooperative, qrCode) {
+            let printWindow = window.open('', '_blank', 'width=400,height=600');
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>Print Participant ID</title>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            text-align: center;
+                            margin: 20px;
+                        }
+                        .id-card {
+                            width: 300px;
+                            height: 450px;
+                            border: 2px solid black;
+                            padding: 20px;
+                            border-radius: 10px;
+                            display: inline-block;
+                            text-align: center;
+                        }
+                        .id-card img {
+                            width: 100px;
+                            height: 100px;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="id-card">
+                        <h2>Participant ID</h2>
+                        <p><strong>Name:</strong> ${firstName} ${lastName}</p>
+                        <p><strong>Designation:</strong> ${designation}</p>
+                        <p><strong>Cooperative:</strong> ${cooperative}</p>
+                          <p><strong>Reference Number:</strong> ${reference_number}</p>
+                        ${qrCode ? `<img src="${qrCode}" alt="QR Code">` : `<p>No QR Code</p>`}
+                    </div>
+                    <script>
+                        setTimeout(() => {
+                            window.print();
+                            setTimeout(() => { window.close(); }, 500);
+                        }, 500);
+                    <\/script>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+        }
+    </script>
+
+
     <script>
         function printAttendance() {
             var tableClone = document.querySelector("table tbody").cloneNode(true);
@@ -504,6 +592,7 @@
             });
         });
     </script>
+
 
     @include('layouts.links')
 </body>

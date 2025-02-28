@@ -282,6 +282,12 @@
                                     </div>
                                 </div>
 
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="reference_number">Reference Number</label>
+                                        <div>{{ $participant->reference_number ?? 'N/A' }}</div>
+                                    </div>
+                                </div>
                                 <!-- Gender -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
@@ -346,23 +352,6 @@
                                     </div>
                                 </div>
 
-
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="qr_code">QR Code</label>
-                                        <div class="Qr">
-                                            <!-- QR Code Image -->
-                                            <img src="https://api.qrserver.com/v1/create-qr-code/?data={{ urlencode(route('adminDashboard', ['participant_id' => $participant->participant_id])) }}&size=200x200" alt="QR Code" id="qrCodeImage"/>
-
-                                            <!-- Download Button -->
-                                            <a href="{{ route('download.qr2', ['participant_id' => $participant->participant_id]) }}" class="btn btn-label-info btn-round">
-                                                Download QR Code
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Delegate Type -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
                                         <label for="delegate_type">Delegate Type</label>
@@ -380,6 +369,24 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="qr_code">QR Code</label>
+                                        <div class="Qr">
+                                            <!-- QR Code Image -->
+                                            <img src="https://api.qrserver.com/v1/create-qr-code/?data={{ urlencode(route('adminDashboard', ['participant_id' => $participant->participant_id])) }}&size=200x200" alt="QR Code" id="qrCodeImage"/>
+
+                                            <!-- Download Button -->
+                                            <a href="{{ route('download.qr2', ['participant_id' => $participant->participant_id]) }}" class="btn btn-label-info btn-round">
+                                                Download QR Code
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Delegate Type -->
+
 
                             </div>
                         </div>

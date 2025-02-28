@@ -292,6 +292,12 @@
                                     </div>
                                 </div>
 
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="reference_number">Reference Number</label>
+                                        <input type="text" class="form-control" name="reference_number" value="{{ old('reference_number', $participant->reference_number) }}" readonly>
+                                    </div>
+                                </div>
 
                                 <!-- Nickname -->
                                 <div class="col-md-6 col-lg-4">

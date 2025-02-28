@@ -306,6 +306,13 @@
                                     </div>
                                 </div>
 
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="reference_number">Reference Number</label>
+                                        <div>{{ $participant->reference_number ?? 'N/A' }}</div>
+                                    </div>
+                                </div>
+
                                 <!-- Congress Type -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
@@ -348,6 +355,25 @@
 
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
+                                        <label for="gender">Attendance</label>
+                                        <div>
+                                            {{ $participant->attendance_datetime
+                                                ? \Carbon\Carbon::parse($participant->attendance_datetime)->format('F j, Y g:i A')
+                                                : 'N/A' }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                 <!-- Delegate Type -->
+                                 <div class="col-md-6 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="delegate_type">Delegate Type</label>
+                                        <div>{{ $participant->delegate_type ?? 'N/A' }}</div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="form-group">
                                         <label for="qr_code">QR Code</label>
                                         <div class="Qr">
                                             <!-- QR Code Image -->
@@ -361,24 +387,9 @@
                                     </div>
                                 </div>
 
-                                <!-- Delegate Type -->
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="delegate_type">Delegate Type</label>
-                                        <div>{{ $participant->delegate_type ?? 'N/A' }}</div>
-                                    </div>
-                                </div>
 
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="gender">Attendance</label>
-                                        <div>
-                                            {{ $participant->attendance_datetime
-                                                ? \Carbon\Carbon::parse($participant->attendance_datetime)->format('F j, Y g:i A')
-                                                : 'N/A' }}
-                                        </div>
-                                    </div>
-                                </div>
+
+
 
                             </div>
                         </div>

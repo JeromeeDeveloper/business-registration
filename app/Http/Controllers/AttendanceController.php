@@ -38,14 +38,18 @@ class AttendanceController extends Controller
             ]);
         }
 
+        // Get the number of entries per page (default to 10)
+        $perPage = $request->input('limit', 5);
+
         // Get paginated participants
-        $participants = $participantsQuery->paginate(5);
+        $participants = $participantsQuery->paginate($perPage);
 
         // Get total count of participants with attendance
         $totalParticipantsWithAttendance = $participantsQuery->count();
 
         return view('dashboard.admin.attendance', compact('participants', 'totalParticipantsWithAttendance'));
     }
+
 
 
     public function showattendance($participant_id)

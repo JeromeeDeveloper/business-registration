@@ -290,6 +290,7 @@
                         <div class="card-body">
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item"><strong>Participant ID:</strong> {{ $participant->participant_id }}</li>
+                                <li class="list-group-item"><strong>Reference Number:</strong> {{ $participant->reference_number }}</li>
                                 <li class="list-group-item"><strong>Name:</strong> {{ $participant->first_name }} {{ $participant->middle_name ?? '' }} {{ $participant->last_name }}</li>
                                 <li class="list-group-item"><strong>Email:</strong> {{ $participant->email }}</li>
                                 <li class="list-group-item"><strong>Gender:</strong> {{ $participant->gender }}</li>
@@ -297,9 +298,6 @@
                                 <li class="list-group-item"><strong>Designation:</strong> {{ $participant->designation ?? 'N/A' }}</li>
                                 <li class="list-group-item"><strong>Delegate Type:</strong> {{ $participant->delegate_type }}</li>
                             </ul>
-
-
-
                             <!-- QR Code Section -->
                             <div class="text-center mt-4">
                                 <h6 class="text-muted">QR Code</h6>

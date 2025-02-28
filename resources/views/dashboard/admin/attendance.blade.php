@@ -319,6 +319,19 @@
                                         }
                                     </style>
                                     <!-- Table Display -->
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <div>
+                                            <label>Show
+                                                <select id="showEntries" class="form-select form-select-sm" style="width: auto; display: inline;">
+                                                    <option value="5" {{ request('limit') == 5 ? 'selected' : '' }}>5</option>
+                                                    <option value="10" {{ request('limit') == 10 ? 'selected' : '' }}>10</option>
+                                                    <option value="25" {{ request('limit') == 25 ? 'selected' : '' }}>25</option>
+                                                    <option value="50" {{ request('limit') == 50 ? 'selected' : '' }}>50</option>
+                                                </select> entries
+                                            </label>
+                                        </div>
+                                    </div>
+
                                     <div class="table-responsive">
                                         <table id="add-row" class="display table table-striped table-hover">
                                             <thead>
@@ -400,6 +413,14 @@
     </div>
     </div>
     @include('layouts.links')
+    <script>
+        document.getElementById('showEntries').addEventListener('change', function() {
+            let url = new URL(window.location.href);
+            url.searchParams.set('limit', this.value);
+            window.location.href = url.href;
+        });
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/html5-qrcode/minified/html5-qrcode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- Include SweetAlert -->
     <script>

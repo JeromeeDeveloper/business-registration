@@ -32,6 +32,9 @@ class CooperativeController extends Controller
         // Get total participants for the cooperative
         $totalParticipants = $cooperative ? $cooperative->participants()->count() : 0;
 
+        // Get the number of entries per page (default to 10)
+        $perPage = $request->input('limit', 5);
+
         // Fetch participants with filtering
         $participants = Participant::with(['registration', 'cooperative', 'user'])
             ->when($request->search, function ($query) use ($request) {
@@ -46,10 +49,12 @@ class CooperativeController extends Controller
                         $cooperativeQuery->where('name', 'like', '%' . $request->search . '%');
                     });
             })
-            ->paginate(10);
+            ->paginate($perPage); // Use the selected number of entries
 
         return view('dashboard.participant.manage_participant.participant', compact('participants', 'totalParticipants'));
     }
+
+
 
 
     public function coopparticipantadd()
@@ -72,6 +77,7 @@ class CooperativeController extends Controller
             'email' => 'required|email|unique:participants,email|unique:cooperatives,email',
             'last_name' => 'required|string|max:255',
             'nickname' => 'nullable|string|max:255',
+            'reference_number' => 'unique:participants,reference_number',
             'gender' => 'required|string|max:255',
             'phone_number' => 'required|string|max:15',
             'designation' => 'nullable|string|max:255',
@@ -85,6 +91,12 @@ class CooperativeController extends Controller
 
         // Get logged-in user's coop_id
         $validatedData['coop_id'] = Auth::user()->coop_id;
+
+        do {
+            $referenceNumber = Str::upper(Str::random(6));
+        } while (Participant::where('reference_number', $referenceNumber)->exists());
+
+        $validatedData['reference_number'] = $referenceNumber;
 
         // Store the participant data
         $participant = Participant::create($validatedData);
