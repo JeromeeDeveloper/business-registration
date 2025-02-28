@@ -195,16 +195,22 @@
                   </a>
                 </li>
                 <li class="separator">
+                    <i class="icon-arrow-right"></i>
+                  </li>
+                  <li class="nav-item">
+                    <a href="#">Dashboard</a>
+                  </li>
+                <li class="separator">
                   <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                  <a href="#">Participants</a>
+                  <a href="#">Participant</a>
                 </li>
                 <li class="separator">
                   <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                  <a href="#">Datatable</a>
+                  <a href="#">Edit</a>
                 </li>
               </ul>
             </div>

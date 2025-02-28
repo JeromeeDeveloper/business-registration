@@ -132,7 +132,7 @@
         <div class="container">
           <div class="page-inner">
             <div class="page-header">
-              <h3 class="fw-bold mb-3">Participants</h3>
+              <h3 class="fw-bold mb-3">Participant</h3>
               <ul class="breadcrumbs mb-3">
                 <li class="nav-home">
                   <a href="#">
@@ -143,14 +143,20 @@
                   <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                  <a href="#">Participants</a>
+                  <a href="#">Dashboard</a>
                 </li>
                 <li class="separator">
                   <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                  <a href="#">Datatable</a>
+                  <a href="#">Participant</a>
                 </li>
+                <li class="separator">
+                    <i class="icon-arrow-right"></i>
+                  </li>
+                  <li class="nav-item">
+                    <a href="#">Add</a>
+                  </li>
               </ul>
             </div>
             <div class="row">
@@ -158,7 +164,7 @@
                 <div class="card">
                   <div class="card-header">
                     <div class="d-flex align-items-center">
-                      <h4 class="card-title">Participants</h4>
+                      <h4 class="card-title">Add</h4>
                     </div>
                   </div>
                   <div class="card-body">
@@ -403,6 +409,56 @@
 
                         </div>
                     </form>
+                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                    <script>
+                        document.getElementById("participantForm").addEventListener("submit", function(event) {
+                            event.preventDefault(); // Prevent normal form submission
+
+                            Swal.fire({
+                                title: "Processing...",
+                                text: "Sending email, please wait...",
+                                allowOutsideClick: false,
+                                didOpen: () => {
+                                    Swal.showLoading(); // Show Swal loading indicator
+                                }
+                            });
+
+                            // Submit the form via AJAX
+                            let formData = new FormData(this);
+                            fetch("{{ route('coopparticipantadd') }}", {
+                                method: "POST",
+                                body: formData,
+                                headers: {
+                                    "X-CSRF-TOKEN": document.querySelector('input[name="_token"]').value
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    Swal.fire({
+                                        title: "Success!",
+                                        text: "Participant registered and email sent successfully!",
+                                        icon: "success"
+                                    }).then(() => {
+                                        window.location.href = "{{ route('coop.index') }}"; // Redirect if needed
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        title: "Error!",
+                                        text: data.message || "Something went wrong!",
+                                        icon: "error"
+                                    });
+                                }
+                            })
+                            .catch(error => {
+                                Swal.fire({
+                                    title: "Error!",
+                                    text: "Failed to send email. Please try again.",
+                                    icon: "error"
+                                });
+                            });
+                        });
+                    </script>
 
                     <script>
                         document.addEventListener("DOMContentLoaded", function () {

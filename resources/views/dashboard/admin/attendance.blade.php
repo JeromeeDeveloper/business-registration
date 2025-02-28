@@ -82,21 +82,21 @@
 
                         <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#attendance">
-                              <i class="fas fa-calendar"></i>
-                              <p>Attendance</p>
-                              <span class="caret"></span>
+                                <i class="fas fa-calendar"></i>
+                                <p>Attendance</p>
+                                <span class="caret"></span>
                             </a>
                             <div class="collapse show" id="attendance">
-                              <ul class="nav nav-collapse">
-                                <li class="active">
-                                    <a href="{{ route('attendance.index') }}">
-                                        <span class="sub-item">Manage attendance</span>
-                                    </a>
-                                </li>
+                                <ul class="nav nav-collapse">
+                                    <li class="active">
+                                        <a href="{{ route('attendance.index') }}">
+                                            <span class="sub-item">Manage attendance</span>
+                                        </a>
+                                    </li>
 
-                              </ul>
+                                </ul>
                             </div>
-                          </li>
+                        </li>
 
                         <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#user">
@@ -196,13 +196,13 @@
                                 <i class="icon-arrow-right"></i>
                             </li>
                             <li class="nav-item">
-                                <a href="#">Attendance</a>
+                                <a href="#">Dashboard</a>
                             </li>
                             <li class="separator">
                                 <i class="icon-arrow-right"></i>
                             </li>
                             <li class="nav-item">
-                                <a href="#">Datatable</a>
+                                <a href="#">Attendance</a>
                             </li>
                         </ul>
                     </div>
@@ -229,7 +229,8 @@
                                                     <span class="input-group-text bg-primary text-white">
                                                         <i class="fa fa-users"></i>
                                                     </span>
-                                                    <input type="text" class="form-control text-center fw-bold" value="{{ $totalParticipantsWithAttendance }}" readonly>
+                                                    <input type="text" class="form-control text-center fw-bold"
+                                                        value="{{ $totalParticipantsWithAttendance }}" readonly>
                                                 </div>
                                             </div>
 
@@ -240,7 +241,8 @@
                                                     <span class="input-group-text bg-primary text-white">
                                                         <i class="fa fa-calendar"></i>
                                                     </span>
-                                                    <input type="datetime-local" name="start_datetime" class="form-control" value="{{ request('start_datetime') }}">
+                                                    <input type="datetime-local" name="start_datetime"
+                                                        class="form-control" value="{{ request('start_datetime') }}">
                                                 </div>
                                             </div>
 
@@ -251,15 +253,17 @@
                                                     <span class="input-group-text bg-primary text-white">
                                                         <i class="fa fa-calendar"></i>
                                                     </span>
-                                                    <input type="datetime-local" name="end_datetime" class="form-control" value="{{ request('end_datetime') }}">
+                                                    <input type="datetime-local" name="end_datetime"
+                                                        class="form-control" value="{{ request('end_datetime') }}">
                                                 </div>
                                             </div>
 
                                             <!-- Search Box -->
-                                            <div class="col-md-3">
+                                            <div class="col-md-2">
                                                 <label class="form-label fw-bold">Enter Participant Info</label>
                                                 <div class="input-group shadow-sm">
-                                                    <input type="text" name="search" class="form-control" placeholder="Search..." value="{{ request('search') }}">
+                                                    <input type="text" name="search" class="form-control"
+                                                        placeholder="Search..." value="{{ request('search') }}">
                                                     <button type="submit" class="btn btn-primary">
                                                         <i class="fa fa-search"></i>
                                                     </button>
@@ -267,22 +271,36 @@
                                             </div>
 
                                             <!-- QR Scanner Button -->
-                                            <div class="col-md-3">
+                                            <div class="col-md-2">
                                                 <label class="form-label fw-bold d-block">QR Scanner</label>
-                                                <a href="#" id="scan-qr-btn" class="btn btn-primary w-100 d-flex align-items-center justify-content-center shadow-sm gap-2" data-bs-toggle="modal" data-bs-target="#qrScannerModal">
+                                                <a href="#" id="scan-qr-btn"
+                                                    class="btn btn-primary w-100 d-flex align-items-center justify-content-center shadow-sm gap-2"
+                                                    data-bs-toggle="modal" data-bs-target="#qrScannerModal">
                                                     <i class="fa fa-qrcode"></i> Scan QR
                                                 </a>
                                             </div>
+
+                                            <div class="col-md-2">
+                                                <label class="form-label fw-bold d-block">Print Attendance List</label>
+                                                <button type="button" onclick="printAttendance()"
+                                                    class="btn btn-primary w-100 d-flex align-items-center justify-content-center shadow-sm gap-2">
+                                                    <i class="fa fa-print"></i> Print Attendance List
+                                                </button>
+                                            </div>
+
                                         </div>
                                     </form>
 
 
-                                    <div class="modal fade" id="qrScannerModal" tabindex="-1" aria-labelledby="qrScannerModalLabel" aria-hidden="true">
+                                    <div class="modal fade" id="qrScannerModal" tabindex="-1"
+                                        aria-labelledby="qrScannerModalLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered modal-sm">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="qrScannerModalLabel"><i class="fa fa-qrcode"></i> Scan QR Code</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    <h5 class="modal-title" id="qrScannerModalLabel"><i
+                                                            class="fa fa-qrcode"></i> Scan QR Code</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body text-center">
                                                     <div id="qr-reader" style="width: 100%;"></div>
@@ -316,12 +334,11 @@
                                                     {{-- <th>Manage Status</th> --}}
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                @forelse ($participants as $participant)
-                                                    <tr>
+                                      <tbody>
+                                         @forelse ($participants as $participant)
+                                             <tr>
                                                         {{-- <td>{{ $participant->registration->status ?? 'Pending' }}</td> --}}
-                                                        <td>{{ optional($participant->cooperative)->name ?? 'N/A' }}
-                                                        </td>
+                                                <td>{{ optional($participant->cooperative)->name ?? 'N/A' }}</td>
                                                         <td>
                                                             {{ $participant->attendance_datetime ? \Carbon\Carbon::parse($participant->attendance_datetime)->format('F j, Y g:i A') : 'Not Attended' }}
                                                         </td>
@@ -337,7 +354,7 @@
                                                                 N/A
                                                             @endif
                                                         </td>
-                                                        <td>
+                                                        <td class="no-print">
                                                             <div class="form-button-action">
                                                                 <a href="{{ route('attendance.show', $participant->participant_id) }}"
                                                                     class="btn btn-link btn-info btn-lg"
@@ -345,19 +362,17 @@
                                                                     title="View Participant Details">
                                                                     <i class="fa fa-eye"></i>
                                                                 </a>
-                                                        </td>
+                                                         </td>
 
-                                                <td>
-                                            </td>
-                                    </div>
+                                                    </div>
 
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="8" class="text-center">No participants found</td>
-                                    </tr>
-                                    @endforelse
-                                    </tbody>
+                                            </tr>
+                                                 @empty
+                                                <tr>
+                                                    <td colspan="8" class="text-center">No participants found</td>
+                                                </tr>
+                                                @endforelse
+                                       </tbody>
                                     </table>
                                 </div>
 
@@ -387,168 +402,223 @@
     @include('layouts.links')
     <script src="https://cdn.jsdelivr.net/npm/html5-qrcode/minified/html5-qrcode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- Include SweetAlert -->
-
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-    let qrScanner;
+        function printAttendance() {
+            var tableClone = document.querySelector("table tbody").cloneNode(true);
 
-    document.getElementById("qrScannerModal").addEventListener("shown.bs.modal", async function () {
-        if (typeof Html5Qrcode === "undefined") {
-            console.error("Html5Qrcode is NOT loaded!");
-            return;
+            // Remove action buttons before printing
+            tableClone.querySelectorAll(".no-print").forEach(el => el.remove());
+
+            var printWindow = window.open('', '', 'width=800,height=600');
+            printWindow.document.write(`
+        <html>
+        <head>
+            <title>Attendance List</title>
+            <style>
+                body { font-family: Arial, sans-serif; }
+                table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                th { background-color: #f4f4f4; }
+                .no-print { display: none; } /* Hide actions column when printing */
+            </style>
+        </head>
+        <body>
+            <h2>Attended Participants List</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Cooperative</th>
+                        <th>Attendance Date & Time</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Congress Type</th>
+                        <th>QR Code</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${tableClone.innerHTML}
+                </tbody>
+            </table>
+            <script>
+                window.onload = function() {
+                    window.print();
+                    setTimeout(() => window.close(), 1000);
+                };
+            <\/script>
+        </body>
+        </html>
+    `);
+            printWindow.document.close();
         }
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let qrScanner;
 
-        qrScanner = new Html5Qrcode("qr-reader");
-        try {
-            let devices = await navigator.mediaDevices.enumerateDevices();
-            let cameraId = null;
+            document.getElementById("qrScannerModal").addEventListener("shown.bs.modal", async function() {
+                if (typeof Html5Qrcode === "undefined") {
+                    console.error("Html5Qrcode is NOT loaded!");
+                    return;
+                }
 
-            // Look for DroidCam or other cameras
-            devices.forEach(device => {
-                if (device.label.toLowerCase().includes("droidcam")) {
-                    cameraId = device.deviceId;
+                qrScanner = new Html5Qrcode("qr-reader");
+                try {
+                    let devices = await navigator.mediaDevices.enumerateDevices();
+                    let cameraId = null;
+
+                    // Look for DroidCam or other cameras
+                    devices.forEach(device => {
+                        if (device.label.toLowerCase().includes("droidcam")) {
+                            cameraId = device.deviceId;
+                        }
+                    });
+
+                    if (cameraId) {
+                        qrScanner.start(
+                            cameraId, {
+                                fps: 10,
+                                qrbox: {
+                                    width: 250,
+                                    height: 250
+                                }
+                            },
+                            decodedText => handleScannedQR(decodedText, qrScanner),
+                            errorMessage => console.warn(errorMessage)
+                        ).catch(err => console.error("Error starting QR scanner:", err));
+                    }
+                } catch (err) {
+                    console.error("Error accessing cameras:", err);
                 }
             });
 
-            if (cameraId) {
-                qrScanner.start(
-                    cameraId,
-                    { fps: 10, qrbox: { width: 250, height: 250 } },
-                    decodedText => handleScannedQR(decodedText, qrScanner),
-                    errorMessage => console.warn(errorMessage)
-                ).catch(err => console.error("Error starting QR scanner:", err));
+            // Stop QR scanner when modal closes
+            document.getElementById("qrScannerModal").addEventListener("hidden.bs.modal", function() {
+                if (qrScanner) {
+                    qrScanner.stop().catch(err => console.warn("Error stopping scanner:", err));
+                }
+            });
+        });
+
+        function handleScannedQR(decodedText, qrScanner) {
+            console.log("Scanned QR Code:", decodedText);
+
+            let participantId;
+
+            try {
+                // Try to extract ID from a URL
+                const url = new URL(decodedText);
+                const pathSegments = url.pathname.split("/"); // Split path into segments
+                participantId = pathSegments[pathSegments.length - 1]; // Get last segment (ID)
+            } catch (e) {
+                // If it's not a valid URL, assume it's a direct numeric ID
+                participantId = decodedText.trim();
             }
-        } catch (err) {
-            console.error("Error accessing cameras:", err);
+
+            // Ensure participantId is a valid number
+            if (isNaN(participantId) || participantId === "") {
+                Swal.fire({
+                    icon: "error",
+                    title: "Invalid QR Code",
+                    text: "No valid participant ID found.",
+                });
+                return;
+            }
+
+            console.log("Extracted Participant ID:", participantId);
+
+            fetch(`/scan-qr?participant_id=${participantId}`, {
+                    method: "GET",
+                    headers: {
+                        "Accept": "application/json"
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        let iconType = data.error.includes("already recorded") ? "warning" : "error";
+                        Swal.fire({
+                            icon: iconType,
+                            title: "Scan Error",
+                            text: data.error,
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Attendance Recorded!",
+                            text: data.success,
+                        });
+                    }
+                    qrScanner.stop();
+                })
+                .catch(error => {
+                    console.error("QR Code Scan Error:", error);
+                    Swal.fire({
+                        icon: "error",
+                        title: "Scan Failed",
+                        text: "Failed to record attendance.",
+                    });
+                });
         }
-    });
 
-    // Stop QR scanner when modal closes
-    document.getElementById("qrScannerModal").addEventListener("hidden.bs.modal", function () {
-        if (qrScanner) {
-            qrScanner.stop().catch(err => console.warn("Error stopping scanner:", err));
-        }
-    });
-});
+        // dynamic scan url
 
-function handleScannedQR(decodedText, qrScanner) {
-    console.log("Scanned QR Code:", decodedText);
+        // function handleScannedQR(decodedText, qrScanner) {
+        //     console.log("Scanned QR Code:", decodedText);
 
-    let participantId;
+        //     let participantId;
 
-    try {
-        // Try to extract ID from a URL
-        const url = new URL(decodedText);
-        const pathSegments = url.pathname.split("/"); // Split path into segments
-        participantId = pathSegments[pathSegments.length - 1]; // Get last segment (ID)
-    } catch (e) {
-        // If it's not a valid URL, assume it's a direct numeric ID
-        participantId = decodedText.trim();
-    }
+        //     try {
+        //         const url = new URL(decodedText);
+        //         const pathSegments = url.pathname.split("/");
+        //         participantId = pathSegments[pathSegments.length - 1];
+        //     } catch (e) {
+        //         participantId = decodedText.trim();
+        //     }
 
-    // Ensure participantId is a valid number
-    if (isNaN(participantId) || participantId === "") {
-        Swal.fire({
-            icon: "error",
-            title: "Invalid QR Code",
-            text: "No valid participant ID found.",
-        });
-        return;
-    }
+        //     if (isNaN(participantId) || participantId === "") {
+        //         Swal.fire({
+        //             icon: "error",
+        //             title: "Invalid QR Code",
+        //             text: "No valid participant ID found.",
+        //         });
+        //         return;
+        //     }
 
-    console.log("Extracted Participant ID:", participantId);
+        //     console.log("Extracted Participant ID:", participantId);
 
-    fetch(`/scan-qr?participant_id=${participantId}`, {
-        method: "GET",
-        headers: { "Accept": "application/json" },
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.error) {
-            let iconType = data.error.includes("already recorded") ? "warning" : "error";
-            Swal.fire({
-                icon: iconType,
-                title: "Scan Error",
-                text: data.error,
-            });
-        } else {
-            Swal.fire({
-                icon: "success",
-                title: "Attendance Recorded!",
-                text: data.success,
-            });
-        }
-        qrScanner.stop();
-    })
-    .catch(error => {
-        console.error("QR Code Scan Error:", error);
-        Swal.fire({
-            icon: "error",
-            title: "Scan Failed",
-            text: "Failed to record attendance.",
-        });
-    });
-}
+        //     const baseUrl = window.location.origin; // Automatically gets the correct base URL
 
-// dynamic scan url
-
-// function handleScannedQR(decodedText, qrScanner) {
-//     console.log("Scanned QR Code:", decodedText);
-
-//     let participantId;
-
-//     try {
-//         const url = new URL(decodedText);
-//         const pathSegments = url.pathname.split("/");
-//         participantId = pathSegments[pathSegments.length - 1];
-//     } catch (e) {
-//         participantId = decodedText.trim();
-//     }
-
-//     if (isNaN(participantId) || participantId === "") {
-//         Swal.fire({
-//             icon: "error",
-//             title: "Invalid QR Code",
-//             text: "No valid participant ID found.",
-//         });
-//         return;
-//     }
-
-//     console.log("Extracted Participant ID:", participantId);
-
-//     const baseUrl = window.location.origin; // Automatically gets the correct base URL
-
-//     fetch(`${baseUrl}/scan-qr?participant_id=${participantId}`, {
-//         method: "GET",
-//         headers: { "Accept": "application/json" },
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//         if (data.error) {
-//             let iconType = data.error.includes("already recorded") ? "warning" : "error";
-//             Swal.fire({
-//                 icon: iconType,
-//                 title: "Scan Error",
-//                 text: data.error,
-//             });
-//         } else {
-//             Swal.fire({
-//                 icon: "success",
-//                 title: "Attendance Recorded!",
-//                 text: data.success,
-//             });
-//         }
-//         qrScanner.stop();
-//     })
-//     .catch(error => {
-//         console.error("QR Code Scan Error:", error);
-//         Swal.fire({
-//             icon: "error",
-//             title: "Scan Failed",
-//             text: "Failed to record attendance.",
-//         });
-//     });
-// }
+        //     fetch(`${baseUrl}/scan-qr?participant_id=${participantId}`, {
+        //         method: "GET",
+        //         headers: { "Accept": "application/json" },
+        //     })
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         if (data.error) {
+        //             let iconType = data.error.includes("already recorded") ? "warning" : "error";
+        //             Swal.fire({
+        //                 icon: iconType,
+        //                 title: "Scan Error",
+        //                 text: data.error,
+        //             });
+        //         } else {
+        //             Swal.fire({
+        //                 icon: "success",
+        //                 title: "Attendance Recorded!",
+        //                 text: data.success,
+        //             });
+        //         }
+        //         qrScanner.stop();
+        //     })
+        //     .catch(error => {
+        //         console.error("QR Code Scan Error:", error);
+        //         Swal.fire({
+        //             icon: "error",
+        //             title: "Scan Failed",
+        //             text: "Failed to record attendance.",
+        //         });
+        //     });
+        // }
 
         // Function to use DroidCam IP as a video source
         function useDroidCamIP(qrScanner, ip) {
@@ -557,10 +627,15 @@ function handleScannedQR(decodedText, qrScanner) {
             videoElement.setAttribute("autoplay", "");
             videoElement.setAttribute("playsinline", "");
 
-            videoElement.addEventListener("loadedmetadata", function () {
+            videoElement.addEventListener("loadedmetadata", function() {
                 qrScanner.start(
-                    videoElement,
-                    { fps: 10, qrbox: { width: 250, height: 250 } },
+                    videoElement, {
+                        fps: 10,
+                        qrbox: {
+                            width: 250,
+                            height: 250
+                        }
+                    },
                     decodedText => handleScannedQR(decodedText, qrScanner),
                     errorMessage => console.warn(errorMessage)
                 ).catch(err => console.error("Error starting QR scanner:", err));

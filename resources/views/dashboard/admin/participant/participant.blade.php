@@ -196,13 +196,13 @@
                                 <i class="icon-arrow-right"></i>
                             </li>
                             <li class="nav-item">
-                                <a href="#">Participants</a>
+                                <a href="#">Dashboard</a>
                             </li>
                             <li class="separator">
                                 <i class="icon-arrow-right"></i>
                             </li>
                             <li class="nav-item">
-                                <a href="#">Datatable</a>
+                                <a href="#">Participant</a>
                             </li>
                         </ul>
                     </div>
@@ -210,33 +210,39 @@
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <div class="d-flex align-items-center">
-                                        <h4 class="card-title">Participants</h4>
+                                    <div class="d-flex align-items-center justify-content-between flex-wrap w-100 gap-2">
+                                        <!-- Title -->
+                                        <h4 class="card-title m-0">Participants</h4>
+
+                                        <!-- Search Form & Buttons -->
+                                        <form method="GET" class="d-flex align-items-center ms-auto">
+                                            <div class="input-group w-auto w-sm-50 w-md-25">
+                                                <input type="text" name="search" class="form-control" placeholder="Search..." value="{{ request('search') }}">
+                                                <button type="submit" class="btn btn-primary">
+                                                    <i class="fa fa-search"></i>
+                                                </button>
+                                            </div>
+                                            <div class="d-flex gap-2 ms-2">
+                                                <button type="button" class="btn btn-primary text-white" data-bs-toggle="tooltip" title="Add Participant"
+                                                    onclick="location.href='{{ route('participantadd') }}'">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
+                                                <button type="button" onclick="printAttendance()"
+                                                    class="btn btn-primary d-flex align-items-center justify-content-center shadow-sm"
+                                                    data-bs-toggle="tooltip" title="Print Participant List">
+                                                    <i class="fa fa-print"></i>
+                                                </button>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
+
+
                                 <div class="card-body">
                                     <!-- Modal -->
                                     <!-- Search Form -->
-                                    <div>
 
-                                    </div>
-                                    <form method="GET" class="mb-2">
-                                        <div class="d-flex justify-content-end">
-                                            <div class="input-group w-50 w-md-50 w-lg-25 ms-auto">
-                                                <input type="text" name="search" class="form-control"
-                                                    placeholder="Search..." value="{{ request('search') }}">
-                                                <div class="input-group-append gap-2 d-flex">
-                                                    <button type="submit" class="btn btn-primary"> <i
-                                                            class="fa fa-search"></i></button>
-                                                    <button type="button" class="btn btn-primary text-white"
-                                                        data-bs-toggle="tooltip" title="Add Participant"
-                                                        onclick="location.href='{{ route('participantadd') }}'">
-                                                        <i class="fa fa-plus"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
+
                                     <!-- Table Display -->
                                     <div class="table-responsive">
                                         <table id="add-row" class="display table table-striped table-hover">
@@ -272,8 +278,8 @@
                                                                 N/A
                                                             @endif
                                                         </td>
-                                                        <td>
-                                                            <div class="form-button-action">
+                                                        <td class="no-print">
+                                                            <div class="form-button-action no-print">
                                                                 <a href="{{ route('participants.show', $participant->participant_id) }}"
                                                                     class="btn btn-link btn-info btn-lg"
                                                                     data-bs-toggle="tooltip"
@@ -282,7 +288,7 @@
                                                                 </a>
 
                                                                 <a href="{{ route('participants.edit', $participant->participant_id) }}"
-                                                                    class="btn btn-link btn-primary btn-lg"
+                                                                    class="btn btn-link btn-primary btn-lg no-print"
                                                                     data-bs-toggle="tooltip" title="Edit Participant">
                                                                     <i class="fa fa-edit"></i>
                                                                 </a>
@@ -294,7 +300,7 @@
                                                                     @csrf
                                                                     @method('DELETE')
                                                                     <button type="button"
-                                                                        class="btn btn-link btn-danger"
+                                                                        class="btn btn-link btn-danger no-print"
                                                                         data-bs-toggle="tooltip"
                                                                         title="Remove Participant"
                                                                         aria-label="Remove Participant"
@@ -302,9 +308,6 @@
                                                                         <i class="fa fa-times"></i>
                                                                     </button>
                                                                 </form>
-                                                        </td>
-
-                                                        <td>
                                                         </td>
                                     </div>
 
@@ -365,6 +368,55 @@
         @include('layouts.adminfooter')
     </div>
     </div>
+    <script>
+        function printAttendance() {
+            var tableClone = document.querySelector("table tbody").cloneNode(true);
+
+            // Remove action buttons before printing
+            tableClone.querySelectorAll(".no-print").forEach(el => el.remove());
+
+            var printWindow = window.open('', '', 'width=800,height=600');
+            printWindow.document.write(`
+        <html>
+        <head>
+            <title>Participant List</title>
+            <style>
+                body { font-family: Arial, sans-serif; }
+                table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                th { background-color: #f4f4f4; }
+                .no-print { display: none; } /* Hide actions column when printing */
+            </style>
+        </head>
+        <body>
+            <h2>Participants List</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Cooperative</th>
+                        <th>User Account</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Designation</th>
+                        <th>QR Code</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${tableClone.innerHTML}
+                </tbody>
+            </table>
+            <script>
+                window.onload = function() {
+                    window.print();
+                    setTimeout(() => window.close(), 1000);
+                };
+            <\/script>
+        </body>
+        </html>
+    `);
+            printWindow.document.close();
+        }
+    </script>
     <script>
         function confirmDelete(event, button) {
             event.preventDefault(); // Prevent form from submitting

@@ -143,13 +143,13 @@
                   <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                  <a href="#">Cooperative</a>
+                  <a href="#">Dashboard</a>
                 </li>
                 <li class="separator">
                   <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                  <a href="#">Information</a>
+                  <a href="#">Cooperative Profile</a>
                 </li>
               </ul>
             </div>
@@ -158,9 +158,150 @@
                 <div class="card">
                   <div class="card-header alignment">
 
-                    {{-- <a href="{{ route('cooperativeprofile.edit')}}" class="btn btn-warning btn-round me-2">
-                        Edit Cooperative Profile
-                    </a> --}}
+                    <!-- Edit Button to Trigger Modal -->
+<button type="button" class="btn btn-warning btn-round me-2" data-bs-toggle="modal" data-bs-target="#editCooperativeModal">
+    Edit Cooperative Profile
+</button>
+
+<!-- Edit Cooperative Modal -->
+<div class="modal fade" id="editCooperativeModal" tabindex="-1" aria-labelledby="editCooperativeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editCooperativeModalLabel">Edit Cooperative Profile</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('cooperativeprofile.update', $cooperative->coop_id) }}" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="name" class="form-label">Cooperative Name</label>
+                            <input type="text" class="form-control" id="name" name="name" value="{{ $cooperative->name }}" required readonly>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="contact_person" class="form-label">Contact Person</label>
+                            <input type="text" class="form-control" id="contact_person" name="contact_person" value="{{ $cooperative->contact_person }}" readonly>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="type" class="form-label">Type</label>
+                            <input type="text" class="form-control" id="type" name="type" value="{{ $cooperative->type }}" required readonly>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="address" class="form-label">Address</label>
+                            <input type="text" class="form-control" id="address" name="address" value="{{ $cooperative->address }}" required readonly>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="form-group">
+                                <label for="region">Region</label>
+                                <select class="form-control" id="region" disabled>
+                                    <option disabled>Select Region</option>
+                                    @foreach([
+                                        'Region I', 'Region II', 'Region III', 'Region IV-A', 'Region IV-B', 'Region V',
+                                        'Region VI', 'Region VII', 'Region VIII', 'Region IX', 'Region X', 'Region XI',
+                                        'Region XII', 'Region XIII', 'NCR', 'CAR', 'BARMM'
+                                    ] as $region)
+                                        <option value="{{ $region }}" {{ $cooperative->region == $region ? 'selected' : '' }}>
+                                            {{ $region }}
+                                        </option>
+                                    @endforeach
+                                </select>
+
+                                <!-- Hidden input to retain the value -->
+                                <input type="hidden" name="region" value="{{ $cooperative->region }}">
+
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="general_manager_ceo" class="form-label">General Manager CEO</label>
+                            <input type="text" class="form-control" id="general_manager_ceo" name="general_manager_ceo" value="{{ $cooperative->general_manager_ceo }}" readonly>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" value="{{ $cooperative->email }}" readonly>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="phone_number" class="form-label">Phone Number</label>
+                            <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{ $cooperative->phone_number }}" readonly>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="bod_chairperson" class="form-label">BOD Chairperson</label>
+                            <input type="text" class="form-control" id="bod_chairperson" name="bod_chairperson" value="{{ $cooperative->bod_chairperson }}" readonly>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="tin" class="form-label">TIN</label>
+                            <input type="text" class="form-control" id="tin" name="tin" value="{{ $cooperative->tin }}" readonly>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="coop_identification_no" class="form-label">Coop Identification Number</label>
+                            <input type="text" class="form-control" id="coop_identification_no" name="coop_identification_no" value="{{ $cooperative->coop_identification_no }}" readonly>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="total_asset" class="form-label">Total Asset</label>
+                            <input type="text" class="form-control" id="total_asset" name="total_asset" value="{{ $cooperative->total_asset }}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="total_income" class="form-label">Total Income</label>
+                            <input type="text" class="form-control" id="total_income" name="total_income" value="{{ $cooperative->total_income }}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="cetf_remittance" class="form-label">CETF Remittance</label>
+                            <input type="text" class="form-control" id="cetf_remittance" name="cetf_remittance" value="{{ $cooperative->cetf_remittance }}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="cetf_required" class="form-label">CETF Required</label>
+                            <input type="text" class="form-control" id="cetf_required" name="cetf_required" value="{{ $cooperative->cetf_required }}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="cetf_balance" class="form-label">CETF Balance</label>
+                            <input type="text" class="form-control" id="cetf_balance" name="cetf_balance" value="{{ $cooperative->cetf_balance }}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="share_capital_balance" class="form-label">Share Capital Balance</label>
+                            <input type="text" class="form-control" id="share_capital_balance" name="share_capital_balance" value="{{ $cooperative->share_capital_balance }}">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="no_of_entitled_votes" class="form-label">No of Entitled Votes</label>
+                            <input type="text" class="form-control" id="no_of_entitled_votes" name="no_of_entitled_votes" value="{{ $cooperative->no_of_entitled_votes }}">
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
+                                <label for="services_availed">Services Availed</label>
+                                <div class="dropdown">
+                                    <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start" type="button" id="servicesDropdown" aria-expanded="false">
+                                        Select Services
+                                    </button>
+                                    <ul class="dropdown-menu w-100 p-2" id="dropdownMenu">
+                                        @php
+                                            $selectedServices = json_decode($cooperative->services_availed, true) ?? [];
+                                        @endphp
+                                        @foreach(['CF', 'IT', 'MSU', 'ICS', 'MCU', 'ADMIN', 'GAD', 'YOUTH', 'SCOOPS', 'YAKAP', 'AGRIBEST'] as $service)
+                                            <li>
+                                                <label class="dropdown-item">
+                                                    <input type="checkbox" class="service-checkbox" name="services_availed[]" value="{{ $service }}"
+                                                        {{ in_array($service, $selectedServices) ? 'checked' : '' }}>
+                                                    {{ $service }}
+                                                </label>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                                <input type="hidden" name="services_availed_json" id="services_availed_json" value="{{ $cooperative->services_availed }}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-round" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-label-info btn-round">Save Changes</button>
+                </div>
+            </form>
+
+            </div>
+        </div>
+    </div>
+
 
                   </div>
                   <form id="participantForm">
@@ -284,6 +425,63 @@
       </div>
 
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const dropdownButton = document.getElementById("servicesDropdown");
+            const dropdownMenu = document.getElementById("dropdownMenu");
+            const checkboxes = dropdownMenu.querySelectorAll('input[type="checkbox"]');
+            const hiddenInput = document.getElementById("services_availed_json");
+
+            // Prevent dropdown from closing when clicking inside
+            dropdownMenu.addEventListener("click", function (event) {
+                event.stopPropagation();
+            });
+
+            dropdownButton.addEventListener("click", function (event) {
+                event.stopPropagation();
+                dropdownMenu.classList.toggle("show");
+            });
+
+            document.addEventListener("click", function (event) {
+                if (!dropdownMenu.contains(event.target) && event.target !== dropdownButton) {
+                    dropdownMenu.classList.remove("show");
+                }
+            });
+
+            function updateDropdownText() {
+                let selected = Array.from(checkboxes)
+                    .filter(i => i.checked)
+                    .map(i => i.value)
+                    .join(", ");
+
+                dropdownButton.innerText = selected ? selected : "Select Services";
+                hiddenInput.value = JSON.stringify(selected.split(", ").filter(Boolean)); // Store as JSON
+            }
+
+            // Update on checkbox change
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener("change", updateDropdownText);
+            });
+
+            // Load preselected values
+            updateDropdownText();
+        });
+        </script>
+        <!-- SweetAlert CDN -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: '{{ session("success") }}',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        @endif
+    });
+</script>
+
   @include('layouts.links')
   </body>
 </html>

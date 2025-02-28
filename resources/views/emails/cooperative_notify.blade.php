@@ -72,15 +72,35 @@
             </div>
 
             <p><strong>Cooperative Details:</strong></p>
-            <p>Type: {{ $coop->type }}</p>
-            <p>Email: {{ $coop->email }}</p>
-            <p>Address: {{ $coop->address }}</p>
+            <p><strong>Cooperative Type: {{ $coop->type }}</strong></p>
+            <p><strong>Email: {{ $coop->email }}</strong></p>
+            <p><strong>Address: {{ $coop->address }}</strong></p>
+
+            @if($gaRegistration)
+            <p><strong>GA Registration Status:</strong> {{ $gaRegistration->registration_status }}</p>
+            <p><strong>Membership Status:</strong> {{ $gaRegistration->membership_status }}</p>
+
+            @if($gaRegistration->registration_status == 'N/A' || $gaRegistration->registration_status == 'Partial Registered')
+                <p style="color: red; font-weight: bold;">
+                    Your registration status is <strong>{{ $gaRegistration->registration_status }}</strong>.
+                    Please check again or review your submission.
+                    If your status is still "Partial Registered," kindly upload the required documents again
+                    or message the GA Team at <a href="mailto:msu@mass-specc.com">msu@mass-specc.com</a> for assistance.
+                </p>
+            @endif
+        @else
+            <p><strong>GA Registration Status:</strong> Not Registered</p>
+            <p><strong>Membership Status:</strong> N/A</p>
+            <p style="color: red; font-weight: bold;">
+                Your cooperative is not yet registered. Please complete the registration process to participate in the event.
+            </p>
+        @endif
+
         </div>
 
         <p><a href="http://127.0.0.1:8000/login">Confirm Attendance</a></p>
 
         <p style="margin-top: 20px;">We look forward to your participation! If you have any questions, feel free to contact us.</p>
-
 
         <p><em>
             The contents of this email message and any attachments are intended solely for the addressee(s) and may contain confidential and/or privileged information and may be legally protected from disclosure. If you are not the intended recipient of this message or their agent, or if this message has been addressed to you in error, please immediately alert the sender by reply email and then delete this message and any attachments.

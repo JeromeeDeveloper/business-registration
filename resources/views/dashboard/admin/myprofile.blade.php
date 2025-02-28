@@ -194,16 +194,16 @@
                   </a>
                 </li>
                 <li class="separator">
-                  <i class="icon-arrow-right"></i>
-                </li>
-                <li class="nav-item">
-                  <a href="#">Profile</a>
-                </li>
+                    <i class="icon-arrow-right"></i>
+                  </li>
+                  <li class="nav-item">
+                    <a href="#">Dashboard</a>
+                  </li>
                 <li class="separator">
                   <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                  <a href="#">Edit</a>
+                  <a href="#">My Profile</a>
                 </li>
               </ul>
             </div>

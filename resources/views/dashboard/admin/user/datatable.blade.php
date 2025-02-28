@@ -198,13 +198,13 @@
                   <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                  <a href="#">User</a>
+                  <a href="#">Dashboard</a>
                 </li>
                 <li class="separator">
                   <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                  <a href="#">Datatable</a>
+                  <a href="#">User</a>
                 </li>
               </ul>
             </div>

@@ -4,6 +4,7 @@ namespace App\Mail;
 
 use App\Models\Cooperative;
 use App\Models\Event;
+use App\Models\GARegistration;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -17,17 +18,16 @@ class CooperativeNotification extends Mailable
 
     public $coop;
     public $event;
+    public $gaRegistration;
 
     /**
      * Create a new message instance.
-     *
-     * @param Cooperative $coop
-     * @param Event $event
      */
-    public function __construct(Cooperative $coop, Event $event)
+    public function __construct(Cooperative $coop, Event $event, ?GARegistration $gaRegistration)
     {
         $this->coop = $coop;
         $this->event = $event;
+        $this->gaRegistration = $gaRegistration; // Nullable in case no registration is found
     }
 
     /**
@@ -52,11 +52,10 @@ class CooperativeNotification extends Mailable
 
     /**
      * Get the attachments for the message.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
      */
     public function attachments(): array
     {
         return [];
     }
 }
+

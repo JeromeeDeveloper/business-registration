@@ -132,7 +132,7 @@
             <div class="container">
                 <div class="page-inner">
                     <div class="page-header">
-                        <h3 class="fw-bold mb-3">Participants Registration</h3>
+                        <h3 class="fw-bold mb-3">Participant Registration</h3>
                         <ul class="breadcrumbs mb-3">
                             <li class="nav-home">
                                 <a href="#">
@@ -143,13 +143,13 @@
                                 <i class="icon-arrow-right"></i>
                             </li>
                             <li class="nav-item">
-                                <a href="#">Participants</a>
+                                <a href="#">Dashboard</a>
                             </li>
                             <li class="separator">
                                 <i class="icon-arrow-right"></i>
                             </li>
                             <li class="nav-item">
-                                <a href="#">Datatable</a>
+                                <a href="#">Participant</a>
                             </li>
                         </ul>
                     </div>
@@ -160,8 +160,8 @@
                                     <div class="d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
                                         <!-- Left: Participants Count -->
                                         <div class="d-flex align-items-center">
-                                            <h4 class="fw-bold text-primary d-flex gap-2 align-items-center mb-2 mb-md-0 text-nowrap">
-                                                Cooperative's Total Participants:
+                                            <h4 class="fw-bold d-flex gap-2 align-items-center mb-2 mb-md-0 text-nowrap">
+                                                Cooperative's Participants:
                                                 <span class="badge bg-primary text-white px-3 py-2 fs-5">
                                                     {{ $totalParticipants }}
                                                 </span>
@@ -170,7 +170,7 @@
 
 
                                         <!-- Right: Search Form + Add Button -->
-                                        <form method="GET" class="w-100 w-md-auto">
+                                        <form method="GET" class="w-80 w-md-auto">
                                             <div class="input-group">
                                                 <input type="text" name="search" class="form-control" placeholder="Search..."
                                                     value="{{ request('search') }}">
@@ -184,6 +184,10 @@
                                                         title="Add Participant" onclick="location.href='{{ route('coopparticipantadd') }}'">
                                                         <i class="fa fa-plus"></i>
                                                     </button>
+                                                    <button type="button" onclick="printAttendance()"
+                                                    class="btn btn-primary w-100 d-flex align-items-center justify-content-center shadow-sm gap-2">
+                                                    <i class="fa fa-print"></i>
+                                                </button>
                                                 </div>
                                             </div>
                                         </form>
@@ -236,7 +240,7 @@
 
 
 
-                                                        <td>
+                                                        <td class="no-print">
                                                             <div class="form-button-action">
 
 
@@ -274,10 +278,6 @@
                                                                         <i class="fa fa-times"></i>
                                                                     </button>
                                                                 </form>
-                                                        </td>
-
-                                                        <td>
-
                                                         </td>
                                     </div>
 
@@ -340,6 +340,55 @@
         @include('layouts.adminfooter')
     </div>
     </div>
+    <script>
+        function printAttendance() {
+            var tableClone = document.querySelector("table tbody").cloneNode(true);
+
+            // Remove action buttons before printing
+            tableClone.querySelectorAll(".no-print").forEach(el => el.remove());
+
+            var printWindow = window.open('', '', 'width=800,height=600');
+            printWindow.document.write(`
+        <html>
+        <head>
+            <title>Participant List</title>
+            <style>
+                body { font-family: Arial, sans-serif; }
+                table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                th { background-color: #f4f4f4; }
+                .no-print { display: none; } /* Hide actions column when printing */
+            </style>
+        </head>
+        <body>
+            <h2>Participants List</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Cooperative</th>
+                        <th>User Account</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Designation</th>
+                        <th>QR Code</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${tableClone.innerHTML}
+                </tbody>
+            </table>
+            <script>
+                window.onload = function() {
+                    window.print();
+                    setTimeout(() => window.close(), 1000);
+                };
+            <\/script>
+        </body>
+        </html>
+    `);
+            printWindow.document.close();
+        }
+    </script>
     <script>
         function confirmDelete(event, button) {
             event.preventDefault(); // Prevent form from submitting

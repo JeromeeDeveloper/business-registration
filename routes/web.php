@@ -1,7 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Auth;
+use App\Models\Participant;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
@@ -20,7 +21,10 @@ use App\Http\Middleware\ParticipantUserMiddleware;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 // Home Page
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', function () {
+    return redirect()->route('login');
+});
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/participants', [HomeController::class, 'home_participants'])->name('home_participants.index');
 
 // Grouped routes for other pages
@@ -61,6 +65,11 @@ Route::post('/store-cooperative', [DashboardController::class, 'storeCooperative
 Route::get('/adminnav', [AuthController::class, 'user'])->name('user_data');
 
 // attendance
+Route::get('/attendance/print', function () {
+    $participants = Participant::whereNotNull('attendance_datetime')->get();
+    return view('dashboard.admin.attendance_print', compact('participants'));
+})->name('attendance.print');
+
 
 Route::get('/Admin/Attendance', [AttendanceController::class, 'attendance'])->name('attendance.index');
 Route::get('/Admin/Attendance/{participant_id}', [AttendanceController::class, 'showattendance'])->name('attendance.show');
@@ -143,7 +152,7 @@ Route::get('/participant/dashboard', [DashboardController::class, 'participant']
 
 Route::get('/cooperativeprofile/{coop_id}', [DashboardController::class, 'cooperativeprofile'])->name('cooperativeprofile');
 Route::get('/cooperativeprofile/{coop_id}/edit', [DashboardController::class, 'editCooperativeProfile'])->name('cooperativeprofile.edit');
-Route::put('/cooperativeprofile/{coop_id}', [DashboardController::class, 'updateCooperativeProfile'])->name('cooperativeprofile.update');
+Route::put('/cooperativeprofile/update/{coop_id}', [DashboardController::class, 'updateCooperativeProfile'])->name('cooperativeprofile.update');
 
 
 Route::get('/participant/register', [DashboardController::class, 'participantregister'])->name('participant.register');

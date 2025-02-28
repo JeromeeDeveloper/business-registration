@@ -138,8 +138,11 @@
         window.print();
     }
 
-    // Update date and time when page loads
-    document.addEventListener("DOMContentLoaded", updateDateTime);
+    // Auto print when the page loads
+    document.addEventListener("DOMContentLoaded", function() {
+        updateDateTime();
+        printReport();
+    });
 </script>
 
 </body>

@@ -187,13 +187,19 @@
         <div class="container">
           <div class="page-inner">
             <div class="page-header">
-              <h3 class="fw-bold mb-3">User Registration</h3>
+              <h3 class="fw-bold mb-3">User</h3>
               <ul class="breadcrumbs mb-3">
                 <li class="nav-home">
                   <a href="#">
                     <i class="icon-home"></i>
                   </a>
                 </li>
+                <li class="separator">
+                    <i class="icon-arrow-right"></i>
+                  </li>
+                  <li class="nav-item">
+                    <a href="#">Dashboard</a>
+                  </li>
                 <li class="separator">
                   <i class="icon-arrow-right"></i>
                 </li>
@@ -204,7 +210,7 @@
                   <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                  <a href="#">Registration</a>
+                  <a href="#">Edit</a>
                 </li>
               </ul>
             </div>
@@ -212,7 +218,7 @@
               <div class="col-md-12">
                 <div class="card">
                   <div class="card-header">
-                    <div class="card-title">User Registration Form</div>
+                    <div class="card-title">User Edit Form</div>
                   </div>
                   <form action="{{ route('user.update', $user->user_id) }}" method="POST">
                     @csrf

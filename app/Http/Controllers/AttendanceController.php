@@ -54,4 +54,15 @@ class AttendanceController extends Controller
         return view('dashboard.admin.attendanceview', compact('participant'));
     }
 
+    public function printAttendance()
+    {
+        // Fetch participants who have an attendance_datetime
+        $participants = Participant::with(['cooperative'])
+            ->whereNotNull('attendance_datetime')
+            ->get();
+
+        return view('dashboard.admin.attendance_print', compact('participants'));
+    }
+
+
 }

@@ -199,8 +199,10 @@
                                     </div>
                                     <div class="col col-stats ms-3 ms-sm-0">
                                         <div class="numbers">
-                                            <p class="card-category">Registration Status Updated</p>
-                                            <h4 class="card-title">{{ \Carbon\Carbon::parse($latestRegistration->date_submitted)->format('M d, Y') }}</h4>
+                                            <p class="card-category">General Assembly Attendance</p>
+                                            <h4 class="card-title">
+                                                {{ $participant->attendance_datetime ? \Carbon\Carbon::parse($participant->attendance_datetime)->format('M d, Y') : 'N/A' }}
+                                            </h4>
                                         </div>
                                     </div>
                                 </div>
@@ -282,7 +284,7 @@
                 @if ($participant)
                 <div class="col-md-8 mx-auto">
                     <div class="card shadow-lg rounded-lg border-0">
-                        <div class="card-header bg-primary text-white">
+                        <div class="card-header bg-primary text-white rounded-top">
                             <h5 class="mb-0">Participant Details</h5>
                         </div>
                         <div class="card-body">

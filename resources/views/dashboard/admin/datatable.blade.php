@@ -197,74 +197,126 @@
                   <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                  <a href="#">Cooperative</a>
+                  <a href="#">Dashboard</a>
                 </li>
                 <li class="separator">
                   <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                  <a href="#">Datatable</a>
+                  <a href="#">Cooperative</a>
                 </li>
               </ul>
             </div>
             <div class="row">
               <div class="col-md-12">
                 <div class="card">
-                  <div class="card-header">
-                    <div class="d-flex align-items-center">
-                      <h4 class="card-title">Cooperative</h4>
-                    </div>
-                  </div>
-                  <div class="card-body">
-                    <!-- Search Form -->
-                    <form method="GET" action="{{ route('adminview') }}">
-                        <div class="d-flex justify-content-end">
-                            <div class="input-group flex-nowrap w-50 w-md-50 w-lg-25 ms-auto">
-                                <input type="text" name="search" class="form-control" placeholder="Search..."
-                                    value="{{ request('search') }}">
-                                <div class="input-group-append gap-2 d-flex">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap w-100">
+                            <!-- Title -->
+                            <h4 class="card-title mb-0 flex-shrink-0">Cooperative</h4>
+
+                            <!-- Search Form & Buttons (All in One Row) -->
+                            <form method="GET" action="{{ route('adminview') }}" class="d-flex align-items-center gap-2 flex-grow-1">
+                                <div class="input-group flex-nowrap">
+                                    <input type="text" name="search" class="form-control" placeholder="Search..." value="{{ request('search') }}">
                                     <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
-                                    <a href="{{ route('adminregister') }}" class="btn btn-primary text-white" data-bs-toggle="tooltip" title="Add Cooperative">
-                                        <i class="fa fa-plus"></i>
+                                </div>
+
+                                <!-- Action Buttons -->
+                                <div class="d-flex gap-2">
+                                    <a href="{{ route('adminregister') }}" class="btn btn-primary" data-bs-toggle="tooltip" title="Add Cooperative">
+                                        <i class="fa fa-plus me-1"></i>
                                     </a>
-                                    <a href="{{ route('import.form') }}" class="btn btn-primary text-white" data-bs-toggle="tooltip" title="Import Cooperative">
-                                        <i class="fa fa-upload"></i>
+                                    <a href="{{ route('import.form') }}" class="btn btn-primary" data-bs-toggle="tooltip" title="Import Cooperative">
+                                        <i class="fa fa-upload me-1"></i>
                                     </a>
                                 </div>
-                            </div>
+
+                                <div class="d-flex gap-2">
+                                    <button type="button" onclick="printAttendance()"
+                                        class="btn btn-primary" data-bs-toggle="tooltip" title="Print Cooperative List">
+                                        <i class="fa fa-print"></i>
+                                    </button>
+                                </div>
+
+                            </form>
                         </div>
-                    </form>
+                    </div>
 
+                  <div class="card-body">
+                    <!-- Search Form -->
+                    <div class="notify_btn d-flex flex-wrap align-items-center justify-content-center gap-3 text-center">
 
+                        <!-- Section Label -->
+                        <span class="text-uppercase text-primary fw-bold d-flex align-items-center">
+                            <i class="fa fa-bell text-warning me-2"></i> Notifications:
+                        </span>
 
+                        <div class="d-flex flex-wrap justify-content-center gap-2">
+                            <!-- Notify via Email -->
+                            <form>
+                                <button class="btn btn-outline-info d-flex align-items-center px-3 py-2 fw-semibold notify-btn"
+                                        onclick="openGmail()"
+                                        data-bs-toggle="tooltip"
+                                        title="Notify via Email">
+                                    <i class="fa fa-envelope me-2"></i> Email
+                                </button>
+                            </form>
+                            <!-- Status & Invitation Form -->
+                            <form action="{{ route('cooperatives.notifyAll') }}" method="POST" onsubmit="showSwalLoader(event, this, 'Sending Status & Invitation...')">
+                                @csrf
+                                <button type="submit" class="btn btn-outline-success d-flex align-items-center px-3 py-2 fw-semibold notify-btn"
+                                        data-bs-toggle="tooltip"
+                                        title="Send Status & Invitation">
+                                    <i class="fa fa-bell me-2"></i> Status & Invite
+                                </button>
+                            </form>
 
+                            <!-- Credentials Form -->
+                            <form action="{{ route('cooperatives.notifyCredentialsAll') }}" method="POST" onsubmit="showSwalLoader(event, this, 'Sending Login Credentials...')">
+                                @csrf
+                                <button type="submit" class="btn btn-outline-danger d-flex align-items-center px-3 py-2 fw-semibold notify-btn"
+                                        data-bs-toggle="tooltip"
+                                        title="Send Login Credentials">
+                                    <i class="fa fa-lock me-2"></i> Credentials
+                                </button>
+                            </form>
 
-                    <div class="notify_btn">
+                        </div>
 
+                    </div>
 
+                    <style>
+                        .notify_btn {
+                            display: flex;
+                            flex-wrap: wrap;
+                            align-items: center;
+                            justify-content: center;
+                            gap: 10px;
+                            text-align: center;
+                        }
+                        .notify-btn {
+                            transition: all 0.3s ease-in-out;
+                            border-radius: 8px;
+                            white-space: nowrap;
+                        }
+                        .notify-btn:hover {
+                            transform: translateY(-2px);
+                        }
 
+                        /* Mobile responsiveness */
+                        @media (max-width: 576px) {
+                            .notify_btn {
+                                flex-direction: column;
+                                align-items: center;
+                            }
+                            .notify-btn {
+                                width: 100%;
+                                text-align: center;
+                            }
+                        }
+                    </style>
 
-
-                        <button class="btn btn-label-info btn-round me-2" onclick="openGmail()">
-                            <i class="fa fa-envelope"></i> Notify Manually
-                        </button>
-
-
-                      <form action="{{ route('cooperatives.notifyAll') }}" method="POST" style="display:inline;">
-                        @csrf
-                        <button type="submit" class="btn btn-label-info btn-round me-2" data-bs-toggle="tooltip" title="Notify All Cooperatives">
-                            <i class="fa fa-bell"></i> Notify Automatically
-                        </button>
-                      </form>
-
-                     <form action="{{ route('cooperatives.notifyCredentialsAll') }}" method="POST" style="display:inline;">
-                        @csrf
-                        <button type="submit" class="btn btn-label-info btn-round me-2" data-bs-toggle="tooltip" title="Notify All Cooperatives">
-                            <i class="fa fa-lock"></i> Notify Credentials
-                        </button>
-                     </form>
-
-                     </div>
                         <!-- Table with Cooperatives -->
                         <div class="table-responsive">
                             <table id="add-row" class="display table table-striped table-hover">
@@ -331,7 +383,7 @@
                                             </td>
 
 
-                                            <td>
+                                            <td class="no-print">
                                                 <div class="form-button-action">
 
                                                     <!-- Notify Form -->
@@ -341,14 +393,13 @@
                                                     </div>
                                                 @endif
 
-                                                <form action="{{ route('cooperatives.notify', $coop->coop_id) }}" method="POST" style="display:inline;">
-                                                    @csrf
-                                                    <button type="submit" class="btn btn-link btn-info btn-lg" data-bs-toggle="tooltip" title="Notify Coop">
-                                                        <i class="fa fa-bell"></i>
-                                                    </button>
-                                                </form>
-
-
+                                                <form action="{{ route('cooperatives.notify', $coop->coop_id) }}" method="POST" style="display:inline;"
+                                                    onsubmit="showSwalLoader(event, this, 'Sending Status & Invitation...')">
+                                                  @csrf
+                                                  <button type="submit" class="btn btn-link btn-info btn-lg" data-bs-toggle="tooltip" title="Send Status & Invite">
+                                                      <i class="fa fa-bell"></i>
+                                                  </button>
+                                              </form>
 
                                                     <a href="{{ route('admin.documents.view', ['coop_id' => $coop->coop_id]) }}"
                                                         class="btn btn-link btn-info btn-lg"
@@ -420,19 +471,118 @@
       </div>
 
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+   function printAttendance() {
+    var tableClone = document.querySelector("table tbody").cloneNode(true);
+
+    // Convert dropdowns to text before printing
+    tableClone.querySelectorAll("select").forEach(select => {
+        var selectedText = select.options[select.selectedIndex].text;
+        var textNode = document.createTextNode(selectedText);
+        select.parentNode.replaceChild(textNode, select);
+    });
+
+    // Remove action buttons before printing
+    tableClone.querySelectorAll(".no-print").forEach(el => el.remove());
+
+    var printWindow = window.open('', '', 'width=800,height=600');
+    printWindow.document.write(`
+        <html>
+        <head>
+            <title>Cooperative List</title>
+            <style>
+                body { font-family: Arial, sans-serif; }
+                table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                th { background-color: #f4f4f4; }
+                .no-print { display: none; }
+            </style>
+        </head>
+        <body>
+            <h2>Cooperative List</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Cooperative</th>
+                        <th>Cooperative Address</th>
+                        <th>Cooperative Region</th>
+                        <th>Cooperative Email</th>
+                        <th>Registration Status</th>
+                        <th>Membership Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${tableClone.innerHTML}
+                </tbody>
+            </table>
+            <script>
+                window.onload = function() {
+                    window.print();
+                    setTimeout(() => window.close(), 1000);
+                };
+            <\/script>
+        </body>
+        </html>
+    `);
+    printWindow.document.close();
+}
+
+    </script>
+    <script>
+        function showSwalLoader(event, form, message) {
+            event.preventDefault(); // Stop normal form submission
+
+            Swal.fire({
+                title: 'Processing...',
+                text: message,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+
+                    // Submit the form after showing the loader
+                    setTimeout(() => {
+                        form.submit();
+                    }, 2000); // Adjust the delay as needed
+                }
+            });
+        }
+    </script>
+    <script>
+        function showSwalLoader(event, form, message) {
+            event.preventDefault(); // Stop normal form submission
+
+            Swal.fire({
+                title: 'Processing...',
+                text: message,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+
+                    // Submit the form after showing the loader
+                    setTimeout(() => {
+                        form.submit();
+                    }, 2000); // Adjust the delay as needed
+                }
+            });
+        }
+    </script>
+
     <script>
         function openGmail() {
-            let recipient = @json($emails); // Get emails from PHP and convert to a JavaScript array
+            let recipient = @json($emails);
             let subject = encodeURIComponent("52nd CO-OP LEADERS CONGRESS & 48th GENERAL ASSEMBLY");
             let body = encodeURIComponent(`Dear Cooperative Members,
 
             We are pleased to invite you to our upcoming event:
 
-            Event Name: CO-OP Leaders Congress
-            Date: March 15, 2025
-            Location: Davao City
-
-            Kindly confirm your attendance.
+            Event Name:
+            Date:
+            Location:
 
             Best Regards,
             MASS-SPECC Cooperative Development Center`);

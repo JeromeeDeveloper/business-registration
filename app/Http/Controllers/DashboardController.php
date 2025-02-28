@@ -80,30 +80,29 @@ class DashboardController extends Controller
     public function sendNotification($coopId)
     {
         try {
-            // Log for debugging
             \Log::info('Notification request received for Coop ID: ' . $coopId);
 
             // Find the cooperative by ID
             $coop = Cooperative::findOrFail($coopId);
             \Log::info('Found cooperative: ' . $coop->name . ' with email: ' . $coop->email);
 
-            // Get the latest event for the cooperative (adjust this logic as per your requirement)
-            $event = Event::latest()->first();  // Get the most recent event (or adjust accordingly)
+            // Get the latest event for the cooperative
+            $event = Event::latest()->first();
 
-            // Send the email notification and pass both cooperative and event data
-            Mail::to($coop->email)->send(new CooperativeNotification($coop, $event));
+            // Fetch GA Registration details
+            $gaRegistration = GARegistration::where('coop_id', $coopId)->latest()->first();
+
+            // Send the email and pass cooperative, event, and GA registration data
+            Mail::to($coop->email)->send(new CooperativeNotification($coop, $event, $gaRegistration));
             \Log::info('Notification sent to: ' . $coop->email);
 
-            // Redirect back with success message
             return redirect()->route('adminview')->with('success', 'Notification sent to the cooperative!');
         } catch (\Exception $e) {
-            // Log the exception
             \Log::error('Error sending notification: ' . $e->getMessage());
-
-            // Return with error message
             return back()->with('error', 'Error sending notification: ' . $e->getMessage());
         }
     }
+
 
     public function sendNotificationToAll()
     {
@@ -118,7 +117,7 @@ class DashboardController extends Controller
             }
 
             // Get the latest event
-            $event = Event::latest()->first(); // Adjust this logic based on your event structure
+            $event = Event::latest()->first();
 
             if (!$event) {
                 return back()->with('error', 'No event found to notify.');
@@ -126,7 +125,12 @@ class DashboardController extends Controller
 
             // Send email to each cooperative
             foreach ($cooperatives as $coop) {
-                Mail::to($coop->email)->send(new CooperativeNotification($coop, $event));
+                // Retrieve GA Registration for the current cooperative
+                $gaRegistration = GARegistration::where('coop_id', $coop->coop_id)->latest()->first();
+
+                // Send email
+                Mail::to($coop->email)->send(new CooperativeNotification($coop, $event, $gaRegistration));
+
                 \Log::info('Notification sent to: ' . $coop->email);
             }
 
@@ -134,9 +138,10 @@ class DashboardController extends Controller
         } catch (\Exception $e) {
             \Log::error('Error sending notifications: ' . $e->getMessage());
 
-            return back()->with('error', 'Error sending notifications: ' . $e->getMessage());
+            return back()->with('error', 'Error sending notifications. Please try again.');
         }
     }
+
 
     public function sendCredentialsToAll()
     {
@@ -279,38 +284,88 @@ class DashboardController extends Controller
 
     public function updateCooperativeProfile(Request $request, $coop_id)
     {
-        // Validate the request
-        $request->validate([
+
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'contact_person' => 'nullable|string|max:255',
             'type' => 'required|string|max:255',
+            'contact_person' => 'required|string|max:255',
+            'general_manager_ceo' => 'required|string|max:255',
+            'region' => [
+            'required',
+            Rule::in([
+                'Region I', 'Region II', 'Region III', 'Region IV-A', 'Region IV-B', 'Region V',
+                'Region VI', 'Region VII', 'Region VIII', 'Region IX', 'Region X', 'Region XI',
+                'Region XII', 'Region XIII', 'NCR', 'CAR', 'BARMM'
+            ]),
+        ],
+            'phone_number' => 'required|string|max:20',
+            'tin' => 'required|string|max:50',
+            'total_asset' => 'nullable|numeric|min:0',
+            'total_income' => 'nullable|numeric|min:0',
+            'cetf_remittance' => 'nullable|numeric|min:0',
+            'cetf_required' => 'nullable|numeric|min:0',
+            'cetf_balance' => 'nullable|numeric|min:0',
+            'share_capital_balance' => 'nullable|numeric|min:0',
+            'no_of_entitled_votes' => 'nullable|integer|min:0',
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('participants', 'email'),
+                Rule::unique('cooperatives', 'email')->ignore($coop_id, 'coop_id'), // Ignore itself
+            ],
             'address' => 'required|string|max:255',
-            'region' => 'required|string|max:255',
-            'phone_number' => 'nullable|string|max:20',
-            'email' => 'nullable|email|max:255',
-            'tin' => 'nullable|string|max:255',
-            'coop_identification_no' => 'nullable|string|max:255',
-            'bod_chairperson' => 'nullable|string|max:255',
-            'general_manager_ceo' => 'nullable|string|max:255',
-            'ga_registration_status' => 'nullable|string|max:255',
-            'total_asset' => 'nullable|numeric',
-            'total_income' => 'nullable|numeric',
-            'cetf_remittance' => 'nullable|numeric',
-            'cetf_required' => 'nullable|numeric',
-            'cetf_balance' => 'nullable|numeric',
-            'share_capital_balance' => 'nullable|numeric',
-            'no_of_entitled_votes' => 'nullable|integer',
-            'services_availed' => 'nullable|string|max:255',
+            'services_availed' => 'nullable|array', // Ensure it's an array (from checkboxes)
+            'services_availed.*' => 'string|max:255', // Ensure each item is a string
         ]);
 
-        // Find the cooperative by ID
-        $cooperative = Cooperative::findOrFail($coop_id);
+        $validated['total_asset'] = $request->total_asset ? (float) str_replace(',', '', $request->total_asset) : null;
+        $validated['total_income'] = $request->total_income ? (float) str_replace(',', '', $request->total_income) : null;
+        $validated['cetf_remittance'] = $request->cetf_remittance ? (float) str_replace(',', '', $request->cetf_remittance) : null;
+        $validated['cetf_required'] = $request->cetf_required ? (float) str_replace(',', '', $request->cetf_required) : null;
+        $validated['cetf_balance'] = $request->cetf_balance ? (float) str_replace(',', '', $request->cetf_balance) : null;
+        $validated['share_capital_balance'] = $request->share_capital_balance ? (float) str_replace(',', '', $request->share_capital_balance) : null;
+        $validated['no_of_entitled_votes'] = $request->no_of_entitled_votes ? (int) $request->no_of_entitled_votes : null;
 
-        // Update the cooperative record
-        $cooperative->update($request->all());
+        // Store services_availed as a JSON string
+        $validated['services_availed'] = isset($request->services_availed)
+            ? json_encode($request->services_availed) // Convert array to JSON
+            : json_encode([]); // Store empty JSON array if no services selected
+
+        // Find the cooperative by its ID and update the details
+        $cooperative = Cooperative::findOrFail($coop_id);
+        $cooperative->update($validated);
+
+        // // Validate the request
+        // $request->validate([
+        //     'name' => 'required|string|max:255',
+        //     'contact_person' => 'nullable|string|max:255',
+        //     'type' => 'required|string|max:255',
+        //     'address' => 'required|string|max:255',
+        //     'region' => 'required|string|max:255',
+        //     'phone_number' => 'nullable|string|max:20',
+        //     'email' => 'nullable|email|max:255',
+        //     'tin' => 'nullable|string|max:255',
+        //     'coop_identification_no' => 'nullable|string|max:255',
+        //     'bod_chairperson' => 'nullable|string|max:255',
+        //     'general_manager_ceo' => 'nullable|string|max:255',
+        //     'total_asset' => 'nullable|numeric',
+        //     'total_income' => 'nullable|numeric',
+        //     'cetf_remittance' => 'nullable|numeric',
+        //     'cetf_required' => 'nullable|numeric',
+        //     'cetf_balance' => 'nullable|numeric',
+        //     'share_capital_balance' => 'required|numeric',
+        //     'no_of_entitled_votes' => 'nullable|integer',
+        //     'services_availed' => 'nullable|string|max:255',
+        // ]);
+
+        // // Find the cooperative by ID
+        // $cooperative = Cooperative::findOrFail($coop_id);
+
+        // // Update the cooperative record
+        // $cooperative->update($request->all());
 
         // Redirect back with a success message
-        return redirect()->route('cooperativeprofile', ['cooperative_id' => $coop_id])
+        return redirect()->route('cooperativeprofile', ['coop_id' => $coop_id])
                          ->with('success', 'Cooperative profile updated successfully!');
     }
 

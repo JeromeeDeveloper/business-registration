@@ -133,7 +133,7 @@
         <div class="container">
           <div class="page-inner">
             <div class="page-header">
-              <h3 class="fw-bold mb-3">Participants</h3>
+              <h3 class="fw-bold mb-3">Participant</h3>
               <ul class="breadcrumbs mb-3">
                 <li class="nav-home">
                   <a href="#">
@@ -141,16 +141,22 @@
                   </a>
                 </li>
                 <li class="separator">
+                    <i class="icon-arrow-right"></i>
+                  </li>
+                  <li class="nav-item">
+                    <a href="#">Dashboard</a>
+                  </li>
+                <li class="separator">
                   <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                  <a href="#">Participants</a>
+                  <a href="#">Participant</a>
                 </li>
                 <li class="separator">
                   <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                  <a href="#">Datatable</a>
+                  <a href="#">View</a>
                 </li>
               </ul>
             </div>
@@ -159,7 +165,7 @@
                 <div class="card">
                   <div class="card-header">
                     <div class="d-flex align-items-center">
-                      <h4 class="card-title">Participants</h4>
+                      <h4 class="card-title">View</h4>
                     </div>
                   </div>
                   <div class="card-body">

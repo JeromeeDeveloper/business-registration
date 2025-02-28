@@ -105,9 +105,6 @@ class CooperativeController extends Controller
         $participant->user_id = $user->user_id;
         $participant->save();
 
-        // Send email notification
-        Mail::to($user->email)->send(new ParticipantCreated($user, $generatedPassword));
-
         // Generate QR code data (e.g., a URL to their profile page)
         $qrData = route('adminDashboard', ['coop_id' => $participant->coop_id]); // Adjust this route as needed
 
@@ -123,16 +120,32 @@ class CooperativeController extends Controller
             $path = 'qrcodes/participant_' . $participant->coop_id . '.png';
             Storage::disk('public')->put($path, $response->body());
 
-            // Optionally, save the QR code path to the participant
+            // Save the QR code path to the participant
             $participant->qr_code = $path;
             $participant->save();
         } else {
-            // Handle failure if the QR code generation fails
-            return redirect()->route('coop.index')->with('error', 'Failed to generate QR code.');
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to generate QR code.'
+            ], 500);
         }
 
-        return redirect()->route('coop.index')->with('success', 'Participant registered and user account created successfully!');
+        // Send email notification
+        try {
+            Mail::to($user->email)->send(new ParticipantCreated($user, $generatedPassword));
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to send email: ' . $e->getMessage()
+            ], 500);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Participant registered successfully!'
+        ]);
     }
+
 
 
 
