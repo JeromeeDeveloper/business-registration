@@ -12,7 +12,9 @@ use App\Models\Participant;
 use Illuminate\Http\Request;
 use App\Models\GARegistration;
 use Illuminate\Validation\Rule;
+use App\Models\EventParticipant;
 use App\Models\UploadedDocument;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
@@ -192,12 +194,30 @@ class DashboardController extends Controller
 
     public function admin()
     {
+        $totalAttended = EventParticipant::whereNotNull('attendance_datetime')->count();
         $totalParticipants = Participant::count();
         $totalUsers = User::count();
         $totalSpeakers = Speaker::count();
         $totalEvents = Event::count();
         $totalCooperative = Cooperative::count();
         $latestEvent = Event::with('speakers')->orderBy('start_date', 'desc')->first();
+        $latestEvents = Event::with('speakers')->orderBy('start_date', 'desc')->take(5)->get();
+
+        $totalMigsAttended = EventParticipant::whereNotNull('attendance_datetime')
+        ->whereHas('participant.cooperative.gaRegistration', function ($query) {
+            $query->where('membership_status', 'Migs');
+        })
+        ->distinct('participant_id')
+        ->count('participant_id');
+
+        $totalMigsParticipants = Participant::whereHas('cooperative.gaRegistration', function ($query) {
+            $query->where('membership_status', 'Migs');
+        })->count();
+
+        $totalNonMigsParticipants = Participant::whereHas('cooperative.gaRegistration', function ($query) {
+            $query->where('membership_status', 'Non-migs');
+        })->count();
+
 
         // Get cooperative IDs that are fully and partially registered
         $fullyRegisteredCoops = GARegistration::where('registration_status', 'Fully Registered')
@@ -218,14 +238,21 @@ class DashboardController extends Controller
         return view('dashboard.admin.admin', compact(
             'totalParticipants', 'totalUsers', 'totalSpeakers', 'totalEvents', 'latestEvent',
             'fullyRegisteredCoops', 'partiallyRegisteredCoops',
-            'fullyRegisteredParticipants', 'partiallyRegisteredParticipants', 'totalCooperative'
+            'fullyRegisteredParticipants', 'partiallyRegisteredParticipants', 'totalCooperative', 'totalAttended', 'totalMigsAttended', 'totalMigsParticipants','totalNonMigsParticipants','latestEvents'
         ));
     }
 
     public function participant()
     {
         $user = Auth::user();
-        $participant = $user ? $user->participant()->with('cooperative', 'registration')->first() : null;
+
+        // Ensure the user is logged in and has a coop_id
+        if (!$user || !$user->coop_id) {
+            dd('User not found or coop_id not set');
+        }
+
+        // Fetch the participant details, including the cooperative and registration details
+        $participant = $user->participant()->with('cooperative', 'registration')->first();
 
         // Fetch the latest event (most recent based on start_date)
         $latestEvent = Event::with('speakers')->orderBy('start_date', 'desc')->first();
@@ -233,8 +260,22 @@ class DashboardController extends Controller
         // Count total events
         $totalEvents = Event::count();
 
+        $latestEvents = Event::with('speakers')->orderBy('start_date', 'desc')->take(5)->get();
+
         // Count total speakers
         $totalSpeakers = Speaker::count();
+
+        // Count total participants
+        $totalParticipants = Participant::where('coop_id', $user->coop_id)->count();
+
+
+        // Fetch the cooperative from the participant relationship (ensure coop_id exists)
+        $cooperative = $participant ? $participant->cooperative : null;
+
+        $totalDocuments = UploadedDocument::where('coop_id', $user->coop_id)
+        ->where('status', 'Approved')
+        ->count();
+
 
         // Fetch GARegistration record based on the user's coop_id
         $gaRegistration = $user && $user->coop_id
@@ -245,10 +286,6 @@ class DashboardController extends Controller
         $registrationStatus = $gaRegistration ? $gaRegistration->registration_status : 'N/A';
         $membershipStatus = $gaRegistration ? $gaRegistration->membership_status : 'Non-migs';
 
-        // Get the cooperative (using coop_id) and check for uploaded documents
-        $cooperative = $participant ? $participant->cooperative : null;
-        $hasDocuments = $cooperative ? UploadedDocument::where('coop_id', $cooperative->coop_id)->exists() : false;
-
         // Fetch Cooperative based on logged-in user's coop_id
         $coop = $user && $user->coop_id ? Cooperative::where('coop_id', $user->coop_id)->first() : null;
 
@@ -257,13 +294,17 @@ class DashboardController extends Controller
             'event' => $latestEvent,
             'totalEvents' => $totalEvents,
             'totalSpeakers' => $totalSpeakers,
+            'totalParticipants' => $totalParticipants, // Pass total participants
+            'totalDocuments' => $totalDocuments, // Pass total uploaded documents
             'registrationStatus' => $registrationStatus,
             'membershipStatus' => $membershipStatus,
-            'hasDocuments' => $hasDocuments,
             'cooperative' => $cooperative,
             'coop' => $coop,
+            'latestEvents' => $latestEvents, // ✅ FIXED: added to pass the events
         ]);
     }
+
+
 
 
     public function cooperativeprofile($coop_id)
@@ -431,37 +472,56 @@ public function store(Request $request)
 public function scanQR(Request $request)
 {
     $participantId = $request->query('participant_id');
+    $eventId = $request->query('event_id');
 
-    // Check if the participant exists
     $participant = Participant::find($participantId);
     if (!$participant) {
         return response()->json(['error' => 'Participant not found.'], 404);
     }
 
-    // Get the cooperative's GA registration status
+    $event = Event::find($eventId);
+    if (!$event) {
+        return response()->json(['error' => 'Event not found.'], 404);
+    }
+
     $gaRegistration = GARegistration::where('coop_id', $participant->coop_id)->first();
 
-    // If GA registration is "Partial Registered" or NULL, prevent scanning
     if (!$gaRegistration || $gaRegistration->registration_status === 'Partial Registered' || $gaRegistration->registration_status === null) {
         return response()->json(['error' => 'Participant cannot be scanned. GA registration is incomplete.'], 403);
     }
 
-    // If attendance has already been recorded, return an error
-    if ($participant->attendance_datetime !== null) {
-        return response()->json(['error' => 'Attendance already recorded.'], 400);
+    // Check if participant is registered in this congress (event)
+    $isRegisteredInEvent = $participant->events()
+        ->where('event_participant.event_id', $eventId) // Explicitly use event_participant.event_id
+        ->exists();
+
+    if (!$isRegisteredInEvent) {
+        return response()->json(['error' => 'Participant is not added in this congress.'], 403);
     }
 
-    // If GA is fully registered and attendance datetime is NULL, record attendance
-    if ($gaRegistration->registration_status === 'Fully Registered' && is_null($participant->attendance_datetime)) {
-        $participant->attendance_datetime = Carbon::now();
-        $participant->save();
-        return response()->json(['success' => 'Attendance recorded successfully!', 'participant' => $participant]);
+    // Check if attendance is already recorded
+    $existingAttendance = EventParticipant::where('event_id', $eventId)
+        ->where('participant_id', $participantId)
+        ->whereNotNull('attendance_datetime')
+        ->first();
+
+    if ($existingAttendance) {
+        return response()->json(['error' => 'Attendance already recorded for this participant.'], 409);
     }
 
-    // Fallback error (shouldn't be reached)
-    return response()->json(['error' => 'Unexpected error.'], 500);
+    // Record attendance
+    $attendance = EventParticipant::updateOrCreate(
+        [
+            'event_id' => $eventId,
+            'participant_id' => $participantId,
+        ],
+        [
+            'attendance_datetime' => now(),
+        ]
+    );
+
+    return response()->json(['success' => 'Attendance recorded successfully!', 'participant' => $participant]);
 }
-
 
 
     // Show the cooperative registration form
@@ -471,29 +531,39 @@ public function scanQR(Request $request)
     }
 
     public function view(Request $request)
-{
+    {
+        $search = $request->input('search');
+        $filterNoGA = $request->input('filter_no_ga');
 
-    $search = $request->input('search');
+        $cooperatives = Cooperative::query();
 
+        // Apply filter first
+        if ($filterNoGA === '1') {
+            $cooperatives->whereDoesntHave('gaRegistration');
+        }
 
-    $cooperatives = Cooperative::where('name', 'LIKE', "%{$search}%")
-        ->orWhere('region', 'LIKE', "%{$search}%")
-        ->orWhere('email', 'LIKE', "%{$search}%")
-        ->orWhere('address', 'LIKE', "%{$search}%")
-        ->orWhereHas('gaRegistration', function ($query) use ($search) {
-            $query->where('registration_status', 'LIKE', "%{$search}%");
-        })
-        ->orWhereHas('gaRegistration', function ($query) use ($search) {
-            $query->where('membership_status', 'LIKE', "%{$search}%");
-        })
-        ->orderBy('created_at', 'desc')
-        ->paginate(5);
+        // Apply search if provided
+        if ($search) {
+            $cooperatives->where(function ($query) use ($search) {
+                $query->where('name', 'LIKE', "%{$search}%")
+                    ->orWhere('region', 'LIKE', "%{$search}%")
+                    ->orWhere('email', 'LIKE', "%{$search}%")
+                    ->orWhere('address', 'LIKE', "%{$search}%")
+                    ->orWhereHas('gaRegistration', function ($query) use ($search) {
+                        $query->where('registration_status', 'LIKE', "%{$search}%")
+                              ->orWhere('membership_status', 'LIKE', "%{$search}%");
+                    });
+            });
+        }
+
+        $cooperatives = $cooperatives->orderBy('created_at', 'desc')->paginate(5);
 
         $emails = $cooperatives->pluck('email')->filter()->implode(',');
 
-    // Return view with search query
-    return view('dashboard.admin.datatable', compact('cooperatives', 'search', 'emails'));
-}
+        return view('dashboard.admin.datatable', compact('cooperatives', 'search', 'emails', 'filterNoGA'));
+    }
+
+
 
 
 public function storeCooperative(Request $request)
@@ -549,7 +619,13 @@ public function storeCooperative(Request $request)
     ]);
 
     // Generate a sanitized password
-    $sanitizedPassword = str_replace(' ', '', $cooperative->name) . 'GA2025';
+    $words = preg_split('/\s+/', trim($cooperative->name));
+    $acronym = '';
+    foreach ($words as $word) {
+        $acronym .= strtoupper($word[0]);
+    }
+
+    $sanitizedPassword = $acronym . 'GA2025';
 
     // Create the user account
     User::create([
@@ -592,13 +668,13 @@ public function storeCooperative(Request $request)
             'contact_person' => 'required|string|max:255',
             'general_manager_ceo' => 'required|string|max:255',
             'region' => [
-            'required',
-            Rule::in([
-                'Region I', 'Region II', 'Region III', 'Region IV-A', 'Region IV-B', 'Region V',
-                'Region VI', 'Region VII', 'Region VIII', 'Region IX', 'Region X', 'Region XI',
-                'Region XII', 'Region XIII', 'NCR', 'CAR', 'BARMM'
-            ]),
-        ],
+                'required',
+                Rule::in([
+                    'Region I', 'Region II', 'Region III', 'Region IV-A', 'Region IV-B', 'Region V',
+                    'Region VI', 'Region VII', 'Region VIII', 'Region IX', 'Region X', 'Region XI',
+                    'Region XII', 'Region XIII', 'NCR', 'CAR', 'BARMM'
+                ]),
+            ],
             'phone_number' => 'required|string|max:20',
             'tin' => 'required|string|max:50',
             'total_asset' => 'nullable|numeric|min:0',
@@ -612,11 +688,11 @@ public function storeCooperative(Request $request)
                 'required',
                 'email',
                 Rule::unique('participants', 'email'),
-                Rule::unique('cooperatives', 'email')->ignore($coop_id, 'coop_id'), // Ignore itself
+                Rule::unique('cooperatives', 'email')->ignore($coop_id, 'coop_id'),
             ],
             'address' => 'required|string|max:255',
-            'services_availed' => 'nullable|array', // Ensure it's an array (from checkboxes)
-            'services_availed.*' => 'string|max:255', // Ensure each item is a string
+            'services_availed' => 'nullable|array',
+            'services_availed.*' => 'string|max:255',
         ]);
 
         $validated['total_asset'] = $request->total_asset ? (float) str_replace(',', '', $request->total_asset) : null;
@@ -627,18 +703,46 @@ public function storeCooperative(Request $request)
         $validated['share_capital_balance'] = $request->share_capital_balance ? (float) str_replace(',', '', $request->share_capital_balance) : null;
         $validated['no_of_entitled_votes'] = $request->no_of_entitled_votes ? (int) $request->no_of_entitled_votes : null;
 
-        // Store services_availed as a JSON string
         $validated['services_availed'] = isset($request->services_availed)
-            ? json_encode($request->services_availed) // Convert array to JSON
-            : json_encode([]); // Store empty JSON array if no services selected
+            ? json_encode($request->services_availed)
+            : json_encode([]);
 
         // Find the cooperative by its ID and update the details
         $coop = Cooperative::findOrFail($coop_id);
         $coop->update($validated);
 
-        // Redirect to the cooperatives page with a success message
+        // Find the user linked to this cooperative
+        $user = User::where('coop_id', $coop->coop_id)->first();
+
+        if ($user) {
+            $currentUserEmail = strtolower(trim($user->email));
+            $newCoopEmail = strtolower(trim($coop->email));
+
+            if ($currentUserEmail !== $newCoopEmail) {
+                $emailExists = User::where('email', $coop->email)
+                    ->where('user_id', '!=', $user->user_id)
+                    ->exists();
+
+                if ($emailExists) {
+                    return redirect()->back()->withErrors(['email' => 'The email is already used by another user.']);
+                }
+
+                $user->update([
+                    'name' => $coop->contact_person,
+                    'email' => $coop->email,
+                ]);
+            } else {
+                // Just update the name if email didn't change
+                $user->update([
+                    'name' => $coop->contact_person,
+                ]);
+            }
+        }
+
+
         return redirect()->route('adminview')->with('success', 'Cooperative updated successfully!');
     }
+
 
 
 

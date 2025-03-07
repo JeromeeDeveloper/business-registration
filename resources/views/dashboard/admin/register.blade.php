@@ -229,7 +229,7 @@
                       <div class="col-md-6 col-lg-4">
                         <div class="form-group">
                           <label for="name">Cooperative Name</label>
-                          <input type="text" class="form-control" name="name" id="name" placeholder="Enter Cooperative Name" />
+                          <input type="text" class="form-control" name="name" id="name" placeholder="Enter Cooperative Name" required/>
                         </div>
                       </div>
 
@@ -237,7 +237,7 @@
                       <div class="col-md-6 col-lg-4">
                         <div class="form-group">
                           <label for="contact_person">Contact Person</label>
-                          <input type="text" class="form-control" name="contact_person" id="contact_person" placeholder="Enter Contact Person" />
+                          <input type="text" class="form-control" name="contact_person" id="contact_person" placeholder="Enter Contact Person" required/>
                         </div>
                       </div>
 
@@ -245,7 +245,7 @@
                       <div class="col-md-6 col-lg-4">
                         <div class="form-group">
                           <label for="type">Cooperative Type</label>
-                          <input type="text" class="form-control" name="type" id="type" placeholder="Enter Cooperative Type" />
+                          <input type="text" class="form-control" name="type" id="type" placeholder="Enter Cooperative Type" required/>
                         </div>
                       </div>
 
@@ -253,7 +253,7 @@
                       <div class="col-md-6 col-lg-4">
                         <div class="form-group">
                           <label for="address">Address</label>
-                          <input class="form-control" id="address" name="address" rows="3" placeholder="Enter Address"></input>
+                          <input class="form-control" id="address" name="address" rows="3" placeholder="Enter Address" required></input>
                         </div>
                       </div>
 
@@ -261,7 +261,7 @@
                       <div class="col-md-6 col-lg-4">
                         <div class="form-group">
                           <label for="region">Region</label>
-                          <select class="form-control" name="region" id="region">
+                          <select class="form-control" name="region" id="region" required>
                             <option value="">Select Region</option>
                             <option value="Region I">Region I</option>
                             <option value="Region II">Region II</option>
@@ -287,7 +287,7 @@
                       <div class="col-md-6 col-lg-4">
                         <div class="form-group">
                           <label for="phone_number">Phone Number</label>
-                          <input type="number" class="form-control" name="phone_number" id="phone_number" placeholder="Enter Phone Number" />
+                          <input type="number" class="form-control" name="phone_number" id="phone_number" placeholder="Enter Phone Number" required/>
                         </div>
                       </div>
 
@@ -295,7 +295,7 @@
                       <div class="col-md-6 col-lg-4">
                         <div class="form-group">
                           <label for="email">Email</label>
-                          <input type="email" class="form-control" name="email" id="email" placeholder="Enter Email" />
+                          <input type="email" class="form-control" name="email" id="email" placeholder="Enter Email" required/>
                         </div>
                       </div>
 
@@ -303,7 +303,7 @@
                       <div class="col-md-6 col-lg-4">
                         <div class="form-group">
                           <label for="tin">TIN</label>
-                          <input type="text" class="form-control" name="tin" id="tin" placeholder="Enter TIN" />
+                          <input type="text" class="form-control" name="tin" id="tin" placeholder="Enter TIN" required/>
                         </div>
                       </div>
 
@@ -311,7 +311,7 @@
                       <div class="col-md-6 col-lg-4">
                         <div class="form-group">
                           <label for="coop_identification_no">Cooperative ID</label>
-                          <input type="text" class="form-control" name="coop_identification_no" id="coop_identification_no" placeholder="Enter Coop ID" />
+                          <input type="text" class="form-control" name="coop_identification_no" id="coop_identification_no" placeholder="Enter Coop ID" required/>
                         </div>
                       </div>
 
@@ -321,7 +321,7 @@
                       <div class="col-md-6 col-lg-4">
                         <div class="form-group">
                           <label for="bod_chairperson">BOD Chairperson</label>
-                          <input type="text" class="form-control" name="bod_chairperson" id="bod_chairperson" placeholder="Enter BOD Chairperson" />
+                          <input type="text" class="form-control" name="bod_chairperson" id="bod_chairperson" placeholder="Enter BOD Chairperson" required/>
                         </div>
                       </div>
 
@@ -329,7 +329,7 @@
                       <div class="col-md-6 col-lg-4">
                         <div class="form-group">
                           <label for="general_manager_ceo">General Manager/CEO</label>
-                          <input type="text" class="form-control" name="general_manager_ceo" id="general_manager_ceo" placeholder="Enter Manager/CEO" />
+                          <input type="text" class="form-control" name="general_manager_ceo" id="general_manager_ceo" placeholder="Enter Manager/CEO" required/>
                         </div>
                       </div>
 
@@ -361,7 +361,7 @@
                       <div class="col-md-6 col-lg-4">
                         <div class="form-group">
                           <label for="total_asset">Total Assets</label>
-                          <input type="number" class="form-control" name="total_asset" id="total_asset" placeholder="Enter Total Assets" />
+                          <input type="number" class="form-control" name="total_asset" id="total_asset" placeholder="Enter Total Assets" required/>
                         </div>
                       </div>
 
@@ -369,7 +369,7 @@
                       <div class="col-md-6 col-lg-4">
                         <div class="form-group">
                           <label for="total_income">Total Income</label>
-                          <input type="number" class="form-control" name="total_income" id="total_income" placeholder="Enter Total Income" />
+                          <input type="number" class="form-control" name="total_income" id="total_income" placeholder="Enter Total Income" required/>
                         </div>
                       </div>
 
@@ -377,7 +377,7 @@
                       <div class="col-md-6 col-lg-4">
                         <div class="form-group">
                           <label for="cetf_remittance">CETF Remittance</label>
-                          <input type="number" class="form-control" name="cetf_remittance" id="cetf_remittance" placeholder="Enter CETF Remittance" />
+                          <input type="number" class="form-control" name="cetf_remittance" id="cetf_remittance" placeholder="Enter CETF Remittance" required/>
                         </div>
                       </div>
 
@@ -385,7 +385,7 @@
                       <div class="col-md-6 col-lg-4">
                         <div class="form-group">
                           <label for="cetf_required">CETF Required</label>
-                          <input type="number" class="form-control" name="cetf_required" id="cetf_required" placeholder="Enter CETF Required" />
+                          <input type="number" class="form-control" name="cetf_required" id="cetf_required" placeholder="Enter CETF Required" required/>
                         </div>
                       </div>
 
@@ -394,7 +394,7 @@
                       <div class="col-md-6 col-lg-4">
                         <div class="form-group">
                           <label for="cetf_balance">CETF Balance</label>
-                          <input type="number" class="form-control" name="cetf_balance" id="cetf_balance" placeholder="Enter CETF Balance" />
+                          <input type="number" class="form-control" name="cetf_balance" id="cetf_balance" placeholder="Enter CETF Balance" required/>
                         </div>
                       </div>
 
@@ -403,7 +403,7 @@
                       <div class="col-md-6 col-lg-4">
                         <div class="form-group">
                           <label for="share_capital_balance">Share Capital Balance</label>
-                          <input type="number" class="form-control" name="share_capital_balance" id="share_capital_balance" placeholder="Enter Share Capital Balance" />
+                          <input type="number" class="form-control" name="share_capital_balance" id="share_capital_balance" placeholder="Enter Share Capital Balance" required/>
                         </div>
                       </div>
 
@@ -411,7 +411,7 @@
                       <div class="col-md-6 col-lg-4">
                         <div class="form-group">
                           <label for="no_of_entitled_votes">No of Entitled Votes</label>
-                          <input type="number" class="form-control" name="no_of_entitled_votes" id="no_of_entitled_votes" placeholder="Enter No of Entitled Votes" />
+                          <input type="number" class="form-control" name="no_of_entitled_votes" id="no_of_entitled_votes" placeholder="Enter No of Entitled Votes" required/>
                         </div>
                       </div>
 

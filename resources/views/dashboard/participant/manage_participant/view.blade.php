@@ -181,12 +181,12 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-6 col-lg-4">
+                                {{-- <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
                                         <label for="user_id">User Account</label>
                                         <div>{{ $participant->user->name ?? 'N/A' }}</div>
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
@@ -254,8 +254,16 @@
                                 <!-- Congress Type -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label for="congress_type">Congress Type</label>
-                                        <div>{{ $participant->congress_type ?? 'N/A' }}</div>
+                                        <label>Congress Types</label>
+                                        <div class="border p-2 rounded" style="min-height: 45px; background-color: #f8f9fa;">
+                                            @if ($participant->events->isNotEmpty())
+                                                @foreach ($participant->events as $event)
+                                                    <span class="badge bg-primary">{{ $event->title }}</span>
+                                                @endforeach
+                                            @else
+                                                <span class="text-muted">No congress types selected.</span>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
 
@@ -291,25 +299,12 @@
                                     </div>
                                 </div>
 
+
                                  <!-- Delegate Type -->
                                  <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
                                         <label for="delegate_type">Delegate Type</label>
                                         <div>{{ $participant->delegate_type ?? 'N/A' }}</div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="reference_number">Reference Number</label>
-                                        <div>{{ $participant->reference_number ?? 'N/A' }}</div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="attendance_datetime">GA Attendance</label>
-                                        <div>{{ $participant->attendance_datetime ?? 'N/A' }}</div>
                                     </div>
                                 </div>
 
@@ -327,6 +322,22 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="reference_number">Access Key</label>
+                                        <div>{{ $participant->reference_number ?? 'N/A' }}</div>
+                                    </div>
+                                </div>
+
+                                {{-- <div class="col-md-6 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="attendance_datetime">GA Attendance</label>
+                                        <div>{{ $participant->attendance_datetime ?? 'N/A' }}</div>
+                                    </div>
+                                </div> --}}
+
+
 
 
 

@@ -291,23 +291,33 @@
                                                         <td>{{ $participant->last_name }}</td>
                                                         <td>{{ $participant->designation ?? 'N/A' }}</td>
                                                         <td>
-                                                            @if ($participant->qr_code)
-                                                                <img src="{{ asset('storage/' . $participant->qr_code) }}"
+                                                            @if ($participant->participant_id)
+                                                                <img src="https://api.qrserver.com/v1/create-qr-code/?data={{ urlencode(route('adminDashboard', ['participant_id' => $participant->participant_id])) }}&size=100x100"
                                                                     alt="QR Code"
                                                                     style="width: 100px; height: 100px;">
                                                             @else
                                                                 N/A
                                                             @endif
                                                         </td>
+
                                                         <td class="no-print">
                                                             <div class="form-button-action no-print">
 
                                                                 <button class="btn btn-link btn-success btn-lg no-print"
-                                                                        data-bs-toggle="tooltip"
-                                                                        title="Generate & Print ID"
-                                                                        onclick="printParticipantID({{ $participant->participant_id }}, '{{ $participant->first_name }}', '{{ $participant->last_name }}', '{{ $participant->designation ?? 'N/A' }}', '{{ $participant->reference_number ?? 'N/A' }}', '{{ optional($participant->cooperative)->name ?? 'N/A' }}', '{{ asset('storage/' . $participant->qr_code) }}')">
-                                                                    <i class="fa fa-id-card"></i>
-                                                                </button>
+                                                                data-bs-toggle="tooltip"
+                                                                title="Generate & Print ID"
+                                                                onclick="printParticipantID(
+                                                                    {{ $participant->participant_id }},
+                                                                    '{{ $participant->first_name }}',
+                                                                    '{{ $participant->last_name }}',
+                                                                    '{{ $participant->designation ?? 'N/A' }}',
+                                                                    '{{ $participant->reference_number ?? 'N/A' }}',
+                                                                    '{{ optional($participant->cooperative)->name ?? 'N/A' }}',
+                                                                    'https://api.qrserver.com/v1/create-qr-code/?data={{ urlencode(route('adminDashboard', ['participant_id' => $participant->participant_id])) }}&size=200x200'
+                                                                )">
+                                                                <i class="fa fa-id-card"></i>
+                                                            </button>
+
 
                                                                 <a href="{{ route('participants.show', $participant->participant_id) }}"
                                                                     class="btn btn-link btn-info btn-lg"
@@ -439,7 +449,7 @@
                         <p><strong>Name:</strong> ${firstName} ${lastName}</p>
                         <p><strong>Designation:</strong> ${designation}</p>
                         <p><strong>Cooperative:</strong> ${cooperative}</p>
-                          <p><strong>Reference Number:</strong> ${reference_number}</p>
+                          <p><strong>Access Key:</strong> ${reference_number}</p>
                         ${qrCode ? `<img src="${qrCode}" alt="QR Code">` : `<p>No QR Code</p>`}
                     </div>
                     <script>

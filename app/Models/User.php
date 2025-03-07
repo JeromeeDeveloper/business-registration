@@ -40,8 +40,7 @@ class User extends Authenticatable
 
     public function cooperative()
     {
-        return $this->belongsTo(Cooperative::class, 'coop_id');
+        return $this->belongsTo(Cooperative::class, 'coop_id', 'coop_id');
     }
-
 
 }

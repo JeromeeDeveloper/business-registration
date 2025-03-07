@@ -204,32 +204,31 @@
                                 </div>
                             </div>
 
+                            <div class="col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" id="email" placeholder="Enter Email" value="{{ old('email') }}" required/>
+                                    @error('email')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
 
-
-                               <!-- User Display -->
-                                {{-- <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="user_id">User</label>
-                                        <select class="form-control" name="user_id" id="user_id">
-                                            <option value="" disabled selected>Select a user</option>
-                                            @foreach($users as $user)
-                                                <option value="{{ $user->user_id }}" {{ auth()->user()->user_id == $user->user_id ? 'selected' : '' }}>
-                                                    {{ $user->name }}
-                                                </option>
-                                            @endforeach
-                                            @if($users->isEmpty())
-                                                <p>No users found.</p>
-                                            @endif
-                                        </select>
-                                    </div>
-                                </div> --}}
-
+                            <div class="col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="phone_number">Phone Number</label>
+                                    <input type="text" class="form-control @error('phone_number') is-invalid @enderror" name="phone_number" id="phone_number" placeholder="Enter Phone Number" value="{{ old('phone_number') }}" required/>
+                                    @error('phone_number')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
 
                                 <!-- First Name -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
                                         <label for="first_name">First Name</label>
-                                        <input type="text" class="form-control @error('first_name') is-invalid @enderror" name="first_name" id="first_name" placeholder="Enter First Name" value="{{ old('first_name') }}" />
+                                        <input type="text" class="form-control @error('first_name') is-invalid @enderror" name="first_name" id="first_name" placeholder="Enter First Name" value="{{ old('first_name') }}" required />
                                         @error('first_name')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -240,7 +239,7 @@
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
                                         <label for="middle_name">Middle Name</label>
-                                        <input type="text" class="form-control @error('middle_name') is-invalid @enderror" name="middle_name" id="middle_name" placeholder="Enter Middle Name" value="{{ old('middle_name') }}" />
+                                        <input type="text" class="form-control @error('middle_name') is-invalid @enderror" name="middle_name" id="middle_name" placeholder="Enter Middle Name" value="{{ old('middle_name') }}" required/>
                                         @error('middle_name')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -251,22 +250,14 @@
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
                                         <label for="last_name">Last Name</label>
-                                        <input type="text" class="form-control @error('last_name') is-invalid @enderror" name="last_name" id="last_name" placeholder="Enter Last Name" value="{{ old('last_name') }}" />
+                                        <input type="text" class="form-control @error('last_name') is-invalid @enderror" name="last_name" id="last_name" placeholder="Enter Last Name" value="{{ old('last_name') }}" required/>
                                         @error('last_name')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
                                 </div>
 
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="email">Email</label>
-                                        <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" id="email" placeholder="Enter Email" value="{{ old('email') }}" />
-                                        @error('email')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
+
 
                                 <!-- Nickname -->
                                 <div class="col-md-6 col-lg-4">
@@ -283,7 +274,8 @@
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
                                         <label for="gender">Gender</label>
-                                        <select class="form-control @error('gender') is-invalid @enderror" name="gender" id="gender">
+                                        <select class="form-control @error('gender') is-invalid @enderror" name="gender" id="gender" required>
+                                            <option value="" disabled selected>Select Gender</option>
                                             <option value="Male" {{ old('gender') == 'Male' ? 'selected' : '' }}>Male</option>
                                             <option value="Female" {{ old('gender') == 'Female' ? 'selected' : '' }}>Female</option>
                                             <option value="Other" {{ old('gender') == 'Other' ? 'selected' : '' }}>Other</option>
@@ -294,22 +286,13 @@
                                     </div>
                                 </div>
 
-                                <!-- Phone Number -->
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="phone_number">Phone Number</label>
-                                        <input type="text" class="form-control @error('phone_number') is-invalid @enderror" name="phone_number" id="phone_number" placeholder="Enter Phone Number" value="{{ old('phone_number') }}" />
-                                        @error('phone_number')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
+
 
                                 <!-- Designation -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
                                         <label for="designation">Designation</label>
-                                        <input type="text" class="form-control @error('designation') is-invalid @enderror" name="designation" id="designation" placeholder="Enter Designation" value="{{ old('designation') }}" />
+                                        <input type="text" class="form-control @error('designation') is-invalid @enderror" name="designation" id="designation" placeholder="Enter Designation" value="{{ old('designation') }}" required/>
                                         @error('designation')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -317,13 +300,36 @@
                                 </div>
 
                                 <!-- Congress Type -->
-                                <div class="col-md-6 col-lg-4">
+                                {{-- <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
                                         <label for="congress_type">Congress Type</label>
-                                        <input type="text" class="form-control @error('congress_type') is-invalid @enderror" name="congress_type" id="congress_type" placeholder="Enter Congress Type" value="{{ old('congress_type') }}" />
+                                        <input type="text" class="form-control @error('congress_type') is-invalid @enderror" name="congress_type" id="congress_type" placeholder="Enter Congress Type" value="{{ old('congress_type') }}" required/>
                                         @error('congress_type')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
+                                    </div>
+                                </div> --}}
+
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="event_ids">Congress Types</label>
+                                        <div class="dropdown">
+                                            <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Select Congress Types
+                                            </button>
+                                            <ul class="dropdown-menu p-3" style="width: 100%; max-height: 300px; overflow-y: auto;">
+                                                @foreach ($events as $event)
+                                                    <li>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" name="event_ids[]" value="{{ $event->event_id }}" id="event_{{ $event->event_id }}">
+                                                            <label class="form-check-label" for="event_{{ $event->event_id }}">
+                                                                {{ $event->title }}
+                                                            </label>
+                                                        </div>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -331,7 +337,7 @@
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
                                         <label for="religious_affiliation">Religious Affiliation</label>
-                                        <input type="text" class="form-control @error('religious_affiliation') is-invalid @enderror" name="religious_affiliation" id="religious_affiliation" placeholder="Enter Religious Affiliation" value="{{ old('religious_affiliation') }}" />
+                                        <input type="text" class="form-control @error('religious_affiliation') is-invalid @enderror" name="religious_affiliation" id="religious_affiliation" placeholder="Enter Religious Affiliation" value="{{ old('religious_affiliation') }}" required/>
                                         @error('religious_affiliation')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -342,8 +348,8 @@
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
                                         <label for="tshirt_size">T-shirt Size</label>
-                                        <select class="form-control @error('tshirt_size') is-invalid @enderror" name="tshirt_size" id="tshirt_size">
-                                            <option value="">Select Size</option>
+                                        <select class="form-control @error('tshirt_size') is-invalid @enderror" name="tshirt_size" id="tshirt_size" required>
+                                            <option value="" disabled selected>Select T-shirt Size</option>
                                             <option value="XS" {{ old('tshirt_size') == 'XS' ? 'selected' : '' }}>XS</option>
                                             <option value="S" {{ old('tshirt_size') == 'S' ? 'selected' : '' }}>S</option>
                                             <option value="M" {{ old('tshirt_size') == 'M' ? 'selected' : '' }}>M</option>
@@ -362,7 +368,8 @@
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
                                         <label for="is_msp_officer">Is MSP Officer</label>
-                                        <select class="form-control @error('is_msp_officer') is-invalid @enderror" name="is_msp_officer" id="is_msp_officer">
+                                        <select class="form-control @error('is_msp_officer') is-invalid @enderror" name="is_msp_officer" id="is_msp_officer" required>
+                                            <option value="" disabled selected>Select Status</option>
                                             <option value="No" {{ old('is_msp_officer') == 'No' ? 'selected' : '' }}>No</option>
                                             <option value="Yes" {{ old('is_msp_officer') == 'Yes' ? 'selected' : '' }}>Yes</option>
                                         </select>
@@ -391,9 +398,10 @@
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
                                         <label for="delegate_type">Delegate Type</label>
-                                        <select class="form-control @error('delegate_type') is-invalid @enderror" name="delegate_type" id="delegate_type">
-                                            <option value="Voting" {{ old('delegate_type') == 'Voting' ? 'selected' : '' }}>Voting</option>
-                                            <option value="Non-Voting" {{ old('delegate_type') == 'Non-Voting' ? 'selected' : '' }}>Non-Voting</option>
+                                        <select class="form-control @error('delegate_type') is-invalid @enderror" name="delegate_type" id="delegate_type" required>
+                                            <option value="" disabled selected>Select Delegate Type</option>
+                                            <option value="Voting" {{ old('delegate_type') == 'Voting' ? 'selected' : '' }}>Yes</option>
+                                            <option value="Non-Voting" {{ old('delegate_type') == 'Non-Voting' ? 'selected' : '' }}>No</option>
                                         </select>
                                         @error('delegate_type')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -409,6 +417,16 @@
 
                         </div>
                     </form>
+                    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+                    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+                    <script>
+                        $(document).ready(function() {
+                            $('#event_ids').select2({
+                                placeholder: 'Select Congress Types'
+                            });
+                        });
+                    </script>
+
                     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
                     <script>
                         document.getElementById("participantForm").addEventListener("submit", function(event) {

@@ -12,26 +12,33 @@ use Illuminate\Support\Facades\Auth;
 class ViewerController extends Controller
 {
     public function dashboardviewer()
-    {
-        $user = Auth::user();
+{
+    $user = Auth::user();
 
-        if (!$user) {
-            return redirect()->route('login')->with('error', 'Please log in first.');
-        }
-
-        $cooperative = Cooperative::where('coop_id', $user->coop_id)->first();
-
-        // Fetch participant using Eloquent relationship
-        $participant = $user->participant;
-
-        // Fetch latest event
-        $event = Event::latest()->first();
-
-        // Fetch GA Registration statuses based on the user's coop_id
-        $gaRegistrations = GARegistration::where('coop_id', $user->coop_id)->get();
-
-        return view('dashboard.participant_viewer.dashboard', compact('cooperative', 'participant', 'event', 'gaRegistrations'));
+    if (!$user) {
+        return redirect()->route('login')->with('error', 'Please log in first.');
     }
+
+    $cooperative = Cooperative::where('coop_id', $user->coop_id)->first();
+
+    $participant = $user->participant;
+
+    $event = Event::latest()->first();
+
+    $gaRegistrations = GARegistration::where('coop_id', $user->coop_id)->get();
+
+    // ✅ Fetch latest 5 events with speakers
+    $latestEvents = Event::with('speakers')->orderBy('start_date', 'desc')->take(5)->get();
+
+    return view('dashboard.participant_viewer.dashboard', compact(
+        'cooperative',
+        'participant',
+        'event',
+        'gaRegistrations',
+        'latestEvents' // ✅ pass to the view
+    ));
+}
+
 
     public function events_participant()
     {
@@ -64,33 +71,41 @@ class ViewerController extends Controller
     }
 
     public function updateProfileParticipant(Request $request)
-    {
+{
+    // Validate the incoming data
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,' . Auth::id() . ',user_id',
+        'password' => 'nullable|string|min:6|confirmed', // Only validate if password is provided
+    ]);
 
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . Auth::id() . ',user_id',
-            'password' => 'nullable|string|min:6|confirmed', // Only validate if password is provided
-        ]);
+    // Get the authenticated user
+    $user = Auth::user();
 
-
-        $user = Auth::user();
-
-
-        if ($request->filled('password')) {
-            $user->password = bcrypt($request->password);
-        }
-
-
-        $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
-
-            'password' => $user->password ?? $user->password,
-        ]);
-
-
-        return redirect()->route('participant.profile.user.edit')->with('success', 'Profile updated successfully!');
+    // Only update the password if it's provided
+    if ($request->filled('password')) {
+        $user->password = bcrypt($request->password); // Hash the new password
     }
+
+    // Update the user details
+    $user->update([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => $user->password ?? $user->password,
+    ]);
+
+    // Update the participant's email to the same as the user's email
+    $participant = $user->participant; // Get the associated participant
+    if ($participant) {
+        $participant->update([
+            'email' => $request->email, // Update the participant email to the new user email
+        ]);
+    }
+
+    // Redirect back with a success message
+    return redirect()->route('participant.profile.user.edit')->with('success', 'Profile updated successfully and participant email synced!');
+}
+
 
 
 }

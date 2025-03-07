@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Event;
 use App\Models\Speaker;
 use App\Models\Cooperative;
 use App\Models\Participant;
@@ -70,12 +71,13 @@ class ParticipantController extends Controller
 
     public function participantadd()
     {
+        $events = Event::all();
         $cooperatives = Cooperative::all();
         $users = User::whereDoesntHave('participant')
                     ->where('role', 'participant') // Filter by role
                     ->get();
 
-        return view('dashboard.admin.participant.add', compact('cooperatives', 'users'));
+        return view('dashboard.admin.participant.add', compact('cooperatives', 'users' ,'events'));
     }
 
 
@@ -140,7 +142,6 @@ public function generateId($id)
 
 public function store(Request $request)
 {
-    // Validate the form data
     $validatedData = $request->validate([
         'coop_id' => 'required|exists:cooperatives,coop_id',
         'first_name' => 'required|string|max:255',
@@ -158,12 +159,9 @@ public function store(Request $request)
         'is_msp_officer' => 'required|string|max:3',
         'msp_officer_position' => 'nullable|string|max:255',
         'delegate_type' => 'required|string|max:10',
+        'event_ids' => 'nullable|array',
+        'event_ids.*' => 'exists:events,event_id',
     ]);
-
-    // If the request does not contain a coop_id, use the authenticated user's coop_id
-    if (!$request->filled('coop_id')) {
-        $validatedData['coop_id'] = Auth::user()->coop_id;
-    }
 
     do {
         $referenceNumber = Str::upper(Str::random(5));
@@ -171,13 +169,14 @@ public function store(Request $request)
 
     $validatedData['reference_number'] = $referenceNumber;
 
-    // Store the participant data
     $participant = Participant::create($validatedData);
 
-    // Generate a unique password
-    $generatedPassword = Str::random(12);
+    if ($request->has('event_ids')) {
+        $participant->events()->sync($request->input('event_ids'));
+    }
 
-    // Create a user linked to the participant
+    $generatedPassword = Str::random(6);
+
     $user = User::create([
         'name' => $validatedData['first_name'] . ' ' . $validatedData['last_name'],
         'coop_id' => $validatedData['coop_id'],
@@ -186,23 +185,18 @@ public function store(Request $request)
         'role' => 'participant',
     ]);
 
-    // Assign user_id to the participant
     $participant->user_id = $user->user_id;
     $participant->save();
 
-    // Send email notification
     Mail::to($user->email)->send(new ParticipantCreated($user, $generatedPassword));
 
-    // Generate QR code data
     $qrData = route('adminDashboard', ['coop_id' => $participant->coop_id]);
 
-    // Call the external QR code API
     $response = Http::get('https://api.qrserver.com/v1/create-qr-code/', [
         'data' => $qrData,
         'size' => '200x200'
     ]);
 
-    // Check if the QR code generation is successful
     if ($response->successful()) {
         $path = 'qrcodes/participant_' . $participant->coop_id . '.png';
         Storage::disk('public')->put($path, $response->body());
@@ -217,22 +211,27 @@ public function store(Request $request)
 }
 
 
+
     // Show a specific participant
     public function show($participant_id)
-    {
-        $participant = Participant::where('participant_id', $participant_id)->firstOrFail();
-        return view('dashboard.admin.participant.view', compact('participant'));
-    }
+{
+    $participant = Participant::with('events')->where('participant_id', $participant_id)->firstOrFail();
+    $events = Event::all(); // ✅ Fetch all congress types
+
+    return view('dashboard.admin.participant.view', compact('participant', 'events'));
+}
+
 
 
    // Show the form for editing a participant
-    public function edit($participant_id)
-    {
-        $participant = Participant::where('participant_id', $participant_id)->firstOrFail();
-        $cooperatives = Cooperative::all(); // Fetch all cooperatives
+   public function edit($participant_id)
+   {
+       $participant = Participant::where('participant_id', $participant_id)->firstOrFail();
+       $cooperatives = Cooperative::all();
+       $events = Event::all(); // ✅ Add this
 
-        return view('dashboard.admin.participant.edit', compact('participant', 'cooperatives'));
-    }
+       return view('dashboard.admin.participant.edit', compact('participant', 'cooperatives', 'events'));
+   }
 
 
     // Update the specified participant
@@ -240,11 +239,6 @@ public function store(Request $request)
     {
         $participant = Participant::where('participant_id', $participant_id)->firstOrFail();
 
-        if (Participant::where('email', $request->email)->where('participant_id', '!=', $participant_id)->exists()) {
-            return redirect()->back()->withErrors(['email' => 'This email is already in use.'])->withInput();
-        }
-
-        // Validate input with unique email check (ignoring the current participant)
         $validatedData = $request->validate([
             'first_name' => 'required|string|max:255',
             'middle_name' => 'nullable|string|max:255',
@@ -267,7 +261,7 @@ public function store(Request $request)
                 function ($attribute, $value, $fail) use ($participant) {
                     $existsInCooperatives = DB::table('cooperatives')
                         ->where('email', $value)
-                        ->where('coop_id', '!=', $participant->coop_id) // Ignore their own cooperative
+                        ->where('coop_id', '!=', $participant->coop_id)
                         ->exists();
 
                     if ($existsInCooperatives) {
@@ -276,13 +270,34 @@ public function store(Request $request)
                 }
             ],
             'coop_id' => 'required|exists:cooperatives,coop_id',
+            'event_ids' => 'nullable|array',
+            'event_ids.*' => 'exists:events,event_id',
         ]);
 
-        // Update only validated fields
         $participant->update($validatedData);
+        $participant->events()->sync($request->input('event_ids', []));
+
+        if ($participant->user_id) {
+            $user = User::find($participant->user_id);
+
+            if ($user && $user->email !== $validatedData['email']) {
+                $emailExists = User::where('email', $validatedData['email'])
+                    ->where('user_id', '!=', $user->user_id)
+                    ->exists();
+
+                if ($emailExists) {
+                    return redirect()->back()->withErrors(['email' => 'This email is already in use by another user.'])->withInput();
+                }
+
+                $user->update([
+                    'email' => $validatedData['email'],
+                ]);
+            }
+        }
 
         return redirect()->route('participants.index')->with('success', 'Participant updated successfully.');
     }
+
 
 
     // Remove the specified participant
@@ -492,16 +507,26 @@ public function updateProfile(Request $request)
         $user->password = bcrypt($request->password); // Hash the new password
     }
 
-    // Update the other fields
+    // Update the user details
     $user->update([
         'name' => $request->name,
         'email' => $request->email,
-        // Password will be updated only if filled
         'password' => $user->password ?? $user->password,
     ]);
 
+    // Update the cooperative email to the same as the user email
+    $cooperative = $user->cooperative; // Get the associated cooperative
+    if ($cooperative) {
+        $cooperative->update([
+
+            'email' => $request->email, // Update the cooperative email to the new user email
+            'contact_person' => $request->name, // Update the cooperative contact_person to the user's name
+        ]);
+    }
+
     // Redirect back with a success message
-    return redirect()->route('participant.profile.edit')->with('success', 'Profile updated successfully!');
+    return redirect()->route('participant.profile.edit')->with('success', 'Profile updated successfully and cooperative email synced!');
 }
+
 
 }

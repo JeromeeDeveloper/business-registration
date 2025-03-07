@@ -12,7 +12,7 @@ class UploadedDocument extends Model
     use HasFactory;
 
     protected $primaryKey = 'document_id';
-    protected $fillable = ['coop_id', 'document_type', 'file_name', 'file_path'];
+    protected $fillable = ['coop_id', 'document_type', 'file_name', 'file_path', 'status'];
 
     /**
      * Get the participant that owns the document.
@@ -24,6 +24,7 @@ class UploadedDocument extends Model
 
     public function cooperative()
     {
-        return $this->belongsTo(Cooperative::class, 'participant_id');
+        return $this->belongsTo(Cooperative::class, 'coop_id');
     }
+
 }

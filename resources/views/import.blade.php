@@ -217,7 +217,7 @@
                 <div class="col-md-12">
                   <div class="card">
                     <div class="card-header">
-                      <h4 class="card-title mb-0">Import</h4>
+                      <h4 class="card-title mb-0">Import Cooperatives</h4>
                     </div>
 
                     <div class="card-body">
@@ -230,8 +230,57 @@
                         <button type="submit" class="btn btn-label-info btn-round me-2">Upload</button>
                       </form>
 
+                      <!-- Sample Excel Format -->
+                      <div class="mt-5">
+                        <h6 class="fw-bold mb-3">📄 Sample Excel Format</h6>
+                        <p class="text-muted">⚠️ <strong>Note:</strong> Make sure your data starts on <strong>Row 3</strong>. Row 1 and Row 2 are reserved for titles/notes.</p>
+                        <div class="table-responsive">
+                          <table class="table table-bordered table-sm text-center align-middle">
+                            <thead class="table-light">
+                              <tr>
+                                <th>Column A</th>
+                                <th>Column B</th>
+                                <th>Column C</th>
+                                <th>Column D<br><small>(Name)</small></th>
+                                <th>Column E<br><small>(Contact Person)</small></th>
+                                <th>Column F<br><small>(Position)</small></th>
+                                <th>Column G<br><small>(Phone Number)</small></th>
+                                <th>Column H<br><small>(Barangay)</small></th>
+                                <th>Column I<br><small>(Municipality)</small></th>
+                                <th>Column J<br><small>(Province)</small></th>
+                                <th>Column K<br><small>(Email)</small></th>
+                                <th>Column L<br><small>(TIN)</small></th>
+                                <th>Column M<br><small>(Remarks)</small></th>
+                                <th>Column N</th>
+                                <th>Column O<br><small>(Region)</small></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <!-- Example Row 3 -->
+                              <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>ABC Cooperative</td>
+                                <td>Juan Dela Cruz</td>
+                                <td>Chairperson</td>
+                                <td>09171234567</td>
+                                <td>Barangay Uno</td>
+                                <td>Sample Town</td>
+                                <td>Sample Province</td>
+                                <td>abc@example.com</td>
+                                <td>123-456-789</td>
+                                <td>Active</td>
+                                <td></td>
+                                <td>Region IV-A</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+
                       <!-- Back Button -->
-                      <button class="btn btn-primary btn-round mt-3" onclick="window.history.back();">Back</button>
+                      <button class="btn btn-primary btn-round mt-4" onclick="window.history.back();">Back</button>
                     </div>
                   </div>
                 </div>

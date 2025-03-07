@@ -179,6 +179,7 @@
                                     <tr>
                                         <th>Document Type</th>
                                         <th>File Name</th>
+                                        <th>Status</th>
                                         <th>View</th>
                                         <th>Download</th>
                                     </tr>
@@ -188,11 +189,13 @@
                                         <tr>
                                             <td>{{ $document->document_type }}</td>
                                             <td>{{ $document->file_name }}</td>
+                                            <td>{{ $document->status }}</td>
                                             <td>
                                                 <a href="{{ asset('storage/' . $document->file_path) }}" target="_blank" class="btn btn-sm btn-outline-primary">
                                                     <i class="fas fa-eye"></i> View
                                                 </a>
                                             </td>
+
                                             <td>
                                                 <a href="{{ asset('storage/' . $document->file_path) }}" download class="btn btn-sm btn-outline-success">
                                                     <i class="fas fa-download"></i> Download

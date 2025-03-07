@@ -308,18 +308,35 @@
 
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label for="reference_number">Reference Number</label>
+                                        <label for="reference_number">Access Key</label>
                                         <div>{{ $participant->reference_number ?? 'N/A' }}</div>
                                     </div>
                                 </div>
 
                                 <!-- Congress Type -->
-                                <div class="col-md-6 col-lg-4">
+                                {{-- <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
                                         <label for="congress_type">Congress Type</label>
                                         <div>{{ $participant->congress_type ?? 'N/A' }}</div>
                                     </div>
+                                </div> --}}
+
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="form-group">
+                                        <label>Congress Types</label>
+                                        <div class="border p-2 rounded" style="min-height: 45px; background-color: #f8f9fa;">
+                                            @if ($participant->events->isNotEmpty())
+                                                @foreach ($participant->events as $event)
+                                                    <span class="badge bg-primary">{{ $event->title }}</span>
+                                                @endforeach
+                                            @else
+                                                <span class="text-muted">No congress types selected.</span>
+                                            @endif
+                                        </div>
+                                    </div>
                                 </div>
+
+
 
                                 <!-- Religious Affiliation -->
                                 <div class="col-md-6 col-lg-4">

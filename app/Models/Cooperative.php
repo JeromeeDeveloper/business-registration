@@ -22,13 +22,12 @@ class Cooperative extends Model
         'share_capital_balance', 'no_of_entitled_votes', 'services_availed'
     ];
 
-
     public function participants()
     {
         return $this->hasMany(Participant::class, 'coop_id');
     }
 
-    public function documents()
+    public function uploadedDocuments()  // Keeping this one, remove `documents()`
     {
         return $this->hasMany(UploadedDocument::class, 'coop_id');
     }
@@ -38,15 +37,14 @@ class Cooperative extends Model
         return $this->hasMany(Notification::class, 'coop_id');
     }
 
-    public function uploadedDocuments()
-    {
-        return $this->hasMany(UploadedDocument::class, 'coop_id');
-    }
-
     public function gaRegistration()
     {
         return $this->hasOne(GARegistration::class, 'coop_id', 'coop_id');
     }
 
-
+    public function users()
+    {
+        return $this->hasMany(User::class, 'coop_id', 'coop_id');
+    }
 }
+

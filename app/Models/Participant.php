@@ -50,5 +50,14 @@ class Participant extends Model
         return $this->hasMany(UploadedDocument::class, 'participant_id', 'participant_id');
     }
 
+    public function events()
+    {
+        return $this->belongsToMany(Event::class, 'event_participant', 'participant_id', 'event_id')
+                    ->withPivot('attendance_datetime')
+                    ->withTimestamps();
+    }
+
+    
+
 }
 

@@ -34,7 +34,7 @@
                             <a class="btn btn-primary btn-square" href="https://www.instagram.com/mass.specc/"><i class="fab fa-instagram fw-normal"></i></a>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-12 pt-0 pt-lg-5 mb-5">
+                    {{-- <div class="col-lg-4 col-md-12 pt-0 pt-lg-5 mb-5">
                         <div class="section-title section-title-sm position-relative pb-3 mb-4">
                             <h3 class="text-light mb-0">Quick Links</h3>
                         </div>
@@ -57,7 +57,7 @@
                             <a class="text-light mb-2" href="/participants"><i class="bi bi-arrow-right text-primary me-2"></i>Participants</a>
                             <a class="text-light" href="/contact"><i class="bi bi-arrow-right text-primary me-2"></i>Contact Us</a>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>

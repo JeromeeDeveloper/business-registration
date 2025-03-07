@@ -237,7 +237,7 @@
 
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label for="reference_number">Reference Number</label>
+                                        <label for="reference_number">Access Key</label>
                                         <input type="text" class="form-control" name="reference_number" value="{{ old('reference_number', $participant->reference_number) }}" readonly>
                                     </div>
                                 </div>
@@ -291,12 +291,13 @@
                                 </div>
 
                                 <!-- Congress Type -->
-                                <div class="col-md-6 col-lg-4">
+                                {{-- <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
                                         <label for="congress_type">Congress Type</label>
                                         <input type="text" class="form-control" name="congress_type" value="{{ old('congress_type', $participant->congress_type) }}">
                                     </div>
-                                </div>
+                                </div> --}}
+
 
                                 <!-- Is MSP Officer -->
                                 <div class="col-md-6 col-lg-4">

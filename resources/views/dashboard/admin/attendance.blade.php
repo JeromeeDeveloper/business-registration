@@ -211,156 +211,208 @@
                             <div class="card">
                                 <div class="card-header">
                                     <div class="d-flex align-items-center">
-                                        <h4 class="card-title">Attendance</h4>
+                                        <div class="col-md-4">
+                                            <label class="form-label fw-semibold text-muted">Present
+                                                Participant</label>
+                                            <div class="input-group">
+                                                <div
+                                                    class="d-flex align-items-center justify-content-start gap-3 w-100">
+                                                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
+                                                        style="width: 45px; height: 45px;">
+                                                        <i class="fa fa-users fs-5"></i>
+                                                    </div>
+                                                    <div>
+                                                        <h6 class="fw-bold mb-0">
+                                                            {{ $totalParticipantsWithAttendance }}</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="card-body">
                                     <!-- Modal -->
-                                    <!-- Search Form -->
-                                    <div>
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <div>
+                                            <label>Show
+                                                <select id="showEntries" class="form-select form-select-sm"
+                                                    style="width: auto; display: inline;">
+                                                    <option value="5"
+                                                        {{ request('limit') == 5 ? 'selected' : '' }}>5</option>
+                                                    <option value="10"
+                                                        {{ request('limit') == 10 ? 'selected' : '' }}>10</option>
+                                                    <option value="25"
+                                                        {{ request('limit') == 25 ? 'selected' : '' }}>25</option>
+                                                    <option value="50"
+                                                        {{ request('limit') == 50 ? 'selected' : '' }}>50</option>
+                                                </select> entries
+                                            </label>
+                                        </div>
 
                                     </div>
-                                    <form method="GET" class="mb-3">
+
+                                    <div>
+                                        <style>
+                                            #clear-date-range {
+                                                transition: all 0.3s ease;
+                                                border-top-left-radius: 0;
+                                                border-bottom-left-radius: 0;
+                                            }
+
+                                            #clear-date-range:hover {
+                                                background-color: #dc3545;
+                                                color: #fff;
+                                                transform: scale(1.05);
+                                            }
+                                        </style>
+
+                                    </div>
+
+                                    <form method="GET" class="p-4 bg-white rounded-3 shadow-sm mb-4">
                                         <div class="row g-3 align-items-end">
-                                            <!-- Total Participants -->
-                                            <div class="col-md-2">
-                                                <label class="form-label fw-bold">Present Participants</label>
+
+                                            <!-- Date Range -->
+                                            <div class="col-12 col-md-4">
+                                                <label class="form-label fw-bold">Date Range</label>
                                                 <div class="input-group shadow-sm">
-                                                    <span class="input-group-text bg-primary text-white">
-                                                        <i class="fa fa-users"></i>
-                                                    </span>
-                                                    <input type="text" class="form-control text-center fw-bold"
-                                                        value="{{ $totalParticipantsWithAttendance }}" readonly>
+                                                    <input type="text" id="date-range" class="form-control" placeholder="Select date & time range">
+                                                    <button type="button" id="clear-date-range" class="btn btn-danger d-flex align-items-center px-3" title="Clear Date Range">
+                                                        <i class="fa fa-times fs-5"></i>
+                                                    </button>
                                                 </div>
                                             </div>
 
-                                            <!-- Start Date & Time -->
-                                            <div class="col-md-2">
-                                                <label class="form-label fw-bold">Start Date & Time</label>
-                                                <div class="input-group shadow-sm">
-                                                    <span class="input-group-text bg-primary text-white">
-                                                        <i class="fa fa-calendar"></i>
-                                                    </span>
-                                                    <input type="datetime-local" name="start_datetime"
-                                                        class="form-control" value="{{ request('start_datetime') }}">
-                                                </div>
-                                            </div>
+                                            <!-- Hidden fields for start and end datetime -->
+                                            <input type="hidden" name="start_datetime" id="start_datetime" value="{{ request('start_datetime') }}">
+                                            <input type="hidden" name="end_datetime" id="end_datetime" value="{{ request('end_datetime') }}">
 
-                                            <!-- End Date & Time -->
-                                            <div class="col-md-2">
-                                                <label class="form-label fw-bold">End Date & Time</label>
+                                            <!-- Search -->
+                                            <div class="col-12 col-md-4">
+                                                <label class="form-label fw-semibold text-muted">Search Participant</label>
                                                 <div class="input-group shadow-sm">
-                                                    <span class="input-group-text bg-primary text-white">
-                                                        <i class="fa fa-calendar"></i>
-                                                    </span>
-                                                    <input type="datetime-local" name="end_datetime"
-                                                        class="form-control" value="{{ request('end_datetime') }}">
-                                                </div>
-                                            </div>
-
-                                            <!-- Search Box -->
-                                            <div class="col-md-2">
-                                                <label class="form-label fw-bold">Enter Participant Info</label>
-                                                <div class="input-group shadow-sm">
-                                                    <input type="text" name="search" class="form-control"
-                                                        placeholder="Search..." value="{{ request('search') }}">
-                                                    <button type="submit" class="btn btn-primary">
+                                                    <input type="text" name="search" class="form-control" placeholder="Enter name or ID..." value="{{ request('search') }}">
+                                                    <button type="submit" class="btn btn-primary px-4">
                                                         <i class="fa fa-search"></i>
                                                     </button>
                                                 </div>
                                             </div>
 
-                                            <!-- QR Scanner Button -->
-                                            <div class="col-md-2">
-                                                <label class="form-label fw-bold d-block">QR Scanner</label>
-                                                <a href="#" id="scan-qr-btn"
-                                                    class="btn btn-primary w-100 d-flex align-items-center justify-content-center shadow-sm gap-2"
-                                                    data-bs-toggle="modal" data-bs-target="#qrScannerModal">
-                                                    <i class="fa fa-qrcode"></i> Scan QR
-                                                </a>
-                                            </div>
-
-                                            <div class="col-md-2">
-                                                <label class="form-label fw-bold d-block">Print Attendance List</label>
-                                                <button type="button" onclick="printAttendance()"
-                                                    class="btn btn-primary w-100 d-flex align-items-center justify-content-center shadow-sm gap-2">
-                                                    <i class="fa fa-print"></i> Print Attendance List
+                                            <!-- Print Button -->
+                                            <div class="col-12 col-md-2 d-grid">
+                                                <label class="form-label fw-semibold text-muted">Print List</label>
+                                                <button type="button" onclick="printAttendance()" class="btn btn-outline-primary d-flex align-items-center justify-content-center gap-2 shadow-sm">
+                                                    <i class="fa fa-print"></i> Print
                                                 </button>
                                             </div>
 
+                                            <!-- Excel Button -->
+                                            <div class="col-12 col-md-2 d-grid">
+                                                <label class="form-label fw-semibold text-muted">Generate Report</label>
+                                                <a class="btn btn-outline-success d-flex align-items-center justify-content-center gap-2 shadow-sm" href="{{ route('export-event-participants') }}">
+                                                    <i class="fas fa-file-excel" style="color: #2a9d8f;"></i> Excel
+                                                </a>
+                                            </div>
                                         </div>
                                     </form>
 
 
+
+                                    <div class="p-4 bg-white rounded-3 shadow-sm mb-4">
+                                        <div class="row align-items-center g-3">
+
+                                            <!-- Event Selector -->
+                                            <div class="col-12 col-md-5">
+                                                <label for="eventSelect" class="form-label fw-bold">Select Event</label>
+                                                <select id="eventSelect" name="event_id" class="form-select shadow-sm" required>
+                                                    <option value="" disabled selected>Select event</option>
+                                                    @foreach ($events as $eventOption)
+                                                        <option value="{{ $eventOption->event_id }}"
+                                                            {{ old('event_id') == $eventOption->event_id ? 'selected' : '' }}>
+                                                            {{ $eventOption->title }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
+                                            <!-- Event Link Indicator -->
+                                            <div class="col-12 col-md-auto d-flex align-items-center justify-content-center">
+                                                <div class="d-flex flex-column align-items-center gap-1 text-muted">
+                                                    <i class="fa fa-link fs-4"></i>
+                                                    <small class="text-center">Event Required for Scanning</small>
+                                                </div>
+                                            </div>
+
+                                            <!-- QR Scanner Button -->
+                                            <div class="col-12 col-md-5">
+                                                <label class="form-label fw-bold invisible">Open QR Scanner</label>
+                                                <button id="openQRModal"
+                                                    class="btn btn-outline-primary d-flex align-items-center gap-2 shadow-sm w-100"
+                                                    disabled
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#qrScannerModal">
+                                                    <i class="fa fa-qrcode"></i> Open QR Scanner
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+
+                                    <!-- QR Scanner Modal -->
                                     <div class="modal fade" id="qrScannerModal" tabindex="-1"
                                         aria-labelledby="qrScannerModalLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered modal-sm">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="qrScannerModalLabel"><i
-                                                            class="fa fa-qrcode"></i> Scan QR Code</h5>
+                                                    <h5 class="modal-title" id="qrScannerModalLabel">
+                                                        <i class="fa fa-qrcode"></i> Scan QR Code
+                                                    </h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body text-center">
+                                                    <!-- QR Reader -->
                                                     <div id="qr-reader" style="width: 100%;"></div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <!-- Responsive Modal Styling -->
-                                    <style>
-                                        @media (max-width: 576px) {
-                                            .modal-dialog {
-                                                max-width: 90%;
-                                                margin: auto;
-                                            }
-                                        }
-                                    </style>
-                                    <!-- Table Display -->
-                                    <div class="d-flex justify-content-between mb-3">
-                                        <div>
-                                            <label>Show
-                                                <select id="showEntries" class="form-select form-select-sm" style="width: auto; display: inline;">
-                                                    <option value="5" {{ request('limit') == 5 ? 'selected' : '' }}>5</option>
-                                                    <option value="10" {{ request('limit') == 10 ? 'selected' : '' }}>10</option>
-                                                    <option value="25" {{ request('limit') == 25 ? 'selected' : '' }}>25</option>
-                                                    <option value="50" {{ request('limit') == 50 ? 'selected' : '' }}>50</option>
-                                                </select> entries
-                                            </label>
-                                        </div>
-                                    </div>
 
                                     <div class="table-responsive">
                                         <table id="add-row" class="display table table-striped table-hover">
                                             <thead>
                                                 <tr>
-                                                    {{-- <th>Registration Status</th> --}}
+                                                    <th>Event Attended</th>
                                                     <th>Assigned Cooperative</th>
                                                     <th>Attendance Date & Time</th>
                                                     <th>First Name</th>
                                                     <th>Last Name</th>
-                                                    <th>Congress Type</th>
+                                                    {{-- <th>Congress Type</th> --}}
                                                     <th>QR Code</th>
                                                     <th>Action</th>
-                                                    {{-- <th>Manage Status</th> --}}
                                                 </tr>
                                             </thead>
-                                      <tbody>
-                                         @forelse ($participants as $participant)
-                                             <tr>
-                                                        {{-- <td>{{ $participant->registration->status ?? 'Pending' }}</td> --}}
-                                                <td>{{ optional($participant->cooperative)->name ?? 'N/A' }}</td>
-                                                        <td>
-                                                            {{ $participant->attendance_datetime ? \Carbon\Carbon::parse($participant->attendance_datetime)->format('F j, Y g:i A') : 'Not Attended' }}
+
+                                            <tbody>
+                                                @forelse ($participants as $eventParticipant)
+                                                    <tr>
+                                                        <td>{{ $eventParticipant->event->title ?? 'N/A' }}</td>
+                                                        <td>{{ optional($eventParticipant->participant->cooperative)->name ?? 'N/A' }}
                                                         </td>
-                                                        <td>{{ $participant->first_name }}</td>
-                                                        <td>{{ $participant->last_name }}</td>
-                                                        <td>{{ $participant->congress_type ?? 'N/A' }}</td>
                                                         <td>
-                                                            @if ($participant->qr_code)
-                                                                <img src="{{ asset('storage/' . $participant->qr_code) }}"
+                                                            {{ $eventParticipant->attendance_datetime
+                                                                ? \Carbon\Carbon::parse($eventParticipant->attendance_datetime)->format('F j, Y g:i A')
+                                                                : 'Not Attended' }}
+                                                        </td>
+                                                        <td>{{ $eventParticipant->participant->first_name }}</td>
+                                                        <td>{{ $eventParticipant->participant->last_name }}</td>
+                                                        {{-- <td>{{ $eventParticipant->participant->congress_type ?? 'N/A' }} --}}
+                                                        </td>
+                                                        <td>
+                                                            @if ($eventParticipant->participant && $eventParticipant->participant->participant_id)
+                                                                <img src="https://api.qrserver.com/v1/create-qr-code/?data={{ urlencode(route('adminDashboard', ['participant_id' => $eventParticipant->participant->participant_id])) }}&size=100x100"
                                                                     alt="QR Code"
                                                                     style="width: 100px; height: 100px;">
                                                             @else
@@ -369,48 +421,49 @@
                                                         </td>
                                                         <td class="no-print">
                                                             <div class="form-button-action">
-                                                                <a href="{{ route('attendance.show', $participant->participant_id) }}"
+                                                                <a href="{{ route('attendance.show', $eventParticipant->participant->participant_id) }}"
                                                                     class="btn btn-link btn-info btn-lg"
                                                                     data-bs-toggle="tooltip"
                                                                     title="View Participant Details">
                                                                     <i class="fa fa-eye"></i>
                                                                 </a>
-                                                         </td>
+                                                            </div>
+                                                        </td>
 
-                                                    </div>
-
-                                            </tr>
-                                                 @empty
-                                                <tr>
-                                                    <td colspan="8" class="text-center">No participants found</td>
-                                                </tr>
+                                                    </tr>
+                                                @empty
+                                                    <tr>
+                                                        <td colspan="8" class="text-center">No participants found
+                                                        </td>
+                                                    </tr>
                                                 @endforelse
-                                       </tbody>
-                                    </table>
-                                </div>
+                                            </tbody>
 
-                                @if (session('success'))
-                                    <script>
-                                        Swal.fire({
-                                            icon: 'success',
-                                            title: '{{ session('success') == 'Deleted!' ? 'Deleted!' : 'Success!' }}',
-                                            text: '{{ session('success') }}',
-                                            confirmButtonText: 'OK'
-                                        });
-                                    </script>
-                                @endif
-                                <div class="d-flex justify-content-center mt-3">
-                                    {{ $participants->appends(['search' => request('search')])->links('pagination::bootstrap-4') }}
-                                </div>
+                                        </table>
+                                    </div>
 
+                                    @if (session('success'))
+                                        <script>
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: '{{ session('success') == 'Deleted!' ? 'Deleted!' : 'Success!' }}',
+                                                text: '{{ session('success') }}',
+                                                confirmButtonText: 'OK'
+                                            });
+                                        </script>
+                                    @endif
+                                    <div class="d-flex justify-content-center mt-3">
+                                        {{ $participants->appends(['search' => request('search')])->links('pagination::bootstrap-4') }}
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            @include('layouts.adminfooter')
         </div>
-        @include('layouts.adminfooter')
-    </div>
     </div>
     @include('layouts.links')
     <script>
@@ -421,8 +474,54 @@
         });
     </script>
 
+
+
+
     <script src="https://cdn.jsdelivr.net/npm/html5-qrcode/minified/html5-qrcode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- Include SweetAlert -->
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        const dateRangePicker = flatpickr("#date-range", {
+            mode: "range",
+            enableTime: true,
+            dateFormat: "Y-m-d h:i K", // 12-hour format with AM/PM
+            time_24hr: false,
+            defaultDate: [
+                "{{ request('start_datetime') }}",
+                "{{ request('end_datetime') }}"
+            ],
+            onChange: function(selectedDates) {
+                if (selectedDates.length === 2) {
+                    document.getElementById('start_datetime').value = formatDateTime(selectedDates[0]);
+                    document.getElementById('end_datetime').value = formatDateTime(selectedDates[1]);
+                }
+            }
+        });
+
+        document.getElementById('clear-date-range').addEventListener('click', function() {
+            dateRangePicker.clear();
+            document.getElementById('start_datetime').value = '';
+            document.getElementById('end_datetime').value = '';
+        });
+
+        function formatDateTime(date) {
+            const options = {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            };
+            return new Intl.DateTimeFormat('en-US', options).format(date).replace(',', '');
+        }
+    </script>
+
+
     <script>
         function printAttendance() {
             var tableClone = document.querySelector("table tbody").cloneNode(true);
@@ -448,6 +547,7 @@
             <table>
                 <thead>
                     <tr>
+                         <th>Event Attended</th>
                         <th>Cooperative</th>
                         <th>Attendance Date & Time</th>
                         <th>First Name</th>
@@ -472,199 +572,195 @@
             printWindow.document.close();
         }
     </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            let qrScanner;
 
-            document.getElementById("qrScannerModal").addEventListener("shown.bs.modal", async function() {
-                if (typeof Html5Qrcode === "undefined") {
-                    console.error("Html5Qrcode is NOT loaded!");
-                    return;
-                }
+<script>
+    let qrScanner;
 
-                qrScanner = new Html5Qrcode("qr-reader");
-                try {
-                    let devices = await navigator.mediaDevices.enumerateDevices();
-                    let cameraId = null;
+    function checkEventSelection() {
+        const eventSelect = document.getElementById('eventSelect');
+        const openQRModal = document.getElementById('openQRModal');
+        openQRModal.disabled = !eventSelect.value;
+    }
 
-                    // Look for DroidCam or other cameras
-                    devices.forEach(device => {
-                        if (device.label.toLowerCase().includes("droidcam")) {
-                            cameraId = device.deviceId;
-                        }
-                    });
+    document.addEventListener("DOMContentLoaded", function() {
+        const eventSelect = document.getElementById('eventSelect');
 
-                    if (cameraId) {
-                        qrScanner.start(
-                            cameraId, {
-                                fps: 10,
-                                qrbox: {
-                                    width: 250,
-                                    height: 250
-                                }
-                            },
-                            decodedText => handleScannedQR(decodedText, qrScanner),
-                            errorMessage => console.warn(errorMessage)
-                        ).catch(err => console.error("Error starting QR scanner:", err));
-                    }
-                } catch (err) {
-                    console.error("Error accessing cameras:", err);
-                }
-            });
+        // Initial check on page load
+        checkEventSelection();
 
-            // Stop QR scanner when modal closes
-            document.getElementById("qrScannerModal").addEventListener("hidden.bs.modal", function() {
-                if (qrScanner) {
-                    qrScanner.stop().catch(err => console.warn("Error stopping scanner:", err));
-                }
-            });
-        });
+        // Enable/disable button on event selection change
+        eventSelect.addEventListener('change', checkEventSelection);
 
-        function handleScannedQR(decodedText, qrScanner) {
-            console.log("Scanned QR Code:", decodedText);
-
-            let participantId;
-
-            try {
-                // Try to extract ID from a URL
-                const url = new URL(decodedText);
-                const pathSegments = url.pathname.split("/"); // Split path into segments
-                participantId = pathSegments[pathSegments.length - 1]; // Get last segment (ID)
-            } catch (e) {
-                // If it's not a valid URL, assume it's a direct numeric ID
-                participantId = decodedText.trim();
-            }
-
-            // Ensure participantId is a valid number
-            if (isNaN(participantId) || participantId === "") {
-                Swal.fire({
-                    icon: "error",
-                    title: "Invalid QR Code",
-                    text: "No valid participant ID found.",
-                });
+        document.getElementById("qrScannerModal").addEventListener("shown.bs.modal", async function() {
+            if (typeof Html5Qrcode === "undefined") {
+                console.error("Html5Qrcode is NOT loaded!");
                 return;
             }
 
-            console.log("Extracted Participant ID:", participantId);
+            const selectedEvent = eventSelect.value;
 
-            fetch(`/scan-qr?participant_id=${participantId}`, {
-                    method: "GET",
-                    headers: {
-                        "Accept": "application/json"
-                    },
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        let iconType = data.error.includes("already recorded") ? "warning" : "error";
-                        Swal.fire({
-                            icon: iconType,
-                            title: "Scan Error",
-                            text: data.error,
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: "success",
-                            title: "Attendance Recorded!",
-                            text: data.success,
-                        });
-                    }
-                    qrScanner.stop();
-                })
-                .catch(error => {
-                    console.error("QR Code Scan Error:", error);
-                    Swal.fire({
-                        icon: "error",
-                        title: "Scan Failed",
-                        text: "Failed to record attendance.",
-                    });
+            if (!selectedEvent) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "No Event Selected",
+                    text: "Please select an event first before scanning.",
                 });
-        }
+                const modal = bootstrap.Modal.getInstance(document.getElementById(
+                'qrScannerModal'));
+                modal.hide();
+                return;
+            }
 
-        // dynamic scan url
+            qrScanner = new Html5Qrcode("qr-reader");
+            try {
+                let devices = await navigator.mediaDevices.enumerateDevices();
+                let cameraId = null;
 
-        // function handleScannedQR(decodedText, qrScanner) {
-        //     console.log("Scanned QR Code:", decodedText);
+                devices.forEach(device => {
+                    if (device.label.toLowerCase().includes("droidcam")) {
+                        cameraId = device.deviceId;
+                    }
+                });
 
-        //     let participantId;
+                if (cameraId) {
+                    qrScanner.start(
+                        cameraId, {
+                            fps: 10,
+                            qrbox: {
+                                width: 250,
+                                height: 250
+                            }
+                        },
+                        decodedText => handleScannedQR(decodedText, qrScanner),
+                        errorMessage => console.warn(errorMessage)
+                    ).catch(err => console.error("Error starting QR scanner:", err));
+                }
+            } catch (err) {
+                console.error("Error accessing cameras:", err);
+            }
+        });
 
-        //     try {
-        //         const url = new URL(decodedText);
-        //         const pathSegments = url.pathname.split("/");
-        //         participantId = pathSegments[pathSegments.length - 1];
-        //     } catch (e) {
-        //         participantId = decodedText.trim();
-        //     }
+        document.getElementById("qrScannerModal").addEventListener("hidden.bs.modal", function() {
+            if (qrScanner) {
+                qrScanner.stop().catch(err => console.warn("Error stopping scanner:", err));
+            }
+        });
+    });
 
-        //     if (isNaN(participantId) || participantId === "") {
-        //         Swal.fire({
-        //             icon: "error",
-        //             title: "Invalid QR Code",
-        //             text: "No valid participant ID found.",
-        //         });
-        //         return;
-        //     }
+    function handleScannedQR(decodedText, qrScanner) {
+    console.log("Scanned QR Code:", decodedText);
 
-        //     console.log("Extracted Participant ID:", participantId);
+    let participantId;
 
-        //     const baseUrl = window.location.origin; // Automatically gets the correct base URL
+    try {
+        const url = new URL(decodedText);
+        const pathParts = url.pathname.split('/');
 
-        //     fetch(`${baseUrl}/scan-qr?participant_id=${participantId}`, {
-        //         method: "GET",
-        //         headers: { "Accept": "application/json" },
-        //     })
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         if (data.error) {
-        //             let iconType = data.error.includes("already recorded") ? "warning" : "error";
-        //             Swal.fire({
-        //                 icon: iconType,
-        //                 title: "Scan Error",
-        //                 text: data.error,
-        //             });
-        //         } else {
-        //             Swal.fire({
-        //                 icon: "success",
-        //                 title: "Attendance Recorded!",
-        //                 text: data.success,
-        //             });
-        //         }
-        //         qrScanner.stop();
-        //     })
-        //     .catch(error => {
-        //         console.error("QR Code Scan Error:", error);
-        //         Swal.fire({
-        //             icon: "error",
-        //             title: "Scan Failed",
-        //             text: "Failed to record attendance.",
-        //         });
-        //     });
-        // }
+        // Extract participant_id from the last part of the path
+        participantId = pathParts[pathParts.length - 1];
+    } catch (e) {
+        Swal.fire({
+            icon: "error",
+            title: "Invalid QR Code",
+            text: "QR code does not contain a valid URL with a participant ID.",
+        });
+        return;
+    }
 
-        // Function to use DroidCam IP as a video source
-        function useDroidCamIP(qrScanner, ip) {
-            let videoElement = document.createElement("video");
-            videoElement.src = ip;
-            videoElement.setAttribute("autoplay", "");
-            videoElement.setAttribute("playsinline", "");
+    if (!participantId || isNaN(participantId)) {
+        Swal.fire({
+            icon: "error",
+            title: "Invalid QR Code",
+            text: "No valid participant ID found.",
+        });
+        return;
+    }
 
-            videoElement.addEventListener("loadedmetadata", function() {
-                qrScanner.start(
-                    videoElement, {
-                        fps: 10,
-                        qrbox: {
-                            width: 250,
-                            height: 250
-                        }
-                    },
-                    decodedText => handleScannedQR(decodedText, qrScanner),
-                    errorMessage => console.warn(errorMessage)
-                ).catch(err => console.error("Error starting QR scanner:", err));
+    const eventId = document.getElementById("eventSelect").value;
+
+    if (!eventId) {
+        Swal.fire({
+            icon: "warning",
+            title: "No Event Selected",
+            text: "Please select an event before scanning.",
+        });
+        return;
+    }
+
+    console.log("Extracted Participant ID:", participantId, "Selected Event ID:", eventId);
+
+    fetch(`/scan-qr?participant_id=${participantId}&event_id=${eventId}`, {
+        method: "GET",
+        headers: {
+            "Accept": "application/json"
+        },
+    })
+    .then(response => {
+        console.log("Response Status:", response.status); // Log the response status
+        return response.json();
+    })
+    .then(data => {
+        console.log("Response Data:", data); // Log the response data for debugging
+
+        if (data.error) {
+            console.log("Error Response:", data.error); // Log the error response
+
+            let iconType = data.error.includes("already recorded") ? "warning" : "error";
+            Swal.fire({
+                icon: iconType,
+                title: "Scan Error",
+                text: data.error, // Display the error from the response
             });
+        } else {
+            console.log("Success Response:", data.success); // Log success message
+            Swal.fire({
+                icon: "success",
+                title: "Attendance Recorded!",
+                text: data.success,
+            }).then(() => {
 
-            document.getElementById("qr-reader").appendChild(videoElement);
+            });
         }
-    </script>
+        qrScanner.stop();
+    })
+    .catch(error => {
+        console.error("QR Code Scan Error:", error); // Log the error in the console
+
+        Swal.fire({
+            icon: "error",
+            title: "Scan Failed",
+            text: `Failed to record attendance. Error: ${error.message || 'Unknown error'}`, // Display the error message
+        });
+        qrScanner.stop();
+    });
+}
+
+
+
+    // Function to use DroidCam IP as a video source
+    function useDroidCamIP(qrScanner, ip) {
+        let videoElement = document.createElement("video");
+        videoElement.src = ip;
+        videoElement.setAttribute("autoplay", "");
+        videoElement.setAttribute("playsinline", "");
+
+        videoElement.addEventListener("loadedmetadata", function() {
+            qrScanner.start(
+                videoElement, {
+                    fps: 10,
+                    qrbox: {
+                        width: 250,
+                        height: 250
+                    }
+                },
+                decodedText => handleScannedQR(decodedText, qrScanner),
+                errorMessage => console.warn(errorMessage)
+            ).catch(err => console.error("Error starting QR scanner:", err));
+        });
+
+        document.getElementById("qr-reader").appendChild(videoElement);
+    }
+</script>
 </body>
 
 </html>

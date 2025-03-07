@@ -223,7 +223,6 @@
                     <button type="button" class="btn btn-label-info btn-round me-2" onclick="window.location.href='{{ route('adminview') }}'">
                         <i class="fa fa-arrow-left"></i>
                     </button>
-
                 </div>
                     </div>
 
@@ -231,42 +230,59 @@
                         <div class="alert alert-danger">{{ session('error') }}</div>
                     @endif
 
-                    @if($documents->isEmpty())
-                        <div class="text-center py-5">No documents uploaded yet.</div>
-                    @else
-                        <div class="table-responsive">
-                            <table class="table table-striped table-hover text-center align-middle">
-                                <thead class="table-dark">
+                @if($documents->isEmpty())
+                    <div class="text-center py-5">No documents uploaded yet.</div>
+                @else
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover text-center align-middle">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Document Type</th>
+                                    <th>File Name</th>
+                                    <th>View</th>
+                                    <th>Download</th>
+                                    <th>Status</th> <!-- Add this -->
+                                    <th>Action</th> <!-- Add this -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($documents as $document)
                                     <tr>
-                                        <th>Document Type</th>
-                                        <th>File Name</th>
-                                        <th>View</th>
-                                        <th>Download</th>
+                                        <td>{{ $document->document_type }}</td>
+                                        <td>{{ $document->file_name }}</td>
+                                        <td>
+                                            <a href="{{ asset('storage/' . $document->file_path) }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-eye"></i> View
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a href="{{ asset('storage/' . $document->file_path) }}" download class="btn btn-sm btn-outline-success">
+                                                <i class="fas fa-download"></i> Download
+                                            </a>
+                                        </td>
+                                        <!-- Status Dropdown -->
+                                        <td>
+                                            <form action="{{ route('admin.documents.updateStatus', $document->document_id) }}" method="POST">
+                                                @csrf
+                                                @method('PUT')
+                                                <select name="status" class="form-select form-select-sm">
+                                                    <option value="Pending" {{ $document->status == 'Pending' ? 'selected' : '' }}>Pending</option>
+                                                    {{-- <option value="Checked" {{ $document->status == 'Checked' ? 'selected' : '' }}>Checked</option> --}}
+                                                    <option value="Approved" {{ $document->status == 'Approved' ? 'selected' : '' }}>Approved</option>
+                                                    {{-- <option value="Rejected" {{ $document->status == 'Rejected' ? 'selected' : '' }}>Rejected</option> --}}
+                                                </select>
+                                        </td>
+                                        <td>
+                                            <button type="submit" class="btn btn-sm btn-outline-secondary">Update</button>
+                                            </form>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($documents as $document)
-                                        <tr>
-                                            <td>{{ $document->document_type }}</td>
-                                            <td>{{ $document->file_name }}</td>
-                                            <td>
-                                                <a href="{{ asset('storage/' . $document->file_path) }}" target="_blank" class="btn btn-sm btn-outline-primary">
-                                                    <i class="fas fa-eye"></i> View
-                                                </a>
-                                            </td>
-                                            <td>
-                                                <a href="{{ asset('storage/' . $document->file_path) }}" download class="btn btn-sm btn-outline-success">
-                                                    <i class="fas fa-download"></i> Download
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @endif
 
-                        </div>
-
-                    @endif
 
              </div>
 
@@ -282,6 +298,18 @@
       </div>
 
     </div>
+    @if(session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: '{{ session('success') }}',
+            showConfirmButton: false,
+            timer: 2000
+        });
+    </script>
+@endif
+
   @include('layouts.links')
   </body>
 </html>

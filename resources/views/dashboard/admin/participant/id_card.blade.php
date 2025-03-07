@@ -40,7 +40,7 @@
         <p><strong>Cooperative Name</strong> {{ optional($participant->cooperative)->name ?? 'N/A' }}</p>
         <p><strong>Nickname:</strong> {{ $participant->nickname}}</p>
         <p><strong>Designation:</strong> {{ $participant->designation ?? 'N/A' }}</p>
-        <p><strong>Reference Number:</strong> {{ $participant->reference_number ?? 'N/A' }}</p>
+        <p><strong>Access Key:</strong> {{ $participant->reference_number ?? 'N/A' }}</p>
 
         @if ($participant->qr_code)
             <img src="{{ asset('storage/' . $participant->qr_code) }}" alt="QR Code">

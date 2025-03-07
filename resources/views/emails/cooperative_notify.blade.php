@@ -56,7 +56,7 @@
 <body>
     <div class="container">
 
-        <h1>You're Invited!</h1>
+        <h1>Notice!</h1>
         <p><strong>Dear {{ $coop->contact_person }},</strong></p>
 
         <div class="content">
@@ -98,7 +98,7 @@
 
         </div>
 
-        <p><a href="http://127.0.0.1:8000/login">Confirm Attendance</a></p>
+        {{-- <p><a href="http://127.0.0.1:8000/login">Confirm Attendance</a></p> --}}
 
         <p style="margin-top: 20px;">We look forward to your participation! If you have any questions, feel free to contact us.</p>
 

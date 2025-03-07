@@ -212,27 +212,28 @@
               <div class="col-md-12">
                 <div class="card">
                   <div class="card-header">
-                    <div class="d-flex align-items-center">
-                      <h4 class="card-title">Users</h4>
-                    </div>
+                    <h4 class="card-title mb-2 mb-md-0">Users</h4>
                   </div>
                   <div class="card-body">
                     <!-- Modal -->
                     <form method="GET" action="{{ route('users.index') }}" class="mb-3">
-                        <div class="d-flex justify-content-end">
-                            <div class="input-group flex-nowrap w-50 w-md-50 w-lg-25 ms-auto">
+                        <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+
+
+                            <div class="input-group w-100 w-md-50 w-lg-25">
                                 <input type="text" name="search" class="form-control" placeholder="Search..."
                                        value="{{ request('search') }}">
-                                       <div class="input-group-append gap-2 d-flex">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                                <a href="{{route('registerform')}}" class="btn btn-primary" data-bs-toggle="tooltip" title="Add User">
-                                    <i class="fa fa-plus"></i>
-                                </a>
-                            </div>
+                                <div class="input-group-append gap-2 d-flex">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                    <a href="{{route('registerform')}}" class="btn btn-primary" data-bs-toggle="tooltip" title="Add User">
+                                        <i class="fa fa-plus"></i>
+                                    </a>
+                                </div>
                             </div>
                         </div>
+
                         <div class="table-responsive">
                             <table id="add-row" class="display table table-striped table-hover">
                                 <thead>

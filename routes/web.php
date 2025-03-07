@@ -19,6 +19,7 @@ use App\Http\Controllers\ExcelImportController;
 use App\Http\Controllers\ParticipantController;
 use App\Http\Middleware\ParticipantUserMiddleware;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
+use App\Http\Controllers\EventParticipantExportController;
 
 // Home Page
 Route::get('/', function () {
@@ -44,6 +45,9 @@ Route::post('/logout', function () {Auth::logout();return redirect('/login');})-
 //store
 Route::middleware([AdminMiddleware::class])->group(function () {
 
+//export
+
+Route::get('export-event-participants', [EventParticipantExportController::class, 'export'])->name('export-event-participants');
 
 Route::get('/admin/reports', [DashboardController::class, 'generateReports'])->name('admin.reports');
 
@@ -80,6 +84,8 @@ Route::get('/Admin/Cooperatives', [DashboardController::class, 'view'])->name('a
 Route::delete('/admin/cooperatives/{coop_id}', [DashboardController::class, 'destroy'])->name('cooperatives.destroy');
 
 Route::get('/Admin/Document/View/{coop_id?}', [CooperativeController::class, 'viewadminDocuments'])->name('admin.documents.view');
+Route::put('/Admin/Document/UpdateStatus/{document_id}', [CooperativeController::class, 'updateDocumentStatus'])->name('admin.documents.updateStatus');
+
 
 //edit
 Route::get('/Admin/Cooperatives/Edit/{coop_id}', [DashboardController::class, 'edit'])->name('cooperatives.edit');

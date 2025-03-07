@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Cooperative;
+use App\Models\Participant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -118,6 +119,7 @@ class AuthController extends Controller
         $users = User::with('participant') // Eager-load participant relationship
             ->where('name', 'like', '%' . $search . '%')
             ->orWhere('email', 'like', '%' . $search . '%')
+            ->orWhere('role', 'like', '%' . $search . '%')
             ->orderBy('created_at', 'desc')
             ->paginate(5); // Increased pagination limit for better listing
 
@@ -141,18 +143,20 @@ class AuthController extends Controller
     }
 
     public function update(Request $request, $user_id)
-{
+    {
     // Validate the incoming data
     $validated = $request->validate([
         'name' => 'required|string|max:255',
         'email' => 'required|email|unique:users,email,' . $user_id . ',user_id',
-       'role' => 'required|string|in:cooperative,admin,participant',
+        'role' => 'required|string|in:cooperative,admin,participant',
         'coop_id' => 'required|exists:cooperatives,coop_id', // Validate coop_id exists in cooperatives table
         'password' => 'nullable|string|min:6|confirmed',
     ]);
 
     // Find the user by user_id and update the details
     $user = User::findOrFail($user_id);
+
+    $oldEmail = $user->email; // Store the old email to detect changes
 
     // Only update the password if it's provided
     if ($request->filled('password')) {
@@ -162,11 +166,21 @@ class AuthController extends Controller
         unset($validated['password']);
     }
 
-    // Update the coop_id field as well
     $user->coop_id = $request->coop_id;
-
-    // Update the other fields
     $user->update($validated);
+
+    // Check if email has changed
+    if ($oldEmail !== $validated['email']) {
+        // Update participant email if they had the old email
+        Participant::where('user_id', $user_id)
+            ->where('email', $oldEmail)
+            ->update(['email' => $validated['email']]);
+
+        // Update cooperative email if it's linked by coop_id
+        Cooperative::where('coop_id', $user->coop_id)
+            ->where('email', $oldEmail)
+            ->update(['email' => $validated['email']]);
+    }
 
     // Redirect to the users page with a success message
     return redirect()->route('users.index')->with('success', 'User updated successfully!');

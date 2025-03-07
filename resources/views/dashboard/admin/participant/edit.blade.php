@@ -294,7 +294,7 @@
 
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label for="reference_number">Reference Number</label>
+                                        <label for="reference_number">Access Key</label>
                                         <input type="text" class="form-control" name="reference_number" value="{{ old('reference_number', $participant->reference_number) }}" readonly>
                                     </div>
                                 </div>
@@ -336,10 +336,44 @@
                                 </div>
 
                                 <!-- Congress Type -->
-                                <div class="col-md-6 col-lg-4">
+                                {{-- <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
                                         <label for="congress_type">Congress Type</label>
                                         <input type="text" class="form-control" name="congress_type" value="{{ old('congress_type', $participant->congress_type) }}">
+                                    </div>
+                                </div> --}}
+
+                                @php
+                                    $participantEventIds = $participant->events->pluck('event_id')->toArray();
+                                @endphp
+
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="event_ids">Congress Types</label>
+                                        <div class="dropdown">
+                                            <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Select Congress Types
+                                            </button>
+                                            <ul class="dropdown-menu p-3" style="width: 100%; max-height: 300px; overflow-y: auto;">
+                                                @foreach ($events as $event)
+                                                    <li>
+                                                        <div class="form-check">
+                                                            <input
+                                                                class="form-check-input"
+                                                                type="checkbox"
+                                                                name="event_ids[]"
+                                                                value="{{ $event->event_id }}"
+                                                                id="event_{{ $event->event_id }}"
+                                                                {{ in_array($event->event_id, $participantEventIds) ? 'checked' : '' }}
+                                                            >
+                                                            <label class="form-check-label" for="event_{{ $event->event_id }}">
+                                                                {{ $event->title }}
+                                                            </label>
+                                                        </div>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
 

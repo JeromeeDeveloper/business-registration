@@ -7,14 +7,14 @@
 
 <body>
     <style>
-        .wrapper{
+        .wrapper {
             overflow-x: hidden;
         }
 
         @media (max-width: 992px) {
-         .main-panel .row {
-        --bs-gutter-x: 1px;
-        }
+            .main-panel .row {
+                --bs-gutter-x: 1px;
+            }
         }
 
         /* Small screens (mobile) */
@@ -29,6 +29,36 @@
             .main-panel .row {
                 --bs-gutter-x: 1px;
             }
+        }
+
+        /* Style the Prev and Next buttons */
+        #eventsCarousel .carousel-control-prev,
+        #eventsCarousel .carousel-control-next {
+            width: 40px;
+            height: 40px;
+            background-color: white;
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 1;
+            /* Optional: always visible */
+        }
+
+        #eventsCarousel .carousel-control-prev-icon,
+        #eventsCarousel .carousel-control-next-icon {
+            filter: invert(32%) sepia(93%) saturate(2115%) hue-rotate(203deg) brightness(90%) contrast(90%);
+            width: 20px;
+            height: 20px;
+        }
+
+        #eventsCarousel .carousel-control-prev {
+            left: -20px;
+            /* Adjust position if needed */
+        }
+
+        #eventsCarousel .carousel-control-next {
+            right: -20px;
+            /* Adjust position if needed */
         }
     </style>
     <div class="wrapper">
@@ -217,29 +247,105 @@
                             </div>
                             <p class="text-muted text-nowrap">
                                 Logged in as: <strong>{{ Auth::user()->name }}</strong>
-                                @if($coop)
-                                    | Cooperative: <strong>{{ $coop->name }}</strong>
+                                @if ($coop)
+                                    <br>Cooperative: <strong>{{ $coop->name }}</strong>
                                 @else
-                                    | No Cooperative Assigned
+                                    No Cooperative Assigned
                                 @endif
                             </p>
                         </div>
 
-
                         <div
                             class="d-flex flex-column flex-sm-row gap-2 w-100 justify-content-center justify-content-md-end py-2 py-md-0">
+                            <!-- Register Now Button with Icon -->
+                            <a href="{{ route('coop.index') }}"
+                                class="btn btn-primary btn-lg rounded-pill me-2 shadow-sm hover-shadow d-flex align-items-center">
+                                <i class="fas fa-user-plus me-2"></i> Register Now
+                            </a>
+
                             @if ($coop)
+                                <!-- Cooperative Profile Button with Icon -->
                                 <a href="{{ route('cooperativeprofile', ['coop_id' => $coop->coop_id]) }}"
-                                    class="btn btn-label-info btn-round me-2">
-                                    Cooperative Profile
+                                    class="btn btn-primary btn-lg rounded-pill me-2 shadow-sm hover-shadow d-flex align-items-center">
+                                    <i class="fas fa-building me-2"></i> Cooperative Profile
                                 </a>
                             @else
-                                <a class="btn btn-info btn-round">No Cooperative Associated Yet</a>
+                                <!-- No Cooperative Associated Button with Icon -->
+                                <a
+                                    class="btn btn-info btn-lg rounded-pill shadow-sm hover-shadow d-flex align-items-center">
+                                    <i class="fas fa-exclamation-circle me-2"></i> No Cooperative Associated Yet
+                                </a>
                             @endif
-                            <a href="#" id="viewDocumentsBtn" class="btn btn-primary btn-round">View Uploaded
-                                Documents</a>
+
+
+                            {{-- Button to open the modal --}}
+                            <a class="btn btn-primary btn-lg rounded-pill me-2 shadow-sm hover-shadow d-flex align-items-center"
+                                data-bs-toggle="modal" data-bs-target="#documentsModal">
+                                <i class="fas fa-file me-2"> </i> Documents
+                            </a>
+
+                            {{-- Modal --}}
+                            <div class="modal fade" id="documentsModal" tabindex="-1"
+                                aria-labelledby="documentsModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="documentsModalLabel">Manage Documents</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+
+                                        <div class="modal-body text-center">
+                                            @php
+                                                $user = Auth::user();
+                                                $cooperative = $user->cooperative; // Get the cooperative of the logged-in user
+                                                $hasDocuments = $cooperative
+                                                    ? $cooperative->uploadedDocuments()->exists()
+                                                    : false;
+                                                $registrationStatus =
+                                                    $cooperative && $cooperative->registration
+                                                        ? $cooperative->registration->status
+                                                        : 'Pending';
+                                            @endphp
+
+                                            {{-- Message --}}
+                                            @if ($hasDocuments)
+                                                <div
+                                                    class="alert alert-success rounded-pill py-2 px-4 d-inline-flex align-items-center mb-4">
+                                                    <i class="fas fa-check-circle me-2"></i> Documents already
+                                                    uploaded. You can upload again or view them.
+                                                </div>
+                                            @else
+                                                <div
+                                                    class="alert alert-warning rounded-pill py-2 px-4 d-inline-flex align-items-center mb-4">
+                                                    <i class="fas fa-exclamation-circle me-2"></i> No documents
+                                                    uploaded yet. Please upload now.
+                                                </div>
+                                            @endif
+
+                                            <!-- Upload Now / Upload Again Button with Icon -->
+                                            <a id="uploadBtn" href="#"
+                                                class="btn btn-primary btn-lg rounded-pill shadow-sm hover-shadow d-flex align-items-center justify-content-center mb-3">
+                                                <i class="fas fa-upload me-2"></i>
+                                                {{ $hasDocuments ? 'Upload Again' : 'Upload Now' }}
+                                            </a>
+
+                                            @if ($hasDocuments)
+                                                <a href="#" id="viewDocumentsBtn"
+                                                    class="btn btn-secondary btn-lg rounded-pill shadow-sm hover-shadow d-flex align-items-center justify-content-center">
+                                                    <i class="fas fa-file-alt me-2"></i> View Uploaded Documents
+                                                </a>
+                                            @endif
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
                     </div>
+
 
 
                     <!-- Dashboard Cards -->
@@ -307,17 +413,18 @@
                                     <div class="row align-items-center">
                                         <div class="col-icon">
                                             <div class="icon-big text-center icon-info bubble-shadow-small">
-                                                <i class="fas fa-calendar-alt"></i>
+                                                <i class="fas fa-user"></i>
                                             </div>
                                         </div>
                                         <div class="col col-stats ms-3 ms-sm-0">
                                             <div class="numbers">
-                                                <p class="card-category">Registration Open (March 15-17, 2025)</p>
-                                                {{-- <h4 class="card-title">March 15-17, 2025</h4> --}}
-                                                <a href="{{ route('coop.index') }}"
-                                                    class="btn btn-sm btn-outline-info mt-2">Register Now</a>
+                                                <p class="card-category">Total Participants</p>
+                                                <h4 class="card-title">
+                                                    {{ $totalParticipants }}
+                                                </h4>
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -335,29 +442,20 @@
                                         </div>
                                         <div class="col col-stats ms-3 ms-sm-0">
                                             <div class="numbers">
-                                                <p class="card-category">Required Documents</p>
-                                                @php
-                                                    $user = Auth::user();
-                                                    $cooperative = $user->cooperative; // Get the cooperative of the logged-in user
-                                                    $hasDocuments = $cooperative
-                                                        ? $cooperative->uploadedDocuments()->exists()
-                                                        : false;
-                                                    $registrationStatus =
-                                                        $cooperative && $cooperative->registration
-                                                            ? $cooperative->registration->status
-                                                            : 'Pending';
-                                                @endphp
-
-                                                <button id="uploadBtn" class="btn btn-sm btn-outline-info mt-2">
-                                                    {{ $hasDocuments ? 'Upload Again' : 'Upload Now' }}
-                                                </button>
+                                                <p class="card-category">Uploaded Documents</p>
+                                                <!-- Display the count of uploaded documents -->
+                                                <a href="#" id="viewDocumentsBtn2">
+                                                    <h4 class="card-title">
+                                                        {{ $totalDocuments }} / 4
+                                                    </h4>
+                                                </a>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
                         </div>
+
 
                         <div class="row">
                             <div class="col-md-8">
@@ -398,7 +496,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-4">
+                            {{-- <div class="col-md-4">
                                 @if ($event)
                                     <div class="card card-primary card-round">
                                         <div class="card-header">
@@ -447,8 +545,86 @@
                                     </div>
                                 @else
                                     <p>No upcoming events at the moment.</p>
-                                @endif
+                                @endif --}}
 
+                            <div class="col-md-4">
+                                @if ($latestEvents->count() > 0)
+                                    <div id="eventsCarousel" class="carousel slide" data-bs-ride="carousel"
+                                        data-bs-interval="2000" data-bs-wrap="true">
+
+                                        <div class="carousel-inner">
+                                            @foreach ($latestEvents as $index => $event)
+                                                <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+                                                    <div style="padding: 0 2px;"> <!-- Added 10px padding -->
+                                                        <div class="card card-primary card-round mb-3">
+                                                            <div class="card-header">
+                                                                <div class="card-head-row">
+                                                                    <div class="card-title">{{ $event->title }}</div>
+                                                                    <div class="card-tools">
+                                                                        <div class="dropdown">
+                                                                            <button
+                                                                                class="btn btn-sm btn-label-light dropdown-toggle"
+                                                                                type="button"
+                                                                                id="dropdownMenuButton{{ $event->event_id }}"
+                                                                                data-bs-toggle="dropdown"
+                                                                                aria-haspopup="true"
+                                                                                aria-expanded="false">
+                                                                                More Options
+                                                                            </button>
+                                                                            <div class="dropdown-menu"
+                                                                                aria-labelledby="dropdownMenuButton{{ $event->event_id }}">
+                                                                                <a class="dropdown-item"
+                                                                                    href="{{ route('events.index') }}">View
+                                                                                    Details</a>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="card-category">
+                                                                    {{ \Carbon\Carbon::parse($event->start_date)->format('F d, Y') }}
+                                                                    -
+                                                                    {{ \Carbon\Carbon::parse($event->end_date)->format('F d, Y') }}
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <p>{{ $event->description }}</p>
+                                                                <ul>
+                                                                    <li><strong>📍 Venue:</strong>
+                                                                        {{ $event->location }}</li>
+                                                                    <li><strong>🕒 Time:</strong> 9:00 AM - 5:00 PM</li>
+                                                                    <li><strong>🎤 Guest Speakers:</strong>
+                                                                        @if ($event->speakers->count() > 0)
+                                                                            {{ $event->speakers->pluck('name')->implode(', ') }}
+                                                                        @else
+                                                                            No speakers listed
+                                                                        @endif
+                                                                    </li>
+                                                                    <li><strong>📌 Activities:</strong> Presentations,
+                                                                        Q&A Sessions, Voting</li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+
+                                        <!-- Prev/Next buttons -->
+                                        <button class="carousel-control-prev" type="button"
+                                            data-bs-target="#eventsCarousel" data-bs-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Previous</span>
+                                        </button>
+                                        <button class="carousel-control-next" type="button"
+                                            data-bs-target="#eventsCarousel" data-bs-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Next</span>
+                                        </button>
+
+                                    </div>
+                                @else
+                                    <p>No upcoming events at the moment.</p>
+                                @endif
 
                                 @if ($event)
                                     <div class="card card-round">
@@ -475,59 +651,77 @@
                             </div>
                         </div>
                     </div>
-                    </div>
-
-                    @include('layouts.adminfooter')
-
                 </div>
 
+                @include('layouts.adminfooter')
 
             </div>
 
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    document.getElementById('uploadBtn')?.addEventListener('click', function() {
-                        @if (!$cooperative)
-                            Swal.fire({
-                                icon: 'warning',
-                                title: 'Cooperative Required',
-                                text: 'You need to be associated with a cooperative to upload documents.',
-                                confirmButtonText: 'OK'
-                            });
-                        @else
-                            window.location.href = "{{ route('documents') }}"; // Redirect if cooperative exists
-                        @endif
-                    });
-                });
-            </script>
 
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    document.getElementById('viewDocumentsBtn')?.addEventListener('click', function() {
-                        @if (!$hasDocuments)
-                            Swal.fire({
-                                icon: 'info',
-                                title: 'No Documents Found',
-                                text: 'You have not uploaded any documents yet.',
-                                confirmButtonText: 'OK'
-                            });
-                        @else
-                            window.location.href =
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                document.getElementById('uploadBtn')?.addEventListener('click', function() {
+                    @if (!$cooperative)
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Cooperative Required',
+                            text: 'You need to be associated with a cooperative to upload documents.',
+                            confirmButtonText: 'OK'
+                        });
+                    @else
+                        window.location.href = "{{ route('documents') }}"; // Redirect if cooperative exists
+                    @endif
+                });
+            });
+        </script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                document.getElementById('viewDocumentsBtn')?.addEventListener('click', function() {
+                    @if (!$hasDocuments)
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'No Documents Found',
+                            text: 'You have not uploaded any documents yet.',
+                            confirmButtonText: 'OK'
+                        });
+                    @else
+                        window.location.href =
                             "{{ route('documents.view') }}"; // Redirect if there are documents
-                        @endif
-                    });
+                    @endif
                 });
-            </script>
+            });
+        </script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                document.getElementById('viewDocumentsBtn2')?.addEventListener('click', function() {
+                    @if (!$hasDocuments)
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'No Documents Found',
+                            text: 'You have not uploaded any documents yet.',
+                            confirmButtonText: 'OK'
+                        });
+                    @else
+                        window.location.href =
+                            "{{ route('documents.view') }}"; // Redirect if there are documents
+                    @endif
+                });
+            });
+        </script>
 
 
-            <script>
-                function calculateCETF() {
-                    let totalIncome = parseFloat(document.getElementById('totalIncome').value) || 0;
-                    let cetfRequired = (totalIncome * 0.05) * 0.30;
-                    document.getElementById('cetfRequired').value = cetfRequired.toFixed(2);
-                }
-            </script>
-            @include('layouts.links')
+        <script>
+            function calculateCETF() {
+                let totalIncome = parseFloat(document.getElementById('totalIncome').value) || 0;
+                let cetfRequired = (totalIncome * 0.05) * 0.30;
+                document.getElementById('cetfRequired').value = cetfRequired.toFixed(2);
+            }
+        </script>
+        @include('layouts.links')
 </body>
 
 </html>

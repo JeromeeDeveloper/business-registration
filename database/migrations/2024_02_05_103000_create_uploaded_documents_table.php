@@ -12,7 +12,7 @@ return new class extends Migration {
 
             $table->unsignedBigInteger('coop_id')->nullable();
             $table->foreign('coop_id')->references('coop_id')->on('cooperatives')->onDelete('cascade');
-            
+
             $table->enum('document_type', [
                 'Financial Statement',
                 'Resolution for Voting delegates',
@@ -22,6 +22,7 @@ return new class extends Migration {
             ]);
             $table->string('file_name');
             $table->string('file_path');
+            $table->enum('status', ['Pending', 'Checked', 'Approved', 'Rejected'])->default('Pending');
             $table->timestamp('upload_date')->useCurrent();
             $table->timestamps();
 

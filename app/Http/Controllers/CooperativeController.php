@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Event;
 use App\Models\Speaker;
 use App\Models\Cooperative;
 use App\Models\Participant;
@@ -12,6 +13,8 @@ use App\Models\GARegistration;
 use Illuminate\Validation\Rule;
 use App\Mail\ParticipantCreated;
 use App\Models\UploadedDocument;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
@@ -23,53 +26,48 @@ class CooperativeController extends Controller
 
     public function index(Request $request)
     {
-        // Get the authenticated user
         $user = auth()->user();
-
-        // Get the cooperative of the logged-in user
         $cooperative = $user->cooperative;
 
-        // Get total participants for the cooperative
-        $totalParticipants = $cooperative ? $cooperative->participants()->count() : 0;
-
-        // Get the number of entries per page (default to 10)
+        $totalParticipants = $cooperative ? Participant::where('coop_id', $cooperative->coop_id)->count() : 0;
         $perPage = $request->input('limit', 5);
 
-        // Fetch participants with filtering
         $participants = Participant::with(['registration', 'cooperative', 'user'])
+            ->where('coop_id', $cooperative->coop_id)
             ->when($request->search, function ($query) use ($request) {
-                return $query->where('first_name', 'like', '%' . $request->search . '%')
-                    ->orWhere('last_name', 'like', '%' . $request->search . '%')
-                    ->orWhere('middle_name', 'like', '%' . $request->search . '%')
-                    ->orWhere('designation', 'like', '%' . $request->search . '%')
-                    ->orWhereHas('user', function ($userQuery) use ($request) {
-                        $userQuery->where('name', 'like', '%' . $request->search . '%');
-                    })
-                    ->orWhereHas('cooperative', function ($cooperativeQuery) use ($request) {
-                        $cooperativeQuery->where('name', 'like', '%' . $request->search . '%');
-                    });
+                $query->where(function ($subQuery) use ($request) {
+                    $subQuery->where('first_name', 'like', '%' . $request->search . '%')
+                        ->orWhere('last_name', 'like', '%' . $request->search . '%')
+                        ->orWhere('middle_name', 'like', '%' . $request->search . '%')
+                        ->orWhere('designation', 'like', '%' . $request->search . '%')
+                        ->orWhereHas('user', function ($userQuery) use ($request) {
+                            $userQuery->where('name', 'like', '%' . $request->search . '%');
+                        })
+                        ->orWhereHas('cooperative', function ($cooperativeQuery) use ($request) {
+                            $cooperativeQuery->where('name', 'like', '%' . $request->search . '%');
+                        });
+                });
             })
-            ->paginate($perPage); // Use the selected number of entries
+            ->paginate($perPage);
 
         return view('dashboard.participant.manage_participant.participant', compact('participants', 'totalParticipants'));
     }
 
 
 
-
     public function coopparticipantadd()
     {
+        $events = Event::all();
         $cooperatives = Cooperative::all();
         $users = User::whereDoesntHave('cooperative')
                     ->where('role', 'cooperative') // Filter by role
                     ->get();
 
-        return view('dashboard.participant.manage_participant.add', compact('cooperatives', 'users'));
+        return view('dashboard.participant.manage_participant.add', compact('cooperatives', 'users', 'events'));
     }
 
     public function store(Request $request)
     {
-        // Validate the form data
         $validatedData = $request->validate([
             'coop_id' => 'required|exists:cooperatives,coop_id',
             'first_name' => 'required|string|max:255',
@@ -87,9 +85,10 @@ class CooperativeController extends Controller
             'is_msp_officer' => 'required|string|max:3',
             'msp_officer_position' => 'nullable|string|max:255',
             'delegate_type' => 'required|string|max:10',
+            'event_ids' => 'nullable|array',
+            'event_ids.*' => 'exists:events,event_id',
         ]);
 
-        // Get logged-in user's coop_id
         $validatedData['coop_id'] = Auth::user()->coop_id;
 
         do {
@@ -98,68 +97,76 @@ class CooperativeController extends Controller
 
         $validatedData['reference_number'] = $referenceNumber;
 
-        // Store the participant data
-        $participant = Participant::create($validatedData);
+        try {
+            DB::beginTransaction();
 
-        // Generate a unique password
-        $generatedPassword = Str::random(12);
+            $participant = Participant::create($validatedData);
 
-        // Create a user linked to the participant
-        $user = User::create([
-            'name' => $validatedData['first_name'] . ' ' . $validatedData['last_name'],
-            'coop_id' => $validatedData['coop_id'],
-            'email' => $validatedData['email'],
-            'password' => Hash::make($generatedPassword),
-            'role' => 'participant',
-        ]);
+            $generatedPassword = Str::random(6);
 
-        // Assign user_id to the participant
-        $participant->user_id = $user->user_id;
-        $participant->save();
+            $user = User::create([
+                'name' => $validatedData['first_name'] . ' ' . $validatedData['last_name'],
+                'coop_id' => $validatedData['coop_id'],
+                'email' => $validatedData['email'],
+                'password' => Hash::make($generatedPassword),
+                'role' => 'participant',
+            ]);
 
-        // Generate QR code data (e.g., a URL to their profile page)
-        $qrData = route('adminDashboard', ['coop_id' => $participant->coop_id]); // Adjust this route as needed
+            $participant->user_id = $user->user_id;
+            $participant->save();
 
-        // Call the external QR code API
-        $response = Http::get('https://api.qrserver.com/v1/create-qr-code/', [
-            'data' => $qrData,
-            'size' => '200x200' // You can adjust the size here
-        ]);
+            $qrData = route('adminDashboard', ['coop_id' => $participant->coop_id]);
 
-        // Check if the QR code generation is successful
-        if ($response->successful()) {
-            // Save the QR code image
+            $response = Http::get('https://api.qrserver.com/v1/create-qr-code/', [
+                'data' => $qrData,
+                'size' => '200x200'
+            ]);
+
+            if (!$response->successful()) {
+                DB::rollBack();
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to generate QR code.'
+                ], 500);
+            }
+
             $path = 'qrcodes/participant_' . $participant->coop_id . '.png';
             Storage::disk('public')->put($path, $response->body());
 
-            // Save the QR code path to the participant
             $participant->qr_code = $path;
             $participant->save();
-        } else {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to generate QR code.'
-            ], 500);
-        }
 
-        // Send email notification
-        try {
-            Mail::to($user->email)->send(new ParticipantCreated($user, $generatedPassword));
+            if ($request->has('event_ids')) {
+                $participant->events()->attach($request->input('event_ids'));
+            }
+
+            try {
+                Mail::to($user->email)->send(new ParticipantCreated($user, $generatedPassword));
+            } catch (\Exception $e) {
+                DB::rollBack();
+                Log::error('Email sending failed: ' . $e->getMessage());
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to send email. Please try again.'
+                ], 500);
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Participant registered successfully!'
+            ]);
+
         } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error during participant registration: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to send email: ' . $e->getMessage()
+                'message' => 'An unexpected error occurred. Please try again.'
             ], 500);
         }
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Participant registered successfully!'
-        ]);
     }
-
-
-
 
  // Show a specific participant
  public function show($participant_id)
@@ -210,6 +217,26 @@ class CooperativeController extends Controller
     // Update the participant
     $participant->update($validatedData);
 
+    // ✅ Also update the linked user's email, if the participant has a user_id
+    if ($participant->user_id) {
+        $user = User::find($participant->user_id);
+
+        if ($user) {
+            // Check if the email is not already used by another user
+            $emailExists = User::where('email', $validatedData['email'])
+                ->where('user_id', '!=', $user->id)
+                ->exists();
+
+            if ($emailExists) {
+                return redirect()->back()->withErrors(['email' => 'This email is already in use by another user.'])->withInput();
+            }
+
+            $user->update([
+                'email' => $validatedData['email'],
+            ]);
+        }
+    }
+
     return redirect()->route('coop.index')->with('success', 'Participant updated successfully.');
 }
 
@@ -258,10 +285,10 @@ class CooperativeController extends Controller
     public function storeDocuments(Request $request)
     {
         $request->validate([
-            'documents.Financial Statement' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
-            'documents.Resolution for Voting Delegates' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
-            'documents.Deposit Slip for Registration Fee' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
-            'documents.Deposit Slip for CETF Remittance' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
+            'documents.Financial Statement' => 'mimes:jpg,jpeg,png,pdf|max:2048',
+            'documents.Resolution for Voting Delegates' => 'mimes:jpg,jpeg,png,pdf|max:2048',
+            'documents.Deposit Slip for Registration Fee' => 'mimes:jpg,jpeg,png,pdf|max:2048',
+            'documents.Deposit Slip for CETF Remittance' => 'mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
 
         $cooperative = Auth::user()->cooperative;
@@ -315,6 +342,19 @@ class CooperativeController extends Controller
 
       return view('dashboard.admin.participant.documents', compact('documents', 'coop_id'));
   }
+
+  public function updateDocumentStatus(Request $request, $document_id)
+{
+    $request->validate([
+        'status' => 'required|in:Pending,Checked,Approved,Rejected',
+    ]);
+
+    $document = UploadedDocument::findOrFail($document_id);
+    $document->status = $request->status;
+    $document->save();
+
+    return back()->with('success', 'Document status updated successfully.');
+}
 
   public function updateStatus(Request $request, $coop_id)
   {

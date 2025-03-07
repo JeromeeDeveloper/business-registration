@@ -217,7 +217,7 @@
                                                 <tr>
 
                                                     <th>Cooperative Name</th>
-                                                    <th>User Account</th>
+
                                                     <th>First Name</th>
                                                     <th>Last Name</th>
                                                     <th>Designation</th>
@@ -232,21 +232,19 @@
 
                                                         <td>{{ optional($participant->cooperative)->name ?? 'N/A' }}
                                                         </td>
-                                                        <td>{{ optional($participant->user)->name ?? 'N/A' }}</td>
+
                                                         <td>{{ $participant->first_name }}</td>
                                                         <td>{{ $participant->last_name }}</td>
                                                         <td>{{ $participant->designation ?? 'N/A' }}</td>
                                                         <td>
-                                                            @if ($participant->qr_code)
-                                                                <img src="{{ asset('storage/' . $participant->qr_code) }}"
+                                                            @if ($participant->participant_id)
+                                                                <img src="https://api.qrserver.com/v1/create-qr-code/?data={{ urlencode(route('adminDashboard', ['participant_id' => $participant->participant_id])) }}&size=100x100"
                                                                     alt="QR Code"
                                                                     style="width: 100px; height: 100px;">
                                                             @else
                                                                 N/A
                                                             @endif
                                                         </td>
-
-
 
                                                         <td class="no-print">
                                                             <div class="form-button-action">
@@ -265,13 +263,13 @@
                                                                     <i class="fa fa-eye"></i>
                                                                 </a>
 
-                                                                <a href="{{ route('coop.participants.edit', $participant->participant_id) }}"
+                                                                {{-- <a href="{{ route('coop.participants.edit', $participant->participant_id) }}"
                                                                     class="btn btn-link btn-primary btn-lg"
                                                                     data-bs-toggle="tooltip" title="Edit Participant">
                                                                     <i class="fa fa-edit"></i>
-                                                                </a>
+                                                                </a> --}}
 
-                                                                <form
+                                                                {{-- <form
                                                                     action="{{ route('coop.participants.destroy', $participant->participant_id) }}"
                                                                     method="POST" class="delete-form"
                                                                     style="display:inline;">
@@ -285,7 +283,7 @@
                                                                         onclick="confirmDelete(event, this)">
                                                                         <i class="fa fa-times"></i>
                                                                     </button>
-                                                                </form>
+                                                                </form> --}}
                                                         </td>
                                     </div>
 
@@ -382,7 +380,7 @@
                 <thead>
                     <tr>
                         <th>Cooperative</th>
-                        <th>User Account</th>
+
                         <th>First Name</th>
                         <th>Last Name</th>
                         <th>Designation</th>

@@ -42,11 +42,19 @@
                         <td>{{ $user->email }}</td>
                         <td>
                             @if ($user->cooperative)
-                                {{ str_replace(' ', '', $user->cooperative->name) }}GA2025
+                                @php
+                                    $words = preg_split('/\s+/', trim($user->cooperative->name));
+                                    $acronym = '';
+                                    foreach ($words as $word) {
+                                        $acronym .= strtoupper($word[0]);
+                                    }
+                                @endphp
+                                {{ $acronym }}GA2025
                             @else
                                 DefaultGA2025
                             @endif
                         </td>
+
                     </tr>
                 @endforeach
             </tbody>

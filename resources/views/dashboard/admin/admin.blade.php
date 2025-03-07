@@ -4,6 +4,34 @@
     @include('layouts.adminheader')
         <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
   </head>
+<style>
+       /* Style the Prev and Next buttons */
+       #eventsCarousel .carousel-control-prev,
+                    #eventsCarousel .carousel-control-next {
+                        width: 40px;
+                        height: 40px;
+                        background-color: white;
+                        border-radius: 50%;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        opacity: 1; /* Optional: always visible */
+                    }
+
+                    #eventsCarousel .carousel-control-prev-icon,
+                    #eventsCarousel .carousel-control-next-icon {
+                        filter: invert(32%) sepia(93%) saturate(2115%) hue-rotate(203deg) brightness(90%) contrast(90%);
+                        width: 20px;
+                        height: 20px;
+                    }
+
+                    #eventsCarousel .carousel-control-prev {
+                        left: -20px; /* Adjust position if needed */
+                    }
+
+                    #eventsCarousel .carousel-control-next {
+                        right: -20px; /* Adjust position if needed */
+                    }
+</style>
   <body>
     <div class="wrapper">
       <!-- Sidebar -->
@@ -256,9 +284,9 @@
               <div class="ms-md-auto py-2 py-md-0">
                 <a href="{{ route('admin.reports') }}" class="btn btn-label-info btn-round me-2" target="_blank">Generate Reports</a>
               <!-- Button to trigger modal -->
-                <a href="#" id="scan-qr-btn" class="btn btn-primary btn-round" data-bs-toggle="modal" data-bs-target="#qrScannerModal">
+                {{-- <a href="#" id="scan-qr-btn" class="btn btn-primary btn-round" data-bs-toggle="modal" data-bs-target="#qrScannerModal">
                     Scan QR Code
-                </a>
+                </a> --}}
 
                 <style>
                     @media (max-width: 576px) { /* For small screens */
@@ -292,89 +320,112 @@
             </div>
 
             </div>
-            <div class="row">
-                <div class="col-sm-6 col-md-3">
-                    <div class="card card-stats card-round">
-                        <div class="card-body">
-                            <div class="row align-items-center">
-                                <div class="col-icon">
-                                    <div class="icon-big text-center icon-info bubble-shadow-small">
-                                        <i class="fas fa-building"></i>
-                                    </div>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-3 mb-4">
+
+                <!-- Cooperative -->
+                <div class="col">
+                    <div class="card card-stats card-round shadow-sm h-100">
+                        <div class="card-body d-flex align-items-center">
+                            <div class="col-icon me-3">
+                                <div class="icon-big text-primary text-center">
+                                    <i class="fas fa-building"></i>
                                 </div>
-                                <div class="col col-stats ms-3 ms-sm-0">
-                                    <div class="numbers">
-                                        <p class="card-category">Cooperatives</p>
-                                        <h4 class="card-title">{{ number_format($totalCooperative) }}</h4>
-                                    </div>
-                                </div>
+                            </div>
+                            <div>
+                                <p class="card-category mb-1">Cooperatives</p>
+                                <h4 class="card-title mb-0">{{ number_format($totalCooperative) }}</h4>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-sm-6 col-md-3">
-                    <div class="card card-stats card-round">
-                        <div class="card-body">
-                            <div class="row align-items-center">
-                                <div class="col-icon">
-                                    <div class="icon-big text-center icon-info bubble-shadow-small">
-                                        <i class="fas fa-users"></i>
-                                    </div>
+                <!-- Participants -->
+                <div class="col">
+                    <div class="card card-stats card-round shadow-sm h-100">
+                        <div class="card-body d-flex align-items-center">
+                            <div class="col-icon me-3">
+                                <div class="icon-big text-success text-center">
+                                    <i class="fas fa-users"></i>
                                 </div>
-                                <div class="col col-stats ms-3 ms-sm-0">
-                                    <div class="numbers">
-                                        <p class="card-category">Participants</p>
-                                        <h4 class="card-title">{{ number_format($totalParticipants) }}</h4>
-                                    </div>
-                                </div>
+                            </div>
+                            <div>
+                                <p class="card-category mb-1">Participants</p>
+                                <h4 class="card-title mb-0">{{ number_format($totalParticipants) }}</h4>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-sm-6 col-md-3">
-                    <div class="card card-stats card-round">
-                        <div class="card-body">
-                            <div class="row align-items-center">
-                                <div class="col-icon">
-                                    <div class="icon-big text-center icon-info bubble-shadow-small">
-                                        <i class="fas fa-microphone"></i>
-                                    </div>
+                <!-- Total Attended -->
+                <div class="col">
+                    <div class="card card-stats card-round shadow-sm h-100">
+                        <div class="card-body d-flex align-items-center">
+                            <div class="col-icon me-3">
+                                <div class="icon-big text-info text-center">
+                                    <i class="fas fa-user-check"></i>
                                 </div>
-                                <div class="col col-stats ms-3 ms-sm-0">
-                                    <div class="numbers">
-                                        <p class="card-category">Speakers</p>
-                                        <h4 class="card-title">{{ number_format($totalSpeakers) }}</h4>
-                                    </div>
-                                </div>
+                            </div>
+                            <div>
+                                <p class="card-category mb-1">Total Attended</p>
+                                <h4 class="card-title mb-0">{{ number_format($totalAttended) }}</h4>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-sm-6 col-md-3">
-                    <div class="card card-stats card-round">
-                        <div class="card-body">
-                            <div class="row align-items-center">
-                                <div class="col-icon">
-                                    <div class="icon-big text-center icon-info bubble-shadow-small">
-                                        <i class="fas fa-calendar"></i>
-                                    </div>
+                <!-- Attended Migs -->
+                <div class="col">
+                    <div class="card card-stats card-round shadow-sm h-100">
+                        <div class="card-body d-flex align-items-center">
+                            <div class="col-icon me-3">
+                                <div class="icon-big text-warning text-center">
+                                    <i class="fas fa-user-friends"></i>
                                 </div>
-                                <div class="col col-stats ms-3 ms-sm-0">
-                                    <div class="numbers">
-                                        <p class="card-category">Events</p>
-                                        <h4 class="card-title">{{ number_format($totalEvents) }}</h4>
-                                    </div>
-                                </div>
+                            </div>
+                            <div>
+                                <p class="card-category mb-1">Attended Migs</p>
+                                <h4 class="card-title mb-0">{{ number_format($totalMigsAttended) }}</h4>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                <!-- Total Migs Participants -->
+                <div class="col">
+                    <div class="card card-stats card-round shadow-sm h-100">
+                        <div class="card-body d-flex align-items-center">
+                            <div class="col-icon me-3">
+                                <div class="icon-big text-danger text-center">
+                                    <i class="fas fa-id-card"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="card-category mb-1">Migs Members</p>
+                                <h4 class="card-title mb-0">{{ number_format($totalMigsParticipants) }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total Non-Migs Participants -->
+                <div class="col">
+                    <div class="card card-stats card-round shadow-sm h-100">
+                        <div class="card-body d-flex align-items-center">
+                            <div class="col-icon me-3">
+                                <div class="icon-big text-secondary text-center">
+                                    <i class="fas fa-user-times"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="card-category mb-1">Non-Migs Members</p>
+                                <h4 class="card-title mb-0">{{ number_format($totalNonMigsParticipants) }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
+
             <div class="row">
                 <div class="col-md-8">
                     <div class="card card-round">
@@ -389,56 +440,80 @@
                     </div>
                 </div>
 
-                  <div class="col-md-4">
-                    @if($latestEvent)
-                    <div class="card card-primary card-round">
-                        <div class="card-header">
-                            <div class="card-head-row">
-                                <div class="card-title">{{ $latestEvent->title }}</div>
-                                <div class="card-tools">
-                                    <div class="dropdown">
-                                        <button class="btn btn-sm btn-label-light dropdown-toggle" type="button"
-                                            id="dropdownMenuButton{{ $latestEvent->event_id }}" data-bs-toggle="dropdown"
-                                            aria-haspopup="true" aria-expanded="false">
-                                            More Options
-                                        </button>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $latestEvent->event_id }}">
-                                            <a class="dropdown-item" href="{{route('events.index')}}">View Details</a>
+
+
+                <div class="col-md-4">
+                    @if($latestEvents->count() > 0)
+                    <div id="eventsCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2000" data-bs-wrap="true">
+
+                        <div class="carousel-inner">
+                            @foreach($latestEvents as $index => $event)
+                            <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+                                <div style="padding: 0 2px;"> <!-- Added 10px padding -->
+                                    <div class="card card-primary card-round mb-3">
+                                        <div class="card-header">
+                                            <div class="card-head-row">
+                                                <div class="card-title">{{ $event->title }}</div>
+                                                <div class="card-tools">
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-sm btn-label-light dropdown-toggle" type="button"
+                                                            id="dropdownMenuButton{{ $event->event_id }}" data-bs-toggle="dropdown"
+                                                            aria-haspopup="true" aria-expanded="false">
+                                                            More Options
+                                                        </button>
+                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $event->event_id }}">
+                                                            <a class="dropdown-item" href="{{route('events.index')}}">View Details</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-category">
+                                                {{ \Carbon\Carbon::parse($event->start_date)->format('F d, Y') }} -
+                                                {{ \Carbon\Carbon::parse($event->end_date)->format('F d, Y') }}
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <p>{{ $event->description }}</p>
+                                            <ul>
+                                                <li><strong>📍 Venue:</strong> {{ $event->location }}</li>
+                                                <li><strong>🕒 Time:</strong> 9:00 AM - 5:00 PM</li>
+                                                <li><strong>🎤 Guest Speakers:</strong>
+                                                    @if($event->speakers->count() > 0)
+                                                        {{ $event->speakers->pluck('name')->implode(', ') }}
+                                                    @else
+                                                        No speakers listed
+                                                    @endif
+                                                </li>
+                                                <li><strong>📌 Activities:</strong> Presentations, Q&A Sessions, Voting</li>
+                                            </ul>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-category">
-                                {{ \Carbon\Carbon::parse($latestEvent->start_date)->format('F d, Y') }} -
-                                {{ \Carbon\Carbon::parse($latestEvent->end_date)->format('F d, Y') }}
-                            </div>
+                            @endforeach
                         </div>
-                        <div class="card-body">
-                            <p>{{ $latestEvent->description }}</p>
-                            <ul>
-                                <li><strong>📍 Venue:</strong> {{ $latestEvent->location }}</li>
-                                <li><strong>🕒 Time:</strong> 9:00 AM - 5:00 PM</li>
-                                <li><strong>🎤 Guest Speakers:</strong>
-                                    @if($latestEvent->speakers->count() > 0)
-                                        {{ $latestEvent->speakers->pluck('name')->implode(', ') }}
-                                    @else
-                                        No speakers listed
-                                    @endif
-                                </li>
-                                <li><strong>📌 Activities:</strong> Presentations, Q&A Sessions, Voting</li>
-                            </ul>
 
-                        </div>
+                        <!-- Prev/Next buttons -->
+                        <button class="carousel-control-prev" type="button" data-bs-target="#eventsCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#eventsCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+
                     </div>
                     @else
                     <p>No upcoming events at the moment.</p>
                     @endif
 
+
                     @if($latestEvent)
                     <div class="card card-round">
                       <div class="card-body pb-0">
                         <h2 class="mb-2">Event Notice</h2>
-                        <p class="text-muted">Join us for the upcoming {{ $latestEvent->title }}!</p>
+                        <p class="text-muted">Join us for the upcoming General Assembly (2025)!</p>
                         <div class="pull-in sparkline-fix">
                           <!-- You can insert a related event image or a calendar icon here -->
                           <div id="eventNoticeChart"></div>
@@ -446,7 +521,7 @@
                       </div>
                       <div class="card-footer">
                       <div>
-                          <strong>Notice:</strong> The {{ $latestEvent->title }} will take place on   {{ \Carbon\Carbon::parse($latestEvent->start_date)->format('F d, Y') }} -
+                          <strong>Notice:</strong> The General Assembly will take place on {{ \Carbon\Carbon::parse($latestEvent->start_date)->format('F d, Y') }} -
                           {{ \Carbon\Carbon::parse($latestEvent->end_date)->format('F d, Y') }} Don't miss out on this important event!
                       </div>
                     </div>

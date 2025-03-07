@@ -173,7 +173,7 @@
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="financial_statement">Financial Statement</label>
-                                    <input type="file" class="form-control" name="documents[Financial Statement]" id="financial_statement" accept=".jpg,.jpeg,.png,.pdf" required />
+                                    <input type="file" class="form-control" name="documents[Financial Statement]" id="financial_statement" accept=".jpg,.jpeg,.png,.pdf" />
                                 </div>
                             </div>
 
@@ -181,7 +181,7 @@
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="resolution_voting">Resolution for Voting Delegates</label>
-                                    <input type="file" class="form-control" name="documents[Resolution for Voting Delegates]" id="resolution_voting" accept=".jpg,.jpeg,.png,.pdf" required />
+                                    <input type="file" class="form-control" name="documents[Resolution for Voting Delegates]" id="resolution_voting" accept=".jpg,.jpeg,.png,.pdf" />
                                 </div>
                             </div>
 
@@ -189,7 +189,7 @@
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="registration_fee">Deposit Slip for Registration Fee</label>
-                                    <input type="file" class="form-control" name="documents[Deposit Slip for Registration Fee]" id="registration_fee" accept=".jpg,.jpeg,.png,.pdf" required />
+                                    <input type="file" class="form-control" name="documents[Deposit Slip for Registration Fee]" id="registration_fee" accept=".jpg,.jpeg,.png,.pdf" />
                                 </div>
                             </div>
 
@@ -197,7 +197,7 @@
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="cetf_remittance">Deposit Slip for CETF Remittance</label>
-                                    <input type="file" class="form-control" name="documents[Deposit Slip for CETF Remittance]" id="cetf_remittance" accept=".jpg,.jpeg,.png,.pdf" required />
+                                    <input type="file" class="form-control" name="documents[Deposit Slip for CETF Remittance]" id="cetf_remittance" accept=".jpg,.jpeg,.png,.pdf" />
                                 </div>
                             </div>
                         </div>
