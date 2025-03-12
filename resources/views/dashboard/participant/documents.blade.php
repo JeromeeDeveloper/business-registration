@@ -200,6 +200,29 @@
                                     <input type="file" class="form-control" name="documents[Deposit Slip for CETF Remittance]" id="cetf_remittance" accept=".jpg,.jpeg,.png,.pdf" />
                                 </div>
                             </div>
+
+                            <div class="col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="cetf_undertaking">CETF Undertaking</label>
+                                    <input type="file" class="form-control" name="documents[CETF Undertaking]" id="cetf_undertaking" accept=".jpg,.jpeg,.png,.pdf" />
+                                </div>
+                            </div>
+
+                            <!-- CETF Candidacy -->
+                            <div class="col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="cetf_candidacy">CETF Candidacy</label>
+                                    <input type="file" class="form-control" name="documents[CETF Candidacy]" id="cetf_candidacy" accept=".jpg,.jpeg,.png,.pdf" />
+                                </div>
+                            </div>
+
+                            <!-- CETF Utilization Invoice -->
+                            <div class="col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="cetf_utilization_invoice">CETF Utilization Invoice</label>
+                                    <input type="file" class="form-control" name="documents[CETF Utilization Invoice]" id="cetf_utilization_invoice" accept=".jpg,.jpeg,.png,.pdf" />
+                                </div>
+                            </div>
                         </div>
                     </div>
 

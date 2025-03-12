@@ -18,11 +18,15 @@ return new class extends Migration {
                 'Resolution for Voting delegates',
                 'Deposit Slip for Registration Fee',
                 'List of Officers',
-                'Deposit Slip for CETF Remittance'
+                'Deposit Slip for CETF Remittance',
+                'CETF Undertaking',
+                'CETF Candidacy',
+                'CETF Utilization invoice'
             ]);
             $table->string('file_name');
             $table->string('file_path');
             $table->enum('status', ['Pending', 'Checked', 'Approved', 'Rejected'])->default('Pending');
+            $table->string('remarks')->nullable();
             $table->timestamp('upload_date')->useCurrent();
             $table->timestamps();
 

@@ -10,7 +10,7 @@
         <div class="sidebar-logo">
           <!-- Logo Header -->
           <div class="logo-header" data-background-color="dark">
-            <a href="{{route('adminDashboard')}}" class="logo">
+            <a href="{{route('supportDashboard')}}" class="logo">
                 <img class="logo-mass-specc" src="{{ asset('images/logo.png') }}" alt="">
             </a>
             <div class="nav-toggle">
@@ -33,7 +33,7 @@
 
               <li class="nav-item">
                 <a
-                  href="{{route('adminDashboard')}}"
+                  href="{{route('supportDashboard')}}"
                   class="collapsed"
                 >
                   <i class="fas fa-home"></i>
@@ -57,14 +57,14 @@
                 <div class="collapse" id="cooperative">
                   <ul class="nav nav-collapse">
                     <li>
-                        <a href="{{route('adminview')}}">
+                        <a href="{{route('supportview')}}">
                           <span class="sub-item">Manage Cooperative</span>
                         </a>
                       </li>
                   </ul>
                 </div>
               </li>
-              <li class="nav-item">
+              {{-- <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#participant">
                     <i class="fas fa-user-cog"></i>
                   <p>Participant</p>
@@ -100,14 +100,14 @@
               </li>
 
               <li class="nav-item">
-                <a data-bs-toggle="collapse show" href="#user">
+                <a data-bs-toggle="collapse" href="#user">
                   <i class="fas fa-user"></i>
                   <p>User</p>
                   <span class="caret"></span>
                 </a>
-                <div class="collapse show" id="user">
+                <div class="collapse" id="user">
                   <ul class="nav nav-collapse">
-                    <li class="active">
+                    <li>
                         <a href="{{route('users.index')}}">
                           <span class="sub-item">Manage User</span>
                         </a>
@@ -149,7 +149,7 @@
                       </li>
                   </ul>
                 </div>
-              </li>
+              </li> --}}
 
             </ul>
           </div>
@@ -162,9 +162,8 @@
           <div class="main-header-logo">
             <!-- Logo Header -->
             <div class="logo-header" data-background-color="dark">
-                <a href="{{route('adminDashboard')}}" class="logo">
-                    <img class="logo-mass-specc" src="{{ asset('images/logo.png') }}" alt="">
-              </a>
+              <a href="{{route('supportDashboard')}}" class="logo">
+                <img class="logo-mass-specc" src="{{ asset('images/logo.png') }}" alt="">
               <div class="nav-toggle">
                 <button class="btn btn-toggle toggle-sidebar">
                   <i class="gg-menu-right"></i>
@@ -180,14 +179,62 @@
             <!-- End Logo Header -->
           </div>
           <!-- Navbar Header -->
-          @include('layouts.adminnav')
+          <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
+            <div class="container-fluid">
+                <nav
+                    class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
+
+                </nav>
+
+                <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
+                    <li class="nav-item topbar-user dropdown hidden-caret">
+
+                        <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#"
+                            aria-expanded="false">
+                            <i class="fa fa-user"></i>
+                            <span class="profile-username">
+                                <span class="op-7">Hi,</span>
+                                <span class="fw-bold" style="text-transform: capitalize;">
+                                    {{ Auth::user()->name }}
+                                </span>
+
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user animated fadeIn">
+                            <div class="dropdown-user-scroll scrollbar-outer">
+                                <li>
+                                    <div class="user-box">
+                                        <div class="u-text">
+                                            <h4> {{ Auth::user()->name }}</h4>
+                                            <p class="text-muted"> {{ Auth::user()->email }}</p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="{{ route('profile.edit3') }}">My
+                                        Profile</a>
+                                    <div class="dropdown-divider"></div>
+                                    <form action="{{ route('logout') }}" method="POST" id="logout-form"
+                                        style="display: none;">
+                                        @csrf
+                                    </form>
+                                    <a class="dropdown-item" href="#"
+                                        onclick="document.getElementById('logout-form').submit();">Logout</a>
+                                </li>
+                            </div>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
           <!-- End Navbar -->
         </div>
 
         <div class="container">
           <div class="page-inner">
             <div class="page-header">
-              <h3 class="fw-bold mb-3">User</h3>
+              <h3 class="fw-bold mb-3">Edit Profile</h3>
               <ul class="breadcrumbs mb-3">
                 <li class="nav-home">
                   <a href="#">
@@ -204,13 +251,7 @@
                   <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                  <a href="#">User</a>
-                </li>
-                <li class="separator">
-                  <i class="icon-arrow-right"></i>
-                </li>
-                <li class="nav-item">
-                  <a href="#">Edit</a>
+                  <a href="#">My Profile</a>
                 </li>
               </ul>
             </div>
@@ -218,112 +259,70 @@
               <div class="col-md-12">
                 <div class="card">
                   <div class="card-header">
-                    <div class="card-title">User Edit Form</div>
+                    <div class="card-title">Profile Edit Form</div>
                   </div>
-                  <form action="{{ route('user.update', $user->user_id) }}" method="POST">
+
+                  <form action="{{ route('profile.update3') }}" method="POST">
                     @csrf
                     @method('PUT')
 
-                    @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
-
-                    <div class="card-body">
-                        <div class="row">
-                            <!-- Name -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="name">Full Name</label>
-                                    <input type="text" class="form-control" name="name" id="name" placeholder="Enter your name" value="{{ old('name', $user->name) }}" required>
-                                </div>
-                            </div>
-
-                            <!-- Email -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="email">Email</label>
-                                    <input type="email" class="form-control" name="email" id="email" placeholder="Enter your email" value="{{ old('email', $user->email) }}" required>
-                                </div>
-                            </div>
-
-                            <!-- Cooperative Selection -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="coop_id">Select Cooperative</label>
-                                    <select class="form-control @error('coop_id') is-invalid @enderror" name="coop_id" id="coop_id" required>
-                                        <option value="">-- Select Cooperative --</option>
-                                        @foreach($cooperatives as $cooperative)
-                                            <option value="{{ $cooperative->coop_id }}"
-                                                {{ old('coop_id', $user->coop_id) == $cooperative->coop_id ? 'selected' : '' }}>
-                                                {{ $cooperative->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('coop_id')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                            </div>
-
-
-                            <!-- Password -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="password">Password (leave blank to keep current)</label>
-                                    <input type="password" class="form-control" name="password" id="password" placeholder="Enter new password if you want to change">
-                                </div>
-                            </div>
-
-                            <!-- Password Confirmation (only if password is provided) -->
-                            @if(old('password') || isset($user->password))
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="password_confirmation">Confirm Password</label>
-                                    <input type="password" class="form-control" name="password_confirmation" id="password_confirmation" placeholder="Confirm your new password">
-                                </div>
-                            </div>
-                            @endif
-
-                            <!-- User Role -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="role">User Role</label>
-                                    <select class="form-control" name="role" id="role" required>
-                                        <option value="cooperative" {{ old('role', $user->role) == 'cooperative' ? 'selected' : '' }}>Cooperative</option>
-                                        <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Admin</option>
-                                        <option value="participant" {{ old('role', $user->role) == 'participant' ? 'selected' : '' }}>Participant</option>
-                                        <option value="support" {{ old('role', $user->role) == 'support' ? 'selected' : '' }}>Support</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                        </div>
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" name="name" id="name" value="{{ old('name', $user->name) }}" required>
                     </div>
 
-                    <div class="card-action">
-                        <button type="submit" class="btn btn-label-info btn-round me-2">Update</button>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" id="email" value="{{ old('email', $user->email) }}" required>
+
+                        @error('email')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
+
+
+                    <div class="form-group">
+                        <label for="password">Password (Leave blank to keep current)</label>
+                        <input type="password" class="form-control" name="password" id="password">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password_confirmation">Confirm Password</label>
+                        <input type="password" class="form-control" name="password_confirmation" id="password_confirmation">
+                    </div>
+                    <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-round">Save Changes</button>
+                    <a href="{{ url()->previous() }}" class="btn btn-label-info btn-round me-2">Previous</a>
+                </div>
+
                 </form>
+
+                @if(session('success'))
+                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                    <script>
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: '{{ session('success') }}'
+                        });
+                    </script>
+                @endif
+
 
             </div>
                   </div>
                 </div>
-
               </div>
             </div>
           </div>
         </div>
-
-        @include('layouts.adminfooter')
+    </div>
+        {{-- @include('layouts.adminfooter') --}}
       </div>
 
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
   @include('layouts.links')
   </body>

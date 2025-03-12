@@ -367,7 +367,7 @@
                                 <!-- MSP Officer -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label for="is_msp_officer">Is MSP Officer</label>
+                                        <label for="is_msp_officer">Mass-Specc Officer</label>
                                         <select class="form-control @error('is_msp_officer') is-invalid @enderror" name="is_msp_officer" id="is_msp_officer" required>
                                             <option value="" disabled selected>Select Status</option>
                                             <option value="No" {{ old('is_msp_officer') == 'No' ? 'selected' : '' }}>No</option>
@@ -382,7 +382,7 @@
                                 <!-- MSP Officer Position -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label for="msp_officer_position">MSP Officer Position</label>
+                                        <label for="msp_officer_position">Mass-Specc Officer Position</label>
                                         <input type="text" class="form-control @error('msp_officer_position') is-invalid @enderror"
                                                name="msp_officer_position" id="msp_officer_position"
                                                placeholder="Enter MSP Officer Position"
@@ -400,8 +400,8 @@
                                         <label for="delegate_type">Delegate Type</label>
                                         <select class="form-control @error('delegate_type') is-invalid @enderror" name="delegate_type" id="delegate_type" required>
                                             <option value="" disabled selected>Select Delegate Type</option>
-                                            <option value="Voting" {{ old('delegate_type') == 'Voting' ? 'selected' : '' }}>Yes</option>
-                                            <option value="Non-Voting" {{ old('delegate_type') == 'Non-Voting' ? 'selected' : '' }}>No</option>
+                                            <option value="Voting" {{ old('delegate_type') == 'Voting' ? 'selected' : '' }}>Voting</option>
+                                            <option value="Non-Voting" {{ old('delegate_type') == 'Non-Voting' ? 'selected' : '' }}>Non-Voting</option>
                                         </select>
                                         @error('delegate_type')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -419,6 +419,7 @@
                     </form>
                     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
                     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
                     <script>
                         $(document).ready(function() {
                             $('#event_ids').select2({

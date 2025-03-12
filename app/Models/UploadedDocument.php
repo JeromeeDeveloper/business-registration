@@ -12,7 +12,7 @@ class UploadedDocument extends Model
     use HasFactory;
 
     protected $primaryKey = 'document_id';
-    protected $fillable = ['coop_id', 'document_type', 'file_name', 'file_path', 'status'];
+    protected $fillable = ['coop_id', 'document_type', 'file_name', 'file_path', 'status', 'remarks'];
 
     /**
      * Get the participant that owns the document.

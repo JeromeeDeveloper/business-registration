@@ -35,13 +35,16 @@ class AuthController extends Controller
                 return redirect()->route('adminDashboard')->with('success', 'Welcome back, Admin!');
             } elseif ($user->role === 'cooperative') {
                 return redirect()->route('participantDashboard')->with('success', 'Welcome back!');
-            } elseif ($user->role === 'participant') { // Add participant role
+            } elseif ($user->role === 'participant') {
                 return redirect()->route('participantViewerDashboard')->with('success', 'Welcome to your dashboard!');
+            } elseif ($user->role === 'support') { // ✅ Add support role
+                return redirect()->route('supportDashboard')->with('success', 'Welcome to the support dashboard!');
             }
         }
 
         return redirect()->route('login')->with('error', 'Invalid email or password.');
     }
+
 
 
     public function register(Request $request)
@@ -221,6 +224,8 @@ class AuthController extends Controller
         // Redirect back with a success message
         return redirect()->route('profile.edit')->with('success', 'Profile updated successfully!');
     }
+
+   
 
 
 }

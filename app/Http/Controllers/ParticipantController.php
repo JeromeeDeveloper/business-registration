@@ -24,49 +24,86 @@ class ParticipantController extends Controller
 {
     // Display a listing of participants
     public function index(Request $request)
-{
-    $perPage = $request->input('limit', 5); // Default to 5 entries per page
+    {
+        $perPage = $request->input('limit', 5); // Default to 5 entries per page
 
-    $query = Participant::with(['registration', 'cooperative', 'user']);
+        $query = Participant::with(['registration', 'cooperative', 'user']);
 
-    // Search functionality
-    if ($request->search) {
-        $query->where('first_name', 'like', '%' . $request->search . '%')
-            ->orWhere('last_name', 'like', '%' . $request->search . '%')
-            ->orWhere('middle_name', 'like', '%' . $request->search . '%')
-            ->orWhere('designation', 'like', '%' . $request->search . '%')
-            ->orWhereHas('user', function ($userQuery) use ($request) {
-                $userQuery->where('name', 'like', '%' . $request->search . '%');
-            })
-            ->orWhereHas('cooperative', function ($cooperativeQuery) use ($request) {
-                $cooperativeQuery->where('name', 'like', '%' . $request->search . '%');
-            });
-    }
-
-    // Sorting functionality
-    if ($request->has('sort_by')) {
-        $sortBy = $request->sort_by;
-        $sortOrder = $request->sort_order === 'desc' ? 'desc' : 'asc';
-
-        if (in_array($sortBy, ['first_name', 'last_name', 'middle_name', 'designation'])) {
-            $query->orderBy($sortBy, $sortOrder);
-        } elseif ($sortBy === 'cooperative') {
-            $query->join('cooperatives', 'participants.cooperative_id', '=', 'cooperatives.id')
-                ->orderBy('cooperatives.name', $sortOrder);
-        } elseif ($sortBy === 'user') {
-            $query->join('users', 'participants.user_id', '=', 'users.id')
-                ->orderBy('users.name', $sortOrder);
+        // Search functionality
+        if ($request->search) {
+            $query->where('first_name', 'like', '%' . $request->search . '%')
+                ->orWhere('last_name', 'like', '%' . $request->search . '%')
+                ->orWhere('middle_name', 'like', '%' . $request->search . '%')
+                ->orWhere('designation', 'like', '%' . $request->search . '%')
+                ->orWhereHas('user', function ($userQuery) use ($request) {
+                    $userQuery->where('name', 'like', '%' . $request->search . '%');
+                })
+                ->orWhereHas('cooperative', function ($cooperativeQuery) use ($request) {
+                    $cooperativeQuery->where('name', 'like', '%' . $request->search . '%');
+                });
         }
+
+        // Sorting functionality
+        if ($request->has('sort_by')) {
+            $sortBy = $request->sort_by;
+            $sortOrder = $request->sort_order === 'desc' ? 'desc' : 'asc';
+
+            if (in_array($sortBy, ['first_name', 'last_name', 'middle_name', 'designation'])) {
+                $query->orderBy($sortBy, $sortOrder);
+            } elseif ($sortBy === 'cooperative') {
+                $query->join('cooperatives', 'participants.cooperative_id', '=', 'cooperatives.id')
+                    ->orderBy('cooperatives.name', $sortOrder);
+            } elseif ($sortBy === 'user') {
+                $query->join('users', 'participants.user_id', '=', 'users.id')
+                    ->orderBy('users.name', $sortOrder);
+            }
+        }
+
+        // Load participants with user and retrieve stored password (if stored)
+        $participants = $query->paginate($perPage);
+
+        return view('dashboard.admin.participant.participant', compact('participants'));
     }
 
-    $participants = $query->paginate($perPage);
+    public function resendEmail($userId)
+    {
+        $user = User::where('user_id', $userId)->firstOrFail();
 
-    return view('dashboard.admin.participant.participant', compact('participants'));
-}
+        // Generate a temporary password
+        $temporaryPassword = Str::random(6);
 
+        // Update the user's password in the database
+        $user->password = Hash::make($temporaryPassword);
+        $user->save();
 
+        // Send email with the new password
+        Mail::to($user->email)->queue(new ParticipantCreated($user, $temporaryPassword));
 
+        return response()->json([
+            'success' => true,
+            'message' => 'A new password has been generated and sent to the user.'
+        ]);
+    }
 
+    public function resendEmail2($userId)
+    {
+        $user = User::where('user_id', $userId)->firstOrFail();
+
+        // Generate a temporary password
+        $temporaryPassword = Str::random(6);
+
+        // Update the user's password in the database
+        $user->password = Hash::make($temporaryPassword);
+        $user->save();
+
+        // Send email with the new password
+        Mail::to($user->email)->queue(new ParticipantCreated($user, $temporaryPassword));
+
+        return response()->json([
+            'success' => true,
+            'message' => 'A new password has been generated and sent to the user.'
+        ]);
+    }
 
 
     public function participantadd()
@@ -188,14 +225,15 @@ public function store(Request $request)
     $participant->user_id = $user->user_id;
     $participant->save();
 
-    Mail::to($user->email)->send(new ParticipantCreated($user, $generatedPassword));
+    Mail::to($user->email)->queue(new ParticipantCreated($user, $generatedPassword));
 
     $qrData = route('adminDashboard', ['coop_id' => $participant->coop_id]);
 
-    $response = Http::get('https://api.qrserver.com/v1/create-qr-code/', [
+    $response = Http::timeout(30)->get('https://api.qrserver.com/v1/create-qr-code/', [
         'data' => $qrData,
         'size' => '200x200'
     ]);
+
 
     if ($response->successful()) {
         $path = 'qrcodes/participant_' . $participant->coop_id . '.png';
@@ -209,8 +247,6 @@ public function store(Request $request)
 
     return redirect()->route('participants.index')->with('success', 'Participant registered and user account created successfully!');
 }
-
-
 
     // Show a specific participant
     public function show($participant_id)
@@ -332,6 +368,9 @@ public function store(Request $request)
               'documents.Resolution for Voting Delegates' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
               'documents.Deposit Slip for Registration Fee' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
               'documents.Deposit Slip for CETF Remittance' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
+              'documents.CETF Undertaking' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
+              'documents.CETF Candidacy' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
+              'documents.CETF Utilization Invoice' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
           ]);
 
           $participant = Auth::user()->participant;

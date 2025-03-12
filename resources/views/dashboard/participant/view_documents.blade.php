@@ -162,9 +162,14 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="card">
-                  <div class="card-header">
-                    <div class="card-title">Uploaded Documents</div>
-                  </div>
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <div class="card-title">Uploaded Documents</div>
+
+                        <a id="uploadBtn" href="{{ route('documents') }}"
+                           class="btn btn-primary btn-lg rounded-pill shadow-sm hover-shadow d-flex align-items-center">
+                            <i class="fas fa-upload me-2"></i> Upload Document
+                        </a>
+                    </div>
 
                     @if(session('error'))
                         <div class="alert alert-danger">{{ session('error') }}</div>
@@ -180,6 +185,7 @@
                                         <th>Document Type</th>
                                         <th>File Name</th>
                                         <th>Status</th>
+                                        <th>Remarks</th>
                                         <th>View</th>
                                         <th>Download</th>
                                     </tr>
@@ -190,6 +196,7 @@
                                             <td>{{ $document->document_type }}</td>
                                             <td>{{ $document->file_name }}</td>
                                             <td>{{ $document->status }}</td>
+                                            <td>{{ $document->remarks ?? 'No remarks yet' }}</td>
                                             <td>
                                                 <a href="{{ asset('storage/' . $document->file_path) }}" target="_blank" class="btn btn-sm btn-outline-primary">
                                                     <i class="fas fa-eye"></i> View

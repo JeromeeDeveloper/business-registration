@@ -266,22 +266,7 @@
                             </div>
 
                             <!-- Cooperative Selection Dropdown -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="coop_id">Select Cooperative</label>
-                                    <select class="form-control @error('coop_id') is-invalid @enderror" name="coop_id" id="coop_id" required>
-                                        <option value="">-- Select Cooperative --</option>
-                                        @foreach($cooperatives as $cooperative)
-                                        <option value="{{ $cooperative->coop_id }}" {{ old('coop_id') == $cooperative->coop_id ? 'selected' : '' }}>
-                                            {{ $cooperative->name }}
-                                        </option>
-                                        @endforeach
-                                    </select>
-                                    @error('coop_id')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                            </div>
+
 
                             <!-- Email -->
                             <div class="col-md-6 col-lg-4">
@@ -316,8 +301,26 @@
                                         <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
                                         <option value="participant" {{ old('role') == 'participant' ? 'selected' : '' }}>Participant</option>
                                         <option value="cooperative" {{ old('role') == 'cooperative' ? 'selected' : '' }}>Cooperative</option>
+                                        <option value="support" {{ old('role') == 'support' ? 'selected' : '' }}>Support</option> <!-- Fixed value -->
                                     </select>
                                     @error('role')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-lg-4">
+                                <div class="form-group" id="coop-group">
+                                    <label for="coop_id">Select Cooperative</label>
+                                    <select class="form-control @error('coop_id') is-invalid @enderror" name="coop_id" id="coop_id">
+                                        <option value="">-- Select Cooperative --</option>
+                                        @foreach($cooperatives as $cooperative)
+                                        <option value="{{ $cooperative->coop_id }}" {{ old('coop_id') == $cooperative->coop_id ? 'selected' : '' }}>
+                                            {{ $cooperative->name }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                    @error('coop_id')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -358,5 +361,26 @@
 
     </div>
   @include('layouts.links')
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const roleSelect = document.getElementById("role");
+        const coopGroup = document.getElementById("coop-group");
+        const coopSelect = document.getElementById("coop_id");
+
+        function toggleCoopDropdown() {
+            if (roleSelect.value === "admin" || roleSelect.value === "support") {
+                coopGroup.style.display = "none";
+                coopSelect.value = ""; // Clear the selected cooperative when hidden
+            } else {
+                coopGroup.style.display = "block";
+            }
+        }
+
+        roleSelect.addEventListener("change", toggleCoopDropdown);
+
+        // Run on page load in case of pre-selected values
+        toggleCoopDropdown();
+    });
+</script>
   </body>
 </html>

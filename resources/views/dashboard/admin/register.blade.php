@@ -357,6 +357,11 @@
                         </div>
                     </div>
 
+                    <div class="col-12">
+                        <h4 class="mt-4">Verifier</h4>
+                        <hr>
+                    </div>
+
                       <!-- Total Assets -->
                       <div class="col-md-6 col-lg-4">
                         <div class="form-group">
@@ -365,11 +370,105 @@
                         </div>
                       </div>
 
+                      <div class="col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <label for="loan_balance">Loan Balance</label>
+                            <input type="number" class="form-control" name="loan_balance" id="loan_balance" placeholder="Enter Loan Balance" value="{{ old('loan_balance') }}"/>
+                            <!-- Display the error message if validation fails -->
+                            @error('loan_balance')
+                                <div class="text-danger mt-2">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+
+
+
+                      <div class="col-md-6 col-lg-4">
+                        <div class="form-group">
+                          <label for="total_overdue">Total Overdue</label>
+                          <input type="number" class="form-control" name="total_overdue" id="total_overdue" placeholder="Enter Total Overdue"/>
+                        </div>
+                      </div>
+
+                      <div class="col-md-6 col-lg-4">
+                        <div class="form-group">
+                          <label for="time_deposit">Time Deposit</label>
+                          <input type="number" class="form-control" name="time_deposit" id="time_deposit" placeholder="Enter Time Deposit" />
+                        </div>
+                      </div>
+
+                      <div class="col-md-6 col-lg-4">
+                        <div class="form-group">
+                          <label for="accounts_receivable">Accounts Receivable</label>
+                          <input type="number" class="form-control" name="accounts_receivable" id="accounts_receivable" placeholder="Enter Accounts Receivable" />
+                        </div>
+                      </div>
+
+                      <div class="col-md-6 col-lg-4">
+                        <div class="form-group">
+                          <label for="savings">Savings</label>
+                          <input type="number" class="form-control" name="savings" id="savings" placeholder="Enter Savings" />
+                        </div>
+                      </div>
+
+                      <div class="col-md-6 col-lg-4">
+                        <div class="form-group">
+                          <label for="net_surplus">Net Surplus</label>
+                          <input type="number" class="form-control" name="net_surplus" id="net_surplus" placeholder="Enter Net Surplus" />
+                        </div>
+                      </div>
+
+                      <div class="col-md-6 col-lg-4">
+                        <div class="form-group">
+                          <label for="cetf_due_to_apex">CETF Due to Apex</label>
+                          <input type="number" class="form-control" name="cetf_due_to_apex" id="cetf_due_to_apex" placeholder="Enter CETF Due to Apex" />
+                        </div>
+                      </div>
+
+                      <div class="col-md-6 col-lg-4">
+                        <div class="form-group">
+                          <label for="additional_cetf">Additional CETF</label>
+                          <input type="number" class="form-control" name="additional_cetf" id="additional_cetf" placeholder="Enter Additional CETF" />
+                        </div>
+                      </div>
+
+                      <div class="col-md-6 col-lg-4">
+                        <div class="form-group">
+                          <label for="cetf_undertaking">CETF Undertaking</label>
+                          <input type="number" class="form-control" name="cetf_undertaking" id="cetf_undertaking" placeholder="Enter CETF Undertaking" />
+                        </div>
+                      </div>
+
+                      <div class="col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <label for="full_cetf_remitted">Full CETF Remitted</label>
+                            <select class="form-control" name="full_cetf_remitted" id="full_cetf_remitted">
+                                <option value="" disabled selected>Select an option</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                    </div>
+
+                      <div class="col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <label for="registration_date_paid">Registration Date Paid</label>
+                            <input type="date" class="form-control" name="registration_date_paid" id="registration_date_paid"  />
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="form-group">
+                          <label for="registration_fee">Registration Fee</label>
+                          <input type="number" class="form-control" name="registration_fee" id="registration_fee" placeholder="Enter Total Income" />
+                        </div>
+                      </div>
+
                       <!-- Total Income -->
                       <div class="col-md-6 col-lg-4">
                         <div class="form-group">
                           <label for="total_income">Total Income</label>
-                          <input type="number" class="form-control" name="total_income" id="total_income" placeholder="Enter Total Income" required/>
+                          <input type="number" class="form-control" name="total_income" id="total_income" placeholder="Enter Total Income" />
                         </div>
                       </div>
 
@@ -377,15 +476,15 @@
                       <div class="col-md-6 col-lg-4">
                         <div class="form-group">
                           <label for="cetf_remittance">CETF Remittance</label>
-                          <input type="number" class="form-control" name="cetf_remittance" id="cetf_remittance" placeholder="Enter CETF Remittance" required/>
+                          <input type="number" class="form-control" name="cetf_remittance" id="cetf_remittance" placeholder="Enter CETF Remittance" />
                         </div>
                       </div>
 
-                      <!-- CETF Required -->
+                      <!-- CETF  -->
                       <div class="col-md-6 col-lg-4">
                         <div class="form-group">
                           <label for="cetf_required">CETF Required</label>
-                          <input type="number" class="form-control" name="cetf_required" id="cetf_required" placeholder="Enter CETF Required" required/>
+                          <input type="number" class="form-control" name="cetf_required" id="cetf_required" placeholder="Enter CETF Required" />
                         </div>
                       </div>
 
@@ -394,7 +493,7 @@
                       <div class="col-md-6 col-lg-4">
                         <div class="form-group">
                           <label for="cetf_balance">CETF Balance</label>
-                          <input type="number" class="form-control" name="cetf_balance" id="cetf_balance" placeholder="Enter CETF Balance" required/>
+                          <input type="number" class="form-control" name="cetf_balance" id="cetf_balance" placeholder="Enter CETF Balance"/>
                         </div>
                       </div>
 
@@ -403,17 +502,53 @@
                       <div class="col-md-6 col-lg-4">
                         <div class="form-group">
                           <label for="share_capital_balance">Share Capital Balance</label>
-                          <input type="number" class="form-control" name="share_capital_balance" id="share_capital_balance" placeholder="Enter Share Capital Balance" required/>
+                          <input type="number" class="form-control" name="share_capital_balance" id="share_capital_balance" placeholder="Enter Share Capital Balance"/>
                         </div>
                       </div>
 
                       <!-- Number of Entitled Votes -->
                       <div class="col-md-6 col-lg-4">
                         <div class="form-group">
-                          <label for="no_of_entitled_votes">No of Entitled Votes</label>
-                          <input type="number" class="form-control" name="no_of_entitled_votes" id="no_of_entitled_votes" placeholder="Enter No of Entitled Votes" required/>
+                            <label for="no_of_entitled_votes">No of Entitled Votes</label>
+                            <input type="number" class="form-control" name="no_of_entitled_votes" id="no_of_entitled_votes" placeholder="Enter No of Entitled Votes" disabled />
                         </div>
-                      </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <label for="total_remittance">Total remmitance</label>
+                            <input type="number" class="form-control" name="total_remittance" id="total_remittance" placeholder="Enter Total remmitance" />
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <label for="ga_remark">GA Remark</label>
+                            <input type="text" class="form-control" name="ga_remark" id="ga_remark" placeholder="Enter Total remmitance" />
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <label for="reg_fee_payable">Registration Fee Payable</label>
+                            <input type="text" class="form-control" name="reg_fee_payable" id="reg_fee_payable" placeholder="Enter Registration Fee Payable" />
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <label for="net_required_reg_fee">Net Required Registration Fee</label>
+                            <input type="text" class="form-control" name="net_required_reg_fee" id="net_required_reg_fee" placeholder="Enter Net Required Registration Fee" />
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <label for="total_reg_fee">Total Registration Fee</label>
+                            <input type="text" class="form-control" name="total_reg_fee" id="total_reg_fee" placeholder="Total Registration Fee" />
+                        </div>
+                    </div>
+
 
                     </div>
 
@@ -433,6 +568,57 @@
 
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Function to calculate the number of entitled votes
+        function calculateVotes() {
+            var shareCapital = parseFloat(document.getElementById('share_capital_balance').value);
+            var votes = 0;
+            var remaining = shareCapital;
+
+            if (isNaN(shareCapital) || shareCapital <= 0) {
+                document.getElementById('no_of_entitled_votes').value = 0;
+                return;
+            }
+
+            // Calculate based on ₱100,000 blocks
+            if (remaining >= 100000) {
+                votes += Math.floor(remaining / 100000); // Every ₱100,000 gives 1 vote
+            }
+
+            remaining = remaining % 100000; // Remaining after full ₱100,000 blocks
+
+            while (remaining >= 25000) {
+                if (remaining >= 75000) {
+                    votes += 3; // ₱75,000 → +3 votes
+                    remaining -= 75000;
+                } else if (remaining >= 50000) {
+                    votes += 2; // ₱50,000 → +2 votes
+                    remaining -= 50000;
+                } else if (remaining >= 25000) {
+                    votes += 1; // ₱25,000 → +1 vote
+                    remaining -= 25000;
+                }
+            }
+
+            // Max votes = 5
+            var noOfVotes = Math.min(votes, 5);
+            document.getElementById('no_of_entitled_votes').value = noOfVotes;
+        }
+
+        // Add event listener for share capital balance input change
+        document.getElementById('share_capital_balance').addEventListener('input', calculateVotes);
+    </script>
+
+    <script>
+        document.querySelectorAll('.format-number').forEach(input => {
+            input.addEventListener('input', function (event) {
+                let value = event.target.value.replace(/,/g, ""); // Remove existing commas
+                if (!isNaN(value) && value !== "") {
+                    event.target.value = parseFloat(value).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                }
+            });
+        });
+    </script>
         <!-- Include Bootstrap (if not already included) -->
     {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
     {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> --}}

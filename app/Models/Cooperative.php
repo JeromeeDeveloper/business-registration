@@ -15,11 +15,42 @@ class Cooperative extends Model
 
     protected $primaryKey = 'coop_id';
     protected $fillable = [
-        'name', 'contact_person', 'type', 'address', 'region', 'phone_number',
-        'email', 'tin', 'coop_identification_no', 'bod_chairperson',
-        'general_manager_ceo', 'total_asset',
-        'total_income', 'cetf_remittance', 'cetf_required', 'cetf_balance',
-        'share_capital_balance', 'no_of_entitled_votes', 'services_availed'
+        'name',
+        'contact_person',
+        'type',
+        'address',
+        'region',
+        'phone_number',
+        'email',
+        'tin',
+        'coop_identification_no',
+        'bod_chairperson',
+        'general_manager_ceo',
+        'total_asset',
+        'loan_balance',
+        'total_overdue',
+        'time_deposit',
+        'accounts_receivable',
+        'savings',
+        'net_surplus',
+        'cetf_due_to_apex',
+        'additional_cetf',
+        'cetf_undertaking',
+        'full_cetf_remitted',
+        'registration_date_paid',
+        'registration_fee',
+        'total_income',
+        'cetf_remittance',
+        'cetf_required',
+        'cetf_balance',
+        'share_capital_balance',
+        'no_of_entitled_votes',
+        'services_availed',
+        'total_remittance',
+        'ga_remark',
+        'reg_fee_payable',
+        'net_required_reg_fee',
+        'total_reg_fee'
     ];
 
     public function participants()

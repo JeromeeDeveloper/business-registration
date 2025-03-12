@@ -117,10 +117,16 @@ class CooperativeController extends Controller
 
             $qrData = route('adminDashboard', ['coop_id' => $participant->coop_id]);
 
-            $response = Http::get('https://api.qrserver.com/v1/create-qr-code/', [
+            // $response = Http::get('https://api.qrserver.com/v1/create-qr-code/', [
+            //     'data' => $qrData,
+            //     'size' => '200x200'
+            // ]);
+
+            $response = Http::timeout(30)->get('https://api.qrserver.com/v1/create-qr-code/', [
                 'data' => $qrData,
                 'size' => '200x200'
             ]);
+
 
             if (!$response->successful()) {
                 DB::rollBack();
@@ -141,7 +147,7 @@ class CooperativeController extends Controller
             }
 
             try {
-                Mail::to($user->email)->send(new ParticipantCreated($user, $generatedPassword));
+                Mail::to($user->email)->queue(new ParticipantCreated($user, $generatedPassword));
             } catch (\Exception $e) {
                 DB::rollBack();
                 Log::error('Email sending failed: ' . $e->getMessage());
@@ -344,17 +350,20 @@ class CooperativeController extends Controller
   }
 
   public function updateDocumentStatus(Request $request, $document_id)
-{
-    $request->validate([
-        'status' => 'required|in:Pending,Checked,Approved,Rejected',
-    ]);
+  {
+      $request->validate([
+          'status' => 'required|in:Pending,Checked,Approved,Rejected',
+          'remarks' => 'nullable|string|max:255'
+      ]);
 
-    $document = UploadedDocument::findOrFail($document_id);
-    $document->status = $request->status;
-    $document->save();
+      $document = UploadedDocument::findOrFail($document_id);
+      $document->status = $request->status;
+      $document->remarks = $request->remarks;
+      $document->save();
 
-    return back()->with('success', 'Document status updated successfully.');
-}
+      return back()->with('success', 'Document status and remarks updated successfully.');
+  }
+
 
   public function updateStatus(Request $request, $coop_id)
   {

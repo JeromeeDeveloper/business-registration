@@ -315,12 +315,12 @@
                                 <!-- Gender -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label for="gender">Gender</label>
+                                        <label for="gender">Sex</label>
                                         <select class="form-control @error('gender') is-invalid @enderror" name="gender" id="gender" required>
-                                            <option value="" disabled selected>Select Gender</option>
+                                            <option value="" disabled selected>Select Sex</option>
                                             <option value="Male" {{ old('gender') == 'Male' ? 'selected' : '' }}>Male</option>
                                             <option value="Female" {{ old('gender') == 'Female' ? 'selected' : '' }}>Female</option>
-                                            <option value="Other" {{ old('gender') == 'Other' ? 'selected' : '' }}>Other</option>
+                                            {{-- <option value="Other" {{ old('gender') == 'Other' ? 'selected' : '' }}>Other</option> --}}
                                         </select>
                                         @error('gender')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -410,7 +410,7 @@
                                 <!-- MSP Officer -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label for="is_msp_officer">Is MSP Officer</label>
+                                        <label for="is_msp_officer">Mass-Specc Officer</label>
                                         <select class="form-control @error('is_msp_officer') is-invalid @enderror" name="is_msp_officer" id="is_msp_officer" required>
                                             <option value="" disabled {{ old('is_msp_officer') == '' ? 'selected' : '' }}>Select Status</option>
                                             <option value="No" {{ old('is_msp_officer') == 'No' ? 'selected' : '' }}>No</option>
@@ -425,7 +425,7 @@
                                 <!-- MSP Officer Position -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label for="msp_officer_position">MSP Officer Position</label>
+                                        <label for="msp_officer_position">Mass-Specc Officer Position</label>
                                         <input type="text" class="form-control @error('msp_officer_position') is-invalid @enderror"
                                                name="msp_officer_position" id="msp_officer_position"
                                                placeholder="Enter MSP Officer Position"
@@ -443,8 +443,8 @@
                                         <label for="delegate_type">Delegate Type</label>
                                         <select class="form-control @error('delegate_type') is-invalid @enderror" name="delegate_type" id="delegate_type" required>
                                             <option value="" disabled selected>Select Delegate Type</option>
-                                            <option value="Voting" {{ old('delegate_type') == 'Voting' ? 'selected' : '' }}>Yes</option>
-                                            <option value="Non-Voting" {{ old('delegate_type') == 'Non-Voting' ? 'selected' : '' }}>No</option>
+                                            <option value="Voting" {{ old('delegate_type') == 'Voting' ? 'selected' : '' }}>Voting</option>
+                                            <option value="Non-Voting" {{ old('delegate_type') == 'Non-Voting' ? 'selected' : '' }}>Non-Voting</option>
                                         </select>
                                         @error('delegate_type')
                                             <div class="invalid-feedback">{{ $message }}</div>

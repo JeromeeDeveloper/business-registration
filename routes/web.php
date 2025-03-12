@@ -10,6 +10,8 @@ use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\EventsController;
 use App\Http\Controllers\ViewerController;
+use App\Http\Middleware\SupportMiddleware;
+use App\Http\Controllers\SupportController;
 use App\Http\Controllers\SpeakersController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AttendanceController;
@@ -60,6 +62,9 @@ Route::get('/participants/{id}/generate-id', [ParticipantController::class, 'gen
 
 // Handle the file upload via POST
 Route::post('/import-excel', [ExcelImportController::class, 'importExcel'])->name('import.excel');
+
+Route::get('/participants/{userId}/resend-email-admin', [ParticipantController::class, 'resendEmail2'])
+     ->name('participants.resendEmail2');
 
 Route::post('/cooperatives/{coop_id}/notify', [DashboardController::class, 'sendNotification'])->name('cooperatives.notify');
 Route::post('/cooperatives/notify-all', [DashboardController::class, 'sendNotificationToAll'])->name('cooperatives.notifyAll');
@@ -156,6 +161,9 @@ Route::put('/cooperatives/{coop_id}/update-status', [CooperativeController::clas
 // participant user
 Route::middleware([ParticipantMiddleware::class])->group(function () {
 
+Route::get('/participants/{userId}/resend-email', [ParticipantController::class, 'resendEmail'])
+     ->name('participants.resendEmail');
+
 Route::get('/participant/dashboard', [DashboardController::class, 'participant'])->name('participantDashboard');
 
 Route::get('/cooperativeprofile/{coop_id}', [DashboardController::class, 'cooperativeprofile'])->name('cooperativeprofile');
@@ -237,5 +245,19 @@ Route::get('/download-qr2/{participant_id}', function ($participant_id) {
         'Content-Disposition' => 'attachment; filename="participant_' . $participant_id . '_qr_code.png"',
     ]);
 })->name('download.qr2');
+
+});
+
+Route::middleware([SupportMiddleware::class])->group(function () {
+
+Route::get('/dashboard/support', [SupportController::class, 'support'])->name('supportDashboard');
+
+Route::get('/Support/Cooperatives', [SupportController::class, 'supportview'])->name('supportview');
+Route::get('/Support/profile/edit', [SupportController::class, 'editProfile3'])->name('profile.edit3');
+Route::put('/Supportp/rofile/edit', [SupportController::class, 'updateProfile3'])->name('profile.update3');
+Route::get('/Support/Cooperatives/View/{id}', [SupportController::class, 'show_support'])->name('support.cooperatives.show');
+
+Route::get('/Support/Document/View/{coop_id?}', [SupportController::class, 'viewsupportDocuments'])->name('support.documents.view');
+Route::put('/Support/Document/UpdateStatus/{document_id}', [SupportController::class, 'updateDocumentStatus'])->name('support.documents.updateStatus');
 
 });

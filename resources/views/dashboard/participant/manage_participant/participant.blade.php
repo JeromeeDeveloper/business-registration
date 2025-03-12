@@ -157,10 +157,12 @@
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <div class="d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
+                                    <div
+                                        class="d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
                                         <!-- Left: Participants Count -->
                                         <div class="d-flex align-items-center">
-                                            <h4 class="fw-bold d-flex gap-2 align-items-center mb-2 mb-md-0 text-nowrap">
+                                            <h4
+                                                class="fw-bold d-flex gap-2 align-items-center mb-2 mb-md-0 text-nowrap">
                                                 Cooperative's Participants:
                                                 <span class="badge bg-primary text-white px-3 py-2 fs-5">
                                                     {{ $totalParticipants }}
@@ -172,22 +174,23 @@
                                         <!-- Right: Search Form + Add Button -->
                                         <form method="GET" class="w-80 w-md-auto">
                                             <div class="input-group">
-                                                <input type="text" name="search" class="form-control" placeholder="Search..."
-                                                    value="{{ request('search') }}">
+                                                <input type="text" name="search" class="form-control"
+                                                    placeholder="Search..." value="{{ request('search') }}">
 
                                                 <!-- Buttons with gap -->
                                                 <div class="d-flex gap-2">
                                                     <button type="submit" class="btn btn-primary">
                                                         <i class="fa fa-search"></i>
                                                     </button>
-                                                    <button type="button" class="btn btn-primary text-white" data-bs-toggle="tooltip"
-                                                        title="Add Participant" onclick="location.href='{{ route('coopparticipantadd') }}'">
+                                                    <button type="button" class="btn btn-primary text-white"
+                                                        data-bs-toggle="tooltip" title="Add Participant"
+                                                        onclick="location.href='{{ route('coopparticipantadd') }}'">
                                                         <i class="fa fa-plus"></i>
                                                     </button>
                                                     <button type="button" onclick="printAttendance()"
-                                                    class="btn btn-primary w-100 d-flex align-items-center justify-content-center shadow-sm gap-2">
-                                                    <i class="fa fa-print"></i>
-                                                </button>
+                                                        class="btn btn-primary w-100 d-flex align-items-center justify-content-center shadow-sm gap-2">
+                                                        <i class="fa fa-print"></i>
+                                                    </button>
                                                 </div>
                                             </div>
                                         </form>
@@ -200,11 +203,16 @@
                                     <div class="d-flex justify-content-between mb-3">
                                         <div>
                                             <label>Show
-                                                <select id="showEntries" class="form-select form-select-sm" style="width: auto; display: inline;">
-                                                    <option value="5" {{ request('limit') == 5 ? 'selected' : '' }}>5</option>
-                                                    <option value="10" {{ request('limit') == 10 ? 'selected' : '' }}>10</option>
-                                                    <option value="25" {{ request('limit') == 25 ? 'selected' : '' }}>25</option>
-                                                    <option value="50" {{ request('limit') == 50 ? 'selected' : '' }}>50</option>
+                                                <select id="showEntries" class="form-select form-select-sm"
+                                                    style="width: auto; display: inline;">
+                                                    <option value="5"
+                                                        {{ request('limit') == 5 ? 'selected' : '' }}>5</option>
+                                                    <option value="10"
+                                                        {{ request('limit') == 10 ? 'selected' : '' }}>10</option>
+                                                    <option value="25"
+                                                        {{ request('limit') == 25 ? 'selected' : '' }}>25</option>
+                                                    <option value="50"
+                                                        {{ request('limit') == 50 ? 'selected' : '' }}>50</option>
                                                 </select> entries
                                             </label>
                                         </div>
@@ -256,6 +264,18 @@
                                 <i class="fa fa-file"></i>
                              </a> --}}
 
+                                                                @if ($participant->user && $participant->user->user_id)
+                                                                    <a href="javascript:void(0);"
+                                                                        onclick="resendEmail({{ $participant->user->user_id }})"
+                                                                        class="btn btn-link btn-warning btn-lg"
+                                                                        data-bs-toggle="tooltip"
+                                                                        title="Resend Credentials">
+                                                                        <i class="fas fa-envelope"></i>
+                                                                    </a>
+                                                                @else
+                                                                    <span class="text-danger">No user assigned</span>
+                                                                @endif
+
                                                                 <a href="{{ route('coop.participants.show', $participant->participant_id) }}"
                                                                     class="btn btn-link btn-info btn-lg"
                                                                     data-bs-toggle="tooltip"
@@ -285,6 +305,12 @@
                                                                     </button>
                                                                 </form> --}}
                                                         </td>
+
+
+
+
+
+
                                     </div>
 
                                     </tr>
@@ -346,6 +372,36 @@
         @include('layouts.adminfooter')
     </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        function resendEmail(userId) {
+            Swal.fire({
+                title: 'Sending Email...',
+                text: 'Please wait while we resend the email.',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            fetch("{{ url('/participants') }}/" + userId + "/resend-email")
+                .then(response => response.json()) // Expecting JSON response from Laravel
+                .then(data => {
+                    Swal.close(); // Close the loading Swal
+                    if (data.success) {
+                        Swal.fire('Success!', data.message, 'success');
+                    } else {
+                        Swal.fire('Error!', data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    Swal.close();
+                    Swal.fire('Error!', 'Something went wrong. Please try again.', 'error');
+                });
+        }
+    </script>
     <script>
         document.getElementById('showEntries').addEventListener('change', function() {
             let url = new URL(window.location.href);

@@ -300,6 +300,12 @@
                                                             @endif
                                                         </td>
 
+
+
+
+
+
+
                                                         <td class="no-print">
                                                             <div class="form-button-action no-print">
 
@@ -318,6 +324,15 @@
                                                                 <i class="fa fa-id-card"></i>
                                                             </button>
 
+                                                            @if ($participant->user && $participant->user->user_id)
+                                                            <a href="javascript:void(0);"
+                                                               onclick="resendEmail2({{ $participant->user->user_id }})"
+                                                               class="btn btn-link btn-warning btn-lg" data-bs-toggle="tooltip" title="Resend Credentials">
+                                                               <i class="fas fa-envelope"></i>
+                                                            </a>
+                                                        @else
+                                                            <span class="text-danger">No user assigned</span>
+                                                        @endif
 
                                                                 <a href="{{ route('participants.show', $participant->participant_id) }}"
                                                                     class="btn btn-link btn-info btn-lg"
@@ -407,6 +422,38 @@
         @include('layouts.adminfooter')
     </div>
     </div>
+     {{-- Include SweetAlert2 if not already included --}}
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+     <script>
+         function resendEmail2(userId) {
+             Swal.fire({
+                 title: 'Sending Email...',
+                 text: 'Please wait while we resend the email.',
+                 allowOutsideClick: false,
+                 allowEscapeKey: false,
+                 didOpen: () => {
+                     Swal.showLoading();
+                 }
+             });
+
+             fetch("{{ url('/participants') }}/" + userId + "/resend-email-admin")
+                 .then(response => response.json()) // Expecting JSON response from Laravel
+                 .then(data => {
+                     Swal.close(); // Close the loading Swal
+                     if (data.success) {
+                         Swal.fire('Success!', data.message, 'success');
+                     } else {
+                         Swal.fire('Error!', data.message, 'error');
+                     }
+                 })
+                 .catch(error => {
+                     Swal.close();
+                     Swal.fire('Error!', 'Something went wrong. Please try again.', 'error');
+                 });
+         }
+     </script>
+
     <script>
         document.getElementById('showEntries').addEventListener('change', function() {
             let url = new URL(window.location.href);

@@ -19,15 +19,17 @@ class CooperativeNotification extends Mailable
     public $coop;
     public $event;
     public $gaRegistration;
+    public $users; // Add users property
 
     /**
      * Create a new message instance.
      */
-    public function __construct(Cooperative $coop, Event $event, ?GARegistration $gaRegistration)
+    public function __construct(Cooperative $coop, Event $event, ?GARegistration $gaRegistration, $users)
     {
         $this->coop = $coop;
         $this->event = $event;
-        $this->gaRegistration = $gaRegistration; // Nullable in case no registration is found
+        $this->gaRegistration = $gaRegistration;
+        $this->users = $users;
     }
 
     /**

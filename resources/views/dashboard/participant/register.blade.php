@@ -312,7 +312,7 @@
                             <!-- MSP Officer -->
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
-                                    <label for="is_msp_officer">Is MSP Officer</label>
+                                    <label for="is_msp_officer">Mass-Specc Officer</label>
                                     <select class="form-control @error('is_msp_officer') is-invalid @enderror" name="is_msp_officer" id="is_msp_officer">
                                         <option value="Yes" {{ old('is_msp_officer') == 'Yes' ? 'selected' : '' }}>Yes</option>
                                         <option value="No" {{ old('is_msp_officer') == 'No' ? 'selected' : '' }}>No</option>
@@ -326,7 +326,7 @@
                             <!-- MSP Officer Position -->
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
-                                    <label for="msp_officer_position">MSP Officer Position</label>
+                                    <label for="msp_officer_position">Mass-Specc Officer Position</label>
                                     <input type="text" class="form-control @error('msp_officer_position') is-invalid @enderror" name="msp_officer_position" id="msp_officer_position" placeholder="Enter MSP Officer Position" value="{{ old('msp_officer_position') }}" />
                                     @error('msp_officer_position')
                                         <div class="invalid-feedback">{{ $message }}</div>

@@ -310,11 +310,11 @@
                                 <!-- Gender -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label for="gender">Gender</label>
+                                        <label for="gender">Sex</label>
                                         <select class="form-control" name="gender">
                                             <option value="Male" {{ old('gender', $participant->gender) == 'Male' ? 'selected' : '' }}>Male</option>
                                             <option value="Female" {{ old('gender', $participant->gender) == 'Female' ? 'selected' : '' }}>Female</option>
-                                            <option value="Other" {{ old('gender', $participant->gender) == 'Other' ? 'selected' : '' }}>Other</option>
+                                            {{-- <option value="Other" {{ old('gender', $participant->gender) == 'Other' ? 'selected' : '' }}>Other</option> --}}
                                         </select>
                                     </div>
                                 </div>
@@ -380,7 +380,7 @@
                                 <!-- Is MSP Officer -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label for="is_msp_officer">Is MSP Officer</label>
+                                        <label for="is_msp_officer">Mass-Specc Officer</label>
                                         <select class="form-control" name="is_msp_officer" id="is_msp_officer">
                                             <option value="Yes" {{ old('is_msp_officer', $participant->is_msp_officer) == 'Yes' ? 'selected' : '' }}>Yes</option>
                                             <option value="No" {{ old('is_msp_officer', $participant->is_msp_officer) == 'No' ? 'selected' : '' }}>No</option>
@@ -391,7 +391,7 @@
                                 <!-- MSP Officer Position -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label for="msp_officer_position">MSP Officer Position</label>
+                                        <label for="msp_officer_position">Mass-Specc Officer Position</label>
                                         <input type="text" class="form-control" name="msp_officer_position" id="msp_officer_position"
                                                value="{{ old('msp_officer_position', $participant->msp_officer_position) }}"
                                                {{ old('is_msp_officer', $participant->is_msp_officer) == 'Yes' ? '' : 'disabled' }}>

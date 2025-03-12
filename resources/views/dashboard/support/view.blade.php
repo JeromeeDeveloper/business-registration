@@ -10,7 +10,7 @@
         <div class="sidebar-logo">
           <!-- Logo Header -->
           <div class="logo-header" data-background-color="dark">
-            <a href="{{route('adminDashboard')}}" class="logo">
+            <a href="{{route('supportDashboard')}}" class="logo">
                 <img class="logo-mass-specc" src="{{ asset('images/logo.png') }}" alt="">
             </a>
             <div class="nav-toggle">
@@ -33,7 +33,7 @@
 
               <li class="nav-item">
                 <a
-                  href="{{route('adminDashboard')}}"
+                  href="{{route('supportDashboard')}}"
                   class="collapsed"
                 >
                   <i class="fas fa-home"></i>
@@ -57,99 +57,14 @@
                 <div class="collapse show" id="cooperative">
                   <ul class="nav nav-collapse">
                     <li class="active">
-                        <a href="{{route('adminview')}}">
+                        <a href="{{route('supportview')}}">
                           <span class="sub-item">Manage Cooperative</span>
                         </a>
                       </li>
                   </ul>
                 </div>
               </li>
-              <li class="nav-item">
-                <a data-bs-toggle="collapse" href="#participant">
-                    <i class="fas fa-user-cog"></i>
-                  <p>Participant</p>
-                  <span class="caret"></span>
-                </a>
-                <div class="collapse" id="participant">
-                  <ul class="nav nav-collapse">
-                    <li>
-                        <a href="{{route('participants.index')}}">
-                            <span class="sub-item">Manage Participant</span>
-                          </a>
-                      </li>
-                  </ul>
-                </div>
-              </li>
 
-              <li class="nav-item">
-                <a data-bs-toggle="collapse" href="#attendance">
-                  <i class="fas fa-calendar"></i>
-                  <p>Attendance</p>
-                  <span class="caret"></span>
-                </a>
-                <div class="collapse" id="attendance">
-                  <ul class="nav nav-collapse">
-                    <li>
-                        <a href="{{ route('attendance.index') }}">
-                            <span class="sub-item">Manage attendance</span>
-                        </a>
-                    </li>
-
-                  </ul>
-                </div>
-              </li>
-
-              <li class="nav-item">
-                <a data-bs-toggle="collapse" href="#user">
-                  <i class="fas fa-user"></i>
-                  <p>User</p>
-                  <span class="caret"></span>
-                </a>
-                <div class="collapse" id="user">
-                  <ul class="nav nav-collapse">
-                    <li>
-                        <a href="{{route('users.index')}}">
-                          <span class="sub-item">Manage User</span>
-                        </a>
-                      </li>
-                  </ul>
-                </div>
-              </li>
-
-              <li class="nav-item">
-                <a data-bs-toggle="collapse" href="#speaker">
-                  <i class="fas fa-microphone"></i>
-                  <p>Speakers</p>
-                  <span class="caret"></span>
-                </a>
-                <div class="collapse" id="speaker">
-                  <ul class="nav nav-collapse">
-                    <li>
-                        <a href="{{ route('speakers.index') }}">
-                            <span class="sub-item">Manage Speaker</span>
-                        </a>
-                    </li>
-
-                  </ul>
-                </div>
-              </li>
-
-              <li class="nav-item">
-                <a data-bs-toggle="collapse" href="#events">
-                  <i class="fas fa-calendar"></i>
-                  <p>Events</p>
-                  <span class="caret"></span>
-                </a>
-                <div class="collapse" id="events">
-                  <ul class="nav nav-collapse">
-                    <li>
-                        <a href="{{route('events.index')}}">
-                          <span class="sub-item">Manage Events</span>
-                        </a>
-                      </li>
-                  </ul>
-                </div>
-              </li>
 
             </ul>
           </div>
@@ -162,7 +77,7 @@
           <div class="main-header-logo">
             <!-- Logo Header -->
             <div class="logo-header" data-background-color="dark">
-                <a href="{{route('adminDashboard')}}" class="logo">
+                <a href="{{route('supportDashboard')}}" class="logo">
                     <img class="logo-mass-specc" src="{{ asset('images/logo.png') }}" alt="">
               </a>
               <div class="nav-toggle">
@@ -180,7 +95,55 @@
             <!-- End Logo Header -->
           </div>
           <!-- Navbar Header -->
-          @include('layouts.adminnav')
+          <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
+            <div class="container-fluid">
+                <nav
+                    class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
+
+                </nav>
+
+                <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
+                    <li class="nav-item topbar-user dropdown hidden-caret">
+
+                        <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#"
+                            aria-expanded="false">
+                            <i class="fa fa-user"></i>
+                            <span class="profile-username">
+                                <span class="op-7">Hi,</span>
+                                <span class="fw-bold" style="text-transform: capitalize;">
+                                    {{ Auth::user()->name }}
+                                </span>
+
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user animated fadeIn">
+                            <div class="dropdown-user-scroll scrollbar-outer">
+                                <li>
+                                    <div class="user-box">
+                                        <div class="u-text">
+                                            <h4> {{ Auth::user()->name }}</h4>
+                                            <p class="text-muted"> {{ Auth::user()->email }}</p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="{{ route('profile.edit3') }}">My
+                                        Profile</a>
+                                    <div class="dropdown-divider"></div>
+                                    <form action="{{ route('logout') }}" method="POST" id="logout-form"
+                                        style="display: none;">
+                                        @csrf
+                                    </form>
+                                    <a class="dropdown-item" href="#"
+                                        onclick="document.getElementById('logout-form').submit();">Logout</a>
+                                </li>
+                            </div>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
           <!-- End Navbar -->
         </div>
 
@@ -319,14 +282,72 @@
                                 </div>
                             </div> --}}
 
-                             <!-- Services Availed -->
-                             <div class="col-md-6 col-lg-4">
+                            <!-- Total Assets -->
+                            <div class="col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="total_asset">Total Assets</label>
+                                    <p>{{ $coop->total_asset }}</p>
+                                </div>
+                            </div>
+
+                            <!-- Total Income -->
+                            <div class="col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="total_income">Total Income</label>
+                                    <p>{{ $coop->total_income }}</p>
+                                </div>
+                            </div>
+
+                            <!-- CETF Remittance -->
+                            <div class="col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="cetf_remittance">CETF Remittance</label>
+                                    <p>{{ $coop->cetf_remittance }}</p>
+                                </div>
+                            </div>
+
+                            <!-- CETF Required -->
+                            <div class="col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="cetf_required">CETF Required</label>
+                                    <p>{{ $coop->cetf_required }}</p>
+                                </div>
+                            </div>
+
+                            <!-- CETF Balance -->
+                            <div class="col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="cetf_balance">CETF Balance</label>
+                                    <p>{{ $coop->cetf_balance }}</p>
+                                </div>
+                            </div>
+
+                            <!-- Share Capital Balance -->
+                            <div class="col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="share_capital_balance">Share Capital Balance</label>
+                                    <p>{{ $coop->share_capital_balance }}</p>
+                                </div>
+                            </div>
+
+                            <!-- Number of Entitled Votes -->
+                            <div class="col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="no_of_entitled_votes">No of Entitled Votes</label>
+                                    <p>{{ $coop->no_of_entitled_votes }}</p>
+                                </div>
+                            </div>
+
+                            <!-- Services Availed -->
+                            <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="services_availed">Services Availed</label>
                                     <p>{{ implode(', ', json_decode($coop->services_availed, true)) }}</p>
                                 </div>
                             </div>
 
+
+                            <!-- GA Registration Status -->
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="ga_registration_status">Registration Status</label>
@@ -342,186 +363,11 @@
                                 </div>
                             </div>
 
-                            <div class="col-12">
-                                <h4 class="mt-4">Verifier</h4>
-                                <hr>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="total_asset">Total Assets</label>
-                                    <p>{{ $coop->total_asset }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="loan_balance">Loan Balance</label>
-                                    <p>{{ $coop->loan_balance }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="total_overdue">Total Overdue</label>
-                                    <p>{{ $coop->total_overdue }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="time_deposit">Time Deposit</label>
-                                    <p>{{ $coop->time_deposit }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="accounts_receivable">Accounts Receivable</label>
-                                    <p>{{ $coop->accounts_receivable }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="savings">Savings</label>
-                                    <p>{{ $coop->savings }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="net_surplus">Net Surplus</label>
-                                    <p>{{ $coop->net_surplus }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="cetf_due_to_apex">CETF Due to Apex</label>
-                                    <p>{{ $coop->cetf_due_to_apex }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="additional_cetf">Additional CETF</label>
-                                    <p>{{ $coop->additional_cetf }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="cetf_undertaking">CETF Undertaking</label>
-                                    <p>{{ $coop->cetf_undertaking }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="full_cetf_remitted">Full CETF Remitted</label>
-                                    <p>{{ $coop->full_cetf_remitted }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="registration_date_paid">Registration Date Paid</label>
-                                    <p>{{ \Carbon\Carbon::parse($coop->registration_date_paid)->translatedFormat('F j, Y') }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="registration_fee">Registration Fee</label>
-                                    <p>{{ $coop->total_reg_fee }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="total_income">Total Income</label>
-                                    <p>{{ $coop->total_income }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="cetf_remittance">CETF Remittance</label>
-                                    <p>{{ $coop->cetf_remittance }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="cetf_required">CETF Required</label>
-                                    <p>{{ $coop->cetf_required }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="cetf_balance">CETF Balance</label>
-                                    <p>{{ $coop->cetf_balance }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="share_capital_balance">Share Capital Balance</label>
-                                    <p>{{ $coop->share_capital_balance }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="no_of_entitled_votes">No of Entitled Votes</label>
-                                    <p>{{ $coop->no_of_entitled_votes }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="total_remittance">Total Remittance</label>
-                                    <p>{{ $coop->total_remittance }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="ga_remark">GA Remark</label>
-                                    <p>{{ $coop->ga_remark }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="reg_fee_payable">Registration Fee Payable</label>
-                                    <p>{{ $coop->reg_fee_payable }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="net_required_reg_fee">Net Required Registration Fee</label>
-                                    <p>{{ $coop->net_required_reg_fee }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="total_reg_fee">Total Registration Fee</label>
-                                    <p>{{ $coop->total_reg_fee }}</p>
-                                </div>
-                            </div>
-
-
-
                         </div>
                     </div>
 
                     <div class="card-action">
-                        <button class="btn btn-label-info btn-round me-2" type="button" onclick="window.location.href='{{ route('adminview') }}'">Back</button>
+                        <button class="btn btn-label-info btn-round me-2" type="button" onclick="window.location.href='{{ route('supportview') }}'">Back</button>
                     </div>
                 </form>
 

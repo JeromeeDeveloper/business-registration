@@ -10,7 +10,7 @@
         <div class="sidebar-logo">
           <!-- Logo Header -->
           <div class="logo-header" data-background-color="dark">
-            <a href="{{route('adminDashboard')}}" class="logo">
+            <a href="{{route('supportDashboard')}}" class="logo">
                 <img class="logo-mass-specc" src="{{ asset('images/logo.png') }}" alt="">
             </a>
             <div class="nav-toggle">
@@ -33,7 +33,7 @@
 
                 <li class="nav-item">
                   <a
-                    href="{{route('adminDashboard')}}"
+                    href="{{route('supportDashboard')}}"
                     class="collapsed"
                   >
                     <i class="fas fa-home"></i>
@@ -57,14 +57,14 @@
                     <div class="collapse show" id="cooperative">
                       <ul class="nav nav-collapse">
                         <li class="active">
-                            <a href="{{route('adminview')}}">
+                            <a href="{{route('supportview')}}">
                               <span class="sub-item">Manage Cooperative</span>
                             </a>
                           </li>
                       </ul>
                     </div>
                   </li>
-                  <li class="nav-item">
+                  {{-- <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#participant">
                         <i class="fas fa-user-cog"></i>
                       <p>Participant</p>
@@ -149,7 +149,7 @@
                           </li>
                       </ul>
                     </div>
-                  </li>
+                  </li> --}}
 
               </ul>
           </div>
@@ -162,7 +162,7 @@
           <div class="main-header-logo">
             <!-- Logo Header -->
             <div class="logo-header" data-background-color="dark">
-                <a href="{{route('adminDashboard')}}" class="logo">
+                <a href="{{route('supportDashboard')}}" class="logo">
                     <img class="logo-mass-specc" src="{{ asset('images/logo.png') }}" alt="">
               </a>
               <div class="nav-toggle">
@@ -180,7 +180,55 @@
             <!-- End Logo Header -->
           </div>
           <!-- Navbar Header -->
-          @include('layouts.adminnav')
+          <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
+            <div class="container-fluid">
+                <nav
+                    class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
+
+                </nav>
+
+                <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
+                    <li class="nav-item topbar-user dropdown hidden-caret">
+
+                        <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#"
+                            aria-expanded="false">
+                            <i class="fa fa-user"></i>
+                            <span class="profile-username">
+                                <span class="op-7">Hi,</span>
+                                <span class="fw-bold" style="text-transform: capitalize;">
+                                    {{ Auth::user()->name }}
+                                </span>
+
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user animated fadeIn">
+                            <div class="dropdown-user-scroll scrollbar-outer">
+                                <li>
+                                    <div class="user-box">
+                                        <div class="u-text">
+                                            <h4> {{ Auth::user()->name }}</h4>
+                                            <p class="text-muted"> {{ Auth::user()->email }}</p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="{{ route('profile.edit3') }}">My
+                                        Profile</a>
+                                    <div class="dropdown-divider"></div>
+                                    <form action="{{ route('logout') }}" method="POST" id="logout-form"
+                                        style="display: none;">
+                                        @csrf
+                                    </form>
+                                    <a class="dropdown-item" href="#"
+                                        onclick="document.getElementById('logout-form').submit();">Logout</a>
+                                </li>
+                            </div>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
           <!-- End Navbar -->
         </div>
 
@@ -220,7 +268,7 @@
                   <div class="card-header">
                     <div class="cooperative_doc_titles">
                     <div class="card-title">Uploaded Documents</div>
-                    <button type="button" class="btn btn-label-info btn-round me-2" onclick="window.location.href='{{ route('adminview') }}'">
+                    <button type="button" class="btn btn-label-info btn-round me-2" onclick="window.location.href='{{ route('supportview') }}'">
                         <i class="fa fa-arrow-left"></i>
                     </button>
                 </div>
@@ -263,7 +311,7 @@
                                         </td>
                                         <!-- Status Dropdown -->
                                         <td>
-                                            <form action="{{ route('admin.documents.updateStatus', $document->document_id) }}" method="POST">
+                                            <form action="{{ route('support.documents.updateStatus', $document->document_id) }}" method="POST">
                                                 @csrf
                                                 @method('PUT')
                                                 <select name="status" class="form-select form-select-sm">

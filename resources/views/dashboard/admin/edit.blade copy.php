@@ -162,9 +162,8 @@
           <div class="main-header-logo">
             <!-- Logo Header -->
             <div class="logo-header" data-background-color="dark">
-                <a href="{{route('adminDashboard')}}" class="logo">
-                    <img class="logo-mass-specc" src="{{ asset('images/logo.png') }}" alt="">
-              </a>
+              <a href="{{route('adminDashboard')}}" class="logo">
+                <img class="logo-mass-specc" src="{{ asset('images/logo.png') }}" alt="">
               <div class="nav-toggle">
                 <button class="btn btn-toggle toggle-sidebar">
                   <i class="gg-menu-right"></i>
@@ -187,7 +186,7 @@
         <div class="container">
           <div class="page-inner">
             <div class="page-header">
-              <h3 class="fw-bold mb-3">Cooperative Information</h3>
+              <h3 class="fw-bold mb-3">Edit Cooperative</h3>
               <ul class="breadcrumbs mb-3">
                 <li class="nav-home">
                   <a href="#">
@@ -210,7 +209,7 @@
                   <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                  <a href="#">View</a>
+                  <a href="#">Edit</a>
                 </li>
               </ul>
             </div>
@@ -218,16 +217,18 @@
               <div class="col-md-12">
                 <div class="card">
                   <div class="card-header">
-                    <div class="card-title">Cooperative Information</div>
+                    <div class="card-title">Cooperative Edit Form</div>
                   </div>
-                  <form>
+                  <form action="{{ route('cooperatives.update', $coop->coop_id) }}" method="POST">
+                    @csrf
+                    @method('PUT')
                     <div class="card-body">
                         <div class="row">
                             <!-- Coop Name -->
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="name">Cooperative Name</label>
-                                    <p>{{ $coop->name }}</p>
+                                    <input type="text" class="form-control" name="name" id="name" value="{{ $coop->name }}" placeholder="Enter Cooperative Name" />
                                 </div>
                             </div>
 
@@ -235,7 +236,7 @@
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="contact_person">Contact Person</label>
-                                    <p>{{ $coop->contact_person }}</p>
+                                    <input type="text" class="form-control" name="contact_person" id="contact_person" value="{{ $coop->contact_person }}" placeholder="Enter Contact Person" />
                                 </div>
                             </div>
 
@@ -243,7 +244,7 @@
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="type">Cooperative Type</label>
-                                    <p>{{ $coop->type }}</p>
+                                    <input type="text" class="form-control" name="type" id="type" value="{{ $coop->type }}" placeholder="Enter Cooperative Type" />
                                 </div>
                             </div>
 
@@ -251,7 +252,7 @@
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="address">Address</label>
-                                    <p>{{ $coop->address }}</p>
+                                    <input class="form-control" id="address" name="address" value="{{ $coop->address }}" placeholder="Enter Address" />
                                 </div>
                             </div>
 
@@ -259,31 +260,52 @@
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="region">Region</label>
-                                    <p>{{ $coop->region }}</p>
+                                    <select class="form-control" name="region" id="region">
+                                        <option disabled>Select Region</option>
+                                        @foreach([
+                                            'Region I', 'Region II', 'Region III', 'Region IV-A', 'Region IV-B', 'Region V',
+                                            'Region VI', 'Region VII', 'Region VIII', 'Region IX', 'Region X', 'Region XI',
+                                            'Region XII', 'Region XIII', 'NCR', 'CAR', 'BARMM'
+                                        ] as $region)
+                                            <option value="{{ $region }}" {{ $coop->region == $region ? 'selected' : '' }}>
+                                                {{ $region }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
+
 
                             <!-- Phone Number -->
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="phone_number">Phone Number</label>
-                                    <p>{{ $coop->phone_number }}</p>
+                                    <input type="number" class="form-control" name="phone_number" id="phone_number" value="{{ $coop->phone_number }}" placeholder="Enter Phone Number" />
                                 </div>
                             </div>
 
-                            <!-- Email -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="email">Email</label>
-                                    <p>{{ $coop->email }}</p>
+                          <!-- Email -->
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="email">Email</label>
+                                        <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" id="email" value="{{ old('email', $coop->email) }}" placeholder="Enter Email" />
+
+                                        {{-- Show error only if the email is different from the cooperative's current email --}}
+                                        @if ($errors->has('email') && old('email') !== $coop->email)
+                                            <div class="alert alert-danger">
+                                                {{ $errors->first('email') }}
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
-                            </div>
+
+
 
                             <!-- TIN -->
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="tin">TIN</label>
-                                    <p>{{ $coop->tin }}</p>
+                                    <input type="text" class="form-control" name="tin" id="tin" value="{{ $coop->tin }}" placeholder="Enter TIN" />
                                 </div>
                             </div>
 
@@ -291,7 +313,7 @@
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="coop_identification_no">Cooperative ID</label>
-                                    <p>{{ $coop->coop_identification_no }}</p>
+                                    <input type="text" class="form-control" name="coop_identification_no" id="coop_identification_no" value="{{ $coop->coop_identification_no }}" placeholder="Enter Coop ID" />
                                 </div>
                             </div>
 
@@ -299,7 +321,7 @@
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="bod_chairperson">BOD Chairperson</label>
-                                    <p>{{ $coop->bod_chairperson }}</p>
+                                    <input type="text" class="form-control" name="bod_chairperson" id="bod_chairperson" value="{{ $coop->bod_chairperson }}" placeholder="Enter BOD Chairperson" />
                                 </div>
                             </div>
 
@@ -307,38 +329,43 @@
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="general_manager_ceo">General Manager/CEO</label>
-                                    <p>{{ $coop->general_manager_ceo }}</p>
+                                    <input type="text" class="form-control" name="general_manager_ceo" id="general_manager_ceo" value="{{ $coop->general_manager_ceo }}" placeholder="Enter Manager/CEO" />
                                 </div>
                             </div>
 
-                            <!-- GA Registration Status -->
-                            {{-- <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="ga_registration_status">GA Registration Status</label>
-                                    <p>{{ $coop->ga_registration_status }}</p>
-                                </div>
-                            </div> --}}
-
-                             <!-- Services Availed -->
-                             <div class="col-md-6 col-lg-4">
+                            <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="services_availed">Services Availed</label>
-                                    <p>{{ implode(', ', json_decode($coop->services_availed, true)) }}</p>
+                                    <div class="dropdown">
+                                        <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start" type="button" id="servicesDropdown" aria-expanded="false">
+                                            Select Services
+                                        </button>
+                                        <ul class="dropdown-menu w-100 p-2" id="dropdownMenu">
+                                            @php
+                                                // Decode JSON array properly
+                                                $selectedServices = json_decode($coop->services_availed, true) ?? [];
+                                            @endphp
+
+                                            @foreach(['CF', 'IT', 'MSU', 'ICS', 'MCU', 'ADMIN', 'GAD', 'YOUTH', 'SCOOPS', 'YAKAP', 'AGRIBEST'] as $service)
+                                                <li>
+                                                    <label class="dropdown-item">
+                                                        <input type="checkbox" class="service-checkbox" name="services_availed[]" value="{{ $service }}"
+                                                            {{ in_array($service, $selectedServices) ? 'checked' : '' }}>
+                                                        {{ $service }}
+                                                    </label>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                    <input type="hidden" name="services_availed_json" id="services_availed_json" value="{{ $coop->services_availed }}">
                                 </div>
                             </div>
 
+                            <!-- Number of Entitled Votes -->
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
-                                    <label for="ga_registration_status">Registration Status</label>
-                                    <p>{{ optional($coop->gaRegistration)->registration_status ?? 'N/A' }}</p>
-                                </div>
-                            </div>
-
-                            <!-- Membership Status -->
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="membership_status">Membership Status</label>
-                                    <p>{{ optional($coop->gaRegistration)->membership_status ?? 'N/A' }}</p>
+                                    <label for="no_of_entitled_votes">No of Entitled Votes</label>
+                                    <input type="number" class="form-control" name="no_of_entitled_votes" id="no_of_entitled_votes" value="{{ $coop->no_of_entitled_votes }}" placeholder="Enter No of Entitled Votes" />
                                 </div>
                             </div>
 
@@ -346,172 +373,53 @@
                                 <h4 class="mt-4">Verifier</h4>
                                 <hr>
                             </div>
-
-                            <div class="col-md-6 col-lg-4">
+                              <!-- Total Assets -->
+                              <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="total_asset">Total Assets</label>
-                                    <p>{{ $coop->total_asset }}</p>
+                                    <input type="number" class="form-control" name="total_asset" id="total_asset" value="{{ $coop->total_asset }}" placeholder="Enter Total Assets" />
                                 </div>
                             </div>
 
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="loan_balance">Loan Balance</label>
-                                    <p>{{ $coop->loan_balance }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="total_overdue">Total Overdue</label>
-                                    <p>{{ $coop->total_overdue }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="time_deposit">Time Deposit</label>
-                                    <p>{{ $coop->time_deposit }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="accounts_receivable">Accounts Receivable</label>
-                                    <p>{{ $coop->accounts_receivable }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="savings">Savings</label>
-                                    <p>{{ $coop->savings }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="net_surplus">Net Surplus</label>
-                                    <p>{{ $coop->net_surplus }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="cetf_due_to_apex">CETF Due to Apex</label>
-                                    <p>{{ $coop->cetf_due_to_apex }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="additional_cetf">Additional CETF</label>
-                                    <p>{{ $coop->additional_cetf }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="cetf_undertaking">CETF Undertaking</label>
-                                    <p>{{ $coop->cetf_undertaking }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="full_cetf_remitted">Full CETF Remitted</label>
-                                    <p>{{ $coop->full_cetf_remitted }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="registration_date_paid">Registration Date Paid</label>
-                                    <p>{{ \Carbon\Carbon::parse($coop->registration_date_paid)->translatedFormat('F j, Y') }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="registration_fee">Registration Fee</label>
-                                    <p>{{ $coop->total_reg_fee }}</p>
-                                </div>
-                            </div>
-
+                            <!-- Total Income -->
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="total_income">Total Income</label>
-                                    <p>{{ $coop->total_income }}</p>
+                                    <input type="number" class="form-control" name="total_income" id="total_income" value="{{ $coop->total_income }}" placeholder="Enter Total Income" />
                                 </div>
                             </div>
 
+                            <!-- CETF Remittance -->
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="cetf_remittance">CETF Remittance</label>
-                                    <p>{{ $coop->cetf_remittance }}</p>
+                                    <input type="number" class="form-control" name="cetf_remittance" id="cetf_remittance" value="{{ $coop->cetf_remittance }}" placeholder="Enter CETF Remittance" />
                                 </div>
                             </div>
 
+
+
+                            <!-- CETF Required -->
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="cetf_required">CETF Required</label>
-                                    <p>{{ $coop->cetf_required }}</p>
+                                    <input type="number" class="form-control" name="cetf_required" id="cetf_required" value="{{ $coop->cetf_required }}" placeholder="Enter CETF Required" />
                                 </div>
                             </div>
 
+                            <!-- CETF Balance -->
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="cetf_balance">CETF Balance</label>
-                                    <p>{{ $coop->cetf_balance }}</p>
+                                    <input type="number" class="form-control" name="cetf_balance" id="cetf_balance" value="{{ $coop->cetf_balance }}" placeholder="Enter CETF Balance" />
                                 </div>
                             </div>
 
+                            <!-- Share Capital Balance -->
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="share_capital_balance">Share Capital Balance</label>
-                                    <p>{{ $coop->share_capital_balance }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="no_of_entitled_votes">No of Entitled Votes</label>
-                                    <p>{{ $coop->no_of_entitled_votes }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="total_remittance">Total Remittance</label>
-                                    <p>{{ $coop->total_remittance }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="ga_remark">GA Remark</label>
-                                    <p>{{ $coop->ga_remark }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="reg_fee_payable">Registration Fee Payable</label>
-                                    <p>{{ $coop->reg_fee_payable }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="net_required_reg_fee">Net Required Registration Fee</label>
-                                    <p>{{ $coop->net_required_reg_fee }}</p>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="total_reg_fee">Total Registration Fee</label>
-                                    <p>{{ $coop->total_reg_fee }}</p>
+                                    <input type="number" class="form-control" name="share_capital_balance" id="share_capital_balance" value="{{ $coop->share_capital_balance }}" placeholder="Enter Share Capital Balance" />
                                 </div>
                             </div>
 
@@ -521,23 +429,68 @@
                     </div>
 
                     <div class="card-action">
-                        <button class="btn btn-label-info btn-round me-2" type="button" onclick="window.location.href='{{ route('adminview') }}'">Back</button>
+                        <button class="btn btn-label-info btn-round me-2" type="submit">Submit</button>
+                        <button type="button" class="btn btn-primary btn-round" onclick="window.location.href='{{ route('adminview') }}'">Back</button>
                     </div>
                 </form>
 
             </div>
-
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
-
+    </div>
+        {{-- @include('layouts.adminfooter') --}}
       </div>
 
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const dropdownButton = document.getElementById("servicesDropdown");
+            const dropdownMenu = document.getElementById("dropdownMenu");
+            const checkboxes = dropdownMenu.querySelectorAll('input[type="checkbox"]');
+            const hiddenInput = document.getElementById("services_availed_json");
+
+            // Prevent dropdown from closing when clicking inside
+            dropdownMenu.addEventListener("click", function (event) {
+                event.stopPropagation();
+            });
+
+            dropdownButton.addEventListener("click", function (event) {
+                event.stopPropagation();
+                dropdownMenu.classList.toggle("show");
+            });
+
+            document.addEventListener("click", function (event) {
+                if (!dropdownMenu.contains(event.target) && event.target !== dropdownButton) {
+                    dropdownMenu.classList.remove("show");
+                }
+            });
+
+            function updateDropdownText() {
+                let selected = Array.from(checkboxes)
+                    .filter(i => i.checked)
+                    .map(i => i.value)
+                    .join(", ");
+
+                dropdownButton.innerText = selected ? selected : "Select Services";
+                hiddenInput.value = JSON.stringify(selected.split(", ").filter(Boolean)); // Store as JSON
+            }
+
+            // Update on checkbox change
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener("change", updateDropdownText);
+            });
+
+            // Load preselected values
+            updateDropdownText();
+        });
+        </script>
+
+
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>

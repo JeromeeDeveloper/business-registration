@@ -12,7 +12,7 @@
             <div class="sidebar-logo">
                 <!-- Logo Header -->
                 <div class="logo-header" data-background-color="dark">
-                    <a href="{{ route('adminDashboard') }}" class="logo">
+                    <a href="{{ route('supportDashboard') }}" class="logo">
                         <img class="logo-mass-specc" src="{{ asset('images/logo.png') }}" alt="">
                     </a>
                     <div class="nav-toggle">
@@ -34,7 +34,7 @@
                     <ul class="nav nav-secondary">
 
                         <li class="nav-item">
-                            <a href="{{ route('adminDashboard') }}" class="collapsed">
+                            <a href="{{ route('supportDashboard') }}" class="collapsed">
                                 <i class="fas fa-home"></i>
                                 <p>Dashboard</p>
                             </a>
@@ -56,14 +56,14 @@
                             <div class="collapse show" id="cooperative">
                                 <ul class="nav nav-collapse">
                                     <li class="active">
-                                        <a href="{{ route('adminview') }}">
+                                        <a href="{{ route('supportDashboard') }}">
                                             <span class="sub-item">Manage Cooperative</span>
                                         </a>
                                     </li>
                                 </ul>
                             </div>
                         </li>
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#participant">
                                 <i class="fas fa-user-cog"></i>
                                 <p>Participant</p>
@@ -78,9 +78,9 @@
                                     </li>
                                 </ul>
                             </div>
-                        </li>
+                        </li> --}}
 
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#attendance">
                                 <i class="fas fa-calendar"></i>
                                 <p>Attendance</p>
@@ -149,7 +149,7 @@
                                     </li>
                                 </ul>
                             </div>
-                        </li>
+                        </li> --}}
 
                     </ul>
                 </div>
@@ -161,7 +161,7 @@
                 <div class="main-header-logo">
                     <!-- Logo Header -->
                     <div class="logo-header" data-background-color="dark">
-                        <a href="{{ route('adminDashboard') }}" class="logo">
+                        <a href="{{ route('supportDashboard') }}" class="logo">
                             <img class="logo-mass-specc" src="{{ asset('images/logo.png') }}" alt="">
                         </a>
                         <div class="nav-toggle">
@@ -179,7 +179,55 @@
                     <!-- End Logo Header -->
                 </div>
                 <!-- Navbar Header -->
-                @include('layouts.adminnav')
+                <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
+                    <div class="container-fluid">
+                        <nav
+                            class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
+
+                        </nav>
+
+                        <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
+                            <li class="nav-item topbar-user dropdown hidden-caret">
+
+                                <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#"
+                                    aria-expanded="false">
+                                    <i class="fa fa-user"></i>
+                                    <span class="profile-username">
+                                        <span class="op-7">Hi,</span>
+                                        <span class="fw-bold" style="text-transform: capitalize;">
+                                            {{ Auth::user()->name }}
+                                        </span>
+
+                                    </span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-user animated fadeIn">
+                                    <div class="dropdown-user-scroll scrollbar-outer">
+                                        <li>
+                                            <div class="user-box">
+                                                <div class="u-text">
+                                                    <h4> {{ Auth::user()->name }}</h4>
+                                                    <p class="text-muted"> {{ Auth::user()->email }}</p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="{{ route('profile.edit3') }}">My
+                                                Profile</a>
+                                            <div class="dropdown-divider"></div>
+                                            <form action="{{ route('logout') }}" method="POST" id="logout-form"
+                                                style="display: none;">
+                                                @csrf
+                                            </form>
+                                            <a class="dropdown-item" href="#"
+                                                onclick="document.getElementById('logout-form').submit();">Logout</a>
+                                        </li>
+                                    </div>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
                 <!-- End Navbar -->
             </div>
             <div class="container">
@@ -222,9 +270,9 @@
                                                 <div class="modal-body">
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="checkbox"
-                                                            name="filter_no_ga" value="1" id="filterNoGA"
+                                                            name="filter_no_ga2" value="1" id="filterNoGA"
                                                             form="searchForm"
-                                                            {{ request('filter_no_ga') == '1' ? 'checked' : '' }}>
+                                                            {{ request('filter_no_ga2') == '1' ? 'checked' : '' }}>
                                                         <label class="form-check-label" for="filterNoGA">
                                                             Show only cooperatives with <strong>no GA
                                                                 registrations</strong>
@@ -249,7 +297,7 @@
                                         <h4 class="card-title mb-0 flex-shrink-0">Cooperative</h4>
 
                                         <!-- Search Form -->
-                                        <form method="GET" action="{{ route('adminview') }}"
+                                        <form method="GET" action="{{ route('supportview') }}"
                                             class="d-flex flex-column flex-md-row align-items-stretch align-items-md-center gap-2 flex-grow-1"
                                             id="searchForm">
 
@@ -268,7 +316,7 @@
                                             </div>
 
                                             <!-- Action Buttons -->
-                                            <div class="d-flex flex-row gap-2">
+                                            {{-- <div class="d-flex flex-row gap-2">
                                                 <a href="{{ route('adminregister') }}" class="btn btn-primary"
                                                     data-bs-toggle="tooltip" title="Add Cooperative">
                                                     <i class="fa fa-plus"></i>
@@ -282,7 +330,7 @@
                                                     title="Print Cooperative List">
                                                     <i class="fa fa-print"></i>
                                                 </button>
-                                            </div>
+                                            </div> --}}
 
                                         </form>
                                     </div>
@@ -311,20 +359,20 @@
                                         </div>
 
                                         <!-- Notifications Button -->
-                                        <div>
+                                        {{-- <div>
                                             <button
                                                 class="btn btn-label-info btn-round fw-bold d-flex align-items-center px-4 py-2"
                                                 data-bs-toggle="modal" data-bs-target="#notifyModal">
                                                 <i class="fa fa-bell me-2"></i> Open Notifications
                                             </button>
-                                        </div>
+                                        </div> --}}
 
                                     </div>
 
                                     <!-- Other page content here -->
 
                                     <!-- Notifications Modal (place near the end of the page) -->
-                                    <div class="modal fade" id="notifyModal" tabindex="-1"
+                                    {{-- <div class="modal fade" id="notifyModal" tabindex="-1"
                                         aria-labelledby="notifyModalLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content shadow-lg">
@@ -379,7 +427,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     <!-- End Modal -->
 
                                     <!-- Table with Cooperatives -->
@@ -463,7 +511,7 @@
                                                                     </div>
                                                                 @endif
 
-                                                                <form
+                                                                {{-- <form
                                                                     action="{{ route('cooperatives.notify', $coop->coop_id) }}"
                                                                     method="POST" style="display:inline;"
                                                                     onsubmit="showSwalLoader(event, this, 'Sending Status & Invitation...')">
@@ -474,9 +522,9 @@
                                                                         title="Send Status, Invite & Credentials">
                                                                         <i class="fa fa-bell"></i>
                                                                     </button>
-                                                                </form>
+                                                                </form> --}}
 
-                                                                <a href="{{ route('admin.documents.view', ['coop_id' => $coop->coop_id]) }}"
+                                                                <a href="{{ route('support.documents.view', ['coop_id' => $coop->coop_id]) }}"
                                                                     class="btn btn-link btn-info btn-lg"
                                                                     data-bs-toggle="tooltip"
                                                                     title="View Uploaded Documents">
@@ -484,7 +532,7 @@
                                                                 </a>
 
                                                                 <!-- View Coop Details -->
-                                                                <a href="{{ route('cooperatives.show', $coop->coop_id) }}"
+                                                                <a href="{{ route('support.cooperatives.show', $coop->coop_id) }}"
                                                                     class="btn btn-link btn-info btn-lg"
                                                                     data-bs-toggle="tooltip"
                                                                     title="View Coop Details">
@@ -492,17 +540,17 @@
                                                                 </a>
 
                                                                 <!-- Edit Coop -->
-                                                                <button type="button"
+                                                                {{-- <button type="button"
                                                                     class="btn btn-link btn-info btn-lg"
                                                                     data-bs-toggle="tooltip" title="Edit Coop">
                                                                     <a href="{{ route('cooperatives.edit', $coop->coop_id) }}"
                                                                         class="text-decoration-none text-primary">
                                                                         <i class="fa fa-edit"></i>
                                                                     </a>
-                                                                </button>
+                                                                </button> --}}
 
                                                                 <!-- Delete Coop -->
-                                                                <form
+                                                                {{-- <form
                                                                     action="{{ route('cooperatives.destroy', $coop->coop_id) }}"
                                                                     method="POST" class="delete-form"
                                                                     style="display:inline;">
@@ -515,7 +563,7 @@
                                                                         onclick="confirmDelete(event, this)">
                                                                         <i class="fa fa-times"></i>
                                                                     </button>
-                                                                </form>
+                                                                </form> --}}
 
 
                                                             </div>

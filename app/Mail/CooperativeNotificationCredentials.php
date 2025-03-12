@@ -31,7 +31,7 @@ class CooperativeNotificationCredentials extends Mailable
     {
         $this->coop = $coop;
         $this->event = $event;
-        $this->users = $users; // Store users in the email
+        $this->users = $users; 
     }
 
     /**

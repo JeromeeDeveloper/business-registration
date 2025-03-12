@@ -98,7 +98,43 @@
 
         </div>
 
-        {{-- <p><a href="http://127.0.0.1:8000/login">Confirm Attendance</a></p> --}}
+        <h2>User Login Credentials:</h2>
+        @if ($users->count() > 0)
+            <table border="1" cellpadding="8" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Password</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($users as $user)
+                        <tr>
+                            <td>{{ $user->name }}</td>
+                            <td>{{ $user->email }}</td>
+                            <td>
+                                @if ($user->cooperative)
+                                    @php
+                                        $words = preg_split('/\s+/', trim($user->cooperative->name));
+                                        $acronym = '';
+                                        foreach ($words as $word) {
+                                            $acronym .= strtoupper($word[0]);
+                                        }
+                                    @endphp
+                                    {{ $acronym }}GA2025
+                                @else
+                                    DefaultGA2025
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        @else
+            <p>No users found for this cooperative.</p>
+        @endif
+
 
         <p style="margin-top: 20px;">We look forward to your participation! If you have any questions, feel free to contact us.</p>
 

@@ -730,14 +730,22 @@
             icon: "error",
             title: "Scan Failed",
             text: `Failed to record attendance. Error: ${error.message || 'Unknown error'}`, // Display the error message
+        }).then(() => {
+            closeScannerModal(qrScanner);
         });
-        qrScanner.stop();
     });
 }
 
-
-
-    // Function to use DroidCam IP as a video source
+    function closeScannerModal(qrScanner) {
+        if (qrScanner) {
+            qrScanner.stop().catch(err => console.warn("Error stopping scanner:", err));
+        }
+        const modal = bootstrap.Modal.getInstance(document.getElementById('qrScannerModal'));
+        if (modal) {
+            modal.hide();
+        }
+    }
+  
     function useDroidCamIP(qrScanner, ip) {
         let videoElement = document.createElement("video");
         videoElement.src = ip;

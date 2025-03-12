@@ -446,7 +446,7 @@
                                                 <!-- Display the count of uploaded documents -->
                                                 <a href="#" id="viewDocumentsBtn2">
                                                     <h4 class="card-title">
-                                                        {{ $totalDocuments }} / 4
+                                                        {{ $totalDocuments }} / 7
                                                     </h4>
                                                 </a>
                                             </div>

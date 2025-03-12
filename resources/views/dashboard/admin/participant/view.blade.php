@@ -357,7 +357,7 @@
                                 <!-- MSP Officer -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label for="is_msp_officer">Is MSP Officer</label>
+                                        <label for="is_msp_officer">Mass-Specc Officer</label>
                                         <div>{{ $participant->is_msp_officer ? 'Yes' : 'No' }}</div>
                                     </div>
                                 </div>
@@ -365,7 +365,7 @@
                                 <!-- MSP Officer Position -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label for="msp_officer_position">MSP Officer Position</label>
+                                        <label for="msp_officer_position">Mass-Specc Officer Position</label>
                                         <div>{{ $participant->msp_officer_position ?? 'N/A' }}</div>
                                     </div>
                                 </div>
