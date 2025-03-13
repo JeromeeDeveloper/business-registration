@@ -585,6 +585,7 @@ class DashboardController extends Controller
     {
         $search = $request->input('search');
         $filterNoGA = $request->input('filter_no_ga');
+        $limit = $request->input('limit', 5);  // Default to 5 if no 'limit' is provided
 
         $cooperatives = Cooperative::query();
 
@@ -607,12 +608,14 @@ class DashboardController extends Controller
             });
         }
 
-        $cooperatives = $cooperatives->orderBy('created_at', 'desc')->paginate(5);
+        // Apply pagination with the dynamic limit
+        $cooperatives = $cooperatives->orderBy('created_at', 'desc')->paginate($limit);
 
         $emails = $cooperatives->pluck('email')->filter()->implode(',');
 
         return view('dashboard.admin.datatable', compact('cooperatives', 'search', 'emails', 'filterNoGA'));
     }
+
 
     public function storeCooperative(Request $request)
     {
@@ -647,6 +650,8 @@ class DashboardController extends Controller
             'total_remittance' => 'nullable|numeric',
             'ga_remark' => 'nullable|string|max:255',
             'reg_fee_payable' => 'nullable|numeric',
+            'less_prereg_payment' => 'nullable|numeric',
+            'less_cetf_balance' => 'nullable|numeric',
             'net_required_reg_fee' => 'nullable|numeric',
             'cetf_remittance' => 'nullable|numeric',
             'cetf_required' => 'nullable|numeric',
@@ -730,6 +735,8 @@ class DashboardController extends Controller
             'ga_remark' => $request->ga_remark,
             'reg_fee_payable' => $request->reg_fee_payable,
             'net_required_reg_fee' => $request->net_required_reg_fee,
+            'less_prereg_payment' => $request->less_prereg_payment,
+            'less_cetf_balance' => $request->less_cetf_balance,
             'total_reg_fee' => $request->total_reg_fee,
             'cetf_remittance' => $request->cetf_remittance,
             'cetf_required' => $request->cetf_required,
@@ -780,11 +787,67 @@ class DashboardController extends Controller
         // Redirect back to the cooperatives page with a success message
         return redirect()->route('adminview')->with('success', 'Cooperative deleted successfully!');
     }
+
     public function edit($coop_id)
     {
-        $coop = Cooperative::findOrFail($coop_id); // Find the cooperative by its ID
-        return view('dashboard.admin.edit', compact('coop')); // Pass cooperative data to the edit view
+        $coop = Cooperative::findOrFail($coop_id);
+
+        // Check if cooperative has MIGS membership
+        $hasMigsRegistration = GARegistration::where('coop_id', $coop->coop_id)
+            ->where('membership_status', 'MIGS')
+            ->exists();
+
+        // Check if cooperative has an MSP Officer participant
+        $hasMspOfficer = Participant::where('coop_id', $coop->coop_id)
+            ->where('is_msp_officer', true)
+            ->exists();
+
+        // Check the total remittance
+        $totalRemittance = $coop->total_remittance ?? 0;
+        $free100kCETF = $totalRemittance >= 100000; // Free 1 pax if remittance >= 100K
+        $halfBasedCETF = $totalRemittance >= 50000; // Free 1 pax if remittance >= 50K
+
+        // Get the number of participants
+        $numParticipants = $coop->participants()->count();
+
+        // Calculate the number of free participants
+        $freeParticipants = 0;
+        if ($hasMigsRegistration) {
+            $freeParticipants += 2; // Free 2 participants for MIGS
+        }
+        if ($hasMspOfficer) {
+            $freeParticipants += 1;
+        }
+        if ($free100kCETF) {
+            $freeParticipants += 1;
+        }
+        if ($halfBasedCETF) {
+            $numParticipants = max(0, $numParticipants - 1); // Discount 1 participant by 50%
+        }
+
+        $paidParticipants = max($numParticipants - $freeParticipants, 0);
+
+        // Calculate total registration fee
+        $registrationFee = $coop->registration_fee ?? 0;
+        $totalRegFee = $paidParticipants * $registrationFee;
+
+        // Calculate registration fee payable
+        $netRequiredRegFee = $coop->net_required_reg_fee ?? 0;
+        $lessPreregPayment = $coop->less_prereg_payment ?? 0;
+        $lessCetfBalance = $coop->less_cetf_balance ?? 0;
+
+        $regFeePayable = max(0, $netRequiredRegFee - ($lessPreregPayment + $lessCetfBalance));
+
+        // Store values in the model
+        $coop->total_reg_fee = $totalRegFee;
+        $coop->reg_fee_payable = $regFeePayable;
+
+        return view('dashboard.admin.edit', compact(
+            'coop', 'hasMigsRegistration', 'hasMspOfficer', 'free100kCETF', 'halfBasedCETF'
+        ));
     }
+
+
 
     public function update(Request $request, $coop_id)
     {
@@ -829,10 +892,11 @@ class DashboardController extends Controller
             'cetf_required' => 'nullable|numeric|min:0',
             'cetf_balance' => 'nullable|numeric|min:0',
             'total_remittance' => 'nullable|numeric|min:0',
-            'reg_fee_payable' => 'nullable|numeric|min:0',
             'net_required_reg_fee' => 'nullable|numeric|min:0',
             'total_reg_fee' => 'nullable|numeric|min:0',
             'share_capital_balance' => 'nullable|numeric|min:0',
+            'less_prereg_payment' => 'nullable|numeric|min:0',
+            'less_cetf_balance' => 'nullable|numeric|min:0',
 
             // Other Fields
             'full_cetf_remitted' => ['nullable', Rule::in(['yes', 'no'])],
@@ -849,56 +913,56 @@ class DashboardController extends Controller
             'total_asset', 'loan_balance', 'total_overdue', 'time_deposit',
             'accounts_receivable', 'savings', 'net_surplus', 'cetf_due_to_apex',
             'additional_cetf', 'cetf_undertaking', 'total_income', 'cetf_remittance',
-            'cetf_required', 'cetf_balance', 'total_remittance', 'reg_fee_payable',
-            'net_required_reg_fee', 'total_reg_fee', 'share_capital_balance', 'registration_fee'
+            'cetf_required', 'cetf_balance', 'total_remittance', 'net_required_reg_fee',
+            'total_reg_fee', 'share_capital_balance', 'registration_fee',
+            'less_prereg_payment', 'less_cetf_balance'
         ];
 
         foreach ($numericFields as $field) {
             $validated[$field] = $request->$field ? (float) str_replace(',', '', $request->$field) : null;
         }
 
-        // Calculate `no_of_entitled_votes`
-        // Calculate `no_of_entitled_votes`
-        $share_capital = $validated['share_capital_balance'] ?? 0;
+        $netRequiredRegFee = $validated['net_required_reg_fee'] ?? 0;
+        $lessPreregPayment = $validated['less_prereg_payment'] ?? 0;
+        $lessCetfBalance = $validated['less_cetf_balance'] ?? 0;
 
+        $validated['reg_fee_payable'] = max(0, $netRequiredRegFee - ($lessPreregPayment + $lessCetfBalance));
+
+        // ✅ Calculate `no_of_entitled_votes`
+        $share_capital = $validated['share_capital_balance'] ?? 0;
         $votes = 0;
 
-        // Count how many full ₱100,000 blocks there are
         if ($share_capital >= 100000) {
-            $votes += floor($share_capital / 100000); // Every ₱100,000 gives 1 vote
+            $votes += floor($share_capital / 100000);
         }
 
-        // Check the remaining balance after full ₱100,000 blocks
         $remaining = $share_capital % 100000;
 
-        // Assign votes based on remaining amount
         while ($remaining >= 25000) {
             if ($remaining >= 75000) {
-                $votes += 3; // ₱75,000 → +3 votes
+                $votes += 3;
                 $remaining -= 75000;
             } elseif ($remaining >= 50000) {
-                $votes += 2; // ₱50,000 → +2 votes
+                $votes += 2;
                 $remaining -= 50000;
             } elseif ($remaining >= 25000) {
-                $votes += 1; // ₱25,000 → +1 vote
+                $votes += 1;
                 $remaining -= 25000;
             }
         }
 
-        // Ensure the vote count does not exceed 5
         $validated['no_of_entitled_votes'] = min($votes, 5);
-
 
         // Convert services_availed array to JSON
         $validated['services_availed'] = isset($request->services_availed)
             ? json_encode($request->services_availed)
             : json_encode([]);
 
-        // Update the cooperative
+        // ✅ Update the cooperative
         $coop = Cooperative::findOrFail($coop_id);
         $coop->update($validated);
 
-        // Update linked user
+        // ✅ Update linked user
         $user = User::where('coop_id', $coop->coop_id)->first();
 
         if ($user) {
@@ -919,7 +983,6 @@ class DashboardController extends Controller
                     'email' => $coop->email,
                 ]);
             } else {
-                // Just update the name if email didn't change
                 $user->update([
                     'name' => $coop->contact_person,
                 ]);
@@ -928,6 +991,7 @@ class DashboardController extends Controller
 
         return redirect()->route('adminview')->with('success', 'Cooperative updated successfully!');
     }
+
 
 
 

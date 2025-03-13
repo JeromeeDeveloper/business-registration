@@ -392,4 +392,57 @@ class CooperativeController extends Controller
       return back()->with('success', 'GA Registration status updated successfully.');
   }
 
+  public function storeDocuments2(Request $request, $id)
+  {
+      $request->validate([
+          'documents.Financial Statement' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
+          'documents.Resolution for Voting Delegates' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
+          'documents.Deposit Slip for Registration Fee' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
+          'documents.Deposit Slip for CETF Remittance' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
+          'documents.CETF Undertaking' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
+          'documents.CETF Candidacy' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
+          'documents.CETF Utilization Invoice' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
+      ]);
+
+      // Find the cooperative by its ID
+      $cooperative = Cooperative::findOrFail($id);
+
+      $successMessages = [];
+      foreach ($request->file('documents') as $documentType => $file) {
+          // Check if the document already exists for the cooperative
+          $existingDocument = UploadedDocument::where('coop_id', $cooperative->coop_id)
+              ->where('document_type', $documentType)
+              ->first();
+
+          if ($existingDocument) {
+              // Delete the existing document
+              Storage::disk('public')->delete($existingDocument->file_path);
+              $existingDocument->delete(); // Remove the old record
+
+              $successMessages[] = "$documentType replaced successfully.";
+          }
+
+          // Store the new file
+          $filePath = $file->store('documents', 'public');
+
+          // Create a new document record
+          UploadedDocument::create([
+              'coop_id' => $cooperative->coop_id,
+              'document_type' => $documentType,
+              'file_name' => $file->getClientOriginalName(),
+              'file_path' => $filePath,
+          ]);
+
+          $successMessages[] = "$documentType uploaded successfully.";
+      }
+
+      // Set a unique session key based on the form submitted
+      $formKey = $request->input('form_key', 'default_form');
+      session()->flash("{$formKey}_success", implode('<br>', $successMessages));
+
+      return redirect()->route('cooperatives.edit', $cooperative->coop_id);
+  }
+
+
+
 }

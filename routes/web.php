@@ -47,6 +47,10 @@ Route::post('/logout', function () {Auth::logout();return redirect('/login');})-
 //store
 Route::middleware([AdminMiddleware::class])->group(function () {
 
+
+
+Route::post('/Admin/Cooperatives/Edit/{id}/Documents', [CooperativeController::class, 'storeDocuments2'])->name('cooperatives.storeDocuments2');
+
 //export
 
 Route::get('export-event-participants', [EventParticipantExportController::class, 'export'])->name('export-event-participants');

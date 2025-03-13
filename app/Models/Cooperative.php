@@ -50,7 +50,9 @@ class Cooperative extends Model
         'ga_remark',
         'reg_fee_payable',
         'net_required_reg_fee',
-        'total_reg_fee'
+        'total_reg_fee',
+        'less_cetf_balance',
+        'less_prereg_payment'
     ];
 
     public function participants()

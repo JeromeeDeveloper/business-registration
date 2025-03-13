@@ -323,9 +323,16 @@
                              <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="services_availed">Services Availed</label>
-                                    <p>{{ implode(', ', json_decode($coop->services_availed, true)) }}</p>
+                                    <p>
+                                        @if(!empty($coop->services_availed) && is_array(json_decode($coop->services_availed, true)))
+                                            {{ implode(', ', json_decode($coop->services_availed, true)) }}
+                                        @else
+                                            N/A
+                                        @endif
+                                    </p>
                                 </div>
                             </div>
+
 
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
@@ -438,12 +445,12 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-6 col-lg-4">
+                            {{-- <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="total_income">Total Income</label>
                                     <p>{{ $coop->total_income }}</p>
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
@@ -488,11 +495,26 @@
                             </div>
 
                             <div class="col-md-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="less_prereg_payment">Less: PreReg Payment</label>
+                                <p>{{ $coop->less_prereg_payment }}</p>
+                            </div>
+                        </div>
+
+                            <div class="col-md-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="less_cetf_balance">Less: CETF Utilization</label>
+                                <p>{{ $coop->less_cetf_balance }}</p>
+                            </div>
+                        </div>
+
+                            <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="ga_remark">GA Remark</label>
                                     <p>{{ $coop->ga_remark }}</p>
                                 </div>
                             </div>
+
 
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">

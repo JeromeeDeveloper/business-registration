@@ -289,9 +289,9 @@
                                     <th>File Name</th>
                                     <th>View</th>
                                     <th>Download</th>
-                                    <th>Status</th> <!-- Add this -->
-                                    <th>Remarks</th>
-                                    <th>Action</th> <!-- Add this -->
+                                    {{-- <th>Status</th> <!-- Add this --> --}}
+                                    {{-- <th>Remarks</th> --}}
+                                    {{-- <th>Action</th> <!-- Add this --> --}}
                                 </tr>
                             </thead>
                             <tbody>
@@ -310,7 +310,7 @@
                                             </a>
                                         </td>
                                         <!-- Status Dropdown -->
-                                        <td>
+                                        {{-- <td>
                                             <form action="{{ route('support.documents.updateStatus', $document->document_id) }}" method="POST">
                                                 @csrf
                                                 @method('PUT')
@@ -319,15 +319,15 @@
                                                     <option value="Approved" {{ $document->status == 'Approved' ? 'selected' : '' }}>Approved</option>
                                                     <option value="Rejected" {{ $document->status == 'Rejected' ? 'selected' : '' }}>Rejected</option>
                                                 </select>
-                                        </td>
-                                        <td>
+                                        </td> --}}
+                                        {{-- <td>
                                             <input type="text" name="remarks" class="form-control form-control-sm"
                                                    placeholder="Enter remarks (optional)" value="{{ $document->remarks ?? '' }}">
-                                        </td>
-                                        <td>
+                                        </td> --}}
+                                        {{-- <td>
                                             <button type="submit" class="btn btn-sm btn-outline-secondary">Update</button>
                                             </form>
-                                        </td>
+                                        </td> --}}
 
                                     </tr>
                                 @endforeach

@@ -49,6 +49,9 @@ return new class extends Migration
             $table->decimal('net_required_reg_fee', 15, 2)->nullable();
             $table->decimal('total_reg_fee', 15, 2)->nullable();
 
+            $table->decimal('less_prereg_payment', 15, 2)->nullable();
+            $table->decimal('less_cetf_balance', 15, 2)->nullable();
+
             $table->decimal('share_capital_balance', 15, 2)->nullable();
             $table->integer('no_of_entitled_votes')->nullable();
             $table->json('services_availed')->nullable();

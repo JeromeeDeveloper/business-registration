@@ -566,10 +566,12 @@
     <script>
         document.getElementById('showEntries').addEventListener('change', function() {
             let url = new URL(window.location.href);
-            url.searchParams.set('limit', this.value);
-            window.location.href = url.href;
+            url.searchParams.set('limit', this.value); // Set the 'limit' parameter
+            // Ensure that other parameters are retained while updating the 'limit'
+            window.location.href = url.toString();
         });
     </script>
+
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
