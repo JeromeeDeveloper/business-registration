@@ -543,7 +543,7 @@
                                                             <div class="form-group">
                                                                 <label for="registration_fee">Registration Fee</label>
                                                                 <input type="number" class="form-control" name="registration_fee" id="registration_fee"
-                                                                    placeholder="Enter Registration Fee" />
+                                                                    placeholder="Enter Registration Fee" value="4500"/>
                                                             </div>
 
                                                             <div class="form-group">

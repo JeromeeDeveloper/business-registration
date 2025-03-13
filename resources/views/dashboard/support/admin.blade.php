@@ -527,28 +527,76 @@
                             @endif
 
 
-                            @if ($latestEvent)
-                                <div class="card card-round">
-                                    <div class="card-body pb-0">
-                                        <h2 class="mb-2">Event Notice</h2>
-                                        <p class="text-muted">Join us for the upcoming General Assembly (2025)!</p>
-                                        <div class="pull-in sparkline-fix">
-                                            <!-- You can insert a related event image or a calendar icon here -->
-                                            <div id="eventNoticeChart"></div>
-                                        </div>
-                                    </div>
-                                    <div class="card-footer">
-                                        <div>
-                                            <strong>Notice:</strong> The General Assembly will take place on
-                                            {{ \Carbon\Carbon::parse($latestEvent->start_date)->format('F d, Y') }} -
-                                            {{ \Carbon\Carbon::parse($latestEvent->end_date)->format('F d, Y') }} Don't
-                                            miss out on this important event!
-                                        </div>
-                                    </div>
+                            <style>
+                                .list-group-item {
+                                    transition: background-color 0.3s ease, transform 0.2s ease;
+                                    cursor: pointer;
+                                }
+
+                                .list-group-item:hover {
+                                    background-color: rgba(0, 123, 255, 0.1); /* Light blue background */
+                                    transform: translateY(-3px); /* Slight lift effect */
+                                }
+
+                                .list-group-item:hover .badge {
+                                    filter: brightness(1.2); /* Slightly brighten the badge */
+                                }
+                            </style>
+
+                            <div class="card shadow-lg border-0 rounded-3 overflow-hidden"
+                                style="transition: 0.3s; max-width: 500px; margin: auto;">
+                                <div class="card-header text-white bg-primary rounded-top">
+                                    <h5 class="mb-1"><i class="fas fa-calendar-alt"></i> Dates to Remember!</h5>
+                                    <small>Join us for the upcoming General Assembly 2024!</small>
                                 </div>
-                            @else
-                                <p>No upcoming events at the moment.</p>
-                            @endif
+                                <div class="card-body p-3" style="max-height: 300px; overflow-y: auto;">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item d-flex justify-content-between">
+                                            <span class="badge bg-primary">Feb - Apr</span>
+                                            <span class="text-start flex-grow-1 ms-2">Presentation of 2024 election guidelines.</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between">
+                                            <span class="badge bg-success">March 4</span>
+                                            <span class="text-start flex-grow-1 ms-2">Start of delegate registration.</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between">
+                                            <span class="badge bg-danger">May 20</span>
+                                            <span class="text-start flex-grow-1 ms-2">Start of filing Certificate of Candidacy.</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between">
+                                            <span class="badge bg-warning text-dark">May 22-24</span>
+                                            <span class="text-start flex-grow-1 ms-2">End of COC filing, CETF remittance & voter registration.</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between">
+                                            <span class="badge bg-info">May 22</span>
+                                            <span class="text-start flex-grow-1 ms-2">Mock election & Elecom review.</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between">
+                                            <span class="badge bg-secondary">May 23</span>
+                                            <span class="text-start flex-grow-1 ms-2">Candidate profiles sent to voting delegates.</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between">
+                                            <span class="badge bg-primary">May 27</span>
+                                            <span class="text-start flex-grow-1 ms-2">Ceremonial opening of elections.</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between">
+                                            <span class="badge bg-success">May 28</span>
+                                            <span class="text-start flex-grow-1 ms-2">Online voting continues.</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between">
+                                            <span class="badge bg-danger">May 29</span>
+                                            <span class="text-start flex-grow-1 ms-2">54th Leaders Congress & Election closing.</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between">
+                                            <span class="badge bg-warning text-dark">May 30</span>
+                                            <span class="text-start flex-grow-1 ms-2">Holy Mass & Proclamation of winners.</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="card-footer bg-light rounded-bottom">
+                                    <span class="badge bg-primary p-2" style="cursor: pointer; transition: 0.3s;">Don't miss this event!</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -561,6 +609,15 @@
 
 
     </div>
+    <!-- Load jsPDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<!-- Load autoTable plugin -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
+<!-- Load your custom script -->
+<script src="{{ asset('js/registration-overview.js') }}"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {

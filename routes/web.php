@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Response;
 use App\Http\Controllers\EventsController;
 use App\Http\Controllers\ViewerController;
 use App\Http\Middleware\SupportMiddleware;
+use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\SupportController;
 use App\Http\Controllers\SpeakersController;
 use App\Http\Controllers\DashboardController;
@@ -47,6 +48,7 @@ Route::post('/logout', function () {Auth::logout();return redirect('/login');})-
 //store
 Route::middleware([AdminMiddleware::class])->group(function () {
 
+    Route::get('/registration-overview-pdf', [ReportsController::class, 'showRegistrationOverview'])->name('registration.overview.pdf');
 
 
 Route::post('/Admin/Cooperatives/Edit/{id}/Documents', [CooperativeController::class, 'storeDocuments2'])->name('cooperatives.storeDocuments2');
@@ -54,8 +56,13 @@ Route::post('/Admin/Cooperatives/Edit/{id}/Documents', [CooperativeController::c
 //export
 
 Route::get('export-event-participants', [EventParticipantExportController::class, 'export'])->name('export-event-participants');
+Route::get('/admin/reports/export', [ReportsController::class, 'export'])->name('reports.export');
 
-Route::get('/admin/reports', [DashboardController::class, 'generateReports'])->name('admin.reports');
+Route::get('/admin/reports/documents-status', [ReportsController::class, 'documentsStatus'])
+    ->name('admin.reports.documents_status');
+
+
+Route::get('/admin/reports', [ReportsController::class, 'generateReports'])->name('admin.reports');
 
 // import
 

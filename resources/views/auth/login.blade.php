@@ -236,34 +236,21 @@
 
 <script>
 function showAgreement() {
+    // Show a success message after login
     Swal.fire({
-        title: "Disclosure Agreement",
-        html: `
-            <p>Before proceeding, please review our
-                <a href="#" onclick="openPrivacyPolicyModal(); Swal.close(); return false;"
-                   style="color: rgb(47, 0, 255);">Privacy Policy</a>.
-            </p>
-            <label>
-                <input type="checkbox" id="agreeCheckbox"> I agree to the terms and conditions
-            </label>
-        `,
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Proceed",
-        cancelButtonText: "Cancel",
-        preConfirm: () => {
-            if (!document.getElementById('agreeCheckbox').checked) {
-                Swal.showValidationMessage("You must agree before proceeding.");
-                return false;
-            }
-            return true;
-        }
-    }).then((result) => {
-        if (result.isConfirmed) {
-            document.querySelector(".login-form form").submit();
-        }
+        title: "Logging In...",
+        text: "Please wait while we log you in.",
+        icon: "info",
+        timer: 1500,
+        showConfirmButton: false
     });
+
+    // Submit the form after a short delay
+    setTimeout(() => {
+        document.querySelector("form").submit();
+    }, 1500);
 }
+
 
 function openPrivacyPolicyModal() {
     let modal = document.getElementById("privacy-policy-modal");

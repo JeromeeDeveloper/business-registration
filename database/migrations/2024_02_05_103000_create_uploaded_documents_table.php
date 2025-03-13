@@ -20,7 +20,7 @@ return new class extends Migration {
                 'List of Officers',
                 'Deposit Slip for CETF Remittance',
                 'CETF Undertaking',
-                'CETF Candidacy',
+                'Certificate of Candidacy',
                 'CETF Utilization invoice'
             ]);
             $table->string('file_name');

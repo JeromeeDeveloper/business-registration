@@ -339,12 +339,12 @@
 
 
                                 <!-- Religious Affiliation -->
-                                <div class="col-md-6 col-lg-4">
+                                {{-- <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
                                         <label for="religious_affiliation">Religious Affiliation</label>
                                         <div>{{ $participant->religious_affiliation ?? 'N/A' }}</div>
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 <!-- T-shirt Size -->
                                 <div class="col-md-6 col-lg-4">
@@ -357,7 +357,7 @@
                                 <!-- MSP Officer -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label for="is_msp_officer">Mass-Specc Officer</label>
+                                        <label for="is_msp_officer">MASS-SPECC Officer</label>
                                         <div>{{ $participant->is_msp_officer ? 'Yes' : 'No' }}</div>
                                     </div>
                                 </div>
@@ -365,27 +365,8 @@
                                 <!-- MSP Officer Position -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label for="msp_officer_position">Mass-Specc Officer Position</label>
+                                        <label for="msp_officer_position">MASS-SPECC Officer Position</label>
                                         <div>{{ $participant->msp_officer_position ?? 'N/A' }}</div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="gender">Attendance</label>
-                                        <div>
-                                            {{ $participant->attendance_datetime
-                                                ? \Carbon\Carbon::parse($participant->attendance_datetime)->format('F j, Y g:i A')
-                                                : 'N/A' }}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                 <!-- Delegate Type -->
-                                 <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="delegate_type">Delegate Type</label>
-                                        <div>{{ $participant->delegate_type ?? 'N/A' }}</div>
                                     </div>
                                 </div>
 
@@ -403,6 +384,29 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="gender">Attendance</label>
+                                        <div>
+                                            {{ $participant->attendance_datetime
+                                                ? \Carbon\Carbon::parse($participant->attendance_datetime)->format('F j, Y g:i A')
+                                                : 'N/A' }}
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                 <!-- Delegate Type -->
+                                 <div class="col-md-6 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="delegate_type">Delegate Type</label>
+                                        <div>{{ $participant->delegate_type ?? 'N/A' }}</div>
+                                    </div>
+                                </div>
+
+
 
 
 

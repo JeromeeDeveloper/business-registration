@@ -215,7 +215,7 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="general_manager_ceo" class="form-label">General Manager CEO</label>
-                            <input type="text" class="form-control" id="general_manager_ceo" name="general_manager_ceo" value="{{ $cooperative->general_manager_ceo }}" readonly>
+                            <input type="text" class="form-control" id="general_manager_ceo" name="general_manager_ceo" value="{{ $cooperative->general_manager_ceo }}">
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="email" class="form-label">Email</label>
@@ -223,15 +223,15 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="phone_number" class="form-label">Phone Number</label>
-                            <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{ $cooperative->phone_number }}" readonly>
+                            <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{ $cooperative->phone_number }}">
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="bod_chairperson" class="form-label">BOD Chairperson</label>
-                            <input type="text" class="form-control" id="bod_chairperson" name="bod_chairperson" value="{{ $cooperative->bod_chairperson }}" readonly>
+                            <input type="text" class="form-control" id="bod_chairperson" name="bod_chairperson" value="{{ $cooperative->bod_chairperson }}">
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="tin" class="form-label">TIN</label>
-                            <input type="text" class="form-control" id="tin" name="tin" value="{{ $cooperative->tin }}" readonly>
+                            <input type="text" class="form-control" id="tin" name="tin" value="{{ $cooperative->tin }}">
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="coop_identification_no" class="form-label">Coop Identification Number</label>
@@ -239,31 +239,31 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="total_asset" class="form-label">Total Asset</label>
-                            <input type="text" class="form-control" id="total_asset" name="total_asset" value="{{ $cooperative->total_asset }}">
+                            <input type="text" class="form-control" id="total_asset" name="total_asset" value="{{ $cooperative->total_asset }}" readonly>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="total_income" class="form-label">Total Income</label>
-                            <input type="text" class="form-control" id="total_income" name="total_income" value="{{ $cooperative->total_income }}">
+                            <input type="text" class="form-control" id="total_income" name="total_income" value="{{ $cooperative->total_income }}" readonly>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="cetf_remittance" class="form-label">CETF Remittance</label>
-                            <input type="text" class="form-control" id="cetf_remittance" name="cetf_remittance" value="{{ $cooperative->cetf_remittance }}">
+                            <input type="text" class="form-control" id="cetf_remittance" name="cetf_remittance" value="{{ $cooperative->cetf_remittance }}" readonly>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="cetf_required" class="form-label">CETF Required</label>
-                            <input type="text" class="form-control" id="cetf_required" name="cetf_required" value="{{ $cooperative->cetf_required }}">
+                            <input type="text" class="form-control" id="cetf_required" name="cetf_required" value="{{ $cooperative->cetf_required }}" readonly>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="cetf_balance" class="form-label">CETF Balance</label>
-                            <input type="text" class="form-control" id="cetf_balance" name="cetf_balance" value="{{ $cooperative->cetf_balance }}">
+                            <input type="text" class="form-control" id="cetf_balance" name="cetf_balance" value="{{ $cooperative->cetf_balance }}" readonly>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="share_capital_balance" class="form-label">Share Capital Balance</label>
-                            <input type="text" class="form-control" id="share_capital_balance" name="share_capital_balance" value="{{ $cooperative->share_capital_balance }}">
+                            <input type="text" class="form-control" id="share_capital_balance" name="share_capital_balance" value="{{ $cooperative->share_capital_balance }}" readonly>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="no_of_entitled_votes" class="form-label">No of Entitled Votes</label>
-                            <input type="text" class="form-control" id="no_of_entitled_votes" name="no_of_entitled_votes" value="{{ $cooperative->no_of_entitled_votes }}">
+                            <input type="text" class="form-control" id="no_of_entitled_votes" name="no_of_entitled_votes" value="{{ $cooperative->no_of_entitled_votes }}" readonly>
                         </div>
                         <div class="col-md-12 mb-3">
                             <div class="form-group">
@@ -426,46 +426,36 @@
 
     </div>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const dropdownButton = document.getElementById("servicesDropdown");
-            const dropdownMenu = document.getElementById("dropdownMenu");
-            const checkboxes = dropdownMenu.querySelectorAll('input[type="checkbox"]');
-            const hiddenInput = document.getElementById("services_availed_json");
+       document.addEventListener("DOMContentLoaded", function () {
+    const dropdownButton = document.getElementById("servicesDropdown");
+    const dropdownMenu = document.getElementById("dropdownMenu");
+    const checkboxes = dropdownMenu.querySelectorAll('input[type="checkbox"]');
+    const hiddenInput = document.getElementById("services_availed_json");
 
-            // Prevent dropdown from closing when clicking inside
-            dropdownMenu.addEventListener("click", function (event) {
-                event.stopPropagation();
-            });
+    // Disable dropdown button (prevents clicking)
+    dropdownButton.disabled = true;
 
-            dropdownButton.addEventListener("click", function (event) {
-                event.stopPropagation();
-                dropdownMenu.classList.toggle("show");
-            });
-
-            document.addEventListener("click", function (event) {
-                if (!dropdownMenu.contains(event.target) && event.target !== dropdownButton) {
-                    dropdownMenu.classList.remove("show");
-                }
-            });
-
-            function updateDropdownText() {
-                let selected = Array.from(checkboxes)
-                    .filter(i => i.checked)
-                    .map(i => i.value)
-                    .join(", ");
-
-                dropdownButton.innerText = selected ? selected : "Select Services";
-                hiddenInput.value = JSON.stringify(selected.split(", ").filter(Boolean)); // Store as JSON
-            }
-
-            // Update on checkbox change
-            checkboxes.forEach(checkbox => {
-                checkbox.addEventListener("change", updateDropdownText);
-            });
-
-            // Load preselected values
-            updateDropdownText();
+    // Make checkboxes readonly (prevent selection change)
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener("click", function (event) {
+            event.preventDefault(); // Stops selection change
         });
+    });
+
+    function updateDropdownText() {
+        let selected = Array.from(checkboxes)
+            .filter(i => i.checked)
+            .map(i => i.value)
+            .join(", ");
+
+        dropdownButton.innerText = selected ? selected : "Select Services";
+        hiddenInput.value = JSON.stringify(selected.split(", ").filter(Boolean)); // Store as JSON
+    }
+
+    // Load preselected values
+    updateDropdownText();
+});
+
         </script>
         <!-- SweetAlert CDN -->
 <script>

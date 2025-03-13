@@ -172,7 +172,7 @@
                             <!-- Financial Statement -->
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
-                                    <label for="financial_statement">Financial Statement</label>
+                                    <label for="financial_statement">Audited Financial Statement</label>
                                     <input type="file" class="form-control" name="documents[Financial Statement]" id="financial_statement" accept=".jpg,.jpeg,.png,.pdf" />
                                 </div>
                             </div>
@@ -211,8 +211,8 @@
                             <!-- CETF Candidacy -->
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
-                                    <label for="cetf_candidacy">CETF Candidacy</label>
-                                    <input type="file" class="form-control" name="documents[CETF Candidacy]" id="cetf_candidacy" accept=".jpg,.jpeg,.png,.pdf" />
+                                    <label for="cetf_candidacy">Certificate of Candidacy</label>
+                                    <input type="file" class="form-control" name="documents[Certificate of Candidacy]" id="cetf_candidacy" accept=".jpg,.jpeg,.png,.pdf" />
                                 </div>
                             </div>
 

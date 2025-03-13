@@ -193,7 +193,9 @@
                                 <tbody>
                                     @foreach($documents as $document)
                                         <tr>
-                                            <td>{{ $document->document_type }}</td>
+                                            <td>
+                                                {{ $document->document_type === 'Financial Statement' ? 'Audited ' : '' }}{{ $document->document_type }}
+                                            </td>
                                             <td>{{ $document->file_name }}</td>
                                             <td>{{ $document->status }}</td>
                                             <td>{{ $document->remarks ?? 'No remarks yet' }}</td>

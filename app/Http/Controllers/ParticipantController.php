@@ -369,7 +369,7 @@ public function store(Request $request)
               'documents.Deposit Slip for Registration Fee' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
               'documents.Deposit Slip for CETF Remittance' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
               'documents.CETF Undertaking' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
-              'documents.CETF Candidacy' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
+              'documents.Certificate of Candidacy' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
               'documents.CETF Utilization Invoice' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
           ]);
 

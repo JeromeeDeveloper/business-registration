@@ -273,12 +273,12 @@
                                 <!-- Gender -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label for="gender">Gender</label>
+                                        <label for="gender">Sex</label>
                                         <select class="form-control @error('gender') is-invalid @enderror" name="gender" id="gender" required>
-                                            <option value="" disabled selected>Select Gender</option>
+                                            <option value="" disabled selected>Select Sex</option>
                                             <option value="Male" {{ old('gender') == 'Male' ? 'selected' : '' }}>Male</option>
                                             <option value="Female" {{ old('gender') == 'Female' ? 'selected' : '' }}>Female</option>
-                                            <option value="Other" {{ old('gender') == 'Other' ? 'selected' : '' }}>Other</option>
+                                            {{-- <option value="Other" {{ old('gender') == 'Other' ? 'selected' : '' }}>Other</option> --}}
                                         </select>
                                         @error('gender')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -334,7 +334,7 @@
                                 </div>
 
                                 <!-- Religious Affiliation -->
-                                <div class="col-md-6 col-lg-4">
+                                {{-- <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
                                         <label for="religious_affiliation">Religious Affiliation</label>
                                         <input type="text" class="form-control @error('religious_affiliation') is-invalid @enderror" name="religious_affiliation" id="religious_affiliation" placeholder="Enter Religious Affiliation" value="{{ old('religious_affiliation') }}" required/>
@@ -342,7 +342,7 @@
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 <!-- T-shirt Size -->
                                 <div class="col-md-6 col-lg-4">
@@ -367,7 +367,7 @@
                                 <!-- MSP Officer -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label for="is_msp_officer">Mass-Specc Officer</label>
+                                        <label for="is_msp_officer">MASS-SPECC Officer</label>
                                         <select class="form-control @error('is_msp_officer') is-invalid @enderror" name="is_msp_officer" id="is_msp_officer" required>
                                             <option value="" disabled selected>Select Status</option>
                                             <option value="No" {{ old('is_msp_officer') == 'No' ? 'selected' : '' }}>No</option>
@@ -382,7 +382,7 @@
                                 <!-- MSP Officer Position -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label for="msp_officer_position">Mass-Specc Officer Position</label>
+                                        <label for="msp_officer_position">MASS-SPECC Officer Position</label>
                                         <input type="text" class="form-control @error('msp_officer_position') is-invalid @enderror"
                                                name="msp_officer_position" id="msp_officer_position"
                                                placeholder="Enter MSP Officer Position"

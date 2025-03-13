@@ -29,60 +29,6 @@ use App\Mail\CooperativeNotificationCredentials;
 class DashboardController extends Controller
 {
 
-    public function generateReports()
-    {
-        // No. of MIGS Coops with Voting Delegates per Region
-        $migsCoopsWithVotingDelegates = Cooperative::whereHas('gaRegistration', function ($query) {
-            $query->where('membership_status', 'MIGS')
-                ->where('registration_status', 'Partial Registered')
-                ->where('delegate_type', 'Voting');
-        })->selectRaw('region, COUNT(*) as total')->groupBy('region')->get();
-
-        // No. of Fully Registered MIGS Coops with Voting Delegates per Region
-        $fullyRegisteredMigsCoops = Cooperative::whereHas('gaRegistration', function ($query) {
-            $query->where('membership_status', 'MIGS')
-                ->where('registration_status', 'Fully Registered')
-                ->where('delegate_type', 'Voting');
-        })->selectRaw('region, COUNT(*) as total')->groupBy('region')->get();
-
-        // No. of NON-MIGS Coops with Voting Delegates per Region
-        $nonMigsCoopsWithVotingDelegates = Cooperative::whereHas('gaRegistration', function ($query) {
-            $query->where('membership_status', 'Non-migs')
-                ->where('delegate_type', 'Voting');
-        })->selectRaw('region, COUNT(*) as total')->groupBy('region')->get();
-
-        // Total Allowable Votes per Region
-        $totalAllowableVotes = Cooperative::selectRaw('region, SUM(no_of_entitled_votes) as total_votes')
-            ->groupBy('region')->get();
-
-        // Total Tagged as Voting Delegates (MIGS) per Region
-        $totalVotingDelegatesMigs = GARegistration::where('membership_status', 'MIGS')
-            ->where('delegate_type', 'Voting')
-            ->join('cooperatives', 'ga_registrations.coop_id', '=', 'cooperatives.coop_id')
-            ->selectRaw('cooperatives.region, COUNT(*) as total')
-            ->groupBy('cooperatives.region')
-            ->get();
-
-        // Total Tagged as Voting Delegates (NON-MIGS) per Region
-        $totalVotingDelegatesNonMigs = GARegistration::where('membership_status', 'Non-migs')
-            ->where('delegate_type', 'Voting')
-            ->join('cooperatives', 'ga_registrations.coop_id', '=', 'cooperatives.coop_id')
-            ->selectRaw('cooperatives.region, COUNT(*) as total')
-            ->groupBy('cooperatives.region')
-            ->get();
-
-        // Returning a view with data (or export as PDF/Excel if needed)
-        return view('dashboard.admin.reports', compact(
-            'migsCoopsWithVotingDelegates',
-            'fullyRegisteredMigsCoops',
-            'nonMigsCoopsWithVotingDelegates',
-            'totalAllowableVotes',
-            'totalVotingDelegatesMigs',
-            'totalVotingDelegatesNonMigs'
-        ));
-    }
-
-
     public function sendNotification($coopId)
     {
         try {
@@ -390,7 +336,7 @@ class DashboardController extends Controller
             'total_income' => 'nullable|numeric|min:0',
             'cetf_remittance' => 'nullable|numeric|min:0',
             'cetf_required' => 'nullable|numeric|min:0',
-            'cetf_balance' => 'nullable|numeric|min:0',
+            'cetf_balance' => 'nullable|numeric',
             'share_capital_balance' => 'nullable|numeric|min:0',
             'no_of_entitled_votes' => 'nullable|integer|min:0',
             'email' => [
@@ -802,6 +748,7 @@ class DashboardController extends Controller
             ->where('is_msp_officer', true)
             ->exists();
 
+        $coop->cetf_balance = ($coop->cetf_required ?? 0) - ($coop->total_remittance ?? 0);
         // Check the total remittance
         $totalRemittance = $coop->total_remittance ?? 0;
         $free100kCETF = $totalRemittance >= 100000; // Free 1 pax if remittance >= 100K
@@ -890,7 +837,7 @@ class DashboardController extends Controller
             'total_income' => 'nullable|numeric|min:0',
             'cetf_remittance' => 'nullable|numeric|min:0',
             'cetf_required' => 'nullable|numeric|min:0',
-            'cetf_balance' => 'nullable|numeric|min:0',
+            'cetf_balance' => 'nullable|numeric',
             'total_remittance' => 'nullable|numeric|min:0',
             'net_required_reg_fee' => 'nullable|numeric|min:0',
             'total_reg_fee' => 'nullable|numeric|min:0',
@@ -926,6 +873,7 @@ class DashboardController extends Controller
         $lessPreregPayment = $validated['less_prereg_payment'] ?? 0;
         $lessCetfBalance = $validated['less_cetf_balance'] ?? 0;
 
+
         $validated['reg_fee_payable'] = max(0, $netRequiredRegFee - ($lessPreregPayment + $lessCetfBalance));
 
         // ✅ Calculate `no_of_entitled_votes`
@@ -935,6 +883,8 @@ class DashboardController extends Controller
         if ($share_capital >= 100000) {
             $votes += floor($share_capital / 100000);
         }
+
+        $validated['cetf_balance'] = ($validated['total_remittance'] ?? 0) - ($validated['cetf_required'] ?? 0);
 
         $remaining = $share_capital % 100000;
 

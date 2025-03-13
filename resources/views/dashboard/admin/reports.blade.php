@@ -138,12 +138,12 @@
         window.print();
     }
 
-    // Auto print when the page loads
+    // Run only date update on page load (Remove auto print)
     document.addEventListener("DOMContentLoaded", function() {
-        updateDateTime();
-        printReport();
+        updateDateTime(); // Only update date-time, don't auto-print
     });
 </script>
+
 
 </body>
 </html>

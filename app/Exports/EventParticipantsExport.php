@@ -14,26 +14,26 @@ class EventParticipantsExport implements FromCollection, WithHeadings, WithStyle
 {
     public function collection()
     {
-        // Fetch all events (including those without participants)
-        $events = Event::all();  // Get all events, not just those with attendance
 
-        // Fetch participants and group them by participant ID
+        $events = Event::all();
+
+
         return EventParticipant::with(['event', 'participant.cooperative'])
             ->get()
             ->groupBy(function ($eventParticipant) {
-                return $eventParticipant->participant->id; // Group by participant ID
+                return $eventParticipant->participant->id;
             })
             ->map(function ($groupedEventParticipants) use ($events) {
                 $row = [];
 
-                // For each event, add a column for the event title and its attendance date for the participant
+
                 foreach ($events as $event) {
                     $attendanceDate = $groupedEventParticipants->firstWhere('event_id', $event->event_id);
                     $attendanceFormatted = $attendanceDate ? \Carbon\Carbon::parse($attendanceDate->attendance_datetime)->format('F j, Y g:i A') : 'Not Attended';
                     $row[$event->title] = $attendanceFormatted;
                 }
 
-                // Add participant information after event columns
+
                 $row['First Name'] = $groupedEventParticipants->first()->participant->first_name;
                 $row['Last Name'] = $groupedEventParticipants->first()->participant->last_name;
                 $row['Delegate Type'] = $groupedEventParticipants->first()->participant->delegate_type;
@@ -66,17 +66,6 @@ class EventParticipantsExport implements FromCollection, WithHeadings, WithStyle
             $sheet->getStyle($column . '1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
             $sheet->getStyle($column . '1')->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
         }
-
-        // You can also apply borders or other styling to the whole sheet
-        // $sheet->getStyle('A1:' . $sheet->getHighestColumn() . $sheet->getHighestRow())
-        //       ->applyFromArray([
-        //           'borders' => [
-        //               'allBorders' => [
-        //                   'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-        //                   'color' => ['argb' => 'FF000000'],
-        //               ],
-        //           ],
-        //       ]);
 
         return [];
     }

@@ -283,13 +283,13 @@
                                                                     <i class="fa fa-eye"></i>
                                                                 </a>
 
-                                                                {{-- <a href="{{ route('coop.participants.edit', $participant->participant_id) }}"
+                                                                <a href="{{ route('coop.participants.edit', $participant->participant_id) }}"
                                                                     class="btn btn-link btn-primary btn-lg"
                                                                     data-bs-toggle="tooltip" title="Edit Participant">
                                                                     <i class="fa fa-edit"></i>
-                                                                </a> --}}
+                                                                </a>
 
-                                                                {{-- <form
+                                                                <form
                                                                     action="{{ route('coop.participants.destroy', $participant->participant_id) }}"
                                                                     method="POST" class="delete-form"
                                                                     style="display:inline;">
@@ -303,7 +303,7 @@
                                                                         onclick="confirmDelete(event, this)">
                                                                         <i class="fa fa-times"></i>
                                                                     </button>
-                                                                </form> --}}
+                                                                </form>
                                                         </td>
 
 

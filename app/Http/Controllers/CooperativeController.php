@@ -192,59 +192,61 @@ class CooperativeController extends Controller
 
 
  public function update(Request $request, $participant_id)
-{
-    // Find the participant
-    $participant = Participant::where('participant_id', $participant_id)->firstOrFail();
+ {
+     // Find the participant
+     $participant = Participant::where('participant_id', $participant_id)->firstOrFail();
 
-    // Validate the form data, ensuring email is unique except for this participant
-    $validatedData = $request->validate([
-        'coop_id' => 'required|exists:cooperatives,coop_id',
-        'first_name' => 'required|string|max:255',
-        'middle_name' => 'nullable|string|max:255',
-        'email' => [
-            'required',
-            'email',
-            Rule::unique('participants', 'email')->ignore($participant->participant_id, 'participant_id'),
-            Rule::unique('cooperatives', 'email'),
-        ],
-        'last_name' => 'required|string|max:255',
-        'nickname' => 'nullable|string|max:255',
-        'gender' => 'required|string|max:255',
-        'phone_number' => 'required|string|max:15',
-        'designation' => 'nullable|string|max:255',
-        'congress_type' => 'nullable|string|max:255',
-        'religious_affiliation' => 'nullable|string|max:255',
-        'tshirt_size' => 'nullable|string|max:5',
-        'is_msp_officer' => 'required|string|max:3',
-        'msp_officer_position' => 'nullable|string|max:255',
-        'delegate_type' => 'required|string|max:10',
-    ]);
+     // Validate the form data
+     $validatedData = $request->validate([
+         'coop_id' => 'required|exists:cooperatives,coop_id',
+         'first_name' => 'required|string|max:255',
+         'middle_name' => 'nullable|string|max:255',
+         'email' => [
+             'required',
+             'email',
+             Rule::unique('participants', 'email')->ignore($participant->participant_id, 'participant_id'),
+             Rule::unique('cooperatives', 'email')->ignore($participant->email, 'email'),
+         ],
+         'last_name' => 'required|string|max:255',
+         'nickname' => 'nullable|string|max:255',
+         'gender' => 'required|string|max:255',
+         'phone_number' => 'required|string|max:15',
+         'designation' => 'nullable|string|max:255',
+         'congress_type' => 'nullable|string|max:255',
+         'religious_affiliation' => 'nullable|string|max:255',
+         'tshirt_size' => 'nullable|string|max:5',
+         'is_msp_officer' => 'required|string|max:3',
+         'msp_officer_position' => 'nullable|string|max:255',
+         'delegate_type' => 'required|string|max:10',
+     ]);
 
-    // Update the participant
-    $participant->update($validatedData);
+     // ✅ Check if the email has changed
+     $emailChanged = $participant->email !== $validatedData['email'];
 
-    // ✅ Also update the linked user's email, if the participant has a user_id
-    if ($participant->user_id) {
-        $user = User::find($participant->user_id);
+     // Update the participant
+     $participant->update($validatedData);
 
-        if ($user) {
-            // Check if the email is not already used by another user
-            $emailExists = User::where('email', $validatedData['email'])
-                ->where('user_id', '!=', $user->id)
-                ->exists();
+     // ✅ If the email has changed, update the linked user's email
+     if ($emailChanged && $participant->user_id) {
+         $user = User::find($participant->user_id);
 
-            if ($emailExists) {
-                return redirect()->back()->withErrors(['email' => 'This email is already in use by another user.'])->withInput();
-            }
+         if ($user) {
+             // Check if the new email is already used by another user
+             $emailExists = User::where('email', $validatedData['email'])
+                 ->where('user_id', '!=', $user->user_id) // ✅ Use 'user_id' instead of 'id'
+                 ->exists();
 
-            $user->update([
-                'email' => $validatedData['email'],
-            ]);
-        }
-    }
+             if ($emailExists) {
+                 return redirect()->back()->withErrors(['email' => 'This email is already in use by another user.'])->withInput();
+             }
 
-    return redirect()->route('coop.index')->with('success', 'Participant updated successfully.');
-}
+             // ✅ Update the user's email
+             $user->update(['email' => $validatedData['email']]);
+         }
+     }
+
+     return redirect()->route('coop.index')->with('success', 'Participant updated successfully.');
+ }
 
 
   public function destroy($participant_id)
@@ -395,21 +397,32 @@ class CooperativeController extends Controller
   public function storeDocuments2(Request $request, $id)
   {
       $request->validate([
-          'documents.Financial Statement' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
-          'documents.Resolution for Voting Delegates' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
-          'documents.Deposit Slip for Registration Fee' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
-          'documents.Deposit Slip for CETF Remittance' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
-          'documents.CETF Undertaking' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
-          'documents.CETF Candidacy' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
-          'documents.CETF Utilization Invoice' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
+          'documents.Financial Statement' => 'nullable|mimes:jpg,jpeg,png,pdf|max:2048',
+          'documents.Resolution for Voting Delegates' => 'nullable|mimes:jpg,jpeg,png,pdf|max:2048',
+          'documents.Deposit Slip for Registration Fee' => 'nullable|mimes:jpg,jpeg,png,pdf|max:2048',
+          'documents.Deposit Slip for CETF Remittance' => 'nullable|mimes:jpg,jpeg,png,pdf|max:2048',
+          'documents.CETF Undertaking' => 'nullable|mimes:jpg,jpeg,png,pdf|max:2048',
+          'documents.Certificate of Candidacy' => 'nullable|mimes:jpg,jpeg,png,pdf|max:2048',
+          'documents.CETF Utilization Invoice' => 'nullable|mimes:jpg,jpeg,png,pdf|max:2048',
       ]);
 
       // Find the cooperative by its ID
       $cooperative = Cooperative::findOrFail($id);
 
       $successMessages = [];
-      foreach ($request->file('documents') as $documentType => $file) {
-          // Check if the document already exists for the cooperative
+      $uploadedFiles = $request->file('documents', []); // Default to empty array if no files
+
+      if (empty($uploadedFiles)) {
+          return redirect()->route('cooperatives.edit', $cooperative->coop_id)
+              ->with('error', 'No files were uploaded.');
+      }
+
+      foreach ($uploadedFiles as $documentType => $file) {
+          if (!$file) {
+              continue; // Skip if file is null
+          }
+
+          // Check if the document already exists
           $existingDocument = UploadedDocument::where('coop_id', $cooperative->coop_id)
               ->where('document_type', $documentType)
               ->first();
@@ -417,8 +430,7 @@ class CooperativeController extends Controller
           if ($existingDocument) {
               // Delete the existing document
               Storage::disk('public')->delete($existingDocument->file_path);
-              $existingDocument->delete(); // Remove the old record
-
+              $existingDocument->delete();
               $successMessages[] = "$documentType replaced successfully.";
           }
 
@@ -442,6 +454,7 @@ class CooperativeController extends Controller
 
       return redirect()->route('cooperatives.edit', $cooperative->coop_id);
   }
+
 
 
 

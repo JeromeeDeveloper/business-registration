@@ -297,7 +297,9 @@
                             <tbody>
                                 @foreach($documents as $document)
                                     <tr>
-                                        <td>{{ $document->document_type }}</td>
+                                        <td>
+                                            {{ $document->document_type === 'Financial Statement' ? 'Audited ' : '' }}{{ $document->document_type }}
+                                        </td>
                                         <td>{{ $document->file_name }}</td>
                                         <td>
                                             <a href="{{ asset('storage/' . $document->file_path) }}" target="_blank" class="btn btn-sm btn-outline-primary">
