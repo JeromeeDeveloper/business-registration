@@ -6,7 +6,25 @@
 </head>
 
 <body>
+
     <style>
+        .list-group-item {
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            cursor: pointer;
+        }
+
+        .list-group-item:hover {
+            background-color: rgba(0, 123, 255, 0.1);
+            /* Light blue background */
+            transform: translateY(-3px);
+            /* Slight lift effect */
+        }
+
+        .list-group-item:hover .badge {
+            filter: brightness(1.2);
+            /* Slightly brighten the badge */
+        }
+
         .wrapper {
             overflow-x: hidden;
         }
@@ -245,104 +263,132 @@
                             <div>
                                 <h3 class="fw-bold mb-3 text-nowrap">Cooperative Dashboard</h3>
                             </div>
-                            <p class="text-muted text-nowrap">
-                                Logged in as: <strong>{{ Auth::user()->name }}</strong>
+                            <p
+                                class="text-muted text-nowrap d-flex flex-column flex-md-row align-items-center justify-content-center">
+                                <span>Logged in as: <strong>{{ Auth::user()->name }}</strong></span>
+
                                 @if ($coop)
-                                    <br>Cooperative: <strong>{{ $coop->name }}</strong>
+                                    <span class="mx-2 d-none d-md-inline">|</span>
+                                    <span>Cooperative: <strong>{{ $coop->name }}</strong></span>
                                 @else
-                                    No Cooperative Assigned
+                                    <span class="mx-2 d-none d-md-inline">|</span>
+                                    <span>No Cooperative Assigned</span>
                                 @endif
                             </p>
+
                         </div>
 
+                        <!-- Action Buttons Container -->
                         <div
-                            class="d-flex flex-column flex-sm-row gap-2 w-100 justify-content-center justify-content-md-end py-2 py-md-0">
-                            <!-- Register Now Button with Icon -->
-                            <a href="{{ route('coop.index') }}"
-                                class="btn btn-primary btn-lg rounded-pill me-2 shadow-sm hover-shadow d-flex align-items-center">
-                                <i class="fas fa-user-plus me-2"></i> Register Now
+                            class="d-flex flex-column flex-sm-row gap-3 w-100 justify-content-center justify-content-md-end py-3">
+
+                            <!-- Register Participants -->
+                            <a href="{{ route('coopparticipantadd') }}" class="btn btn-primary btn-lg action-btn">
+                                <i class="fas fa-user-plus me-2"></i> Register Participants
                             </a>
 
+                            <!-- Cooperative Profile (Conditional) -->
                             @if ($coop)
-                                <!-- Cooperative Profile Button with Icon -->
                                 <a href="{{ route('cooperativeprofile', ['coop_id' => $coop->coop_id]) }}"
-                                    class="btn btn-primary btn-lg rounded-pill me-2 shadow-sm hover-shadow d-flex align-items-center">
+                                    class="btn btn-success btn-lg action-btn">
                                     <i class="fas fa-building me-2"></i> Cooperative Profile
                                 </a>
                             @else
-                                <!-- No Cooperative Associated Button with Icon -->
-                                <a
-                                    class="btn btn-info btn-lg rounded-pill shadow-sm hover-shadow d-flex align-items-center">
-                                    <i class="fas fa-exclamation-circle me-2"></i> No Cooperative Associated Yet
+                                <a class="btn btn-warning btn-lg action-btn">
+                                    <i class="fas fa-exclamation-circle me-2"></i> No Cooperative Associated
                                 </a>
                             @endif
 
-
-                            {{-- Button to open the modal --}}
-                            <a class="btn btn-primary btn-lg rounded-pill me-2 shadow-sm hover-shadow d-flex align-items-center"
-                                data-bs-toggle="modal" data-bs-target="#documentsModal">
-                                <i class="fas fa-file me-2"> </i> Documents
+                            <!-- Upload Documents (Triggers Modal) -->
+                            <a class="btn btn-info btn-lg action-btn" data-bs-toggle="modal"
+                                data-bs-target="#documentsModal">
+                                <i class="fas fa-file me-2"></i> Upload Documents
                             </a>
 
-                            {{-- Modal --}}
-                            <div class="modal fade" id="documentsModal" tabindex="-1"
-                                aria-labelledby="documentsModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
+                        </div>
 
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="documentsModalLabel">Manage Documents</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
+                        <!-- Documents Modal -->
+                        <div class="modal fade" id="documentsModal" tabindex="-1"
+                            aria-labelledby="documentsModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content rounded-4 border-0 shadow-lg">
+
+                                    <!-- Modal Header -->
+                                    <div class="modal-header border-0">
+                                        <h5 class="modal-title fw-bold" id="documentsModalLabel">Manage Documents</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+
+                                    <!-- Modal Body -->
+                                    <div class="modal-body text-center">
+                                        @php
+                                            $user = Auth::user();
+                                            $cooperative = $user->cooperative;
+                                            $hasDocuments = $cooperative
+                                                ? $cooperative->uploadedDocuments()->exists()
+                                                : false;
+                                        @endphp
+
+                                        <!-- Status Message -->
+                                        <div
+                                            class="alert rounded-pill py-2 px-4 d-inline-flex align-items-center mb-4
+                    {{ $hasDocuments ? 'alert-success' : 'alert-warning' }}">
+                                            <i
+                                                class="fas {{ $hasDocuments ? 'fa-check-circle' : 'fa-exclamation-circle' }} me-2"></i>
+                                            {{ $hasDocuments ? 'Documents uploaded. You can upload again or view them.' : 'No documents uploaded yet. Please upload now.' }}
                                         </div>
 
-                                        <div class="modal-body text-center">
-                                            @php
-                                                $user = Auth::user();
-                                                $cooperative = $user->cooperative; // Get the cooperative of the logged-in user
-                                                $hasDocuments = $cooperative
-                                                    ? $cooperative->uploadedDocuments()->exists()
-                                                    : false;
-                                                $registrationStatus =
-                                                    $cooperative && $cooperative->registration
-                                                        ? $cooperative->registration->status
-                                                        : 'Pending';
-                                            @endphp
-
-                                            {{-- Message --}}
-                                            @if ($hasDocuments)
-                                                <div
-                                                    class="alert alert-success rounded-pill py-2 px-4 d-inline-flex align-items-center mb-4">
-                                                    <i class="fas fa-check-circle me-2"></i> Documents already
-                                                    uploaded. You can upload again or view them.
-                                                </div>
-                                            @else
-                                                <div
-                                                    class="alert alert-warning rounded-pill py-2 px-4 d-inline-flex align-items-center mb-4">
-                                                    <i class="fas fa-exclamation-circle me-2"></i> No documents
-                                                    uploaded yet. Please upload now.
-                                                </div>
-                                            @endif
-
-                                            <!-- Upload Now / Upload Again Button with Icon -->
+                                        <!-- Upload & View Buttons -->
+                                        <div class="d-flex flex-column gap-2">
                                             <a id="uploadBtn" href="#"
-                                                class="btn btn-primary btn-lg rounded-pill shadow-sm hover-shadow d-flex align-items-center justify-content-center mb-3">
+                                                class="btn btn-primary btn-lg action-btn">
                                                 <i class="fas fa-upload me-2"></i>
                                                 {{ $hasDocuments ? 'Upload Again' : 'Upload Now' }}
                                             </a>
 
                                             @if ($hasDocuments)
                                                 <a href="#" id="viewDocumentsBtn"
-                                                    class="btn btn-secondary btn-lg rounded-pill shadow-sm hover-shadow d-flex align-items-center justify-content-center">
+                                                    class="btn btn-secondary btn-lg action-btn">
                                                     <i class="fas fa-file-alt me-2"></i> View Uploaded Documents
                                                 </a>
                                             @endif
                                         </div>
-
                                     </div>
+
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Custom Styling -->
+                        <style>
+                            /* Button Enhancements */
+                            .action-btn {
+                                padding: 12px 24px;
+                                border-radius: 50px;
+                                transition: all 0.3s ease-in-out;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+                            }
+
+                            .action-btn:hover {
+                                transform: scale(1.05);
+                                box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
+                            }
+
+                            /* Modal Styling */
+                            .modal-content {
+                                background: rgba(255, 255, 255, 0.95);
+                                backdrop-filter: blur(10px);
+                            }
+
+                            .modal-header {
+                                border-bottom: none;
+                            }
+                        </style>
+
 
                     </div>
 
@@ -394,12 +440,12 @@
                                             <div class="numbers">
                                                 <p class="card-category">Membership Status</p>
                                                 <h4
-                                                    class="card-title
-                                                      {{ $membershipStatus === 'Migs' ? 'text-success' : 'text-danger' }}">
-                                                    {{ $membershipStatus === 'Migs' ? 'Migs' : 'Non-migs' }}
+                                                    class="card-title {{ $membershipStatus === 'Migs' ? 'text-success' : 'text-danger' }}">
+                                                    {{ strtoupper($membershipStatus === 'Migs' ? 'Migs' : 'Non-migs') }}
                                                 </h4>
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -459,123 +505,119 @@
 
                         <div class="row">
                             <div class="col-md-8">
-                                <div class="card card-round">
-                                    <div class="card-header">
+                                <div class="card card-round shadow-lg h-100 border-0 rounded-4">
+                                    <!-- Card Header -->
+                                    <div class="card-header bg-primary text-white rounded-top-4">
                                         <div class="card-head-row">
-                                            <div class="card-title">CETF Calculator</div>
-                                            <div class="card-tools">
-                                            </div>
+                                            <div class="card-title text-white fw-bold">📊 CETF Calculator</div>
                                         </div>
                                     </div>
-                                    <div class="card-body">
-                                        <form id="cetfForm">
-                                            <div class="form-group">
-                                                <label for="totalAsset">Total Asset (Latest Audited FS)</label>
-                                                <input type="number" class="form-control" id="totalAsset"
-                                                    required />
+
+                                    <!-- Card Body -->
+                                    <div class="card-body d-flex flex-column justify-content-between">
+                                        <!-- Caution Message -->
+                                        <p class="alert alert-warning text-center rounded-pill py-2">
+                                            ⚠️ This calculation is for testing purposes only and is not recorded.
+                                        </p>
+
+                                        <!-- Form -->
+                                        <form id="cetfForm" class="d-flex flex-column gap-3">
+                                            <div class="form-group position-relative">
+                                                <label for="totalAsset" class="fw-semibold">Total Asset (Latest
+                                                    Audited FS)</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text"><i class="fas fa-coins"></i></span>
+                                                    <input type="number" class="form-control" id="totalAsset"
+                                                        required />
+                                                </div>
                                             </div>
-                                            <div class="form-group">
-                                                <label for="totalIncome">Total Income (Latest Audited FS)</label>
-                                                <input type="number" class="form-control" id="totalIncome"
-                                                    required />
+
+                                            <div class="form-group position-relative">
+                                                <label for="totalIncome" class="fw-semibold">Total Income (Latest
+                                                    Audited FS)</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text"><i
+                                                            class="fas fa-chart-line"></i></span>
+                                                    <input type="number" class="form-control" id="totalIncome"
+                                                        required />
+                                                </div>
                                             </div>
-                                            <div class="form-group">
-                                                <label for="cetfRemittance">CETF Remittance to MSP</label>
-                                                <input type="number" class="form-control" id="cetfRemittance"
-                                                    required />
+
+                                            <div class="form-group position-relative">
+                                                <label for="cetfRemittance" class="fw-semibold">CETF Remittance to
+                                                    MSP</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text"><i
+                                                            class="fas fa-hand-holding-usd"></i></span>
+                                                    <input type="number" class="form-control" id="cetfRemittance"
+                                                        required />
+                                                </div>
                                             </div>
-                                            <div class="form-group">
-                                                <label for="cetfRequired">CETF Required</label>
-                                                <input type="text" class="form-control" id="cetfRequired"
-                                                    readonly />
+
+                                            <div class="form-group position-relative">
+                                                <label for="cetfRequired" class="fw-semibold">CETF Required</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text"><i
+                                                            class="fas fa-file-invoice-dollar"></i></span>
+                                                    <input type="text" class="form-control" id="cetfRequired"
+                                                        readonly />
+                                                </div>
                                             </div>
-                                            <button type="button" class="btn btn-primary btn-round"
-                                                onclick="calculateCETF()">Compute</button>
+
+                                            <!-- Compute Button -->
+                                            <button type="button"
+                                                class="btn btn-primary btn-lg btn-round mt-3 shadow-sm"
+                                                onclick="calculateCETF()">
+                                                <i class="fas fa-calculator me-2"></i> Compute
+                                            </button>
                                         </form>
                                     </div>
                                 </div>
                             </div>
 
-                            {{-- <div class="col-md-4">
-                                @if ($event)
-                                    <div class="card card-primary card-round">
-                                        <div class="card-header">
-                                            <div class="card-head-row">
-                                                <div class="card-title">{{ $event->title }}</div>
-                                                <div class="card-tools">
-                                                    <div class="dropdown">
-                                                        <button class="btn btn-sm btn-label-light dropdown-toggle"
-                                                            type="button"
-                                                            id="dropdownMenuButton{{ $event->event_id }}"
-                                                            data-bs-toggle="dropdown" aria-haspopup="true"
-                                                            aria-expanded="false">
-                                                            More Options
-                                                        </button>
-                                                        <div class="dropdown-menu"
-                                                            aria-labelledby="dropdownMenuButton{{ $event->event_id }}">
-                                                            <a class="dropdown-item"
-                                                                href="{{ route('schedule') }}">View Details</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="card-category">
-                                                {{ \Carbon\Carbon::parse($event->start_date)->format('F d, Y') }} -
-                                                {{ \Carbon\Carbon::parse($event->end_date)->format('F d, Y') }}
-                                            </div>
-                                        </div>
-                                        <div class="card-body">
-                                            <p>{{ $event->description }}</p>
-                                            <ul>
-                                                <li><strong>📍 Venue:</strong> {{ $event->location }}</li>
-                                                <li><strong>🕒 Time:</strong> 9:00 AM - 5:00 PM</li>
-                                                <li><strong>🎤 Guest Speakers:</strong>
-                                                    @if ($event->speakers->count() > 0)
-                                                        {{ $event->speakers->pluck('name')->implode(', ') }}
-                                                    @else
-                                                        No speakers listed
-                                                    @endif
-                                                </li>
-                                                <li><strong>📌 Activities:</strong> Presentations, Q&A Sessions, Voting
-                                                </li>
-                                            </ul>
-                                            <a href="#" class="btn btn-sm btn-outline-primary mt-2">Register
-                                                Now</a>
-                                        </div>
-                                    </div>
-                                @else
-                                    <p>No upcoming events at the moment.</p>
-                                @endif --}}
 
                             <div class="col-md-4">
-                                @if ($latestEvents->count() > 0)
-                                    <div id="eventsCarousel" class="carousel slide" data-bs-ride="carousel"
-                                        data-bs-interval="2000" data-bs-wrap="true">
+                                <style>
+                                    .card-head-row {
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: space-between;
+                                        gap: 10px;
+                                    }
 
+                                    .card-title {
+                                        flex-grow: 1; /* Allows the title to take up available space */
+                                        white-space: nowrap;
+                                        overflow: hidden;
+                                        text-overflow: ellipsis;
+                                        font-weight: bold;
+                                    }
+
+                                    .card-tools {
+                                        flex-shrink: 0; /* Prevents the tools section from shrinking */
+                                    }
+                                </style>
+
+                                @if ($latestEvents->count() > 0)
+                                    <div id="eventsCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2000" data-bs-wrap="true">
                                         <div class="carousel-inner">
                                             @foreach ($latestEvents as $index => $event)
                                                 <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                                                    <div style="padding: 0 2px;"> <!-- Added 10px padding -->
+                                                    <div style="padding: 0 2px;">
                                                         <div class="card card-primary card-round mb-3">
                                                             <div class="card-header">
                                                                 <div class="card-head-row">
-                                                                    <div class="card-title">{{ $event->title }}</div>
+                                                                    <div class="card-title" title="{{ $event->title }}">{{ $event->title }}</div>
                                                                     <div class="card-tools">
                                                                         <div class="dropdown">
-                                                                            <button
-                                                                                class="btn btn-sm btn-label-light dropdown-toggle"
-                                                                                type="button"
-                                                                                id="dropdownMenuButton{{ $event->event_id }}"
-                                                                                data-bs-toggle="dropdown"
-                                                                                aria-haspopup="true"
-                                                                                aria-expanded="false">
+                                                                            <button class="btn btn-sm btn-label-light dropdown-toggle" type="button"
+                                                                                id="dropdownMenuButton{{ $event->event_id }}" data-bs-toggle="dropdown"
+                                                                                aria-haspopup="true" aria-expanded="false">
                                                                                 More Options
                                                                             </button>
                                                                             <div class="dropdown-menu"
                                                                                 aria-labelledby="dropdownMenuButton{{ $event->event_id }}">
-                                                                                <a class="dropdown-item"
-                                                                                    href="{{ route('events.index') }}">View
-                                                                                    Details</a>
+                                                                                <a class="dropdown-item" href="{{ route('schedule') }}">View Details</a>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -589,8 +631,7 @@
                                                             <div class="card-body">
                                                                 <p>{{ $event->description }}</p>
                                                                 <ul>
-                                                                    <li><strong>📍 Venue:</strong>
-                                                                        {{ $event->location }}</li>
+                                                                    <li><strong>📍 Venue:</strong> {{ $event->location }}</li>
                                                                     <li><strong>🕒 Time:</strong> 9:00 AM - 5:00 PM</li>
                                                                     <li><strong>🎤 Guest Speakers:</strong>
                                                                         @if ($event->speakers->count() > 0)
@@ -599,8 +640,7 @@
                                                                             No speakers listed
                                                                         @endif
                                                                     </li>
-                                                                    <li><strong>📌 Activities:</strong> Presentations,
-                                                                        Q&A Sessions, Voting</li>
+                                                                    <li><strong>📌 Activities:</strong> Presentations, Q&A Sessions, Voting</li>
                                                                 </ul>
                                                             </div>
                                                         </div>
@@ -610,37 +650,19 @@
                                         </div>
 
                                         <!-- Prev/Next buttons -->
-                                        <button class="carousel-control-prev" type="button"
-                                            data-bs-target="#eventsCarousel" data-bs-slide="prev">
+                                        <button class="carousel-control-prev" type="button" data-bs-target="#eventsCarousel" data-bs-slide="prev">
                                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                             <span class="visually-hidden">Previous</span>
                                         </button>
-                                        <button class="carousel-control-next" type="button"
-                                            data-bs-target="#eventsCarousel" data-bs-slide="next">
+                                        <button class="carousel-control-next" type="button" data-bs-target="#eventsCarousel" data-bs-slide="next">
                                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                             <span class="visually-hidden">Next</span>
                                         </button>
-
                                     </div>
                                 @else
                                     <p>No upcoming events at the moment.</p>
                                 @endif
 
-                                <style>
-                                    .list-group-item {
-                                        transition: background-color 0.3s ease, transform 0.2s ease;
-                                        cursor: pointer;
-                                    }
-
-                                    .list-group-item:hover {
-                                        background-color: rgba(0, 123, 255, 0.1); /* Light blue background */
-                                        transform: translateY(-3px); /* Slight lift effect */
-                                    }
-
-                                    .list-group-item:hover .badge {
-                                        filter: brightness(1.2); /* Slightly brighten the badge */
-                                    }
-                                </style>
 
                                 <div class="card shadow-lg border-0 rounded-3 overflow-hidden"
                                     style="transition: 0.3s; max-width: 500px; margin: auto;">
@@ -652,48 +674,59 @@
                                         <ul class="list-group list-group-flush">
                                             <li class="list-group-item d-flex justify-content-between">
                                                 <span class="badge bg-primary">Feb - Apr</span>
-                                                <span class="text-start flex-grow-1 ms-2">Presentation of 2024 election guidelines.</span>
+                                                <span class="text-start flex-grow-1 ms-2">Presentation of 2024 election
+                                                    guidelines.</span>
                                             </li>
                                             <li class="list-group-item d-flex justify-content-between">
                                                 <span class="badge bg-success">March 4</span>
-                                                <span class="text-start flex-grow-1 ms-2">Start of delegate registration.</span>
+                                                <span class="text-start flex-grow-1 ms-2">Start of delegate
+                                                    registration.</span>
                                             </li>
                                             <li class="list-group-item d-flex justify-content-between">
                                                 <span class="badge bg-danger">May 20</span>
-                                                <span class="text-start flex-grow-1 ms-2">Start of filing Certificate of Candidacy.</span>
+                                                <span class="text-start flex-grow-1 ms-2">Start of filing Certificate
+                                                    of Candidacy.</span>
                                             </li>
                                             <li class="list-group-item d-flex justify-content-between">
                                                 <span class="badge bg-warning text-dark">May 22-24</span>
-                                                <span class="text-start flex-grow-1 ms-2">End of COC filing, CETF remittance & voter registration.</span>
+                                                <span class="text-start flex-grow-1 ms-2">End of COC filing, CETF
+                                                    remittance & voter registration.</span>
                                             </li>
                                             <li class="list-group-item d-flex justify-content-between">
                                                 <span class="badge bg-info">May 22</span>
-                                                <span class="text-start flex-grow-1 ms-2">Mock election & Elecom review.</span>
+                                                <span class="text-start flex-grow-1 ms-2">Mock election & Elecom
+                                                    review.</span>
                                             </li>
                                             <li class="list-group-item d-flex justify-content-between">
                                                 <span class="badge bg-secondary">May 23</span>
-                                                <span class="text-start flex-grow-1 ms-2">Candidate profiles sent to voting delegates.</span>
+                                                <span class="text-start flex-grow-1 ms-2">Candidate profiles sent to
+                                                    voting delegates.</span>
                                             </li>
                                             <li class="list-group-item d-flex justify-content-between">
                                                 <span class="badge bg-primary">May 27</span>
-                                                <span class="text-start flex-grow-1 ms-2">Ceremonial opening of elections.</span>
+                                                <span class="text-start flex-grow-1 ms-2">Ceremonial opening of
+                                                    elections.</span>
                                             </li>
                                             <li class="list-group-item d-flex justify-content-between">
                                                 <span class="badge bg-success">May 28</span>
-                                                <span class="text-start flex-grow-1 ms-2">Online voting continues.</span>
+                                                <span class="text-start flex-grow-1 ms-2">Online voting
+                                                    continues.</span>
                                             </li>
                                             <li class="list-group-item d-flex justify-content-between">
                                                 <span class="badge bg-danger">May 29</span>
-                                                <span class="text-start flex-grow-1 ms-2">54th Leaders Congress & Election closing.</span>
+                                                <span class="text-start flex-grow-1 ms-2">54th Leaders Congress &
+                                                    Election closing.</span>
                                             </li>
                                             <li class="list-group-item d-flex justify-content-between">
                                                 <span class="badge bg-warning text-dark">May 30</span>
-                                                <span class="text-start flex-grow-1 ms-2">Holy Mass & Proclamation of winners.</span>
+                                                <span class="text-start flex-grow-1 ms-2">Holy Mass & Proclamation of
+                                                    winners.</span>
                                             </li>
                                         </ul>
                                     </div>
                                     <div class="card-footer bg-light rounded-bottom">
-                                        <span class="badge bg-primary p-2" style="cursor: pointer; transition: 0.3s;">Don't miss this event!</span>
+                                        <span class="badge bg-primary p-2"
+                                            style="cursor: pointer; transition: 0.3s;">Don't miss this event!</span>
                                     </div>
                                 </div>
                             </div>

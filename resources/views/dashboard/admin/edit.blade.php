@@ -510,10 +510,11 @@
                                                     <div class="form-group">
                                                         <label for="fs_status">FS (Yes/No)</label>
                                                         <select class="form-control" name="fs_status" id="fs_status">
-                                                            <option value="yes">Yes</option>
-                                                            <option value="no">No</option>
+                                                            <option value="yes" {{ $hasFinancialStatement ? 'selected' : '' }}>Yes</option>
+                                                            <option value="no" {{ !$hasFinancialStatement ? 'selected' : '' }}>No</option>
                                                         </select>
                                                     </div>
+
 
                                                     <div class="form-group">
                                                         <label for="total_asset">Total Assets</label>
@@ -596,8 +597,8 @@
                                                         <label for="cetf_balance">CETF Balance</label>
                                                         <input type="number" class="form-control"
                                                             name="cetf_balance" id="cetf_balance"
-                                                            value="{{ $coop->cetf_required - $coop->total_remittance }}"
-                                                            placeholder="CETF Balance">
+                                                            value="{{ $coop->cetf_balance }}"
+                                                            placeholder="CETF Balance" readonly>
                                                     </div>
 
                                                 </div>
@@ -681,8 +682,6 @@
                                                                 Based on CETF</label>
                                                         </div>
                                                     </div>
-
-
 
 
                                                     <div class="form-group">
@@ -773,7 +772,7 @@
                                         one.</small>
                                 @endif
                                 <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (max
-                                    2MB).</small>
+                                    5MB).</small>
                             </div>
 
                             <!-- Resolution for Voting Delegates (Right Column) -->
@@ -790,7 +789,7 @@
                                         one.</small>
                                 @endif
                                 <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (max
-                                    2MB).</small>
+                                    5MB).</small>
                             </div>
                         </div>
 
@@ -809,7 +808,7 @@
                                         one.</small>
                                 @endif
                                 <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (max
-                                    2MB).</small>
+                                    5MB).</small>
                             </div>
 
                             <!-- Deposit Slip for CETF Remittance (Right Column) -->
@@ -826,7 +825,7 @@
                                         one.</small>
                                 @endif
                                 <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (max
-                                    2MB).</small>
+                                    5MB).</small>
                             </div>
                         </div>
 
@@ -844,7 +843,7 @@
                                         one.</small>
                                 @endif
                                 <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (max
-                                    2MB).</small>
+                                    5MB).</small>
                             </div>
 
 
@@ -861,7 +860,7 @@
                                         one.</small>
                                 @endif
                                 <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (max
-                                    2MB).</small>
+                                    5MB).</small>
                             </div>
                         </div>
 
@@ -880,7 +879,7 @@
                                         one.</small>
                                 @endif
                                 <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (max
-                                    2MB).</small>
+                                    5MB).</small>
                             </div>
                         </div>
 

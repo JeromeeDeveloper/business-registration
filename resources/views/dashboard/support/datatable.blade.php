@@ -455,52 +455,19 @@
 
                                                         <!-- Registration Status Dropdown -->
                                                         <td class="p-2 align-middle text-center">
-                                                            <form
-                                                                action="{{ route('cooperatives.updateStatus', $coop->coop_id) }}"
-                                                                method="POST" class="mb-0">
-                                                                @csrf
-                                                                @method('PUT')
-                                                                <select name="registration_status"
-                                                                    class="form-select form-select-sm rounded-pill shadow-sm border-0 text-center fw-semibold text-primary fs-6"
-                                                                    style="min-width: 200px; cursor: pointer; transition: all 0.3s;"
-                                                                    onchange="this.form.submit()">
-                                                                    <option value="" disabled selected>-- Select
-                                                                        Status --</option>
-                                                                    <option value="Partial Registered"
-                                                                        {{ optional($coop->gaRegistration)->registration_status == 'Partial Registered' ? 'selected' : '' }}>
-                                                                        Partial Registered
-                                                                    </option>
-                                                                    <option value="Fully Registered"
-                                                                        {{ optional($coop->gaRegistration)->registration_status == 'Fully Registered' ? 'selected' : '' }}>
-                                                                        Fully Registered
-                                                                    </option>
-                                                                </select>
-                                                            </form>
+                                                            <span class="fw-semibold text-primary fs-6 rounded-pill shadow-sm border-0 px-3 py-1"
+                                                                  style="min-width: 200px; display: inline-block; background: #eef2ff;">
+                                                                {{ optional($coop->gaRegistration)->registration_status ?? 'Not Set' }}
+                                                            </span>
                                                         </td>
 
                                                         <td class="p-2 align-middle text-center">
-                                                            <form
-                                                                action="{{ route('cooperatives.updateStatus', $coop->coop_id) }}"
-                                                                method="POST" class="mb-0">
-                                                                @csrf
-                                                                @method('PUT')
-                                                                <select name="membership_status"
-                                                                    class="form-select form-select-sm rounded-pill shadow-sm border-0 text-center fw-semibold text-success fs-6"
-                                                                    style="min-width: 200px; cursor: pointer; transition: all 0.3s;"
-                                                                    onchange="this.form.submit()">
-                                                                    <option value="" disabled selected>-- Select
-                                                                        Status --</option>
-                                                                    <option value="Non-migs"
-                                                                        {{ optional($coop->gaRegistration)->membership_status == 'Non-migs' ? 'selected' : '' }}>
-                                                                        Non-migs
-                                                                    </option>
-                                                                    <option value="Migs"
-                                                                        {{ optional($coop->gaRegistration)->membership_status == 'Migs' ? 'selected' : '' }}>
-                                                                        Migs
-                                                                    </option>
-                                                                </select>
-                                                            </form>
+                                                            <span class="fw-semibold text-success fs-6 rounded-pill shadow-sm border-0 px-3 py-1"
+                                                                  style="min-width: 200px; display: inline-block; background: #eaffea;">
+                                                                {{ optional($coop->gaRegistration)->membership_status ?? 'Not Set' }}
+                                                            </span>
                                                         </td>
+
                                                         <td class="no-print">
                                                             <div class="form-button-action">
 
@@ -592,7 +559,8 @@
 
                                 </div>
                                 <div class="d-flex justify-content-center mt-3">
-                                    {{ $cooperatives->appends(['search' => request('search')])->links('pagination::bootstrap-4') }}
+                                    {{-- {{ $cooperatives->appends(['search' => request('search')])->links('pagination::bootstrap-4') }} --}}
+                                    {{ $cooperatives->appends(request()->query())->links('pagination::bootstrap-4') }}
                                 </div>
 
                             </div>

@@ -196,12 +196,16 @@
                             <h3 class="fw-bold mb-3">
                                 Participant Dashboard
                             </h3>
-                            <p class="text-muted text-nowrap">
-                                Logged in as: <strong>{{ Auth::user()->name }}</strong>
+                            <p
+                                class="text-muted text-nowrap d-flex flex-column flex-md-row align-items-center justify-content-center">
+                                <span>Logged in as: <strong>{{ Auth::user()->name }}</strong></span>
+
                                 @if ($cooperative)
-                                    <br> Cooperative: <strong>{{ $cooperative->name }}</strong>
+                                    <span class="mx-2 d-none d-md-inline">|</span>
+                                    <span>Cooperative: <strong>{{ $cooperative->name }}</strong></span>
                                 @else
-                                    | No Cooperative Assigned
+                                    <span class="mx-2 d-none d-md-inline">|</span>
+                                    <span>No Cooperative Assigned</span>
                                 @endif
                             </p>
                         </div>
@@ -317,9 +321,11 @@
                                                 <div class="numbers">
                                                     <p class="card-category">Membership Status</p>
                                                     <h4 class="card-title">
-                                                        {{ $latestRegistration->membership_status }}</h4>
+                                                        {{ strtoupper($latestRegistration->membership_status) }}
+                                                    </h4>
                                                 </div>
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>

@@ -52,7 +52,9 @@ class Cooperative extends Model
         'net_required_reg_fee',
         'total_reg_fee',
         'less_cetf_balance',
-        'less_prereg_payment'
+        'less_prereg_payment',
+        'fs_status',
+        'delinquent'
     ];
 
     public function participants()

@@ -256,7 +256,7 @@
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="coop_id">Select Cooperative</label>
-                                    <select class="form-control @error('coop_id') is-invalid @enderror" name="coop_id" id="coop_id" required>
+                                    <select class="form-control @error('coop_id') is-invalid @enderror" name="coop_id" id="coop_id">
                                         <option value="">-- Select Cooperative --</option>
                                         @foreach($cooperatives as $cooperative)
                                             <option value="{{ $cooperative->coop_id }}"
@@ -324,6 +324,20 @@
       </div>
 
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            @if(session('success'))
+                Swal.fire({
+                    title: 'Success!',
+                    text: '{{ session('success') }}',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+            @endif
+        });
+    </script>
 
   @include('layouts.links')
   </body>

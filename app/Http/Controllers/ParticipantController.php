@@ -363,15 +363,15 @@ public function store(Request $request)
 
       public function storeDocuments(Request $request)
       {
-          $request->validate([
-              'documents.Financial Statement' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
-              'documents.Resolution for Voting Delegates' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
-              'documents.Deposit Slip for Registration Fee' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
-              'documents.Deposit Slip for CETF Remittance' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
-              'documents.CETF Undertaking' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
-              'documents.Certificate of Candidacy' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
-              'documents.CETF Utilization Invoice' => 'required|mimes:jpg,jpeg,png,pdf|max:2048',
-          ]);
+        $request->validate([
+            'documents.Financial Statement' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
+            'documents.Resolution for Voting Delegates' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
+            'documents.Deposit Slip for Registration Fee' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
+            'documents.Deposit Slip for CETF Remittance' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
+            'documents.CETF Undertaking' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
+            'documents.Certificate of Candidacy' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
+            'documents.CETF Utilization Invoice' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
+        ]);
 
           $participant = Auth::user()->participant;
 

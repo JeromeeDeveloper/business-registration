@@ -43,6 +43,9 @@ return new class extends Migration
             $table->decimal('cetf_required', 15, 2)->nullable();
             $table->decimal('cetf_balance', 15, 2)->nullable();
 
+            $table->enum('fs_status', ['yes', 'no'])->default('no');
+            $table->enum('delinquent', ['yes', 'no'])->default('no');
+
             $table->decimal('total_remittance', 15, 2)->nullable();
             $table->string('ga_remark')->nullable();
             $table->decimal('reg_fee_payable', 15, 2)->nullable();

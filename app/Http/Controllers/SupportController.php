@@ -72,6 +72,7 @@ class SupportController extends Controller
     {
         $search = $request->input('search');
         $filterNoGA = $request->input('filter_no_ga2');
+        $limit = $request->input('limit', 5);
 
         $cooperatives = Cooperative::query();
 
@@ -94,7 +95,7 @@ class SupportController extends Controller
             });
         }
 
-        $cooperatives = $cooperatives->orderBy('created_at', 'desc')->paginate(5);
+         $cooperatives = $cooperatives->orderBy('created_at', 'desc')->paginate($limit);
 
         $emails = $cooperatives->pluck('email')->filter()->implode(',');
 

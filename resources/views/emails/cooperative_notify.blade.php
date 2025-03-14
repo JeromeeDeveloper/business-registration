@@ -78,7 +78,8 @@
 
             @if($gaRegistration)
             <p><strong>GA Registration Status:</strong> {{ $gaRegistration->registration_status }}</p>
-            <p><strong>Membership Status:</strong> {{ $gaRegistration->membership_status }}</p>
+            <p><strong>Membership Status:</strong> {{ strtoupper($gaRegistration->membership_status) }}</p>
+
 
             @if($gaRegistration->registration_status == 'N/A' || $gaRegistration->registration_status == 'Partial Registered')
                 <p style="color: red; font-weight: bold;">

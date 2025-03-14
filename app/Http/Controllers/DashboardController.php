@@ -302,104 +302,23 @@ class DashboardController extends Controller
 
     public function updateCooperativeProfile(Request $request, $coop_id)
     {
-
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'type' => 'required|string|max:255',
-            'contact_person' => 'required|string|max:255',
-            'general_manager_ceo' => 'required|string|max:255',
-            'region' => [
-                'required',
-                Rule::in([
-                    'Region I',
-                    'Region II',
-                    'Region III',
-                    'Region IV-A',
-                    'Region IV-B',
-                    'Region V',
-                    'Region VI',
-                    'Region VII',
-                    'Region VIII',
-                    'Region IX',
-                    'Region X',
-                    'Region XI',
-                    'Region XII',
-                    'Region XIII',
-                    'NCR',
-                    'CAR',
-                    'BARMM'
-                ]),
-            ],
             'phone_number' => 'required|string|max:20',
+            'bod_chairperson' => 'nullable|string|max:255',
             'tin' => 'required|string|max:50',
-            'total_asset' => 'nullable|numeric|min:0',
-            'total_income' => 'nullable|numeric|min:0',
-            'cetf_remittance' => 'nullable|numeric|min:0',
-            'cetf_required' => 'nullable|numeric|min:0',
-            'cetf_balance' => 'nullable|numeric',
-            'share_capital_balance' => 'nullable|numeric|min:0',
-            'no_of_entitled_votes' => 'nullable|integer|min:0',
-            'email' => [
-                'required',
-                'email',
-                Rule::unique('participants', 'email'),
-                Rule::unique('cooperatives', 'email')->ignore($coop_id, 'coop_id'), // Ignore itself
-            ],
-            'address' => 'required|string|max:255',
-            'services_availed' => 'nullable|array', // Ensure it's an array (from checkboxes)
-            'services_availed.*' => 'string|max:255', // Ensure each item is a string
+            'general_manager_ceo' => 'nullable|string|max:255',
         ]);
 
-        $validated['total_asset'] = $request->total_asset ? (float) str_replace(',', '', $request->total_asset) : null;
-        $validated['total_income'] = $request->total_income ? (float) str_replace(',', '', $request->total_income) : null;
-        $validated['cetf_remittance'] = $request->cetf_remittance ? (float) str_replace(',', '', $request->cetf_remittance) : null;
-        $validated['cetf_required'] = $request->cetf_required ? (float) str_replace(',', '', $request->cetf_required) : null;
-        $validated['cetf_balance'] = $request->cetf_balance ? (float) str_replace(',', '', $request->cetf_balance) : null;
-        $validated['share_capital_balance'] = $request->share_capital_balance ? (float) str_replace(',', '', $request->share_capital_balance) : null;
-        $validated['no_of_entitled_votes'] = $request->no_of_entitled_votes ? (int) $request->no_of_entitled_votes : null;
-
-        // Store services_availed as a JSON string
-        $validated['services_availed'] = isset($request->services_availed)
-            ? json_encode($request->services_availed) // Convert array to JSON
-            : json_encode([]); // Store empty JSON array if no services selected
-
-        // Find the cooperative by its ID and update the details
+        // Find the cooperative by its ID
         $cooperative = Cooperative::findOrFail($coop_id);
+
+        // Update only the selected fields
         $cooperative->update($validated);
 
-        // // Validate the request
-        // $request->validate([
-        //     'name' => 'required|string|max:255',
-        //     'contact_person' => 'nullable|string|max:255',
-        //     'type' => 'required|string|max:255',
-        //     'address' => 'required|string|max:255',
-        //     'region' => 'required|string|max:255',
-        //     'phone_number' => 'nullable|string|max:20',
-        //     'email' => 'nullable|email|max:255',
-        //     'tin' => 'nullable|string|max:255',
-        //     'coop_identification_no' => 'nullable|string|max:255',
-        //     'bod_chairperson' => 'nullable|string|max:255',
-        //     'general_manager_ceo' => 'nullable|string|max:255',
-        //     'total_asset' => 'nullable|numeric',
-        //     'total_income' => 'nullable|numeric',
-        //     'cetf_remittance' => 'nullable|numeric',
-        //     'cetf_required' => 'nullable|numeric',
-        //     'cetf_balance' => 'nullable|numeric',
-        //     'share_capital_balance' => 'required|numeric',
-        //     'no_of_entitled_votes' => 'nullable|integer',
-        //     'services_availed' => 'nullable|string|max:255',
-        // ]);
-
-        // // Find the cooperative by ID
-        // $cooperative = Cooperative::findOrFail($coop_id);
-
-        // // Update the cooperative record
-        // $cooperative->update($request->all());
-
-        // Redirect back with a success message
         return redirect()->route('cooperativeprofile', ['coop_id' => $coop_id])
             ->with('success', 'Cooperative profile updated successfully!');
     }
+
 
 
     public function participantregister()
@@ -533,6 +452,8 @@ class DashboardController extends Controller
         $filterNoGA = $request->input('filter_no_ga');
         $limit = $request->input('limit', 5);  // Default to 5 if no 'limit' is provided
 
+        $emailsall = Cooperative::pluck('email')->toArray();
+
         $cooperatives = Cooperative::query();
 
         // Apply filter first
@@ -555,11 +476,14 @@ class DashboardController extends Controller
         }
 
         // Apply pagination with the dynamic limit
-        $cooperatives = $cooperatives->orderBy('created_at', 'desc')->paginate($limit);
+        $cooperatives = $cooperatives->orderBy('created_at', 'desc')
+        ->paginate($limit)
+        ->appends($request->query()); // Append all query parameters
+
 
         $emails = $cooperatives->pluck('email')->filter()->implode(',');
 
-        return view('dashboard.admin.datatable', compact('cooperatives', 'search', 'emails', 'filterNoGA'));
+        return view('dashboard.admin.datatable', compact('cooperatives', 'search', 'emails', 'emailsall', 'filterNoGA'));
     }
 
 
@@ -599,6 +523,8 @@ class DashboardController extends Controller
             'less_prereg_payment' => 'nullable|numeric',
             'less_cetf_balance' => 'nullable|numeric',
             'net_required_reg_fee' => 'nullable|numeric',
+            'fs_status' => 'nullable|in:yes,no',
+            'delinquent' => 'nullable|in:yes,no',
             'cetf_remittance' => 'nullable|numeric',
             'cetf_required' => 'nullable|numeric',
             'cetf_balance' => 'nullable|numeric',
@@ -660,6 +586,8 @@ class DashboardController extends Controller
             'phone_number' => $request->phone_number,
             'email' => $request->email,
             'tin' => $request->tin,
+            'fs_status' => $request->fs_status,
+            'delinquent'  => $request->delinquent,
             'coop_identification_no' => $request->coop_identification_no,
             'bod_chairperson' => $request->bod_chairperson,
             'general_manager_ceo' => $request->general_manager_ceo,
@@ -738,6 +666,9 @@ class DashboardController extends Controller
     {
         $coop = Cooperative::findOrFail($coop_id);
 
+        $hasFinancialStatement = UploadedDocument::where('coop_id', $coop->coop_id)
+        ->where('document_type', 'Financial Statement')
+        ->exists();
         // Check if cooperative has MIGS membership
         $hasMigsRegistration = GARegistration::where('coop_id', $coop->coop_id)
             ->where('membership_status', 'MIGS')
@@ -790,7 +721,7 @@ class DashboardController extends Controller
         $coop->reg_fee_payable = $regFeePayable;
 
         return view('dashboard.admin.edit', compact(
-            'coop', 'hasMigsRegistration', 'hasMspOfficer', 'free100kCETF', 'halfBasedCETF'
+            'coop', 'hasMigsRegistration', 'hasMspOfficer', 'free100kCETF', 'halfBasedCETF', 'hasFinancialStatement'
         ));
     }
 
@@ -822,6 +753,8 @@ class DashboardController extends Controller
             ],
             'tin' => 'required|string|max:50',
             'address' => 'required|string|max:255',
+            'fs_status' => ['nullable', Rule::in(['yes', 'no'])],
+            'delinquent' => ['nullable', Rule::in(['yes', 'no'])],
 
             // Numeric Fields
             'total_asset' => 'nullable|numeric|min:0',
@@ -884,7 +817,7 @@ class DashboardController extends Controller
             $votes += floor($share_capital / 100000);
         }
 
-        $validated['cetf_balance'] = ($validated['total_remittance'] ?? 0) - ($validated['cetf_required'] ?? 0);
+        $validated['cetf_balance'] = ($validated['cetf_required'] ?? 0) - ($validated['total_remittance'] ?? 0);
 
         $remaining = $share_capital % 100000;
 

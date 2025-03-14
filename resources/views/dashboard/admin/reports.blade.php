@@ -82,9 +82,7 @@
 
     <!-- Print Button -->
     <div class="d-flex justify-content-end mb-3">
-        <button class="btn btn-primary" onclick="printReport()">
-            <i class="fas fa-print"></i> Print Report
-        </button>
+
     </div>
 
     <div id="report-content" class="p-4">

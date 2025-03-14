@@ -12,12 +12,15 @@
     }
 
     .list-group-item:hover {
-        background-color: rgba(0, 123, 255, 0.1); /* Light blue background */
-        transform: translateY(-3px); /* Slight lift effect */
+        background-color: rgba(0, 123, 255, 0.1);
+        /* Light blue background */
+        transform: translateY(-3px);
+        /* Slight lift effect */
     }
 
     .list-group-item:hover .badge {
-        filter: brightness(1.2); /* Slightly brighten the badge */
+        filter: brightness(1.2);
+        /* Slightly brighten the badge */
     }
 </style>
 <style>
@@ -304,76 +307,96 @@
                         <div class="ms-md-auto py-2 py-md-0">
 
                             <!-- Button to open the modal -->
-                            <button type="button" class="btn btn-primary btn-lg d-flex align-items-center gap-2 shadow-sm"
-                            data-bs-toggle="modal" data-bs-target="#reportModal">
-                        <i class="fas fa-chart-bar"></i> Generate Reports
-                    </button>
+                            <button type="button"
+                                class="btn btn-primary btn-lg d-flex align-items-center gap-2 shadow-sm"
+                                data-bs-toggle="modal" data-bs-target="#reportModal">
+                                <i class="fas fa-chart-bar"></i> Generate Reports
+                            </button>
 
-                    <!-- Report Modal -->
-                    <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content shadow-lg border-0 rounded-4">
-                                <div class="modal-header bg-primary text-white">
-                                    <h5 class="modal-title fw-bold" id="reportModalLabel">
-                                        <i class="fas fa-file-alt me-2"></i> Select a Report
-                                    </h5>
-                                    {{-- <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button> --}}
-                                </div>
+                            <!-- Report Modal -->
+                            <div class="modal fade" id="reportModal" tabindex="-1"
+                                aria-labelledby="reportModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content shadow-lg border-0 rounded-4">
+                                        <div class="modal-header bg-primary text-white">
+                                            <h5 class="modal-title fw-bold" id="reportModalLabel">
+                                                <i class="fas fa-file-alt me-2"></i> Select a Report
+                                            </h5>
+                                            {{-- <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button> --}}
+                                        </div>
 
-                                <div class="modal-body">
-                                    <h6 class="fw-bold text-secondary mb-3">📌 Choose a report to view:</h6>
-                                    <div class="list-group list-group-flush">
-                                        <a href="{{ route('admin.reports') }}" class="list-group-item list-group-item-action py-3 fw-semibold" data-report-type="voting_delegates">
-                                            <i class="fas fa-users me-2"></i> Voting Delegates Status/Count Report
-                                        </a>
-                                        <a href="{{ route('admin.reports.documents_status') }}" class="list-group-item list-group-item-action py-3 fw-semibold" data-report-type="documents_status">
-                                            <i class="fas fa-file-signature me-2"></i> Status Report on Documents Required
-                                        </a>
+                                        <div class="modal-body">
+                                            <h6 class="fw-bold text-secondary mb-3">📌 Choose a report to view:</h6>
+                                            <div class="list-group list-group-flush">
+                                                <a href="{{ route('admin.reports') }}"
+                                                    class="list-group-item list-group-item-action py-3 fw-semibold"
+                                                    data-report-type="voting_delegates">
+                                                    <i class="fas fa-users me-2"></i> Voting Delegates Status/Count
+                                                    Report
+                                                </a>
+                                                <a href="{{ route('admin.reports.documents_status') }}"
+                                                    class="list-group-item list-group-item-action py-3 fw-semibold"
+                                                    data-report-type="documents_status">
+                                                    <i class="fas fa-file-signature me-2"></i> Status Report on
+                                                    Documents Required
+                                                </a>
 
 
-                                        <a href="#" class="list-group-item list-group-item-action py-3 fw-semibold">
-                                            <i class="fas fa-user-friends me-2"></i> Summary of Delegates Per Congress
-                                        </a>
-                                        <a href="#" class="list-group-item list-group-item-action py-3 fw-semibold">
-                                            <i class="fas fa-tshirt me-2"></i> T-Shirt Sizes (All or Per Congress)
-                                        </a>
-                                        <a href="#" class="list-group-item list-group-item-action py-3 fw-semibold">
-                                            <i class="fas fa-building me-2"></i> Coop Registration Summary with Breakdown
-                                        </a>
-                                    </div>
+                                                <a href="#"
+                                                    class="list-group-item list-group-item-action py-3 fw-semibold">
+                                                    <i class="fas fa-user-friends me-2"></i> Summary of Delegates Per
+                                                    Congress
+                                                </a>
+                                                <a href="#"
+                                                    class="list-group-item list-group-item-action py-3 fw-semibold">
+                                                    <i class="fas fa-tshirt me-2"></i> T-Shirt Sizes (All or Per
+                                                    Congress)
+                                                </a>
+                                                <a href="#"
+                                                    class="list-group-item list-group-item-action py-3 fw-semibold">
+                                                    <i class="fas fa-building me-2"></i> Coop Registration Summary with
+                                                    Breakdown
+                                                </a>
+                                            </div>
 
-                                    <hr class="my-4">
-                                    <h6 class="fw-bold text-secondary">📊 Report Preview:</h6>
-                                    <div class="border rounded-3 overflow-hidden shadow-sm">
-                                        <iframe id="reportFrame" src="" width="100%" height="400px" frameborder="0"></iframe>
-                                    </div>
-                                </div>
+                                            <hr class="my-4">
+                                            <h6 class="fw-bold text-secondary">📊 Report Preview:</h6>
+                                            <div class="border rounded-3 overflow-hidden shadow-sm">
+                                                <iframe id="reportFrame" src="" width="100%"
+                                                    height="400px" frameborder="0"></iframe>
+                                            </div>
+                                        </div>
 
-                                <div class="modal-footer d-flex justify-content-between">
-                                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">
-                                        <i class="fas fa-times"></i> Close
-                                    </button>
+                                        <div class="modal-footer d-flex justify-content-between">
+                                            <button type="button" class="btn btn-secondary px-4"
+                                                data-bs-dismiss="modal">
+                                                <i class="fas fa-times"></i> Close
+                                            </button>
 
-                                    <!-- Export Options -->
-                                    <div class="dropdown">
-                                        <button class="btn btn-success dropdown-toggle px-4" type="button" id="exportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="fas fa-download"></i> Export Options
-                                        </button>
-                                        <ul class="dropdown-menu dropdown-menu-end shadow-lg">
-                                            <li><a class="dropdown-item d-flex align-items-center gap-2" href="#" onclick="printReport()">
-                                                <i class="fas fa-print"></i> Print or Export as PDF
-                                            </a></li>
-                                            <li><a class="dropdown-item d-flex align-items-center gap-2" href="#" id="exportExcel" target="_blank">
-                                                <i class="fas fa-file-excel"></i> Export as Excel
-                                            </a></li>
-                                        </ul>
+                                            <!-- Export Options -->
+                                            <div class="dropdown">
+                                                <button class="btn btn-success dropdown-toggle px-4" type="button"
+                                                    id="exportDropdown" data-bs-toggle="dropdown"
+                                                    aria-expanded="false">
+                                                    <i class="fas fa-download"></i> Export Options
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end shadow-lg">
+                                                    <li><a class="dropdown-item d-flex align-items-center gap-2"
+                                                            href="#" onclick="printReport()">
+                                                            <i class="fas fa-print"></i> Print or Export as PDF
+                                                        </a></li>
+                                                    <li><a class="dropdown-item d-flex align-items-center gap-2"
+                                                            href="#" id="exportExcel" target="_blank">
+                                                            <i class="fas fa-file-excel"></i> Export as Excel
+                                                        </a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <!-- Include FontAwesome for Icons (If Not Already Included) -->
+                            <!-- Include FontAwesome for Icons (If Not Already Included) -->
 
 
 
@@ -469,7 +492,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <p class="card-category mb-1">Attended Migs</p>
+                                        <p class="card-category mb-1">Attended MIGS</p>
                                         <h4 class="card-title mb-0">{{ number_format($totalMigsAttended) }}</h4>
                                     </div>
                                 </div>
@@ -486,7 +509,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <p class="card-category mb-1">Migs Members</p>
+                                        <p class="card-category mb-1">MIGS Members</p>
                                         <h4 class="card-title mb-0">{{ number_format($totalMigsParticipants) }}</h4>
                                     </div>
                                 </div>
@@ -503,7 +526,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <p class="card-category mb-1">Non-Migs Members</p>
+                                        <p class="card-category mb-1">NON-MIGS Members</p>
                                         <h4 class="card-title mb-0">{{ number_format($totalNonMigsParticipants) }}
                                         </h4>
                                     </div>
@@ -518,34 +541,39 @@
                     <div class="row">
 
                         <div class="col-md-8">
+
+
                             <div class="card card-round">
+                                <h3 class="p-3 text-center"> Registration Overview</h3> <!-- Added title -->
                                 <div class="card-header d-flex justify-content-between align-items-center">
-                                    {{-- <div class="card-title">Registration Overview</div> --}}
-                                    <div class="d-flex align-items-center">
+
+
+                                    <div class="d-flex flex-wrap align-items-center gap-2">
                                         <!-- Display the totals as button-like elements -->
-                                        <div class="btn btn-success me-2">
+                                        <div class="btn btn-success">
                                             <strong>Fully Registered Coops</strong>: {{ $fullyRegisteredCoops }}
                                         </div>
-                                        <div class="btn btn-warning me-2">
+                                        <div class="btn btn-warning">
                                             <strong>Partially Registered Coops</strong>: {{ $partiallyRegisteredCoops }}
                                         </div>
-                                        <div class="btn btn-info me-2">
+                                        <div class="btn btn-info">
                                             <strong>Fully Registered Participants</strong>: {{ $fullyRegisteredParticipants }}
                                         </div>
-                                        <div class="btn btn-danger me-2">
+                                        <div class="btn btn-danger">
                                             <strong>Partially Registered Participants</strong>: {{ $partiallyRegisteredParticipants }}
                                         </div>
                                         <!-- Button to open the modal -->
-                                        <button id="openModal" class="btn btn-danger me-2">
-                                            <i class="fas fa-eye"></i> Preview Overview
-                                        </button>
+
                                     </div>
+
                                 </div>
 
-                                <div class="card-body">
-                                    <canvas id="registrationChart"></canvas>
+
+                                <div class="card-body h-100">
+                                    <canvas id="registrationChart" style="height: 100rem;"></canvas>
                                 </div>
                             </div>
+
                         </div>
 
                         <div class="modal" tabindex="-1" id="overviewModal">
@@ -553,7 +581,8 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title">Registration Overview</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
                                         <!-- Overview content to be printed -->
@@ -591,7 +620,8 @@
                                         <button id="printOverview" class="btn btn-primary">
                                             <i class="fas fa-print"></i> Print
                                         </button>
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
                                     </div>
                                 </div>
                             </div>
@@ -688,31 +718,38 @@
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item d-flex justify-content-between">
                                             <span class="badge bg-primary">Feb - Apr</span>
-                                            <span class="text-start flex-grow-1 ms-2">Presentation of 2024 election guidelines.</span>
+                                            <span class="text-start flex-grow-1 ms-2">Presentation of 2024 election
+                                                guidelines.</span>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between">
                                             <span class="badge bg-success">March 4</span>
-                                            <span class="text-start flex-grow-1 ms-2">Start of delegate registration.</span>
+                                            <span class="text-start flex-grow-1 ms-2">Start of delegate
+                                                registration.</span>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between">
                                             <span class="badge bg-danger">May 20</span>
-                                            <span class="text-start flex-grow-1 ms-2">Start of filing Certificate of Candidacy.</span>
+                                            <span class="text-start flex-grow-1 ms-2">Start of filing Certificate of
+                                                Candidacy.</span>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between">
                                             <span class="badge bg-warning text-dark">May 22-24</span>
-                                            <span class="text-start flex-grow-1 ms-2">End of COC filing, CETF remittance & voter registration.</span>
+                                            <span class="text-start flex-grow-1 ms-2">End of COC filing, CETF
+                                                remittance & voter registration.</span>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between">
                                             <span class="badge bg-info">May 22</span>
-                                            <span class="text-start flex-grow-1 ms-2">Mock election & Elecom review.</span>
+                                            <span class="text-start flex-grow-1 ms-2">Mock election & Elecom
+                                                review.</span>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between">
                                             <span class="badge bg-secondary">May 23</span>
-                                            <span class="text-start flex-grow-1 ms-2">Candidate profiles sent to voting delegates.</span>
+                                            <span class="text-start flex-grow-1 ms-2">Candidate profiles sent to voting
+                                                delegates.</span>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between">
                                             <span class="badge bg-primary">May 27</span>
-                                            <span class="text-start flex-grow-1 ms-2">Ceremonial opening of elections.</span>
+                                            <span class="text-start flex-grow-1 ms-2">Ceremonial opening of
+                                                elections.</span>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between">
                                             <span class="badge bg-success">May 28</span>
@@ -720,16 +757,19 @@
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between">
                                             <span class="badge bg-danger">May 29</span>
-                                            <span class="text-start flex-grow-1 ms-2">54th Leaders Congress & Election closing.</span>
+                                            <span class="text-start flex-grow-1 ms-2">54th Leaders Congress & Election
+                                                closing.</span>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between">
                                             <span class="badge bg-warning text-dark">May 30</span>
-                                            <span class="text-start flex-grow-1 ms-2">Holy Mass & Proclamation of winners.</span>
+                                            <span class="text-start flex-grow-1 ms-2">Holy Mass & Proclamation of
+                                                winners.</span>
                                         </li>
                                     </ul>
                                 </div>
                                 <div class="card-footer bg-light rounded-bottom">
-                                    <span class="badge bg-primary p-2" style="cursor: pointer; transition: 0.3s;">Don't miss this event!</span>
+                                    <span class="badge bg-primary p-2"
+                                        style="cursor: pointer; transition: 0.3s;">Don't miss this event!</span>
                                 </div>
                             </div>
 
@@ -745,285 +785,140 @@
 
 
     </div>
-   <!-- Add necessary scripts for modal and printing -->
-   <script>
-    // Open the modal when the "Preview Overview" button is clicked
-    document.getElementById("openModal").addEventListener("click", function() {
-        var myModal = new bootstrap.Modal(document.getElementById('overviewModal'));
-        myModal.show();
-    });
-
-    // Print the overview content when the "Print" button is clicked
-    document.getElementById("printOverview").addEventListener("click", function() {
-        var printContent = document.getElementById('overviewContent').innerHTML;
-        var newWindow = window.open('', '', 'height=600,width=800');
-        newWindow.document.write('<html><head><title>Print Preview</title></head><body>');
-        newWindow.document.write(printContent);
-        newWindow.document.write('</body></html>');
-        newWindow.document.close();
-        newWindow.print();
-    });
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        var ctx = document.getElementById('registrationChart').getContext('2d');
-        var registrationChart = new Chart(ctx, {
-            type: 'bar', // Change to 'bar' for a bar chart
-            data: {
-                labels: [
-                    'Fully Registered Coops',
-                    'Partially Registered Coops',
-                    'Fully Registered Participants',
-                    'Partially Registered Participants',
-                ],
-                datasets: [{
-                    label: 'Number of Registrations',
-                    data: [
-                        {{ $fullyRegisteredCoops }},
-                        {{ $partiallyRegisteredCoops }},
-                        {{ $fullyRegisteredParticipants }},
-                        {{ $partiallyRegisteredParticipants }},
-                    ],
-                    backgroundColor: [
-                        'rgba(40, 167, 69, 0.6)', // Green
-                        'rgba(255, 193, 7, 0.6)', // Yellow
-                        'rgba(23, 162, 184, 0.6)', // Blue
-                        'rgba(220, 53, 69, 0.6)', // Red
-                    ],
-                    borderColor: [
-                        'rgba(40, 167, 69, 1)',
-                        'rgba(255, 193, 7, 1)',
-                        'rgba(23, 162, 184, 1)',
-                        'rgba(220, 53, 69, 1)',
-                    ],
-                    borderWidth: 2,
-                    borderRadius: 5, // Optional, to round the corners of the bars
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top', // Positions the legend at the top
-                        labels: {
-                            // This callback will format the label to include the number
-                            generateLabels: function(chart) {
-                                var labels = Chart.defaults.plugins.legend.labels.generateLabels(chart);
-                                labels.forEach(function(label, index) {
-                                    label.text = label.text + ': ' + chart.data.datasets[0].data[index];
-                                });
-                                return labels;
-                            }
-                        }
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(tooltipItem) {
-                                // Display the label along with the value in the tooltip
-                                return tooltipItem.label + ': ' + tooltipItem.raw;
-                            }
-                        }
-                    }
-                },
-                // Displaying the numbers on top of the bars
-                animations: {
-                    tension: {
-                        duration: 1000,
-                        easing: 'easeInOutQuad',
-                        from: 1,
-                        to: 0,
-                        loop: true
-                    }
-                },
-                scales: {
-                    x: {
-                        ticks: {
-                            font: {
-                                size: 14
-                            }
-                        }
-                    },
-                    y: {
-                        ticks: {
-                            font: {
-                                size: 14
-                            },
-                            // Displaying the number on the y-axis
-                            callback: function(value) { return value; }
-                        }
-                    }
-                }
-            }
+    <!-- Add necessary scripts for modal and printing -->
+    <script>
+        // Open the modal when the "Preview Overview" button is clicked
+        document.getElementById("openModal").addEventListener("click", function() {
+            var myModal = new bootstrap.Modal(document.getElementById('overviewModal'));
+            myModal.show();
         });
 
-        // Add data labels above the bars (numbers)
-        registrationChart.options.plugins.datalabels = {
-            anchor: 'end',
-            align: 'top',
-            formatter: function(value, ctx) {
-                return value; // Display the numeric value on top of each bar
-            },
-            font: {
-                size: 14,
-                weight: 'bold'
-            }
-        };
-        registrationChart.update();
-    });
-</script>
+        // Print the overview content when the "Print" button is clicked
+        document.getElementById("printOverview").addEventListener("click", function() {
+            var printContent = document.getElementById('overviewContent').innerHTML;
+            var newWindow = window.open('', '', 'height=600,width=800');
+            newWindow.document.write('<html><head><title>Print Preview</title></head><body>');
+            newWindow.document.write(printContent);
+            newWindow.document.write('</body></html>');
+            newWindow.document.close();
+            newWindow.print();
+        });
+    </script>
 
-    <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/html5-qrcode/minified/html5-qrcode.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- Include SweetAlert -->
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            let qrScanner;
-
-            document.getElementById("qrScannerModal").addEventListener("shown.bs.modal", async function() {
-                if (typeof Html5Qrcode === "undefined") {
-                    console.error("Html5Qrcode is NOT loaded!");
-                    return;
-                }
-
-                qrScanner = new Html5Qrcode("qr-reader");
-                try {
-                    let devices = await navigator.mediaDevices.enumerateDevices();
-                    let cameraId = null;
-
-                    // Look for DroidCam or other cameras
-                    devices.forEach(device => {
-                        if (device.label.toLowerCase().includes("droidcam")) {
-                            cameraId = device.deviceId;
-                        }
-                    });
-
-                    if (cameraId) {
-                        qrScanner.start(
-                            cameraId, {
-                                fps: 10,
-                                qrbox: {
-                                    width: 250,
-                                    height: 250
+            var ctx = document.getElementById('registrationChart').getContext('2d');
+            var registrationChart = new Chart(ctx, {
+                type: 'bar', // Change to 'bar' for a bar chart
+                data: {
+                    labels: [
+                        'Fully Registered Coops',
+                        'Partially Registered Coops',
+                        'Fully Registered Participants',
+                        'Partially Registered Participants',
+                    ],
+                    datasets: [{
+                        label: 'Number of Registrations',
+                        data: [
+                            {{ $fullyRegisteredCoops }},
+                            {{ $partiallyRegisteredCoops }},
+                            {{ $fullyRegisteredParticipants }},
+                            {{ $partiallyRegisteredParticipants }},
+                        ],
+                        backgroundColor: [
+                            'rgba(40, 167, 69, 0.6)', // Green
+                            'rgba(255, 193, 7, 0.6)', // Yellow
+                            'rgba(23, 162, 184, 0.6)', // Blue
+                            'rgba(220, 53, 69, 0.6)', // Red
+                        ],
+                        borderColor: [
+                            'rgba(40, 167, 69, 1)',
+                            'rgba(255, 193, 7, 1)',
+                            'rgba(23, 162, 184, 1)',
+                            'rgba(220, 53, 69, 1)',
+                        ],
+                        borderWidth: 2,
+                        borderRadius: 5, // Optional, to round the corners of the bars
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top', // Positions the legend at the top
+                            labels: {
+                                // This callback will format the label to include the number
+                                generateLabels: function(chart) {
+                                    var labels = Chart.defaults.plugins.legend.labels.generateLabels(
+                                        chart);
+                                    labels.forEach(function(label, index) {
+                                        label.text = label.text + ': ' + chart.data.datasets[0]
+                                            .data[index];
+                                    });
+                                    return labels;
                                 }
-                            },
-                            decodedText => handleScannedQR(decodedText, qrScanner),
-                            errorMessage => console.warn(errorMessage)
-                        ).catch(err => console.error("Error starting QR scanner:", err));
-                    }
-                } catch (err) {
-                    console.error("Error accessing cameras:", err);
-                }
-            });
-
-            // Stop QR scanner when modal closes
-            document.getElementById("qrScannerModal").addEventListener("hidden.bs.modal", function() {
-                if (qrScanner) {
-                    qrScanner.stop().catch(err => console.warn("Error stopping scanner:", err));
-                }
-            });
-        });
-
-        function handleScannedQR(decodedText, qrScanner) {
-            console.log("Scanned QR Code:", decodedText);
-
-            let participantId;
-
-            try {
-                // Try to extract ID from a URL
-                const url = new URL(decodedText);
-                const pathSegments = url.pathname.split("/"); // Split path into segments
-                participantId = pathSegments[pathSegments.length - 1]; // Get last segment (ID)
-            } catch (e) {
-                // If it's not a valid URL, assume it's a direct numeric ID
-                participantId = decodedText.trim();
-            }
-
-            // Ensure participantId is a valid number
-            if (isNaN(participantId) || participantId === "") {
-                Swal.fire({
-                    icon: "error",
-                    title: "Invalid QR Code",
-                    text: "No valid participant ID found.",
-                });
-                return;
-            }
-
-            console.log("Extracted Participant ID:", participantId);
-
-            fetch(`/scan-qr?participant_id=${participantId}`, {
-                    method: "GET",
-                    headers: {
-                        "Accept": "application/json"
-                    },
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        let iconType = data.error.includes("already recorded") ? "warning" : "error";
-                        Swal.fire({
-                            icon: iconType,
-                            title: "Scan Error",
-                            text: data.error,
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: "success",
-                            title: "Attendance Recorded!",
-                            text: data.success,
-                        });
-                    }
-                    qrScanner.stop();
-                })
-                .catch(error => {
-                    console.error("QR Code Scan Error:", error);
-                    Swal.fire({
-                        icon: "error",
-                        title: "Scan Failed",
-                        text: "Failed to record attendance.",
-                    });
-                });
-        }
-
-
-
-
-        // Function to use DroidCam IP as a video source
-        function useDroidCamIP(qrScanner, ip) {
-            let videoElement = document.createElement("video");
-            videoElement.src = ip;
-            videoElement.setAttribute("autoplay", "");
-            videoElement.setAttribute("playsinline", "");
-
-            videoElement.addEventListener("loadedmetadata", function() {
-                qrScanner.start(
-                    videoElement, {
-                        fps: 10,
-                        qrbox: {
-                            width: 250,
-                            height: 250
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    // Display the label along with the value in the tooltip
+                                    return tooltipItem.label + ': ' + tooltipItem.raw;
+                                }
+                            }
                         }
                     },
-                    decodedText => handleScannedQR(decodedText, qrScanner),
-                    errorMessage => console.warn(errorMessage)
-                ).catch(err => console.error("Error starting QR scanner:", err));
+                    // Displaying the numbers on top of the bars
+                    animations: {
+                        tension: {
+                            duration: 1000,
+                            easing: 'easeInOutQuad',
+                            from: 1,
+                            to: 0,
+                            loop: true
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                font: {
+                                    size: 14
+                                },
+                                // Displaying the number on the y-axis
+                                callback: function(value) {
+                                    return value;
+                                }
+                            }
+                        }
+                    }
+                }
             });
 
-            document.getElementById("qr-reader").appendChild(videoElement);
-        }
+            // Add data labels above the bars (numbers)
+            registrationChart.options.plugins.datalabels = {
+                anchor: 'end',
+                align: 'top',
+                formatter: function(value, ctx) {
+                    return value; // Display the numeric value on top of each bar
+                },
+                font: {
+                    size: 14,
+                    weight: 'bold'
+                }
+            };
+            registrationChart.update();
+        });
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- Include SweetAlert -->
 
-
-
-    <script>
-        function calculateCETF() {
-            let totalIncome = parseFloat(document.getElementById('totalIncome').value) || 0;
-            let cetfRequired = (totalIncome * 0.05) * 0.30;
-            document.getElementById('cetfRequired').value = cetfRequired.toFixed(2);
-        }
-    </script>
     @include('layouts.links')
     <!-- JavaScript -->
     <script>
@@ -1040,17 +935,19 @@
             const exportBaseUrl = "{{ route('reports.export') }}";
 
             document.querySelectorAll(".list-group-item").forEach(item => {
-    item.addEventListener("click", function(event) {
-        event.preventDefault();
-        const reportType = this.getAttribute("data-report-type"); // Add a data attribute for report type
-        const reportUrl = this.getAttribute("href");
+                item.addEventListener("click", function(event) {
+                    event.preventDefault();
+                    const reportType = this.getAttribute(
+                    "data-report-type"); // Add a data attribute for report type
+                    const reportUrl = this.getAttribute("href");
 
-        if (reportUrl) {
-            reportFrame.src = reportUrl;
-            exportExcel.href = exportBaseUrl + "?report=" + encodeURIComponent(reportType) + "&export=excel";
-        }
-    });
-});
+                    if (reportUrl) {
+                        reportFrame.src = reportUrl;
+                        exportExcel.href = exportBaseUrl + "?report=" + encodeURIComponent(
+                            reportType) + "&export=excel";
+                    }
+                });
+            });
 
         });
 

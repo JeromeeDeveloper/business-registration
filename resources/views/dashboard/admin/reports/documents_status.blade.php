@@ -20,21 +20,54 @@
             background-color: #e9ecef !important;
         }
 
-        /* Remove padding/margins for full-width printing */
+        /* 🔹 PRINT STYLES */
         @media print {
-            body {
-                background-color: white;
+            @page {
+                size: A4 landscape; /* Ensures A4 size in landscape mode */
+                margin: 10mm; /* Adds a small margin to fit content */
             }
-            .container-fluid {
+
+            body {
+                background-color: white !important;
                 margin: 0;
                 padding: 0;
             }
-            .table-responsive {
-                box-shadow: none !important;
-                border-radius: 0 !important;
+
+            .container-fluid {
+                width: 100%;
+                padding: 0;
+                margin: 0;
             }
+
+            .table-responsive {
+                overflow: hidden !important; /* Prevents scrolling */
+                page-break-inside: auto; /* Prevents breaking tables */
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse; /* Ensures proper table alignment */
+                font-size: 12px; /* Adjust text size for better fit */
+            }
+
             h2 {
-                font-size: 20px;
+                font-size: 18px; /* Reduce heading size */
+                text-align: center;
+                color: black !important; /* Ensures it prints properly */
+            }
+
+            /* Remove hover effect in print mode */
+            .table-hover tbody tr:hover {
+                background-color: transparent !important;
+            }
+
+            /* Ensure headers are printed properly */
+            thead {
+                display: table-header-group; /* Keeps headers on every printed page */
+            }
+
+            tbody {
+                display: table-row-group;
             }
         }
     </style>
@@ -47,18 +80,17 @@
     </h2>
 
     <div class="table-responsive">
-        <table class="table table-hover align-middle">
+        <table class="table table-hover align-middle border">
             <thead class="bg-gradient bg-dark text-white">
                 <tr>
-                    <th><i class="fas fa-building"></i> Cooperative Region</th>
-                    <th><i class="fas fa-file-alt"></i> Financial Statement</th>
-                    <th><i class="fas fa-file-alt"></i> Resolution for Voting delegates</th>
-                    <th><i class="fas fa-file-alt"></i> Deposit Slip for Registration Fee</th>
-
-                    <th><i class="fas fa-file-alt"></i> Deposit Slip for CETF Remittance</th>
-                    <th><i class="fas fa-file-alt"></i> CETF Undertaking</th>
-                    <th><i class="fas fa-file-alt"></i> Certificate of Candidacy</th>
-                    <th><i class="fas fa-file-alt"></i> CETF Utilization invoice</th>
+                    <th>Cooperative Region</th>
+                    <th> Financial Statement</th>
+                    <th> Resolution for Voting delegates</th>
+                    <th> Deposit Slip for Registration Fee</th>
+                    <th> Deposit Slip for CETF Remittance</th>
+                    <th> CETF Undertaking</th>
+                    <th> Certificate of Candidacy</th>
+                    <th> CETF Utilization invoice</th>
                 </tr>
             </thead>
             <tbody class="bg-light">
@@ -68,7 +100,6 @@
                     <td>{{ $documents->where('document_type', 'Financial Statement')->count() }}</td>
                     <td>{{ $documents->where('document_type', 'Resolution for Voting delegates')->count() }}</td>
                     <td>{{ $documents->where('document_type', 'Deposit Slip for Registration Fee')->count() }}</td>
-
                     <td>{{ $documents->where('document_type', 'Deposit Slip for CETF Remittance')->count() }}</td>
                     <td>{{ $documents->where('document_type', 'CETF Undertaking')->count() }}</td>
                     <td>{{ $documents->where('document_type', 'Certificate of Candidacy')->count() }}</td>

@@ -361,7 +361,7 @@
                                 </div>
 
                                 <div class="d-flex justify-content-center mt-3">
-                                    {{ $participants->appends(['search' => request('search')])->links('pagination::bootstrap-4') }}
+                                    {{ $participants->appends(['search' => request('search'), 'limit' => request('limit')])->links('pagination::bootstrap-4') }}
                                 </div>
                             </div>
                         </div>

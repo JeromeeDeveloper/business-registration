@@ -118,16 +118,18 @@ class AuthController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
+        $limit = $request->input('limit', 5); // Default to 5 if no limit is set
 
         $users = User::with('participant') // Eager-load participant relationship
             ->where('name', 'like', '%' . $search . '%')
             ->orWhere('email', 'like', '%' . $search . '%')
             ->orWhere('role', 'like', '%' . $search . '%')
             ->orderBy('created_at', 'desc')
-            ->paginate(5); // Increased pagination limit for better listing
+            ->paginate($limit); // Use dynamic limit for pagination
 
         return view('dashboard.admin.user.datatable', compact('users'));
     }
+
 
 
     public function destroy($user_id)
@@ -151,8 +153,8 @@ class AuthController extends Controller
     $validated = $request->validate([
         'name' => 'required|string|max:255',
         'email' => 'required|email|unique:users,email,' . $user_id . ',user_id',
-        'role' => 'required|string|in:cooperative,admin,participant',
-        'coop_id' => 'required|exists:cooperatives,coop_id', // Validate coop_id exists in cooperatives table
+        'role' => 'required|string|in:cooperative,admin,participant,support',
+        'coop_id' => 'nullable|exists:cooperatives,coop_id', // Validate coop_id exists in cooperatives table
         'password' => 'nullable|string|min:6|confirmed',
     ]);
 
@@ -225,7 +227,7 @@ class AuthController extends Controller
         return redirect()->route('profile.edit')->with('success', 'Profile updated successfully!');
     }
 
-   
+
 
 
 }

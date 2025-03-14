@@ -431,28 +431,26 @@
                                                         </td>
 
                                                         <td class="p-2 align-middle text-center">
-                                                            <form
-                                                                action="{{ route('cooperatives.updateStatus', $coop->coop_id) }}"
-                                                                method="POST" class="mb-0">
+                                                            <form action="{{ route('cooperatives.updateStatus', $coop->coop_id) }}" method="POST" class="mb-0">
                                                                 @csrf
                                                                 @method('PUT')
                                                                 <select name="membership_status"
                                                                     class="form-select form-select-sm rounded-pill shadow-sm border-0 text-center fw-semibold text-success fs-6"
                                                                     style="min-width: 200px; cursor: pointer; transition: all 0.3s;"
                                                                     onchange="this.form.submit()">
-                                                                    <option value="" disabled selected>-- Select
-                                                                        Status --</option>
+                                                                    <option value="" disabled selected>-- Select Status --</option>
                                                                     <option value="Non-migs"
                                                                         {{ optional($coop->gaRegistration)->membership_status == 'Non-migs' ? 'selected' : '' }}>
-                                                                        Non-migs
+                                                                        {{ strtoupper('Non-migs') }}
                                                                     </option>
                                                                     <option value="Migs"
                                                                         {{ optional($coop->gaRegistration)->membership_status == 'Migs' ? 'selected' : '' }}>
-                                                                        Migs
+                                                                        {{ strtoupper('Migs') }}
                                                                     </option>
                                                                 </select>
                                                             </form>
                                                         </td>
+
                                                         <td class="no-print">
                                                             <div class="form-button-action">
 
@@ -544,7 +542,7 @@
 
                                 </div>
                                 <div class="d-flex justify-content-center mt-3">
-                                    {{ $cooperatives->appends(['search' => request('search')])->links('pagination::bootstrap-4') }}
+                                    {{ $cooperatives->appends(request()->query())->links('pagination::bootstrap-4') }}
                                 </div>
 
                             </div>
@@ -564,13 +562,18 @@
 
     </div>
     <script>
-        document.getElementById('showEntries').addEventListener('change', function() {
-            let url = new URL(window.location.href);
-            url.searchParams.set('limit', this.value); // Set the 'limit' parameter
-            // Ensure that other parameters are retained while updating the 'limit'
-            window.location.href = url.toString();
+        document.addEventListener("DOMContentLoaded", function () {
+            let showEntries = document.getElementById("showEntries");
+            if (showEntries) {
+                showEntries.addEventListener("change", function () {
+                    let url = new URL(window.location.href);
+                    url.searchParams.set("limit", this.value); // Set 'limit' parameter
+                    window.location.href = url.toString(); // Update the URL
+                });
+            }
         });
     </script>
+
 
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -673,24 +676,27 @@
         }
     </script>
 
-    <script>
-        function openGmail() {
-            let recipient = @json($emails);
-            let subject = encodeURIComponent("52nd CO-OP LEADERS CONGRESS & 48th GENERAL ASSEMBLY");
-            let body = encodeURIComponent(`Dear Cooperative Members,
+<script>
+    function openGmail() {
+        // Retrieve emails from Laravel and convert to a comma-separated list
+        let recipients = @json($emailsall).join(',');
 
-            We are pleased to invite you to our upcoming event:
+        let subject = encodeURIComponent("52nd CO-OP LEADERS CONGRESS & 48th GENERAL ASSEMBLY");
+        let body = encodeURIComponent(`Dear Cooperative Members,
 
-            Event Name:
-            Date:
-            Location:
+We are pleased to invite you to our upcoming event:
 
-            Best Regards,
-            MASS-SPECC Cooperative Development Center`);
+Event Name:
+Date:
+Location:
 
-            window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${recipient}&su=${subject}&body=${body}`, '_blank');
-        }
-    </script>
+Best Regards,
+MASS-SPECC Cooperative Development Center`);
+
+        // Open Gmail compose window
+        window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${recipients}&su=${subject}&body=${body}`, '_blank');
+    }
+</script>
 
     <script>
         function confirmDelete(event, button) {

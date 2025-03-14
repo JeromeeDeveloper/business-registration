@@ -467,12 +467,29 @@
                                                         <fieldset class="border rounded p-3 shadow-sm h-100">
                                                             <legend class="h5 text-success">CETF Requirement Computation</legend>
 
-                                                                <div class="form-group mb-3">
-                                                                    <label for="fs">Financual Statement</label>
-                                                                    <input type="text" class="form-control" name="fs"
-                                                                        id="fs" placeholder="Enter Financial Statement"
-                                                                     />
+
+                                                                <div class="form-group">
+                                                                    <label for="fs_status">Audited Financial Statement Status</label>
+                                                                    <select class="form-control" name="fs_status" id="fs_status" required>
+                                                                        <option value="">Select Status</option>
+                                                                        <option value="yes">Yes</option>
+                                                                        <option value="no">No</option>
+                                                                    </select>
                                                                 </div>
+
+
+
+                                                                <div class="form-group">
+                                                                    <label for="delinquent">Delinquent Type</label>
+                                                                    <select class="form-control" name="delinquent" id="delinquent" required>
+                                                                        <option value="">Select Status</option>
+                                                                        <option value="yes">Yes</option>
+                                                                        <option value="no">No</option>
+                                                                    </select>
+                                                                </div>
+
+
+
 
                                                                 <div class="form-group">
                                                                     <label for="total_asset" class="form-label">Total Assets</label>
@@ -543,8 +560,9 @@
                                                             <div class="form-group">
                                                                 <label for="registration_fee">Registration Fee</label>
                                                                 <input type="number" class="form-control" name="registration_fee" id="registration_fee"
-                                                                    placeholder="Enter Registration Fee" value="4500"/>
+                                                                    placeholder="Enter Registration Fee" value="4500" readonly />
                                                             </div>
+
 
                                                             <div class="form-group">
                                                                 <label for="total_reg_fee">Total Registration Fee</label>
@@ -620,6 +638,15 @@
 
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if ($errors->any())
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: '@foreach ($errors->all() as $error){{ $error }}@endforeach',
+        });
+    </script>
+@endif
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             function updateRegFeePayable() {

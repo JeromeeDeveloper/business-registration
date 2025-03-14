@@ -347,9 +347,12 @@
                 document.addEventListener("DOMContentLoaded", function() {
                     Swal.fire({
                         icon: 'success',
-                        title: 'Success!',
+                        title: 'Account Created!',
                         text: '{{ session("success") }}',
-                        confirmButtonColor: '#28a745'
+                        showConfirmButton: false,
+                        timer: 3000, // Auto closes in 3 seconds
+                        toast: true,
+                        position: 'top-end'
                     });
                 });
             </script>

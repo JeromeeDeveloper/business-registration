@@ -235,6 +235,16 @@
                         </div>
 
                         <div class="table-responsive">
+                            <div>
+                                <label class="mb-0">Show
+                                    <select id="showEntries" class="form-select form-select-sm d-inline-block w-auto ms-1">
+                                        <option value="5" {{ request('limit') == 5 ? 'selected' : '' }}>5</option>
+                                        <option value="10" {{ request('limit') == 10 ? 'selected' : '' }}>10</option>
+                                        <option value="25" {{ request('limit') == 25 ? 'selected' : '' }}>25</option>
+                                        <option value="50" {{ request('limit') == 50 ? 'selected' : '' }}>50</option>
+                                    </select> entries
+                                </label>
+                            </div>
                             <table id="add-row" class="display table table-striped table-hover">
                                 <thead>
                                     <tr>
@@ -286,7 +296,7 @@
 
                   </div>
                   <div class="d-flex justify-content-center mt-3">
-                    {{ $users->appends(['search' => request('search')])->links('pagination::bootstrap-4') }}
+                    {{ $users->appends(['search' => request('search'), 'limit' => request('limit')])->links('pagination::bootstrap-4') }}
                 </div>
 
 
@@ -306,6 +316,19 @@
       </div>
 
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let showEntries = document.getElementById("showEntries");
+            if (showEntries) {
+                showEntries.addEventListener("change", function () {
+                    let url = new URL(window.location.href);
+                    url.searchParams.set("limit", this.value); // Set 'limit' parameter
+                    window.location.href = url.toString(); // Update the URL and reload the page
+                });
+            }
+        });
+    </script>
+
     <script>
        function confirmDelete(event, button) {
         event.preventDefault(); // Prevent form from submitting

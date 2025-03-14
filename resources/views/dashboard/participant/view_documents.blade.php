@@ -197,7 +197,18 @@
                                                 {{ $document->document_type === 'Financial Statement' ? 'Audited ' : '' }}{{ $document->document_type }}
                                             </td>
                                             <td>{{ $document->file_name }}</td>
-                                            <td>{{ $document->status }}</td>
+                                            <td>
+                                                @if ($document->status == 'Pending')
+                                                    Pending
+                                                @elseif ($document->status == 'Approved')
+                                                    Accepted
+                                                @elseif ($document->status == 'Rejected')
+                                                    Decline
+                                                @else
+                                                    {{ $document->status }}
+                                                @endif
+                                            </td>
+
                                             <td>{{ $document->remarks ?? 'No remarks yet' }}</td>
                                             <td>
                                                 <a href="{{ asset('storage/' . $document->file_path) }}" target="_blank" class="btn btn-sm btn-outline-primary">

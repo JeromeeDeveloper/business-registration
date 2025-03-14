@@ -24,12 +24,19 @@ use Illuminate\Support\Facades\Storage;
 class CooperativeController extends Controller
 {
 
-    public function index(Request $request)
+        public function index(Request $request)
     {
         $user = auth()->user();
         $cooperative = $user->cooperative;
 
-        $totalParticipants = $cooperative ? Participant::where('coop_id', $cooperative->coop_id)->count() : 0;
+        // Ensure the user is part of a cooperative
+        if (!$cooperative) {
+            return redirect()->route('some.route')->with('error', 'No cooperative assigned to this user.');
+        }
+
+        $totalParticipants = Participant::where('coop_id', $cooperative->coop_id)->count();
+
+        // Get the limit from the request, default to 5
         $perPage = $request->input('limit', 5);
 
         $participants = Participant::with(['registration', 'cooperative', 'user'])
@@ -48,10 +55,12 @@ class CooperativeController extends Controller
                         });
                 });
             })
-            ->paginate($perPage);
+            ->paginate($perPage)
+            ->appends(['limit' => $perPage, 'search' => $request->search]); // Preserve query parameters
 
         return view('dashboard.participant.manage_participant.participant', compact('participants', 'totalParticipants'));
     }
+
 
 
 
@@ -293,10 +302,13 @@ class CooperativeController extends Controller
     public function storeDocuments(Request $request)
     {
         $request->validate([
-            'documents.Financial Statement' => 'mimes:jpg,jpeg,png,pdf|max:2048',
-            'documents.Resolution for Voting Delegates' => 'mimes:jpg,jpeg,png,pdf|max:2048',
-            'documents.Deposit Slip for Registration Fee' => 'mimes:jpg,jpeg,png,pdf|max:2048',
-            'documents.Deposit Slip for CETF Remittance' => 'mimes:jpg,jpeg,png,pdf|max:2048',
+            'documents.Financial Statement' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
+            'documents.Resolution for Voting Delegates' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
+            'documents.Deposit Slip for Registration Fee' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
+            'documents.Deposit Slip for CETF Remittance' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
+            'documents.CETF Undertaking' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
+            'documents.Certificate of Candidacy' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
+            'documents.CETF Utilization Invoice' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
         ]);
 
         $cooperative = Auth::user()->cooperative;
@@ -396,15 +408,15 @@ class CooperativeController extends Controller
 
   public function storeDocuments2(Request $request, $id)
   {
-      $request->validate([
-          'documents.Financial Statement' => 'nullable|mimes:jpg,jpeg,png,pdf|max:2048',
-          'documents.Resolution for Voting Delegates' => 'nullable|mimes:jpg,jpeg,png,pdf|max:2048',
-          'documents.Deposit Slip for Registration Fee' => 'nullable|mimes:jpg,jpeg,png,pdf|max:2048',
-          'documents.Deposit Slip for CETF Remittance' => 'nullable|mimes:jpg,jpeg,png,pdf|max:2048',
-          'documents.CETF Undertaking' => 'nullable|mimes:jpg,jpeg,png,pdf|max:2048',
-          'documents.Certificate of Candidacy' => 'nullable|mimes:jpg,jpeg,png,pdf|max:2048',
-          'documents.CETF Utilization Invoice' => 'nullable|mimes:jpg,jpeg,png,pdf|max:2048',
-      ]);
+    $request->validate([
+        'documents.Financial Statement' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
+        'documents.Resolution for Voting Delegates' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
+        'documents.Deposit Slip for Registration Fee' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
+        'documents.Deposit Slip for CETF Remittance' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
+        'documents.CETF Undertaking' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
+        'documents.Certificate of Candidacy' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
+        'documents.CETF Utilization Invoice' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
+    ]);
 
       // Find the cooperative by its ID
       $cooperative = Cooperative::findOrFail($id);

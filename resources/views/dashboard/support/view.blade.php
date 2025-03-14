@@ -274,14 +274,6 @@
                                 </div>
                             </div>
 
-                            <!-- GA Registration Status -->
-                            {{-- <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="ga_registration_status">GA Registration Status</label>
-                                    <p>{{ $coop->ga_registration_status }}</p>
-                                </div>
-                            </div> --}}
-
                              <!-- Services Availed -->
                              <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
@@ -308,9 +300,17 @@
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="membership_status">Membership Status</label>
-                                    <p>{{ optional($coop->gaRegistration)->membership_status ?? 'N/A' }}</p>
+                                    <p>{{ strtoupper(optional($coop->gaRegistration)->membership_status ?? 'N/A') }}</p>
                                 </div>
                             </div>
+
+                            <div class="col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="fs_status">Audited Financial Statement Status</label>
+                                    <p>{{ $coop->fs_status }}</p>
+                                </div>
+                            </div>
+
 
                             <div class="col-12">
                                 <h4 class="mt-4">Verifier</h4>
@@ -321,6 +321,13 @@
                                 <div class="form-group">
                                     <label for="total_asset">Total Assets</label>
                                     <p>{{ $coop->total_asset }}</p>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="delinquent">Delinquent Status</label>
+                                    <p>{{ $coop->delinquent }}</p>
                                 </div>
                             </div>
 
@@ -403,17 +410,17 @@
 
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
-                                    <label for="registration_fee">Registration Fee</label>
+                                    <label for="registration_fee">Total Registration Fee</label>
                                     <p>{{ $coop->total_reg_fee }}</p>
                                 </div>
                             </div>
 
-                            {{-- <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="total_income">Total Income</label>
-                                    <p>{{ $coop->total_income }}</p>
-                                </div>
-                            </div> --}}
+                            <div class="col-md-6 col-lg-4">
+                            <div class="form-group">
+                                <label for="num_participants"># of Participants</label>
+                                <p> {{ $coop->participants()->count() }}</p>
+                            </div>
+                        </div>
 
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">

@@ -271,8 +271,8 @@
                                                 @method('PUT')
                                                 <select name="status" class="form-select form-select-sm">
                                                     <option value="Pending" {{ $document->status == 'Pending' ? 'selected' : '' }}>Pending</option>
-                                                    <option value="Approved" {{ $document->status == 'Approved' ? 'selected' : '' }}>Approved</option>
-                                                    <option value="Rejected" {{ $document->status == 'Rejected' ? 'selected' : '' }}>Rejected</option>
+                                                    <option value="Approved" {{ $document->status == 'Approved' ? 'selected' : '' }}>Accepted</option>
+                                                    <option value="Rejected" {{ $document->status == 'Rejected' ? 'selected' : '' }}>Decline</option>
                                                 </select>
                                         </td>
                                         <td>
