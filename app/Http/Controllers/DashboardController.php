@@ -69,42 +69,45 @@ class DashboardController extends Controller
 
 
     public function sendNotificationToAll()
-    {
-        try {
-            \Log::info('Notification request received for all cooperatives.');
+{
+    try {
+        \Log::info('Notification request received for all cooperatives.');
 
-            // Retrieve all cooperatives
-            $cooperatives = Cooperative::all();
+        // Retrieve all cooperatives
+        $cooperatives = Cooperative::all();
 
-            if ($cooperatives->isEmpty()) {
-                return back()->with('error', 'No cooperatives found.');
-            }
-
-            // Get the latest event
-            $event = Event::latest()->first();
-
-            if (!$event) {
-                return back()->with('error', 'No event found to notify.');
-            }
-
-            // Send email to each cooperative
-            foreach ($cooperatives as $coop) {
-                // Retrieve GA Registration for the current cooperative
-                $gaRegistration = GARegistration::where('coop_id', $coop->coop_id)->latest()->first();
-
-                // Send email
-                Mail::to($coop->email)->send(new CooperativeNotification($coop, $event, $gaRegistration));
-
-                \Log::info('Notification sent to: ' . $coop->email);
-            }
-
-            return redirect()->route('adminview')->with('success', 'Notification sent to all cooperatives!');
-        } catch (\Exception $e) {
-            \Log::error('Error sending notifications: ' . $e->getMessage());
-
-            return back()->with('error', 'Error sending notifications. Please try again.');
+        if ($cooperatives->isEmpty()) {
+            return back()->with('error', 'No cooperatives found.');
         }
+
+        // Get the latest event
+        $event = Event::oldest()->first();
+
+        if (!$event) {
+            return back()->with('error', 'No event found to notify.');
+        }
+
+        // Send email to each cooperative
+        foreach ($cooperatives as $coop) {
+            // Retrieve GA Registration for the current cooperative
+            $gaRegistration = GARegistration::where('coop_id', $coop->coop_id)->latest()->first();
+
+            // Retrieve users related to the cooperative (Adjust as needed)
+            $users = User::where('coop_id', $coop->coop_id)->get(); // Assuming User has a `coop_id`
+
+            // Send email with the correct number of arguments
+            Mail::to($coop->email)->send(new CooperativeNotification($coop, $event, $gaRegistration, $users));
+
+            \Log::info('Notification sent to: ' . $coop->email);
+        }
+
+        return redirect()->route('adminview')->with('success', 'Notification sent to all cooperatives!');
+    } catch (\Exception $e) {
+        \Log::error('Error sending notifications: ' . $e->getMessage());
+
+        return back()->with('error', 'Error sending notifications. Please try again.');
     }
+}
 
 
     public function sendCredentialsToAll()
@@ -120,7 +123,7 @@ class DashboardController extends Controller
             }
 
             // Get the latest event
-            $event = Event::latest()->first();
+            $event = Event::oldest()->first();
 
             if (!$event) {
                 return back()->with('error', 'No event found to notify.');

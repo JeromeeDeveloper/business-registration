@@ -302,21 +302,22 @@ class UserSeeder extends Seeder
                 'coop_id' => null, // Add if necessary
             ],
 
+
             [
-                'name' => 'Ann Abuzo',
-                'email' => 'ar.abuzo@mass-specc.coop',
-                'password' => Hash::make('password'),
+                'name' => 'Jerome Porcado',
+                'email' => 'porcadojerome@gmail.com',
+                'password' => Hash::make('jerome123'),
                 'role' => 'admin',
                 'coop_id' => null, // Add if necessary
             ],
 
-
+            [
                 'name' => 'Bernadette Toledo',
                 'email' => 'bo.toledo@mass-specc.coop',
                 'password' => Hash::make('password'),
                 'role' => 'admin',
                 'coop_id' => null, // Add if necessary
-
+            ]
         ];
 
         foreach ($users as $user) {

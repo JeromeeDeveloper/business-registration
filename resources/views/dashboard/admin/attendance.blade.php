@@ -476,6 +476,7 @@
 
 
 
+<script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/html5-qrcode/minified/html5-qrcode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- Include SweetAlert -->
@@ -615,12 +616,13 @@
             try {
                 let devices = await navigator.mediaDevices.enumerateDevices();
                 let cameraId = null;
+devices.forEach(device => {
+    if (device.kind === "videoinput") {
+        cameraId = device.deviceId;
+        return; // Select the first video input device found
+    }
+});
 
-                devices.forEach(device => {
-                    if (device.label.toLowerCase().includes("droidcam")) {
-                        cameraId = device.deviceId;
-                    }
-                });
 
                 if (cameraId) {
                     qrScanner.start(
@@ -650,19 +652,24 @@
     function handleScannedQR(decodedText, qrScanner) {
     console.log("Scanned QR Code:", decodedText);
 
+    // ✅ Stop the scanner immediately to prevent multiple detections
+    if (qrScanner) {
+        qrScanner.stop().catch(err => console.warn("Error stopping scanner:", err));
+    }
+
     let participantId;
 
     try {
         const url = new URL(decodedText);
         const pathParts = url.pathname.split('/');
-
-        // Extract participant_id from the last part of the path
         participantId = pathParts[pathParts.length - 1];
     } catch (e) {
         Swal.fire({
             icon: "error",
             title: "Invalid QR Code",
             text: "QR code does not contain a valid URL with a participant ID.",
+        }).then(() => {
+            closeScannerModal(); // Ensure modal closes
         });
         return;
     }
@@ -672,17 +679,20 @@
             icon: "error",
             title: "Invalid QR Code",
             text: "No valid participant ID found.",
+        }).then(() => {
+            closeScannerModal();
         });
         return;
     }
 
     const eventId = document.getElementById("eventSelect").value;
-
     if (!eventId) {
         Swal.fire({
             icon: "warning",
             title: "No Event Selected",
             text: "Please select an event before scanning.",
+        }).then(() => {
+            closeScannerModal();
         });
         return;
     }
@@ -691,50 +701,40 @@
 
     fetch(`/scan-qr?participant_id=${participantId}&event_id=${eventId}`, {
         method: "GET",
-        headers: {
-            "Accept": "application/json"
-        },
+        headers: { "Accept": "application/json" },
     })
-    .then(response => {
-        console.log("Response Status:", response.status); // Log the response status
-        return response.json();
-    })
+    .then(response => response.json())
     .then(data => {
-        console.log("Response Data:", data); // Log the response data for debugging
-
         if (data.error) {
-            console.log("Error Response:", data.error); // Log the error response
-
             let iconType = data.error.includes("already recorded") ? "warning" : "error";
             Swal.fire({
                 icon: iconType,
                 title: "Scan Error",
-                text: data.error, // Display the error from the response
+                text: data.error,
+            }).then(() => {
+                closeScannerModal();
             });
         } else {
-            console.log("Success Response:", data.success); // Log success message
             Swal.fire({
                 icon: "success",
                 title: "Attendance Recorded!",
                 text: data.success,
             }).then(() => {
-
+                closeScannerModal();
             });
         }
-        qrScanner.stop();
     })
     .catch(error => {
-        console.error("QR Code Scan Error:", error); // Log the error in the console
-
         Swal.fire({
             icon: "error",
             title: "Scan Failed",
-            text: `Failed to record attendance. Error: ${error.message || 'Unknown error'}`, // Display the error message
+            text: `Failed to record attendance. Error: ${error.message || 'Unknown error'}`,
         }).then(() => {
-            closeScannerModal(qrScanner);
+            closeScannerModal();
         });
     });
 }
+
 
     function closeScannerModal(qrScanner) {
         if (qrScanner) {
