@@ -578,6 +578,8 @@ class DashboardController extends Controller
         // Store the selected services as JSON
         $servicesAvailed = json_encode($request->services_availed);
 
+        $cetfBalance = ($request->cetf_required ?? 0) - ($request->total_remittance ?? 0);
+
         // Create the cooperative entry
         $cooperative = Cooperative::create([
             'name' => $request->name,

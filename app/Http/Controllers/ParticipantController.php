@@ -363,70 +363,61 @@ public function store(Request $request)
 
       public function storeDocuments(Request $request)
       {
-        $request->validate([
-            'documents.Financial Statement' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
-            'documents.Resolution for Voting Delegates' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
-            'documents.Deposit Slip for Registration Fee' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
-            'documents.Deposit Slip for CETF Remittance' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
-            'documents.CETF Undertaking' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
-            'documents.Certificate of Candidacy' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
-            'documents.CETF Utilization Invoice' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
-        ]);
-
+          $request->validate([
+              'documents.Financial Statement' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
+              'documents.Resolution for Voting Delegates' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
+              'documents.Deposit Slip for Registration Fee' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
+              'documents.Deposit Slip for CETF Remittance' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
+              'documents.CETF Undertaking' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
+              'documents.Certificate of Candidacy' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
+              'documents.CETF Utilization Invoice' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
+          ]);
+      
           $participant = Auth::user()->participant;
-
+      
           if (!$participant) {
               return response()->json(['success' => false, 'message' => 'You are not registered as a participant.'], 403);
           }
-
+      
           $registrationStatus = $participant->registration ? $participant->registration->status : 'Pending';
           $successMessages = [];
-
+      
           foreach ($request->file('documents') as $documentType => $file) {
               $existingDocument = UploadedDocument::where('participant_id', $participant->participant_id)
                   ->where('document_type', $documentType)
                   ->first();
-
+      
               if ($existingDocument && $registrationStatus === 'Rejected') {
+                  // Delete the old file before replacing
                   Storage::disk('public')->delete($existingDocument->file_path);
                   $existingDocument->delete();
-
-                  $filePath = $file->store('documents', 'public');
-
-                  UploadedDocument::create([
-                      'participant_id' => $participant->participant_id,
-                      'document_type' => $documentType,
-                      'file_name' => $file->getClientOriginalName(),
-                      'file_path' => $filePath,
-                  ]);
-
-                  $successMessages[] = "$documentType uploaded successfully after rejection.";
-                  continue;
               }
-
-              if ($existingDocument) {
+      
+              if ($existingDocument && $registrationStatus !== 'Rejected') {
                   $successMessages[] = "$documentType has already been uploaded.";
                   continue;
               }
-
-              $filePath = $file->store('documents', 'public');
-
+      
+              // Preserve original filename and prevent overwriting by adding timestamp
+              $fileName = time() . '_' . $file->getClientOriginalName();
+              $filePath = $file->storeAs('documents', $fileName, 'public');
+      
               UploadedDocument::create([
                   'participant_id' => $participant->participant_id,
                   'document_type' => $documentType,
                   'file_name' => $file->getClientOriginalName(),
                   'file_path' => $filePath,
               ]);
-
+      
               $successMessages[] = "$documentType uploaded successfully.";
           }
-
+      
           return response()->json([
               'success' => true,
               'message' => implode('<br>', $successMessages)
           ]);
       }
-
+      
 
 
       public function viewDocuments()

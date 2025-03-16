@@ -163,7 +163,7 @@
               <div class="col-md-12">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <div class="card-title">Uploaded Documents</div>
+                        <div class="card-title">Cooperative Uploaded Documents</div>
 
                         <a id="uploadBtn" href="{{ route('documents') }}"
                            class="btn btn-primary btn-lg rounded-pill shadow-sm hover-shadow d-flex align-items-center">

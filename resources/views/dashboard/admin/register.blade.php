@@ -377,13 +377,6 @@
                                                             </div>
 
                                                             <div class="form-group">
-                                                                <label for="cetf_balance" class="form-label fw-bold">CETF Balance</label>
-                                                                <input type="number" class="form-control" name="cetf_balance" id="cetf_balance"
-                                                                    placeholder="Enter CETF Balance" />
-                                                            </div>
-
-
-                                                            <div class="form-group">
                                                                 <label for="loan_balance">Loan Balance</label>
                                                                 <input type="number" class="form-control" name="loan_balance" id="loan_balance"
                                                                     placeholder="Enter Loan Overdue" />
@@ -543,6 +536,12 @@
                                                                 </select>
                                                                 <input type="hidden" name="full_cetf_remitted_hidden" id="full_cetf_remitted_hidden" />
                                                             </div>
+
+                                                            <div class="form-group">
+                                                                <label for="cetf_balance" class="form-label fw-bold">CETF Balance</label>
+                                                                <input type="number" class="form-control" name="cetf_balance" id="cetf_balance"
+                                                                    placeholder="Enter CETF Balance"/>
+                                                            </div>
                                                         </fieldset>
                                                     </div>
 
@@ -638,6 +637,7 @@
 
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     @if ($errors->any())
     <script>
         Swal.fire({
@@ -647,6 +647,25 @@
         });
     </script>
 @endif
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let cetfRequired = document.getElementById('cetf_required');
+        let totalRemittance = document.getElementById('total_remittance');
+        let cetfBalance = document.getElementById('cetf_balance');
+
+        function updateCetfBalance() {
+            let required = parseFloat(cetfRequired.value) || 0;
+            let remitted = parseFloat(totalRemittance.value) || 0;
+            let balance = (required - remitted).toFixed(2);
+
+            cetfBalance.value = balance;
+        }
+
+        cetfRequired.addEventListener('input', updateCetfBalance);
+        totalRemittance.addEventListener('input', updateCetfBalance);
+        updateCetfBalance(); // Initialize on page load
+    });
+</script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             function updateRegFeePayable() {

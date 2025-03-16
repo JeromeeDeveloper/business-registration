@@ -332,7 +332,8 @@ class CooperativeController extends Controller
             }
 
             // Upload and save new file
-            $filePath = $file->store('documents', 'public');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $filePath = $file->storeAs('documents', $fileName, 'public');
 
             UploadedDocument::create([
                 'coop_id' => $cooperative->coop_id,
@@ -447,7 +448,8 @@ class CooperativeController extends Controller
           }
 
           // Store the new file
-          $filePath = $file->store('documents', 'public');
+          $fileName = time() . '_' . $file->getClientOriginalName();
+          $filePath = $file->storeAs('documents', $fileName, 'public');
 
           // Create a new document record
           UploadedDocument::create([
