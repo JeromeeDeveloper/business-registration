@@ -83,7 +83,7 @@
             <img class="logo" src="{{asset('images/logo.png')}}" alt="">
             <div class="title">Signup</div>
 
-            {{-- signup form --}}
+           
 
             <form action="{{ route('register') }}" method="POST">
                 @csrf

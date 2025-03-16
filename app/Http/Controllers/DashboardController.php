@@ -290,9 +290,59 @@ class DashboardController extends Controller
     public function cooperativeprofile($coop_id)
     {
         $cooperative = Cooperative::findOrFail($coop_id);
-
-        return view('dashboard.participant.cooperativeprofile', compact('cooperative'));
+    
+        // Check if cooperative has MIGS membership
+        $hasMigsRegistration = GARegistration::where('coop_id', $cooperative->coop_id)
+            ->where('membership_status', 'MIGS')
+            ->exists();
+    
+        // Check if cooperative has an MSP Officer participant
+        $hasMspOfficer = Participant::where('coop_id', $cooperative->coop_id)
+            ->where('is_msp_officer', true)
+            ->exists();
+    
+        // Check the total remittance
+        $totalRemittance = $cooperative->total_remittance ?? 0;
+        $free100kCETF = $totalRemittance >= 100000; // Free 1 pax if remittance >= 100K
+        $halfBasedCETF = $totalRemittance >= 50000; // Discount 1 pax by 50%
+    
+        // Get the number of participants
+        $numParticipants = $cooperative->participants()->count();
+    
+        // Calculate the number of free participants
+        $freeParticipants = 0;
+        if ($hasMigsRegistration) {
+            $freeParticipants += 2; // Free 2 participants for MIGS
+        }
+        if ($hasMspOfficer) {
+            $freeParticipants += 1;
+        }
+        if ($free100kCETF) {
+            $freeParticipants += 1;
+        }
+        if ($halfBasedCETF) {
+            $numParticipants = max(0, $numParticipants - 1); // Discount 1 participant by 50%
+        }
+    
+        $paidParticipants = max($numParticipants - $freeParticipants, 0);
+    
+        // Calculate total registration fee
+        $registrationFee = $cooperative->registration_fee ?? 0;
+        $totalRegFee = $paidParticipants * $registrationFee;
+    
+        // Calculate registration fee payable
+        $netRequiredRegFee = $cooperative->net_required_reg_fee ?? 0;
+        $lessPreregPayment = $cooperative->less_prereg_payment ?? 0;
+        $lessCetfBalance = $cooperative->less_cetf_balance ?? 0;
+    
+        $regFeePayable = max(0, $netRequiredRegFee - ($lessPreregPayment + $lessCetfBalance));
+    
+        return view('dashboard.participant.cooperativeprofile', compact(
+            'cooperative', 'totalRegFee', 'regFeePayable'
+        ));
     }
+    
+    
 
     public function editCooperativeProfile($coop_id)
     {

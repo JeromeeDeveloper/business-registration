@@ -567,7 +567,7 @@
                                                                 <label for="total_reg_fee">Total Registration Fee</label>
                                                                 <input type="number" class="form-control"
                                                                     name="total_reg_fee" id="total_reg_fee"
-                                                                    placeholder="Enter Total Registration Fee">
+                                                                    placeholder="Enter Total Registration Fee" readonly>
                                                             </div>
 
                                                             <div class="form-group">

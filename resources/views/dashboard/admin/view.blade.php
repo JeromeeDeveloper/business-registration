@@ -447,8 +447,8 @@
 
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
-                                    <label for="registration_fee">Total Registration Fee</label>
-                                    <p>{{ $coop->total_reg_fee }}</p>
+                                    <label for="registration_fee">Registration Fee</label>
+                                    <p>{{ $coop->registration_fee }}</p>
                                 </div>
                             </div>
 
@@ -540,7 +540,8 @@
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="total_reg_fee">Total Registration Fee</label>
-                                    <p>{{ $coop->total_reg_fee }}</p>
+                                    <p>{{ number_format($coop->registration_fee * $coop->participants->count(), 2) ?? 'N/A' }}</p>
+
                                 </div>
                             </div>
 

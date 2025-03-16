@@ -338,7 +338,7 @@
                                             <div class="col-12 col-md-auto d-flex align-items-center justify-content-center">
                                                 <div class="d-flex flex-column align-items-center gap-1 text-muted">
                                                     <i class="fa fa-link fs-4"></i>
-                                                    <small class="text-center">Event Required for Scanning</small>
+                                                    <small class="text-center">Select Event for Scanning</small>
                                                 </div>
                                             </div>
 
