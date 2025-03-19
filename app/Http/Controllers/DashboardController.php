@@ -50,7 +50,7 @@ class DashboardController extends Controller
                 ->get();
 
             if ($users->isNotEmpty()) {
-                Mail::to($coop->email)->send(new CooperativeNotification($coop, $event, $gaRegistration, $users));
+                Mail::to($coop->email)->queue(new CooperativeNotification($coop, $event, $gaRegistration, $users));
                 \Log::info("Notification sent to: {$coop->email}");
             } else {
                 \Log::info("Skipped cooperative: {$coop->name} (No cooperative users found)");
@@ -96,7 +96,7 @@ class DashboardController extends Controller
             $users = User::where('coop_id', $coop->coop_id)->get(); // Assuming User has a `coop_id`
 
             // Send email with the correct number of arguments
-            Mail::to($coop->email)->send(new CooperativeNotification($coop, $event, $gaRegistration, $users));
+            Mail::to($coop->email)->queue(new CooperativeNotification($coop, $event, $gaRegistration, $users));
 
             \Log::info('Notification sent to: ' . $coop->email);
         }
@@ -183,7 +183,6 @@ class DashboardController extends Controller
             $query->where('membership_status', 'Non-migs');
         })->count();
 
-
         // Get cooperative IDs that are fully and partially registered
         $fullyRegisteredCoops = GARegistration::where('registration_status', 'Fully Registered')
             ->distinct()->count('coop_id');
@@ -202,6 +201,64 @@ class DashboardController extends Controller
             GARegistration::where('registration_status', 'Partial Registered')->pluck('coop_id')
         )->count();
 
+        // Registered Coops: Fully or Partially Registered with GARegistration
+        $registeredCoops = GARegistration::whereIn('registration_status', ['Fully Registered', 'Partial Registered'])
+            ->whereNotNull('coop_id')
+            ->distinct()
+            ->count('coop_id');
+
+             // Count registered MIGS Coops
+    // Count registered MIGS Coops with Participant connection
+$registeredMigsCoops = GARegistration::where('membership_status', 'Migs')
+->whereHas('cooperative.participants') // Ensuring there's a Participant connected to the Cooperative
+->distinct()->count('coop_id');
+
+// Count registered NON-MIGS Coops with Participant connection
+$registeredNonMigsCoops = GARegistration::where('membership_status', 'Non-migs')
+->whereHas('cooperative.participants') // Ensuring there's a Participant connected to the Cooperative
+->distinct()->count('coop_id');
+
+$totalCoopAttended = DB::table('participants')
+    ->join('event_participant', 'participants.participant_id', '=', 'event_participant.participant_id')
+    ->whereNotNull('event_participant.attendance_datetime') // Ensures the participant attended
+    ->distinct('participants.coop_id') // Counts each coop only once
+    ->count('participants.coop_id');
+
+$totalMigsAttended = DB::table('participants')
+    ->join('event_participant', 'participants.participant_id', '=', 'event_participant.participant_id')
+    ->whereNotNull('event_participant.attendance_datetime') // Ensures the participant attended
+    ->whereIn('participants.coop_id', function ($query) {
+        $query->select('coop_id')
+              ->from('ga_registrations')
+              ->where('membership_status', 'Migs');
+    })
+    ->distinct('participants.coop_id') // Counts MIGS coop only once
+    ->count('participants.coop_id');
+
+$totalNonMigsAttended = DB::table('participants')
+    ->join('event_participant', 'participants.participant_id', '=', 'event_participant.participant_id')
+    ->whereNotNull('event_participant.attendance_datetime') // Ensures the participant attended
+    ->whereIn('participants.coop_id', function ($query) {
+        $query->select('coop_id')
+              ->from('ga_registrations')
+              ->where('membership_status', 'Non-migs');
+    })
+    ->distinct('participants.coop_id') // Counts Non-MIGS coop only once
+    ->count('participants.coop_id');
+
+// Attended Participants with Voting Delegate Type
+$totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
+    ->whereHas('participant', function ($query) {
+        $query->where('delegate_type', 'Voting');  // Only participants with 'voting' delegate type
+    })
+    ->distinct('participant_id')  // Ensures each participant is counted only once
+    ->count('participant_id');
+
+
+
+        // Registered Participants: Those with non-null coop_id
+        $registeredParticipants = Participant::whereNotNull('coop_id')->count();
+
         return view('dashboard.admin.admin', compact(
             'totalParticipants',
             'totalUsers',
@@ -217,9 +274,19 @@ class DashboardController extends Controller
             'totalMigsAttended',
             'totalMigsParticipants',
             'totalNonMigsParticipants',
-            'latestEvents'
+            'latestEvents',
+            'registeredCoops',
+            'registeredMigsCoops',
+            'registeredNonMigsCoops',
+            'totalCoopAttended',
+            'totalCoopAttended',
+            'totalMigsAttended',
+            'totalNonMigsAttended',
+            'totalVotingParticipants',
+            'registeredParticipants'
         ));
     }
+
 
 
     public function participant()
@@ -290,25 +357,25 @@ class DashboardController extends Controller
     public function cooperativeprofile($coop_id)
     {
         $cooperative = Cooperative::findOrFail($coop_id);
-    
+
         // Check if cooperative has MIGS membership
         $hasMigsRegistration = GARegistration::where('coop_id', $cooperative->coop_id)
             ->where('membership_status', 'MIGS')
             ->exists();
-    
+
         // Check if cooperative has an MSP Officer participant
         $hasMspOfficer = Participant::where('coop_id', $cooperative->coop_id)
             ->where('is_msp_officer', true)
             ->exists();
-    
+
         // Check the total remittance
         $totalRemittance = $cooperative->total_remittance ?? 0;
         $free100kCETF = $totalRemittance >= 100000; // Free 1 pax if remittance >= 100K
         $halfBasedCETF = $totalRemittance >= 50000; // Discount 1 pax by 50%
-    
+
         // Get the number of participants
         $numParticipants = $cooperative->participants()->count();
-    
+
         // Calculate the number of free participants
         $freeParticipants = 0;
         if ($hasMigsRegistration) {
@@ -323,26 +390,26 @@ class DashboardController extends Controller
         if ($halfBasedCETF) {
             $numParticipants = max(0, $numParticipants - 1); // Discount 1 participant by 50%
         }
-    
+
         $paidParticipants = max($numParticipants - $freeParticipants, 0);
-    
+
         // Calculate total registration fee
         $registrationFee = $cooperative->registration_fee ?? 0;
         $totalRegFee = $paidParticipants * $registrationFee;
-    
+
         // Calculate registration fee payable
         $netRequiredRegFee = $cooperative->net_required_reg_fee ?? 0;
         $lessPreregPayment = $cooperative->less_prereg_payment ?? 0;
         $lessCetfBalance = $cooperative->less_cetf_balance ?? 0;
-    
+
         $regFeePayable = max(0, $netRequiredRegFee - ($lessPreregPayment + $lessCetfBalance));
-    
+
         return view('dashboard.participant.cooperativeprofile', compact(
             'cooperative', 'totalRegFee', 'regFeePayable'
         ));
     }
-    
-    
+
+
 
     public function editCooperativeProfile($coop_id)
     {
@@ -548,7 +615,7 @@ class DashboardController extends Controller
             'contact_person' => 'required|string|max:255',
             'type' => 'required|string|max:255',
             'address' => 'required|string|max:255',
-            'region' => 'required|string|max:255|in:Region I,Region II,Region III,Region IV-A,Region IV-B,Region V,Region VI,Region VII,Region VIII,Region IX,Region X,Region XI,Region XII,Region XIII,NCR,CAR,BARMM',
+            'region' => 'required|string|max:255|in:Region I,Region II,Region III,Region IV-A,Region IV-B,Region V,Region VI,Region VII,Region VIII,Region IX,Region X,Region XI,Region XII,Region XIII,NCR,CAR,BARMM,ZBST,LUZON',
             'phone_number' => 'required|string|max:20',
             'email' => 'required|email|unique:cooperatives,email',
             'tin' => 'required|string|max:255',
@@ -723,7 +790,9 @@ class DashboardController extends Controller
 
         $hasFinancialStatement = UploadedDocument::where('coop_id', $coop->coop_id)
         ->where('document_type', 'Financial Statement')
+        ->where('status', 'Approved')
         ->exists();
+
         // Check if cooperative has MIGS membership
         $hasMigsRegistration = GARegistration::where('coop_id', $coop->coop_id)
             ->where('membership_status', 'MIGS')
@@ -796,7 +865,7 @@ class DashboardController extends Controller
                 Rule::in([
                     'Region I', 'Region II', 'Region III', 'Region IV-A', 'Region IV-B', 'Region V',
                     'Region VI', 'Region VII', 'Region VIII', 'Region IX', 'Region X', 'Region XI',
-                    'Region XII', 'Region XIII', 'NCR', 'CAR', 'BARMM'
+                    'Region XII', 'Region XIII', 'NCR', 'CAR', 'BARMM', 'ZBST', 'LUZON'
                 ]),
             ],
             'phone_number' => 'required|string|max:20',

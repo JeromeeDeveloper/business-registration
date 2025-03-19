@@ -397,7 +397,6 @@
                     <!-- Dashboard Cards -->
                     <div class="row">
                         <!-- Registration Status -->
-                        <!-- Registration Status -->
                         <div class="col-sm-6 col-md-3">
                             <div class="card card-stats card-round">
                                 <div class="card-body">
@@ -410,21 +409,22 @@
                                         <div class="col col-stats ms-3 ms-sm-0">
                                             <div class="numbers">
                                                 <p class="card-category">Registration Status</p>
-                                                <h4
-                                                    class="card-title
-                            {{ $registrationStatus === 'Fully Registered'
-                                ? 'text-success'
-                                : ($registrationStatus === 'Partial Registered'
-                                    ? 'text-warning'
-                                    : 'text-danger') }}">
-                                                    {{ $registrationStatus }}
+                                                <h4 class="card-title
+                                                    {{ $registrationStatus === 'Fully Registered'
+                                                        ? 'text-success'
+                                                        : ($registrationStatus === 'Partial Registered'
+                                                            ? 'text-warning'
+                                                            : 'text-danger') }}">
+                                                    {{ $registrationStatus === 'Rejected' ? 'Not Available' : $registrationStatus }}
                                                 </h4>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+
+                    </div>
+
 
                         <!-- Membership Status -->
                         <div class="col-sm-6 col-md-3">
@@ -550,7 +550,7 @@
                                                     <span class="input-group-text"><i
                                                             class="fas fa-hand-holding-usd"></i></span>
                                                     <input type="number" class="form-control" id="cetfRemittance"
-                                                        required />
+                                                        readonly />
                                                 </div>
                                             </div>
 
@@ -586,7 +586,8 @@
                                     }
 
                                     .card-title {
-                                        flex-grow: 1; /* Allows the title to take up available space */
+                                        flex-grow: 1;
+                                        /* Allows the title to take up available space */
                                         white-space: nowrap;
                                         overflow: hidden;
                                         text-overflow: ellipsis;
@@ -594,12 +595,14 @@
                                     }
 
                                     .card-tools {
-                                        flex-shrink: 0; /* Prevents the tools section from shrinking */
+                                        flex-shrink: 0;
+                                        /* Prevents the tools section from shrinking */
                                     }
                                 </style>
 
                                 @if ($latestEvents->count() > 0)
-                                    <div id="eventsCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2000" data-bs-wrap="true">
+                                    <div id="eventsCarousel" class="carousel slide" data-bs-ride="carousel"
+                                        data-bs-interval="2000" data-bs-wrap="true">
                                         <div class="carousel-inner">
                                             @foreach ($latestEvents as $index => $event)
                                                 <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
@@ -607,32 +610,41 @@
                                                         <div class="card card-primary card-round mb-3">
                                                             <div class="card-header">
                                                                 <div class="card-head-row">
-                                                                    <div class="card-title" title="{{ $event->title }}">{{ $event->title }}</div>
+                                                                    <div class="card-title"
+                                                                        title="{{ $event->title }}">
+                                                                        {{ $event->title }}</div>
                                                                     <div class="card-tools">
                                                                         <div class="dropdown">
-                                                                            <button class="btn btn-sm btn-label-light dropdown-toggle" type="button"
-                                                                                id="dropdownMenuButton{{ $event->event_id }}" data-bs-toggle="dropdown"
-                                                                                aria-haspopup="true" aria-expanded="false">
+                                                                            <button
+                                                                                class="btn btn-sm btn-label-light dropdown-toggle"
+                                                                                type="button"
+                                                                                id="dropdownMenuButton{{ $event->event_id }}"
+                                                                                data-bs-toggle="dropdown"
+                                                                                aria-haspopup="true"
+                                                                                aria-expanded="false">
                                                                                 More Options
                                                                             </button>
                                                                             <div class="dropdown-menu"
                                                                                 aria-labelledby="dropdownMenuButton{{ $event->event_id }}">
-                                                                                <a class="dropdown-item" href="{{ route('schedule') }}">View Details</a>
+                                                                                <a class="dropdown-item"
+                                                                                    href="{{ route('schedule') }}">View
+                                                                                    Details</a>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                                 <div class="card-category">
                                                                     {{ \Carbon\Carbon::parse($event->start_date)->format('F d, Y') }}
-                                                                    -
-                                                                    {{ \Carbon\Carbon::parse($event->end_date)->format('F d, Y') }}
+                                                                    {{-- -
+                                                                    {{ \Carbon\Carbon::parse($event->end_date)->format('F d, Y') }} --}}
                                                                 </div>
                                                             </div>
                                                             <div class="card-body">
-                                                                <p>{{ $event->description }}</p>
+                                                                {{-- <p>{{ $event->description }}</p> --}}
                                                                 <ul>
-                                                                    <li><strong>📍 Venue:</strong> {{ $event->location }}</li>
-                                                                    <li><strong>🕒 Time:</strong> 9:00 AM - 5:00 PM</li>
+                                                                    <li><strong>📍 Venue:</strong>
+                                                                        {{ $event->location }}</li>
+                                                                    {{-- <li><strong>🕒 Time:</strong> 9:00 AM - 5:00 PM</li> --}}
                                                                     <li><strong>🎤 Guest Speakers:</strong>
                                                                         @if ($event->speakers->count() > 0)
                                                                             {{ $event->speakers->pluck('name')->implode(', ') }}
@@ -640,7 +652,7 @@
                                                                             No speakers listed
                                                                         @endif
                                                                     </li>
-                                                                    <li><strong>📌 Activities:</strong> Presentations, Q&A Sessions, Voting</li>
+
                                                                 </ul>
                                                             </div>
                                                         </div>
@@ -650,11 +662,13 @@
                                         </div>
 
                                         <!-- Prev/Next buttons -->
-                                        <button class="carousel-control-prev" type="button" data-bs-target="#eventsCarousel" data-bs-slide="prev">
+                                        <button class="carousel-control-prev" type="button"
+                                            data-bs-target="#eventsCarousel" data-bs-slide="prev">
                                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                             <span class="visually-hidden">Previous</span>
                                         </button>
-                                        <button class="carousel-control-next" type="button" data-bs-target="#eventsCarousel" data-bs-slide="next">
+                                        <button class="carousel-control-next" type="button"
+                                            data-bs-target="#eventsCarousel" data-bs-slide="next">
                                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                             <span class="visually-hidden">Next</span>
                                         </button>
@@ -662,65 +676,112 @@
                                 @else
                                     <p>No upcoming events at the moment.</p>
                                 @endif
+                                <style>
+                                    .floating-notice {
+                                        position: fixed;
+                                        bottom: 20px;
+                                        right: 20px;
+                                        background-color: #f8d7da;
+                                        color: #721c24;
+                                        padding: 15px 25px;
+                                        border-radius: 5px;
+                                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                                        z-index: 9999;
+                                        width: auto;
+                                        max-width: 300px;
+                                        display: flex;
+                                        flex-direction: column; /* Align content vertically */
+                                    }
+
+                                    .notice-content {
+                                        font-family: Arial, sans-serif;
+                                        font-size: 14px;
+                                        max-width: 240px;
+                                    }
+
+                                    .floating-notice p {
+                                        margin: 0;
+                                    }
+
+                                    .floating-notice strong {
+                                        font-weight: bold;
+                                    }
+
+                                    .close-btn {
+                                        background: none;
+                                        border: none;
+                                        font-size: 20px;
+                                        color: #721c24;
+                                        cursor: pointer;
+                                        position: absolute;
+                                        top: 5px;
+                                        right: 10px;
+                                    }
+                                </style>
+
+                                <!-- Floating Notice with Close Button -->
+                                <div class="floating-notice">
+                                    <button class="close-btn" onclick="closeNotice()">×</button>
+                                    <div class="notice-content">
+                                        <p><strong>Notice:</strong> Please note the cut-off date for T-shirt size selection is <strong>May 10, 2025</strong>. Ensure you choose your T-shirt size before the deadline.</p>
+                                    </div>
+                                </div>
+
+                                <script>
+                                    // Function to close the floating notice
+                                    function closeNotice() {
+                                        document.querySelector('.floating-notice').style.display = 'none';
+                                    }
+                                </script>
+
+
 
 
                                 <div class="card shadow-lg border-0 rounded-3 overflow-hidden"
                                     style="transition: 0.3s; max-width: 500px; margin: auto;">
                                     <div class="card-header text-white bg-primary rounded-top">
-                                        <h5 class="mb-1"><i class="fas fa-calendar-alt"></i> Dates to Remember!</h5>
-                                        <small>Join us for the upcoming General Assembly 2024!</small>
+                                        <h5 class="mb-1"><i class="fas fa-calendar-alt"></i> Dates To Remember!</h5>
+                                        <small>Join us for the upcoming General Assembly 2025!</small>
                                     </div>
                                     <div class="card-body p-3" style="max-height: 300px; overflow-y: auto;">
                                         <ul class="list-group list-group-flush">
                                             <li class="list-group-item d-flex justify-content-between">
-                                                <span class="badge bg-primary">Feb - Apr</span>
-                                                <span class="text-start flex-grow-1 ms-2">Presentation of 2024 election
-                                                    guidelines.</span>
+                                                <span class="badge bg-primary">Mar 17</span>
+                                                <span class="text-start flex-grow-1 ms-2">Start of Online
+                                                    Registration</span>
                                             </li>
                                             <li class="list-group-item d-flex justify-content-between">
-                                                <span class="badge bg-success">March 4</span>
-                                                <span class="text-start flex-grow-1 ms-2">Start of delegate
-                                                    registration.</span>
+                                                <span class="badge bg-success">Apr 01</span>
+                                                <span class="text-start flex-grow-1 ms-2">Start of Filing
+                                                    Candidacy</span>
                                             </li>
                                             <li class="list-group-item d-flex justify-content-between">
-                                                <span class="badge bg-danger">May 20</span>
-                                                <span class="text-start flex-grow-1 ms-2">Start of filing Certificate
-                                                    of Candidacy.</span>
+                                                <span class="badge bg-danger">May 17</span>
+                                                <span class="text-start flex-grow-1 ms-2">End of Filing of
+                                                    Candidacy</span>
                                             </li>
                                             <li class="list-group-item d-flex justify-content-between">
-                                                <span class="badge bg-warning text-dark">May 22-24</span>
-                                                <span class="text-start flex-grow-1 ms-2">End of COC filing, CETF
-                                                    remittance & voter registration.</span>
+                                                <span class="badge bg-warning text-dark">May 21</span>
+                                                <span class="text-start flex-grow-1 ms-2">Ceremonial Opening of
+                                                    Election</span>
                                             </li>
                                             <li class="list-group-item d-flex justify-content-between">
                                                 <span class="badge bg-info">May 22</span>
-                                                <span class="text-start flex-grow-1 ms-2">Mock election & Elecom
-                                                    review.</span>
+                                                <span class="text-start flex-grow-1 ms-2">End of Reg for
+                                                    Non-Voting</span>
                                             </li>
                                             <li class="list-group-item d-flex justify-content-between">
                                                 <span class="badge bg-secondary">May 23</span>
-                                                <span class="text-start flex-grow-1 ms-2">Candidate profiles sent to
-                                                    voting delegates.</span>
+                                                <span class="text-start flex-grow-1 ms-2">SECTORAL CONGRESS 55th CO-OP
+                                                    LEADERS</span>
                                             </li>
                                             <li class="list-group-item d-flex justify-content-between">
-                                                <span class="badge bg-primary">May 27</span>
-                                                <span class="text-start flex-grow-1 ms-2">Ceremonial opening of
-                                                    elections.</span>
+                                                <span class="badge bg-primary">May 24</span>
+                                                <span class="text-start flex-grow-1 ms-2">55th CO-OP LEADERS</span>
                                             </li>
                                             <li class="list-group-item d-flex justify-content-between">
-                                                <span class="badge bg-success">May 28</span>
-                                                <span class="text-start flex-grow-1 ms-2">Online voting
-                                                    continues.</span>
-                                            </li>
-                                            <li class="list-group-item d-flex justify-content-between">
-                                                <span class="badge bg-danger">May 29</span>
-                                                <span class="text-start flex-grow-1 ms-2">54th Leaders Congress &
-                                                    Election closing.</span>
-                                            </li>
-                                            <li class="list-group-item d-flex justify-content-between">
-                                                <span class="badge bg-warning text-dark">May 30</span>
-                                                <span class="text-start flex-grow-1 ms-2">Holy Mass & Proclamation of
-                                                    winners.</span>
+                                                <span class="badge bg-success">May 25</span>
+                                                <span class="text-start flex-grow-1 ms-2">51st General Assembly</span>
                                             </li>
                                         </ul>
                                     </div>
@@ -729,6 +790,7 @@
                                             style="cursor: pointer; transition: 0.3s;">Don't miss this event!</span>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>

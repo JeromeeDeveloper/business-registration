@@ -10,7 +10,7 @@
         <div class="sidebar-logo">
           <!-- Logo Header -->
           <div class="logo-header" data-background-color="dark">
-            <a href="{{route('adminDashboard')}}" class="logo">
+            <a href="{{route('supportDashboard')}}" class="logo">
                 <img class="logo-mass-specc" src="{{ asset('images/logo.png') }}" alt="">
             </a>
             <div class="nav-toggle">
@@ -33,7 +33,7 @@
 
                 <li class="nav-item">
                   <a
-                    href="{{route('adminDashboard')}}"
+                    href="{{route('supportDashboard')}}"
                     class="collapsed"
                   >
                     <i class="fas fa-home"></i>
@@ -57,14 +57,14 @@
                     <div class="collapse" id="cooperative">
                       <ul class="nav nav-collapse">
                         <li>
-                            <a href="{{route('adminview')}}">
+                            <a href="{{route('supportview')}}">
                               <span class="sub-item">Manage Cooperative</span>
                             </a>
                           </li>
                       </ul>
                     </div>
                   </li>
-                  <li class="nav-item">
+                  {{-- <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#participant">
                         <i class="fas fa-user-cog"></i>
                       <p>Participant</p>
@@ -79,7 +79,7 @@
                           </li>
                       </ul>
                     </div>
-                  </li>
+                  </li> --}}
 
                   <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#attendance">
@@ -90,7 +90,7 @@
                     <div class="collapse show" id="attendance">
                       <ul class="nav nav-collapse">
                         <li class="active">
-                            <a href="{{ route('attendance.index') }}">
+                            <a href="{{ route('support.attendance.index') }}">
                                 <span class="sub-item">Manage attendance</span>
                             </a>
                         </li>
@@ -99,7 +99,7 @@
                     </div>
                   </li>
 
-                  <li class="nav-item">
+                  {{-- <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#user">
                       <i class="fas fa-user"></i>
                       <p>User</p>
@@ -149,7 +149,7 @@
                           </li>
                       </ul>
                     </div>
-                  </li>
+                  </li> --}}
 
               </ul>
           </div>
@@ -162,7 +162,7 @@
           <div class="main-header-logo">
             <!-- Logo Header -->
             <div class="logo-header" data-background-color="dark">
-              <a href="{{route('adminDashboard')}}" class="logo">
+              <a href="{{route('supportDashboard')}}" class="logo">
                 <img class="logo-mass-specc" src="{{ asset('images/logo.png') }}" alt="">
               </a>
               <div class="nav-toggle">
@@ -180,7 +180,55 @@
             <!-- End Logo Header -->
           </div>
           <!-- Navbar Header -->
-          @include('layouts.adminnav')
+          <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
+            <div class="container-fluid">
+                <nav
+                    class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
+
+                </nav>
+
+                <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
+                    <li class="nav-item topbar-user dropdown hidden-caret">
+
+                        <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#"
+                            aria-expanded="false">
+                            <i class="fa fa-user"></i>
+                            <span class="profile-username">
+                                <span class="op-7">Hi,</span>
+                                <span class="fw-bold" style="text-transform: capitalize;">
+                                    {{ Auth::user()->name }}
+                                </span>
+
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user animated fadeIn">
+                            <div class="dropdown-user-scroll scrollbar-outer">
+                                <li>
+                                    <div class="user-box">
+                                        <div class="u-text">
+                                            <h4> {{ Auth::user()->name }}</h4>
+                                            <p class="text-muted"> {{ Auth::user()->email }}</p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="{{ route('profile.edit3') }}">My
+                                        Profile</a>
+                                    <div class="dropdown-divider"></div>
+                                    <form action="{{ route('logout') }}" method="POST" id="logout-form"
+                                        style="display: none;">
+                                        @csrf
+                                    </form>
+                                    <a class="dropdown-item" href="#"
+                                        onclick="document.getElementById('logout-form').submit();">Logout</a>
+                                </li>
+                            </div>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
           <!-- End Navbar -->
         </div>
 
@@ -322,7 +370,7 @@
 
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label>Congress Types</label>
+                                        <label>Congress</label>
                                         <div class="border p-2 rounded" style="min-height: 45px; background-color: #f8f9fa;">
                                             @if ($participant->events->isNotEmpty())
                                                 @foreach ($participant->events as $event)
@@ -406,7 +454,7 @@
                             </div>
                         </div>
                         <div class="card-action">
-                            <button class="btn btn-label-info btn-round" type="button" onclick="window.location.href='{{ route('attendance.index') }}'">Back</button>
+                            <button class="btn btn-label-info btn-round" type="button" onclick="window.location.href='{{ route('support.attendance.index') }}'">Back</button>
                         </div>
                     </form>
 

@@ -14,11 +14,10 @@ class EventParticipantsExport implements FromCollection, WithHeadings, WithStyle
 {
     public function collection()
     {
-
         $events = Event::all();
 
-
         return EventParticipant::with(['event', 'participant.cooperative'])
+            ->whereNotNull('attendance_datetime') // Only get participants with attendance
             ->get()
             ->groupBy(function ($eventParticipant) {
                 return $eventParticipant->participant->id;
@@ -26,13 +25,14 @@ class EventParticipantsExport implements FromCollection, WithHeadings, WithStyle
             ->map(function ($groupedEventParticipants) use ($events) {
                 $row = [];
 
-
                 foreach ($events as $event) {
                     $attendanceDate = $groupedEventParticipants->firstWhere('event_id', $event->event_id);
-                    $attendanceFormatted = $attendanceDate ? \Carbon\Carbon::parse($attendanceDate->attendance_datetime)->format('F j, Y g:i A') : 'Not Attended';
+                    $attendanceFormatted = $attendanceDate
+                        ? \Carbon\Carbon::parse($attendanceDate->attendance_datetime)->format('F j, Y g:i A')
+                        : 'Not Attended';
+
                     $row[$event->title] = $attendanceFormatted;
                 }
-
 
                 $row['First Name'] = $groupedEventParticipants->first()->participant->first_name;
                 $row['Last Name'] = $groupedEventParticipants->first()->participant->last_name;
@@ -43,6 +43,7 @@ class EventParticipantsExport implements FromCollection, WithHeadings, WithStyle
             })
             ->values(); // Reset keys after grouping
     }
+
 
     public function headings(): array
     {

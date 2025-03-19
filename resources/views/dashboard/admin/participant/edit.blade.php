@@ -349,10 +349,10 @@
 
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label for="event_ids">Congress Types</label>
+                                        <label for="event_ids">Congress</label>
                                         <div class="dropdown">
                                             <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                Select Congress Types
+                                                Select Congresses
                                             </button>
                                             <ul class="dropdown-menu p-3" style="width: 100%; max-height: 300px; overflow-y: auto;">
                                                 @foreach ($events as $event)

@@ -268,7 +268,7 @@
                                                     <label for="region">Region</label>
                                                     <select class="form-control" name="region" id="region">
                                                         <option disabled>Select Region</option>
-                                                        @foreach (['Region I', 'Region II', 'Region III', 'Region IV-A', 'Region IV-B', 'Region V', 'Region VI', 'Region VII', 'Region VIII', 'Region IX', 'Region X', 'Region XI', 'Region XII', 'Region XIII', 'NCR', 'CAR', 'BARMM'] as $region)
+                                                        @foreach (['Region I', 'Region II', 'Region III', 'Region IV-A', 'Region IV-B', 'Region V', 'Region VI', 'Region VII', 'Region VIII', 'Region IX', 'Region X', 'Region XI', 'Region XII', 'Region XIII', 'NCR', 'CAR', 'BARMM', 'ZBST', 'LUZON'] as $region)
                                                             <option value="{{ $region }}"
                                                                 {{ $coop->region == $region ? 'selected' : '' }}>
                                                                 {{ $region }}
@@ -391,11 +391,61 @@
 
                                                     <div class="form-group">
                                                         <label for="share_capital_balance">Share Capital</label>
-                                                        <input type="number" class="form-control"
-                                                            name="share_capital_balance" id="share_capital_balance"
-                                                            value="{{ $coop->share_capital_balance }}"
-                                                            placeholder="Enter Share Capital">
+                                                        <input type="text" class="form-control"
+                                                               name="share_capital_balance" id="share_capital_balance"
+                                                               value="{{ number_format($coop->share_capital_balance, 2) }}"
+                                                               placeholder="Enter Share Capital">
                                                     </div>
+
+                                                    <script>
+                                                        const inputElement = document.getElementById('share_capital_balance');
+
+                                                        inputElement.addEventListener('input', function(event) {
+                                                            let value = event.target.value;
+
+                                                            // Remove any non-numeric characters except for the decimal point
+                                                            value = value.replace(/[^0-9.]/g, '');
+
+                                                            // Split the value into integer and decimal parts
+                                                            let [integerPart, decimalPart] = value.split('.');
+
+                                                            // Format the integer part with commas
+                                                            integerPart = new Intl.NumberFormat().format(integerPart);
+
+                                                            // If there is a decimal part, ensure it has at most 2 decimal places
+                                                            if (decimalPart) {
+                                                                decimalPart = decimalPart.substring(0, 2); // Limit to 2 decimal places
+                                                            }
+
+                                                            // Combine integer and decimal parts
+                                                            if (decimalPart) {
+                                                                value = `${integerPart}.${decimalPart}`;
+                                                            } else {
+                                                                value = integerPart;
+                                                            }
+
+                                                            // Delay updating the input field to avoid unwanted jumps
+                                                            setTimeout(() => {
+                                                                event.target.value = value;
+                                                            }, 0); // Delay with 0 milliseconds to give time for value stabilization
+                                                        });
+
+                                                        // Before submitting the form or processing the value, strip commas
+                                                        function getRawValue() {
+                                                            let value = inputElement.value;
+                                                            return value.replace(/,/g, ''); // Remove commas before submitting
+                                                        }
+
+                                                        // Example: submit the form with cleaned value (use this in the form submission)
+                                                        const form = document.querySelector('form');
+                                                        form.addEventListener('submit', function(e) {
+                                                            // Get the raw value (without commas)
+                                                            const rawValue = getRawValue();
+                                                            // Set the cleaned value before submitting the form
+                                                            inputElement.value = rawValue;
+                                                        });
+                                                    </script>
+
 
                                                     <div class="form-group">
                                                         <label for="no_of_entitled_votes">Complied SC Req. / # Voting
@@ -508,12 +558,25 @@
                                                     <hr>
 
                                                     <div class="form-group">
-                                                        <label for="fs_status">FS (Yes/No)</label>
-                                                        <select class="form-control" name="fs_status" id="fs_status">
-                                                            <option value="yes" {{ $hasFinancialStatement ? 'selected' : '' }}>Yes</option>
-                                                            <option value="no" {{ !$hasFinancialStatement ? 'selected' : '' }}>No</option>
+                                                        <label for="fs_status">FS (YES/NO)</label>
+                                                        <select class="form-control" id="fs_status" disabled>
+                                                            <option value="yes" {{ $hasFinancialStatement == true ? 'selected' : '' }}>Yes</option>
+                                                            <option value="no" {{ $hasFinancialStatement == false ? 'selected' : '' }}>No</option>
+                                                        </select>
+                                                        <!-- Hidden input to store value -->
+                                                        <input type="hidden" name="fs_status" value="{{ $hasFinancialStatement ? 'yes' : 'no' }}">
+                                                    </div>
+
+
+
+                                                    <div class="form-group">
+                                                        <label for="delinquent">Delinquent</label>
+                                                        <select class="form-control" name="delinquent" id="delinquent">
+                                                            <option value="yes" {{ old('delinquent', $cooperative->delinquent ?? 'no') == 'yes' ? 'selected' : '' }}>Delinquent</option>
+                                                            <option value="no" {{ old('delinquent', $cooperative->delinquent ?? 'no') == 'no' ? 'selected' : '' }}>Non-Delinquent</option>
                                                         </select>
                                                     </div>
+
 
 
                                                     <div class="form-group">
@@ -621,10 +684,12 @@
                                                     <div class="form-group">
                                                         <label for="registration_fee">Registration Fee</label>
                                                         <input type="number" class="form-control"
-                                                            name="registration_fee" id="registration_fee"
-                                                            value="{{ $coop->registration_fee }}"
-                                                            placeholder="Enter Registration Fee" readonly>
+                                                               name="registration_fee" id="registration_fee"
+                                                               value="4500"
+                                                               placeholder="Enter Registration Fee"
+                                                               readonly>
                                                     </div>
+
 
 
                                                     <div class="form-group">
@@ -741,6 +806,7 @@
                                     </div>
                                 </form>
 
+
                             </div>
 
 
@@ -763,7 +829,7 @@
                                 <label for="documents[Financial Statement]" class="form-label">Audited Financial
                                     Statement</label>
                                 <input type="file" name="documents[Financial Statement]"
-                                    accept=".jpg,.jpeg,.png,.pdf" class="form-control mb-2">
+                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv" class="form-control mb-2">
                                 @if ($coop->uploadedDocuments()->where('document_type', 'Financial Statement')->exists())
                                     <p class="text-info">Current File:
                                         {{ $coop->uploadedDocuments()->where('document_type', 'Financial Statement')->first()->file_name }}
@@ -771,8 +837,8 @@
                                     <small class="form-text text-muted">You can upload a new file or keep the existing
                                         one.</small>
                                 @endif
-                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (max
-                                    5MB).</small>
+                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (no file size limit).</small>
+
                             </div>
 
                             <!-- Resolution for Voting Delegates (Right Column) -->
@@ -780,7 +846,7 @@
                                 <label for="documents[Resolution for Voting Delegates]" class="form-label">Resolution
                                     for Voting Delegates</label>
                                 <input type="file" name="documents[Resolution for Voting Delegates]"
-                                    accept=".jpg,.jpeg,.png,.pdf" class="form-control mb-2">
+                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv" class="form-control mb-2">
                                 @if ($coop->uploadedDocuments()->where('document_type', 'Resolution for Voting Delegates')->exists())
                                     <p class="text-info">Current File:
                                         {{ $coop->uploadedDocuments()->where('document_type', 'Resolution for Voting Delegates')->first()->file_name }}
@@ -788,8 +854,8 @@
                                     <small class="form-text text-muted">You can upload a new file or keep the existing
                                         one.</small>
                                 @endif
-                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (max
-                                    5MB).</small>
+                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (no file size limit).</small>
+
                             </div>
                         </div>
 
@@ -799,7 +865,7 @@
                                 <label for="documents[Deposit Slip for Registration Fee]" class="form-label">Deposit
                                     Slip for Registration Fee</label>
                                 <input type="file" name="documents[Deposit Slip for Registration Fee]"
-                                    accept=".jpg,.jpeg,.png,.pdf" class="form-control mb-2">
+                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv" class="form-control mb-2">
                                 @if ($coop->uploadedDocuments()->where('document_type', 'Deposit Slip for Registration Fee')->exists())
                                     <p class="text-info">Current File:
                                         {{ $coop->uploadedDocuments()->where('document_type', 'Deposit Slip for Registration Fee')->first()->file_name }}
@@ -807,8 +873,8 @@
                                     <small class="form-text text-muted">You can upload a new file or keep the existing
                                         one.</small>
                                 @endif
-                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (max
-                                    5MB).</small>
+                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (no file size limit).</small>
+
                             </div>
 
                             <!-- Deposit Slip for CETF Remittance (Right Column) -->
@@ -816,7 +882,7 @@
                                 <label for="documents[Deposit Slip for CETF Remittance]" class="form-label">Deposit
                                     Slip for CETF Remittance</label>
                                 <input type="file" name="documents[Deposit Slip for CETF Remittance]"
-                                    accept=".jpg,.jpeg,.png,.pdf" class="form-control mb-2">
+                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv" class="form-control mb-2">
                                 @if ($coop->uploadedDocuments()->where('document_type', 'Deposit Slip for CETF Remittance')->exists())
                                     <p class="text-info">Current File:
                                         {{ $coop->uploadedDocuments()->where('document_type', 'Deposit Slip for CETF Remittance')->first()->file_name }}
@@ -824,8 +890,8 @@
                                     <small class="form-text text-muted">You can upload a new file or keep the existing
                                         one.</small>
                                 @endif
-                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (max
-                                    5MB).</small>
+                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (no file size limit).</small>
+
                             </div>
                         </div>
 
@@ -834,7 +900,7 @@
                             <div class="col-md-6 mb-4">
                                 <label for="documents[CETF Undertaking]" class="form-label">CETF Undertaking</label>
                                 <input type="file" name="documents[CETF Undertaking]"
-                                    accept=".jpg,.jpeg,.png,.pdf" class="form-control mb-2">
+                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv" class="form-control mb-2">
                                 @if ($coop->uploadedDocuments()->where('document_type', 'CETF Undertaking')->exists())
                                     <p class="text-info">Current File:
                                         {{ $coop->uploadedDocuments()->where('document_type', 'CETF Undertaking')->first()->file_name }}
@@ -842,8 +908,8 @@
                                     <small class="form-text text-muted">You can upload a new file or keep the existing
                                         one.</small>
                                 @endif
-                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (max
-                                    5MB).</small>
+                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (no file size limit).</small>
+
                             </div>
 
 
@@ -851,7 +917,7 @@
                                 <label for="documents[Certificate of Candidacy]" class="form-label">Certificate of
                                     Candidacy</label>
                                 <input type="file" name="documents[Certificate of Candidacy]"
-                                    accept=".jpg,.jpeg,.png,.pdf" class="form-control mb-2">
+                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv" class="form-control mb-2">
                                 @if ($coop->uploadedDocuments()->where('document_type', 'Certificate of Candidacy')->exists())
                                     <p class="text-info">Current File:
                                         {{ $coop->uploadedDocuments()->where('document_type', 'Certificate of Candidacy')->first()->file_name }}
@@ -859,8 +925,8 @@
                                     <small class="form-text text-muted">You can upload a new file or keep the existing
                                         one.</small>
                                 @endif
-                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (max
-                                    5MB).</small>
+                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (no file size limit).</small>
+
                             </div>
                         </div>
 
@@ -870,7 +936,7 @@
                                 <label for="documents[CETF Utilization Invoice]" class="form-label">CETF Utilization
                                     Invoice</label>
                                 <input type="file" name="documents[CETF Utilization Invoice]"
-                                    accept=".jpg,.jpeg,.png,.pdf" class="form-control mb-2">
+                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv" class="form-control mb-2">
                                 @if ($coop->uploadedDocuments()->where('document_type', 'CETF Utilization Invoice')->exists())
                                     <p class="text-info">Current File:
                                         {{ $coop->uploadedDocuments()->where('document_type', 'CETF Utilization Invoice')->first()->file_name }}
@@ -878,8 +944,8 @@
                                     <small class="form-text text-muted">You can upload a new file or keep the existing
                                         one.</small>
                                 @endif
-                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (max
-                                    5MB).</small>
+                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (no file size limit).</small>
+
                             </div>
                         </div>
 
@@ -921,6 +987,43 @@
             });
         </script>
     @endif
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simulate your share capital balance (this should be dynamically fetched from your input field or value)
+            const shareCapital = parseFloat(document.getElementById('share_capital_balance').value) || 0; // Replace with your actual share capital input field
+
+            // Function to calculate the number of entitled votes
+            function calculateEntitledVotes(shareCapital) {
+                let votes = 0;
+                let remaining = shareCapital;
+
+                if (remaining >= 100000) {
+                    votes += Math.floor(remaining / 100000);
+                    remaining = remaining % 100000; // Get the remaining after calculating full votes
+                }
+
+                while (remaining >= 25000) {
+                    if (remaining >= 75000) {
+                        votes += 3;
+                        remaining -= 75000;
+                    } else if (remaining >= 50000) {
+                        votes += 2;
+                        remaining -= 50000;
+                    } else if (remaining >= 25000) {
+                        votes += 1;
+                        remaining -= 25000;
+                    }
+                }
+
+                return Math.min(votes, 5); // Ensure that no more than 5 votes are entitled
+            }
+
+            // Calculate and display the entitled votes
+            const entitledVotes = calculateEntitledVotes(shareCapital);
+            document.getElementById('no_of_entitled_votes').value = entitledVotes;
+        });
+        </script>
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             let cetfRequired = document.getElementById('cetf_required');

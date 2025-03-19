@@ -1,9 +1,13 @@
 <?php
 
-use App\Models\Participant;
+use App\Models\Cooperative;
 
+use App\Models\Participant;
+use App\Models\UploadedDocument;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Observers\CooperativeObserver;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Middleware\AdminMiddleware;
@@ -13,6 +17,7 @@ use App\Http\Controllers\ViewerController;
 use App\Http\Middleware\SupportMiddleware;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\SupportController;
+use App\Observers\UploadedDocumentObserver;
 use App\Http\Controllers\SpeakersController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AttendanceController;
@@ -22,6 +27,7 @@ use App\Http\Controllers\ExcelImportController;
 use App\Http\Controllers\ParticipantController;
 use App\Http\Middleware\AdminOrSupportMiddleware;
 use App\Http\Middleware\ParticipantUserMiddleware;
+use App\Http\Controllers\SupportAttendanceController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 use App\Http\Controllers\EventParticipantExportController;
 
@@ -57,10 +63,21 @@ Route::middleware([AdminOrSupportMiddleware::class])->group(function () {
         ->name('admin.reports.documents_status');
 
     Route::get('/admin/reports', [ReportsController::class, 'generateReports'])->name('admin.reports');
+
+    Route::get('/attendance/print', function () {
+        $participants = Participant::whereNotNull('attendance_datetime')->get();
+        return view('dashboard.admin.attendance_print', compact('participants'));
+    })->name('attendance.print');
+
+
+    Route::get('/Support/Attendance', [SupportAttendanceController::class, 'supportattendance'])->name('support.attendance.index');
+    Route::get('/Support/Attendance/{participant_id}', [SupportAttendanceController::class, 'supportshowattendance'])->name('support.attendance.show');
 });
 
 //store
 Route::middleware([AdminMiddleware::class])->group(function () {
+
+  
 
     Route::get('/registration-overview-pdf', [ReportsController::class, 'showRegistrationOverview'])->name('registration.overview.pdf');
 
@@ -269,4 +286,9 @@ Route::middleware([SupportMiddleware::class])->group(function () {
 
     Route::get('/Support/Document/View/{coop_id?}', [SupportController::class, 'viewsupportDocuments'])->name('support.documents.view');
     Route::put('/Support/Document/UpdateStatus/{document_id}', [SupportController::class, 'updateDocumentStatus'])->name('support.documents.updateStatus');
+
+    Route::get('/Support/Cooperatives/Edit/{coop_id}', [SupportController::class, 'edit'])->name('support.cooperatives.edit');
+    Route::put('/Support/Cooperatives/{coop_id}', [SupportController::class, 'update'])->name('support.cooperatives.update');
+
+    Route::post('/Support/Cooperatives/Edit/{id}/Documents', [SupportController::class, 'storeDocuments3'])->name('cooperatives.storeDocuments3');
 });

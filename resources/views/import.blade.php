@@ -221,63 +221,82 @@
                     </div>
 
                     <div class="card-body">
-                      <form action="{{ route('import.excel') }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <div class="mb-3">
-                          <label for="file" class="form-label">Choose Excel File</label>
-                          <input type="file" name="file" class="form-control" id="file" required>
-                        </div>
-                        <button type="submit" class="btn btn-label-info btn-round me-2">Upload</button>
-                      </form>
+                        <form action="{{ route('import.excel') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="file" class="form-label">Choose Excel File</label>
+                                <input type="file" name="file" class="form-control @error('file') is-invalid @enderror" id="file" required>
+                                @error('file')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <button type="submit" class="btn btn-label-info btn-round me-2">Upload</button>
+                        </form>
+
+                        <!-- Success Message -->
+                        @if(session('success'))
+                            <div class="alert alert-success mt-3">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+
+                        <!-- Error Message -->
+                        @if(session('error'))
+                            <div class="alert alert-danger mt-3">
+                                {{ session('error') }}
+                            </div>
+                        @endif
+
 
                       <!-- Sample Excel Format -->
                       <div class="mt-5">
                         <h6 class="fw-bold mb-3">📄 Sample Excel Format</h6>
-                        <p class="text-muted">⚠️ <strong>Note:</strong> Make sure your data starts on <strong>Row 3</strong>. Row 1 and Row 2 are reserved for titles/notes.</p>
+                        <p class="text-muted">⚠️ <strong>Note:</strong> Make sure your data starts on <strong>Row 1</strong>.</p>
+                        <p class="text-muted">✅ <strong>Allowed Regions:</strong> Region I, Region II, Region III, Region IV-A, Region IV-B, Region V, Region VI, Region VII, Region VIII, Region IX, Region X, Region XI, Region XII, Region XIII, NCR, CAR, BARMM, LUZON, Visayas, Mindanao, ZBST</p>
                         <div class="table-responsive">
-                          <table class="table table-bordered table-sm text-center align-middle">
-                            <thead class="table-light">
-                              <tr>
-                                <th>Column A</th>
-                                <th>Column B</th>
-                                <th>Column C</th>
-                                <th>Column D<br><small>(Name)</small></th>
-                                <th>Column E<br><small>(Contact Person)</small></th>
-                                <th>Column F<br><small>(Position)</small></th>
-                                <th>Column G<br><small>(Phone Number)</small></th>
-                                <th>Column H<br><small>(Barangay)</small></th>
-                                <th>Column I<br><small>(Municipality)</small></th>
-                                <th>Column J<br><small>(Province)</small></th>
-                                <th>Column K<br><small>(Email)</small></th>
-                                <th>Column L<br><small>(TIN)</small></th>
-                                <th>Column M<br><small>(Remarks)</small></th>
-                                <th>Column N</th>
-                                <th>Column O<br><small>(Region)</small></th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <!-- Example Row 3 -->
-                              <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td>ABC Cooperative</td>
-                                <td>Juan Dela Cruz</td>
-                                <td>Chairperson</td>
-                                <td>09171234567</td>
-                                <td>Barangay Uno</td>
-                                <td>Sample Town</td>
-                                <td>Sample Province</td>
-                                <td>abc@example.com</td>
-                                <td>123-456-789</td>
-                                <td>Active</td>
-                                <td></td>
-                                <td>Region IV-A</td>
-                              </tr>
-                            </tbody>
-                          </table>
+                            <table class="table table-bordered table-sm text-center align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Column A<br><small>(Email)</small></th>
+                                        <th>Column B<br><small>(Coop ID No.)</small></th>
+                                        <th>Column C</th>
+                                        <th>Column D<br><small>(Name)</small></th>
+                                        <th>Column E<br><small>(Region)</small></th>
+                                        <th>Column F<br><small>(Share Capital)</small></th>
+                                        <th>Column G<br><small>(Savings 1)</small></th>
+                                        <th>Column H<br><small>(Savings 2)</small></th>
+                                        <th>Column I<br><small>(Savings 3)</small></th>
+                                        <th>Column J<br><small>(Time Deposit)</small></th>
+                                        <th>Column K<br><small>(Loan Receivable)</small></th>
+                                        <th>Column L<br><small>(Accounts Receivable)</small></th>
+                                        <th>Column M</th>
+                                        <th>Column N<br><small>(CETF Remittance)</small></th>
+                                        <th>Column O<br><small>(Services Availed)</small></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>abc@example.com</td>
+                                        <td>123456</td>
+                                        <td></td>
+                                        <td>ABC Cooperative</td>
+                                        <td>Region IV-A</td>
+                                        <td>500,000</td>
+                                        <td>200,000</td>
+                                        <td>150,000</td>
+                                        <td>50,000</td>
+                                        <td>300,000</td>
+                                        <td>400,000</td>
+                                        <td>100,000</td>
+                                        <td></td>
+                                        <td>20,000</td>
+                                        <td>CF, IT, MSU</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                      </div>
+                    </div>
+
 
                       <!-- Back Button -->
                       <button class="btn btn-primary btn-round mt-4" onclick="window.history.back();">Back</button>

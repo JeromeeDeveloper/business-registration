@@ -17,8 +17,9 @@ return new class extends Migration
             $table->enum('region', [
                 'Region I', 'Region II', 'Region III', 'Region IV-A', 'Region IV-B', 'Region V',
                 'Region VI', 'Region VII', 'Region VIII', 'Region IX', 'Region X', 'Region XI',
-                'Region XII', 'Region XIII', 'NCR', 'CAR', 'BARMM'
+                'Region XII', 'Region XIII', 'NCR', 'CAR', 'BARMM', 'ZBST', 'LUZON'
             ]);
+
             $table->string('phone_number');
             $table->string('email')->unique();
             $table->string('tin');

@@ -38,7 +38,7 @@ class CooperativeNotification extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Cooperative Notification',
+            subject: '2025 CO-OPvention Online Registration Credentials',
         );
     }
 

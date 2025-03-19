@@ -31,7 +31,7 @@ class CooperativeNotificationCredentials extends Mailable
     {
         $this->coop = $coop;
         $this->event = $event;
-        $this->users = $users; 
+        $this->users = $users;
     }
 
     /**
@@ -40,7 +40,7 @@ class CooperativeNotificationCredentials extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Cooperative Notification',
+            subject: '2025 CO-OPvention Online Registration Credentials',
         );
     }
 

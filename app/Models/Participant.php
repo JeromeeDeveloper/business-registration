@@ -57,7 +57,16 @@ class Participant extends Model
                     ->withTimestamps();
     }
 
-    
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($participant) {
+            if ($participant->user) {
+                $participant->user->delete();
+            }
+        });
+    }
 
 }
 

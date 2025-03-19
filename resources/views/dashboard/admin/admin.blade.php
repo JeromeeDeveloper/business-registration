@@ -431,6 +431,7 @@
                     </div>
                     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-3 mb-4">
 
+
                         <!-- Cooperative -->
                         <div class="col">
                             <div class="card card-stats card-round shadow-sm h-100">
@@ -448,6 +449,144 @@
                             </div>
                         </div>
 
+                        <div class="col-md-2">
+                            <div class="card card-stats card-round shadow-sm h-100">
+                                <div class="card-body d-flex align-items-center">
+                                    <div class="col-icon me-3">
+                                        <div class="icon-big text-primary text-center">
+                                            <i class="fas fa-building"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p class="card-category mb-1">Registered Coops</p>
+                                        <h4 class="card-title mb-0">{{ number_format($registeredCoops) }}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Fully Registered Participants -->
+                        <div class="col-md-2">
+                            <div class="card card-stats card-round shadow-sm h-100">
+                                <div class="card-body d-flex align-items-center">
+                                    <div class="col-icon me-3">
+                                        <div class="icon-big text-success text-center">
+                                            <i class="fas fa-check-circle"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p class="card-category mb-1">Fully Registered Coops</p>
+                                        <h4 class="card-title mb-0">{{ number_format($fullyRegisteredCoops) }}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Partially Registered Coops -->
+                        <div class="col-md-2">
+                            <div class="card card-stats card-round shadow-sm h-100">
+                                <div class="card-body d-flex align-items-center">
+                                    <div class="col-icon me-3">
+                                        <div class="icon-big text-warning text-center">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p class="card-category mb-1">Partially Registered Coops</p>
+                                        <h4 class="card-title mb-0">{{ number_format($partiallyRegisteredCoops) }}
+                                        </h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-2">
+                            <div class="card card-stats card-round shadow-sm h-100">
+                                <div class="card-body d-flex align-items-center">
+                                    <div class="col-icon me-3">
+                                        <div class="icon-big text-success text-center">
+                                            <i class="fas fa-building"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p class="card-category mb-1">Registered Migs Coops</p>
+                                        <h4 class="card-title mb-0">{{ number_format($registeredMigsCoops) }}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Registered Non-Migs Coops -->
+                        <div class="col-md-2">
+                            <div class="card card-stats card-round shadow-sm h-100">
+                                <div class="card-body d-flex align-items-center">
+                                    <div class="col-icon me-3">
+                                        <div class="icon-big text-danger text-center">
+                                            <i class="fas fa-building"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p class="card-category mb-1">Registered Non-Migs Coops</p>
+                                        <h4 class="card-title mb-0">{{ number_format($registeredNonMigsCoops) }}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="card card-stats card-round shadow-sm h-100">
+                                <div class="card-body d-flex align-items-center">
+                                    <div class="col-icon me-3">
+                                        <div class="icon-big text-secondary text-center">
+                                            <i class="fas fa-users"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p class="card-category mb-1">Registered Participants</p>
+                                        <h4 class="card-title mb-0">{{ number_format($registeredParticipants) }}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Total Migs Participants -->
+                        <div class="col">
+                            <div class="card card-stats card-round shadow-sm h-100">
+                                <div class="card-body d-flex align-items-center">
+                                    <div class="col-icon me-3">
+                                        <div class="icon-big text-danger text-center">
+                                            <i class="fas fa-id-card"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p class="card-category mb-1">MIGS Members</p>
+                                        <h4 class="card-title mb-0">{{ number_format($totalMigsParticipants ?? 0) }}
+                                        </h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Total Non-Migs Participants -->
+                        <div class="col">
+                            <div class="card card-stats card-round shadow-sm h-100">
+                                <div class="card-body d-flex align-items-center">
+                                    <div class="col-icon me-3">
+                                        <div class="icon-big text-secondary text-center">
+                                            <i class="fas fa-user-times"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p class="card-category mb-1">NON-MIGS Members</p>
+                                        <h4 class="card-title mb-0">
+                                            {{ number_format($totalNonMigsParticipants ?? 0) }}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Participants -->
                         <div class="col">
                             <div class="card card-stats card-round shadow-sm h-100">
@@ -458,7 +597,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <p class="card-category mb-1">Participants</p>
+                                        <p class="card-category mb-1">Total Participants</p>
                                         <h4 class="card-title mb-0">{{ number_format($totalParticipants) }}</h4>
                                     </div>
                                 </div>
@@ -499,41 +638,6 @@
                             </div>
                         </div>
 
-                        <!-- Total Migs Participants -->
-                        <div class="col">
-                            <div class="card card-stats card-round shadow-sm h-100">
-                                <div class="card-body d-flex align-items-center">
-                                    <div class="col-icon me-3">
-                                        <div class="icon-big text-danger text-center">
-                                            <i class="fas fa-id-card"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="card-category mb-1">MIGS Members</p>
-                                        <h4 class="card-title mb-0">{{ number_format($totalMigsParticipants) }}</h4>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Total Non-Migs Participants -->
-                        <div class="col">
-                            <div class="card card-stats card-round shadow-sm h-100">
-                                <div class="card-body d-flex align-items-center">
-                                    <div class="col-icon me-3">
-                                        <div class="icon-big text-secondary text-center">
-                                            <i class="fas fa-user-times"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="card-category mb-1">NON-MIGS Members</p>
-                                        <h4 class="card-title mb-0">{{ number_format($totalNonMigsParticipants) }}
-                                        </h4>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
 
 
@@ -544,35 +648,81 @@
 
 
                             <div class="card card-round">
-                                <h3 class="p-3 text-center"> Registration Overview</h3> <!-- Added title -->
-                                <div class="card-header d-flex justify-content-between align-items-center">
-
-
-                                    <div class="d-flex flex-wrap align-items-center gap-2">
-                                        <!-- Display the totals as button-like elements -->
-                                        <div class="btn btn-success">
-                                            <strong>Fully Registered Coops</strong>: {{ $fullyRegisteredCoops }}
+                                <h3 class="p-3 text-center">Attendance Status</h3> <!-- Added title -->
+                                <div class="card-body d-flex">
+                                    <!-- Total Coop Attended -->
+                                    <div class="col">
+                                        <div class="card card-stats card-round shadow-sm h-100">
+                                            <div class="card-body d-flex align-items-center">
+                                                <div class="col-icon me-3">
+                                                    <div class="icon-big text-info text-center">
+                                                        <i class="fas fa-users"></i>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <p class="card-category mb-1">Total Coop Attended</p>
+                                                    <h4 class="card-title mb-0">{{ number_format($totalCoopAttended) }}</h4>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="btn btn-warning">
-                                            <strong>Partially Registered Coops</strong>: {{ $partiallyRegisteredCoops }}
-                                        </div>
-                                        <div class="btn btn-info">
-                                            <strong>Fully Registered Participants</strong>: {{ $fullyRegisteredParticipants }}
-                                        </div>
-                                        <div class="btn btn-danger">
-                                            <strong>Partially Registered Participants</strong>: {{ $partiallyRegisteredParticipants }}
-                                        </div>
-                                        <!-- Button to open the modal -->
-
                                     </div>
 
-                                </div>
+                                    <!-- Total MIGS Coop Attended -->
+                                    <div class="col">
+                                        <div class="card card-stats card-round shadow-sm h-100">
+                                            <div class="card-body d-flex align-items-center">
+                                                <div class="col-icon me-3">
+                                                    <div class="icon-big text-success text-center">
+                                                        <i class="fas fa-user-friends"></i>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <p class="card-category mb-1">Attended MIGS</p>
+                                                    <h4 class="card-title mb-0">{{ number_format($totalMigsAttended) }}</h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Total NON-MIGS Coop Attended -->
+                                    <div class="col">
+                                        <div class="card card-stats card-round shadow-sm h-100">
+                                            <div class="card-body d-flex align-items-center">
+                                                <div class="col-icon me-3">
+                                                    <div class="icon-big text-danger text-center">
+                                                        <i class="fas fa-user-times"></i>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <p class="card-category mb-1">Attended NON-MIGS</p>
+                                                    <h4 class="card-title mb-0">{{ number_format($totalNonMigsAttended) }}</h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Total Attended Voting Participants -->
+                                    <div class="col">
+                                        <div class="card card-stats card-round shadow-sm h-100">
+                                            <div class="card-body d-flex align-items-center">
+                                                <div class="col-icon me-3">
+                                                    <div class="icon-big text-primary text-center">
+                                                        <i class="fas fa-check-circle"></i>  <!-- New icon -->
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <p class="card-category mb-1">Total Participants Attended</p>
+                                                    <h4 class="card-title mb-0">{{ number_format($totalVotingParticipants) }}</h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
 
-                                <div class="card-body h-100">
-                                    <canvas id="registrationChart" style="height: 100rem;"></canvas>
                                 </div>
                             </div>
+
+
 
                         </div>
 
@@ -630,7 +780,7 @@
                         <div class="col-md-4">
                             @if ($latestEvents->count() > 0)
                                 <div id="eventsCarousel" class="carousel slide" data-bs-ride="carousel"
-                                    data-bs-interval="2000" data-bs-wrap="true">
+                                    data-bs-interval="7000" data-bs-wrap="true">
 
                                     <div class="carousel-inner">
                                         @foreach ($latestEvents as $index => $event)
@@ -662,16 +812,16 @@
                                                             </div>
                                                             <div class="card-category">
                                                                 {{ \Carbon\Carbon::parse($event->start_date)->format('F d, Y') }}
-                                                                -
-                                                                {{ \Carbon\Carbon::parse($event->end_date)->format('F d, Y') }}
+                                                                {{-- -
+                                                                {{ \Carbon\Carbon::parse($event->end_date)->format('F d, Y') }} --}}
                                                             </div>
                                                         </div>
                                                         <div class="card-body">
-                                                            <p>{{ $event->description }}</p>
+                                                            {{-- <p>{{ $event->description }}</p> --}}
                                                             <ul>
                                                                 <li><strong>📍 Venue:</strong> {{ $event->location }}
                                                                 </li>
-                                                                <li><strong>🕒 Time:</strong> 9:00 AM - 5:00 PM</li>
+                                                                {{-- <li><strong>🕒 Time:</strong> 9:00 AM - 5:00 PM</li> --}}
                                                                 <li><strong>🎤 Guest Speakers:</strong>
                                                                     @if ($event->speakers->count() > 0)
                                                                         {{ $event->speakers->pluck('name')->implode(', ') }}
@@ -679,8 +829,7 @@
                                                                         No speakers listed
                                                                     @endif
                                                                 </li>
-                                                                <li><strong>📌 Activities:</strong> Presentations, Q&A
-                                                                    Sessions, Voting</li>
+
                                                             </ul>
                                                         </div>
                                                     </div>
@@ -717,53 +866,39 @@
                                 <div class="card-body p-3" style="max-height: 300px; overflow-y: auto;">
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item d-flex justify-content-between">
-                                            <span class="badge bg-primary">Feb - Apr</span>
-                                            <span class="text-start flex-grow-1 ms-2">Presentation of 2024 election
-                                                guidelines.</span>
+                                            <span class="badge bg-primary">Mar 17</span>
+                                            <span class="text-start flex-grow-1 ms-2">Start of Online
+                                                Registration</span>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between">
-                                            <span class="badge bg-success">March 4</span>
-                                            <span class="text-start flex-grow-1 ms-2">Start of delegate
-                                                registration.</span>
+                                            <span class="badge bg-success">Apr 01</span>
+                                            <span class="text-start flex-grow-1 ms-2">Start of Filing Candidacy</span>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between">
-                                            <span class="badge bg-danger">May 20</span>
-                                            <span class="text-start flex-grow-1 ms-2">Start of filing Certificate of
-                                                Candidacy.</span>
+                                            <span class="badge bg-danger">May 17</span>
+                                            <span class="text-start flex-grow-1 ms-2">End of Filing of Candidacy</span>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between">
-                                            <span class="badge bg-warning text-dark">May 22-24</span>
-                                            <span class="text-start flex-grow-1 ms-2">End of COC filing, CETF
-                                                remittance & voter registration.</span>
+                                            <span class="badge bg-warning text-dark">May 21</span>
+                                            <span class="text-start flex-grow-1 ms-2">Ceremonial Opening of
+                                                Election</span>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between">
                                             <span class="badge bg-info">May 22</span>
-                                            <span class="text-start flex-grow-1 ms-2">Mock election & Elecom
-                                                review.</span>
+                                            <span class="text-start flex-grow-1 ms-2">End of Reg for Non-Voting</span>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between">
                                             <span class="badge bg-secondary">May 23</span>
-                                            <span class="text-start flex-grow-1 ms-2">Candidate profiles sent to voting
-                                                delegates.</span>
+                                            <span class="text-start flex-grow-1 ms-2">SECTORAL CONGRESS 55th CO-OP
+                                                LEADERS</span>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between">
-                                            <span class="badge bg-primary">May 27</span>
-                                            <span class="text-start flex-grow-1 ms-2">Ceremonial opening of
-                                                elections.</span>
+                                            <span class="badge bg-primary">May 24</span>
+                                            <span class="text-start flex-grow-1 ms-2">55th CO-OP LEADERS</span>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between">
-                                            <span class="badge bg-success">May 28</span>
-                                            <span class="text-start flex-grow-1 ms-2">Online voting continues.</span>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between">
-                                            <span class="badge bg-danger">May 29</span>
-                                            <span class="text-start flex-grow-1 ms-2">54th Leaders Congress & Election
-                                                closing.</span>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between">
-                                            <span class="badge bg-warning text-dark">May 30</span>
-                                            <span class="text-start flex-grow-1 ms-2">Holy Mass & Proclamation of
-                                                winners.</span>
+                                            <span class="badge bg-success">May 25</span>
+                                            <span class="text-start flex-grow-1 ms-2">51st General Assembly</span>
                                         </li>
                                     </ul>
                                 </div>
@@ -772,6 +907,7 @@
                                         style="cursor: pointer; transition: 0.3s;">Don't miss this event!</span>
                                 </div>
                             </div>
+
 
                         </div>
                     </div>
@@ -938,7 +1074,7 @@
                 item.addEventListener("click", function(event) {
                     event.preventDefault();
                     const reportType = this.getAttribute(
-                    "data-report-type"); // Add a data attribute for report type
+                        "data-report-type"); // Add a data attribute for report type
                     const reportUrl = this.getAttribute("href");
 
                     if (reportUrl) {

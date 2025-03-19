@@ -254,7 +254,7 @@
                                 <!-- Congress Type -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label>Congress Types</label>
+                                        <label>Congress</label>
                                         <div class="border p-2 rounded" style="min-height: 45px; background-color: #f8f9fa;">
                                             @if ($participant->events->isNotEmpty())
                                                 @foreach ($participant->events as $event)
@@ -268,12 +268,12 @@
                                 </div>
 
                                 <!-- Religious Affiliation -->
-                                <div class="col-md-6 col-lg-4">
+                                {{-- <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
                                         <label for="religious_affiliation">Religious Affiliation</label>
                                         <div>{{ $participant->religious_affiliation ?? 'N/A' }}</div>
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 <!-- T-shirt Size -->
                                 <div class="col-md-6 col-lg-4">

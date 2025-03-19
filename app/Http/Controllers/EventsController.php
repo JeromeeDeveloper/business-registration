@@ -12,9 +12,10 @@ class EventsController extends Controller
      */
     public function index()
     {
-        $events = Event::all(); // Get all events
+        $events = Event::orderBy('start_date', 'asc')->get(); // Order by start_date ascending
         return view('dashboard.admin.events.datatable', compact('events'));
     }
+
 
     /**
      * Store a newly created event in storage.

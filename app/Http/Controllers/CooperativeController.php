@@ -126,22 +126,30 @@ class CooperativeController extends Controller
 
             $qrData = route('adminDashboard', ['coop_id' => $participant->coop_id]);
 
-            // $response = Http::get('https://api.qrserver.com/v1/create-qr-code/', [
-            //     'data' => $qrData,
-            //     'size' => '200x200'
-            // ]);
-
-            $response = Http::timeout(30)->get('https://api.qrserver.com/v1/create-qr-code/', [
-                'data' => $qrData,
-                'size' => '200x200'
-            ]);
-
+            // Retry mechanism for QR code generation (max 3 attempts)
+            $maxRetries = 3;
+            $attempt = 0;
+            do {
+                try {
+                    $response = Http::timeout(30)->get('https://api.qrserver.com/v1/create-qr-code/', [
+                        'data' => $qrData,
+                        'size' => '200x200'
+                    ]);
+                    if ($response->successful()) {
+                        break;
+                    }
+                } catch (\Exception $e) {
+                    Log::warning("QR Code API attempt {$attempt} failed: " . $e->getMessage());
+                }
+                $attempt++;
+                sleep(2); // Wait before retrying
+            } while ($attempt < $maxRetries);
 
             if (!$response->successful()) {
                 DB::rollBack();
                 return response()->json([
                     'success' => false,
-                    'message' => 'Failed to generate QR code.'
+                    'message' => 'Failed to generate QR code after multiple attempts.'
                 ], 500);
             }
 
@@ -155,14 +163,25 @@ class CooperativeController extends Controller
                 $participant->events()->attach($request->input('event_ids'));
             }
 
-            try {
-                Mail::to($user->email)->queue(new ParticipantCreated($user, $generatedPassword));
-            } catch (\Exception $e) {
+            // Retry mechanism for sending email (max 3 attempts)
+            $emailSent = false;
+            $emailAttempts = 0;
+            while (!$emailSent && $emailAttempts < $maxRetries) {
+                try {
+                    Mail::to($user->email)->queue(new ParticipantCreated($user, $generatedPassword));
+                    $emailSent = true;
+                } catch (\Exception $e) {
+                    Log::warning("Email sending attempt {$emailAttempts} failed: " . $e->getMessage());
+                    $emailAttempts++;
+                    sleep(2); // Wait before retrying
+                }
+            }
+
+            if (!$emailSent) {
                 DB::rollBack();
-                Log::error('Email sending failed: ' . $e->getMessage());
                 return response()->json([
                     'success' => false,
-                    'message' => 'Failed to send email. Please try again.'
+                    'message' => 'Failed to send email after multiple attempts. Please try again later.'
                 ], 500);
             }
 
@@ -182,6 +201,7 @@ class CooperativeController extends Controller
             ], 500);
         }
     }
+
 
  // Show a specific participant
  public function show($participant_id)
@@ -258,14 +278,25 @@ class CooperativeController extends Controller
  }
 
 
-  public function destroy($participant_id)
-    {
-        // Use 'participant_id' for the identifier
-        $participant = Participant::where('participant_id', $participant_id)->firstOrFail();
-        $participant->delete();
+ public function destroy($participant_id)
+{
+    // Find the participant
+    $participant = Participant::where('participant_id', $participant_id)->firstOrFail();
 
-      return redirect()->route('coop.index')->with('success', 'Deleted!');
-  }
+    // Get the associated user
+    $user = $participant->user;
+
+    // Delete the participant
+    $participant->delete();
+
+    // If a user is associated, delete the user as well
+    if ($user) {
+        $user->delete();
+    }
+
+    return redirect()->route('coop.index')->with('success', 'Participant and associated user deleted!');
+}
+
 
   public function documents()
     {
@@ -302,13 +333,13 @@ class CooperativeController extends Controller
     public function storeDocuments(Request $request)
     {
         $request->validate([
-            'documents.Financial Statement' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
-            'documents.Resolution for Voting Delegates' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
-            'documents.Deposit Slip for Registration Fee' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
-            'documents.Deposit Slip for CETF Remittance' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
-            'documents.CETF Undertaking' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
-            'documents.Certificate of Candidacy' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
-            'documents.CETF Utilization Invoice' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
+        'documents.Financial Statement' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv',
+'documents.Resolution for Voting Delegates' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv',
+'documents.Deposit Slip for Registration Fee' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv',
+'documents.Deposit Slip for CETF Remittance' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv',
+'documents.CETF Undertaking' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv',
+'documents.Certificate of Candidacy' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv',
+'documents.CETF Utilization Invoice' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv',
         ]);
 
         $cooperative = Auth::user()->cooperative;
@@ -380,43 +411,80 @@ class CooperativeController extends Controller
   }
 
 
-  public function updateStatus(Request $request, $coop_id)
-  {
-      // Validate inputs
-      $request->validate([
-          'registration_status' => 'nullable|in:Partial Registered,Fully Registered,Rejected',
-          'membership_status' => 'nullable|in:Non-migs,Migs',
-      ]);
 
-      // Find or create GA Registration for the Cooperative
-      $gaRegistration = GARegistration::firstOrCreate(
-          ['coop_id' => $coop_id],
-          ['participant_id' => null] // Ensure participant_id is handled
-      );
+    //   public function updateStatus(Request $request, $coop_id)
+    //   {
+    //       // Validate inputs
+    //       $request->validate([
+    //           'membership_status' => 'nullable|in:Non-migs,Migs',
+    //       ]);
 
-      // Update only if values are provided
-      if ($request->filled('registration_status')) {
-          $gaRegistration->registration_status = $request->registration_status;
-      }
-      if ($request->filled('membership_status')) {
-          $gaRegistration->membership_status = $request->membership_status;
-      }
+    //       // Find or create GA Registration for the Cooperative
+    //       $gaRegistration = GARegistration::firstOrCreate(
+    //           ['coop_id' => $coop_id],
+    //           ['participant_id' => null]
+    //       );
 
-      $gaRegistration->save();
+    //       // Define required documents
+    //       $requiredDocuments = [
+    //           'Financial Statement',
+    //           'Resolution for Voting delegates',
+    //           'Deposit Slip for Registration Fee',
+    //           'Deposit Slip for CETF Remittance',
+    //           'CETF Undertaking',
+    //           'Certificate of Candidacy',
+    //           'CETF Utilization invoice'
+    //       ];
 
-      return back()->with('success', 'GA Registration status updated successfully.');
-  }
+    //       // Check approved documents
+    //       $approvedDocumentsCount = UploadedDocument::where('coop_id', $coop_id)
+    //           ->whereIn('document_type', $requiredDocuments)
+    //           ->where('status', 'Approved')
+    //           ->count();
+
+    //       $isListOfOfficersApproved = UploadedDocument::where('coop_id', $coop_id)
+    //           ->where('document_type', 'List of Officers')
+    //           ->where('status', 'Approved')
+    //           ->exists();
+
+    //       // Fetch cooperative and check payment status
+    //       $coop = Cooperative::findOrFail($coop_id);
+
+    //       $isPaymentSufficient = !is_null($coop->less_prereg_payment) &&
+    //                               $coop->less_prereg_payment >= $coop->net_required_reg_fee;
+
+    //       // Determine registration status
+    //       if (($approvedDocumentsCount === count($requiredDocuments) && $isListOfOfficersApproved) || $isPaymentSufficient) {
+    //           $gaRegistration->registration_status = 'Fully Registered';
+    //       } else {
+    //           $gaRegistration->registration_status = 'Partial Registered';
+    //       }
+
+    //       // Update membership status if provided
+    //       if ($request->filled('membership_status')) {
+    //           $gaRegistration->membership_status = $request->membership_status;
+    //       }
+
+    //       $gaRegistration->save();
+
+    //       return back()->with('success', 'GA Registration status updated successfully.');
+    //   }
+
+
+
 
   public function storeDocuments2(Request $request, $id)
   {
     $request->validate([
-        'documents.Financial Statement' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
-        'documents.Resolution for Voting Delegates' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
-        'documents.Deposit Slip for Registration Fee' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
-        'documents.Deposit Slip for CETF Remittance' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
-        'documents.CETF Undertaking' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
-        'documents.Certificate of Candidacy' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
-        'documents.CETF Utilization Invoice' => 'nullable|mimes:jpg,jpeg,png,pdf|max:5120',
+      'documents.Financial Statement' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv',
+'documents.Resolution for Voting Delegates' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv',
+'documents.Deposit Slip for Registration Fee' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv',
+'documents.Deposit Slip for CETF Remittance' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv',
+'documents.CETF Undertaking' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv',
+'documents.Certificate of Candidacy' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv',
+'documents.CETF Utilization Invoice' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv',
+
+
     ]);
 
       // Find the cooperative by its ID

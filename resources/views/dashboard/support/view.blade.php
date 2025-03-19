@@ -326,7 +326,7 @@
 
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
-                                    <label for="delinquent">Delinquent Status</label>
+                                    <label for="delinquent">Delinquent</label>
                                     <p>{{ $coop->delinquent }}</p>
                                 </div>
                             </div>

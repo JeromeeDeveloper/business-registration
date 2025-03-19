@@ -321,18 +321,18 @@
                                 </div>
 
                                 <!-- Religious Affiliation -->
-                                <div class="col-md-6 col-lg-4">
+                                {{-- <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
                                         <label for="religious_affiliation">Religious Affiliation</label>
                                         <input type="text" class="form-control" name="religious_affiliation" value="{{ old('religious_affiliation', $participant->religious_affiliation) }}">
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 <!-- T-Shirt Size -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
                                         <label for="tshirt_size">T-Shirt Size</label>
-                                        <select class="form-control" name="tshirt_size">
+                                        <select class="form-control" name="tshirt_size" id="tshirt_size">
                                             <option value="XS" {{ old('tshirt_size', $participant->tshirt_size) == 'XS' ? 'selected' : '' }}>XS</option>
                                             <option value="S" {{ old('tshirt_size', $participant->tshirt_size) == 'S' ? 'selected' : '' }}>S</option>
                                             <option value="M" {{ old('tshirt_size', $participant->tshirt_size) == 'M' ? 'selected' : '' }}>M</option>
@@ -343,6 +343,21 @@
                                         </select>
                                     </div>
                                 </div>
+
+                                <script>
+                                    // Set the cutoff date (update as needed)
+                                    const cutoffDate = '2025-05-10'; // Example cutoff date (YYYY-MM-DD)
+
+                                    // Get current date in YYYY-MM-DD format
+                                    const currentDate = new Date().toISOString().split('T')[0];
+
+                                    // Check if the current date is past the cutoff date
+                                    if (currentDate > cutoffDate) {
+                                        // Disable the dropdown if the cutoff date has passed
+                                        document.getElementById('tshirt_size').disabled = true;
+                                    }
+                                </script>
+
 
                                 <!-- Delegate Type -->
                                 <div class="col-md-6 col-lg-4">
@@ -363,6 +378,65 @@
                             <button type="button" class="btn btn-primary btn-round" onclick="window.location.href='{{ route('coop.index') }}'">Back</button>
                         </div>
                     </form>
+
+                    <style>
+                        .floating-notice {
+                            position: fixed;
+                            bottom: 20px;
+                            right: 20px;
+                            background-color: #f8d7da;
+                            color: #721c24;
+                            padding: 15px 25px;
+                            border-radius: 5px;
+                            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                            z-index: 9999;
+                            width: auto;
+                            max-width: 300px;
+                            display: flex;
+                            flex-direction: column; /* Align content vertically */
+                        }
+
+                        .notice-content {
+                            font-family: Arial, sans-serif;
+                            font-size: 14px;
+                            max-width: 240px;
+                        }
+
+                        .floating-notice p {
+                            margin: 0;
+                        }
+
+                        .floating-notice strong {
+                            font-weight: bold;
+                        }
+
+                        .close-btn {
+                            background: none;
+                            border: none;
+                            font-size: 20px;
+                            color: #721c24;
+                            cursor: pointer;
+                            position: absolute;
+                            top: 5px;
+                            right: 10px;
+                        }
+                    </style>
+
+                    <!-- Floating Notice with Close Button -->
+                    <div class="floating-notice">
+                        <button class="close-btn" onclick="closeNotice()">×</button>
+                        <div class="notice-content">
+                            <p><strong>Notice:</strong> Please note the cut-off date for T-shirt size selection is <strong>May 10, 2025</strong>. Ensure you choose your T-shirt size before the deadline.</p>
+                        </div>
+                    </div>
+
+                    <script>
+                        // Function to close the floating notice
+                        function closeNotice() {
+                            document.querySelector('.floating-notice').style.display = 'none';
+                        }
+                    </script>
+
 
                 </div>
                 </div>

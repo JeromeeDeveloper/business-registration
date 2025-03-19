@@ -199,8 +199,10 @@
             events: {!! json_encode($events->map(function ($event) {
                 return [
                     'title' => $event->title,
-                    'start' => $event->start_date,
-                    'end'   => $event->end_date,
+              'start' => \Carbon\Carbon::parse($event->start_date)->format('Y-m-d'),
+
+
+                    // 'end'   => $event->end_date,
                     'description' => $event->description,
                     'location' => $event->location,
                     'display' => 'block'
@@ -214,7 +216,7 @@
                     title: info.event.title,
                     html: `
                         <strong>Start:</strong> ${info.event.start.toLocaleString()}<br>
-                        <strong>End:</strong> ${info.event.end ? info.event.end.toLocaleString() : 'N/A'}<br>
+
                         <strong>Location:</strong> ${info.event.extendedProps.location || 'No location provided'}<br>
                         <strong>Description:</strong> ${info.event.extendedProps.description || 'No description provided'}
                     `,

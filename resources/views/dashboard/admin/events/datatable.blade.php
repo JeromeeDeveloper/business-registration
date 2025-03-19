@@ -237,9 +237,8 @@
                                 <thead>
                                     <tr>
                                         <th>Title</th>
-                                        <th>Start Date</th>
-                                        <th>End Date</th>
-                                        <th>Location</th>
+                                        <th>Date</th>
+
                                         <th style="width: 10%">Action</th>
                                     </tr>
                                 </thead>
@@ -248,8 +247,8 @@
                                         <tr>
                                             <td>{{ $event->title }}</td>
                                             <td>{{ \Carbon\Carbon::parse($event->start_date)->format('F j, Y') }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($event->end_date)->format('F j, Y') }}</td>
-                                            <td>{{ $event->location }}</td>
+
+                                            {{-- <td>{{ $event->location }}</td> --}}
                                             <td>
                                                 <div class="form-button-action">
                                                     <!-- Edit Speaker -->

@@ -282,7 +282,9 @@
                                                     title="Print Cooperative List">
                                                     <i class="fa fa-print"></i>
                                                 </button>
+
                                             </div>
+
 
                                         </form>
                                     </div>
@@ -319,6 +321,17 @@
                                             </button>
                                         </div>
 
+
+
+
+
+                                    @if(session('status'))
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <strong>Success!</strong> {{ session('status') }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                @endif
+
                                     </div>
 
                                     <!-- Other page content here -->
@@ -342,7 +355,7 @@
                                                             class="btn btn-outline-info w-100 d-flex align-items-center justify-content-center px-4 py-2 fw-semibold"
                                                             onclick="openGmail()" data-bs-toggle="tooltip"
                                                             title="Notify via Email">
-                                                            <i class="fa fa-envelope me-2"></i> Email
+                                                            <i class="fa fa-envelope me-2"></i> Manual Email Invitation
                                                         </button>
                                                     </form>
 
@@ -353,13 +366,13 @@
                                                         @csrf
                                                         <button type="submit"
                                                             class="btn btn-outline-success w-100 d-flex align-items-center justify-content-center px-4 py-2 fw-semibold"
-                                                            data-bs-toggle="tooltip" title="Send Status & Invitation">
-                                                            <i class="fa fa-bell me-2"></i> Status & Invite
+                                                            data-bs-toggle="tooltip" title="Send Credentials & Invitation">
+                                                            <i class="fa fa-bell me-2"></i> Invitation & Credentials
                                                         </button>
                                                     </form>
 
                                                     <!-- Credentials Form -->
-                                                    <form action="{{ route('cooperatives.notifyCredentialsAll') }}"
+                                                    {{-- <form action="{{ route('cooperatives.notifyCredentialsAll') }}"
                                                         method="POST"
                                                         onsubmit="showSwalLoader(event, this, 'Sending Login Credentials...')">
                                                         @csrf
@@ -368,7 +381,7 @@
                                                             data-bs-toggle="tooltip" title="Send Login Credentials">
                                                             <i class="fa fa-lock me-2"></i> Credentials
                                                         </button>
-                                                    </form>
+                                                    </form> --}}
 
                                                 </div>
                                                 <div class="modal-footer">
@@ -407,49 +420,25 @@
 
                                                         <!-- Registration Status Dropdown -->
                                                         <td class="p-2 align-middle text-center">
-                                                            <form
-                                                                action="{{ route('cooperatives.updateStatus', $coop->coop_id) }}"
-                                                                method="POST" class="mb-0">
-                                                                @csrf
-                                                                @method('PUT')
-                                                                <select name="registration_status"
-                                                                    class="form-select form-select-sm rounded-pill shadow-sm border-0 text-center fw-semibold text-primary fs-6"
-                                                                    style="min-width: 200px; cursor: pointer; transition: all 0.3s;"
-                                                                    onchange="this.form.submit()">
-                                                                    <option value="" disabled selected>-- Select
-                                                                        Status --</option>
-                                                                    <option value="Partial Registered"
-                                                                        {{ optional($coop->gaRegistration)->registration_status == 'Partial Registered' ? 'selected' : '' }}>
-                                                                        Partial Registered
-                                                                    </option>
-                                                                    <option value="Fully Registered"
-                                                                        {{ optional($coop->gaRegistration)->registration_status == 'Fully Registered' ? 'selected' : '' }}>
-                                                                        Fully Registered
-                                                                    </option>
-                                                                </select>
-                                                            </form>
+                                                            <div class="form-control text-center fw-semibold text-primary fs-6" style="min-width: 200px;">
+                                                                @php
+                                                                    $status = optional($coop->gaRegistration)->registration_status;
+                                                                    echo $status === 'Rejected' ? 'NOT AVAILABLE' : ($status ?? 'NOT AVAILABLE');
+                                                                @endphp
+                                                            </div>
                                                         </td>
 
+                                                        <!-- Membership Status Dropdown -->
                                                         <td class="p-2 align-middle text-center">
-                                                            <form action="{{ route('cooperatives.updateStatus', $coop->coop_id) }}" method="POST" class="mb-0">
-                                                                @csrf
-                                                                @method('PUT')
-                                                                <select name="membership_status"
-                                                                    class="form-select form-select-sm rounded-pill shadow-sm border-0 text-center fw-semibold text-success fs-6"
-                                                                    style="min-width: 200px; cursor: pointer; transition: all 0.3s;"
-                                                                    onchange="this.form.submit()">
-                                                                    <option value="" disabled selected>-- Select Status --</option>
-                                                                    <option value="Non-migs"
-                                                                        {{ optional($coop->gaRegistration)->membership_status == 'Non-migs' ? 'selected' : '' }}>
-                                                                        {{ strtoupper('Non-migs') }}
-                                                                    </option>
-                                                                    <option value="Migs"
-                                                                        {{ optional($coop->gaRegistration)->membership_status == 'Migs' ? 'selected' : '' }}>
-                                                                        {{ strtoupper('Migs') }}
-                                                                    </option>
-                                                                </select>
-                                                            </form>
+                                                            <div class="form-control text-center fw-semibold text-success fs-6" style="min-width: 200px;">
+                                                                @php
+                                                                    $membershipStatus = optional($coop->gaRegistration)->membership_status ?? 'Not Available';
+                                                                @endphp
+                                                                {{ strtoupper($membershipStatus) }}
+                                                            </div>
                                                         </td>
+
+
 
                                                         <td class="no-print">
                                                             <div class="form-button-action">
@@ -469,7 +458,7 @@
                                                                     <button type="submit"
                                                                         class="btn btn-link btn-info btn-lg"
                                                                         data-bs-toggle="tooltip"
-                                                                        title="Send Status, Invite & Credentials">
+                                                                        title="Send Invitation & Credentials">
                                                                         <i class="fa fa-bell"></i>
                                                                     </button>
                                                                 </form>

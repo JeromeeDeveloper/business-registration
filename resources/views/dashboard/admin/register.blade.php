@@ -267,8 +267,7 @@
                                             <div class="col-md-6 col-lg-4">
                                                 <div class="form-group">
                                                     <label for="region">Region</label>
-                                                    <select class="form-control" name="region" id="region"
-                                                        required>
+                                                    <select class="form-control" name="region" id="region" required>
                                                         <option value="">Select Region</option>
                                                         <option value="Region I">Region I</option>
                                                         <option value="Region II">Region II</option>
@@ -283,12 +282,15 @@
                                                         <option value="Region X">Region X</option>
                                                         <option value="Region XI">Region XI</option>
                                                         <option value="Region XII">Region XII</option>
+                                                        <option value="Region XIII">Region XIII</option>
                                                         <option value="NCR">National Capital Region</option>
-                                                        <option value="CAR">Cordillera Administrative Region
-                                                        </option>
+                                                        <option value="CAR">Cordillera Administrative Region</option>
                                                         <option value="BARMM">Bangsamoro Autonomous Region</option>
+                                                        <option value="ZBST">ZBST</option>
+                                                        <option value="LUZON">LUZON</option>
                                                     </select>
                                                 </div>
+
                                             </div>
 
                                             <!-- Phone Number -->
@@ -461,33 +463,33 @@
                                                             <legend class="h5 text-success">CETF Requirement Computation</legend>
 
 
-                                                                <div class="form-group">
-                                                                    <label for="fs_status">Audited Financial Statement Status</label>
-                                                                    <select class="form-control" name="fs_status" id="fs_status" required>
-                                                                        <option value="">Select Status</option>
-                                                                        <option value="yes">Yes</option>
-                                                                        <option value="no">No</option>
-                                                                    </select>
-                                                                </div>
+                                                            <div class="form-group">
+                                                                <label for="fs_status">FS(YES/NO)</label>
+                                                                <select class="form-control" name="fs_status" id="fs_status">
+                                                                    <option value="">Select Status</option>
+                                                                    <option value="yes">Yes</option>
+                                                                    <option value="no" selected>No</option> <!-- Set default value to "No" -->
+                                                                </select>
+                                                            </div>
 
 
 
-                                                                <div class="form-group">
-                                                                    <label for="delinquent">Delinquent Type</label>
-                                                                    <select class="form-control" name="delinquent" id="delinquent" required>
-                                                                        <option value="">Select Status</option>
-                                                                        <option value="yes">Yes</option>
-                                                                        <option value="no">No</option>
-                                                                    </select>
-                                                                </div>
 
+                                                            <div class="form-group">
+                                                                <label for="delinquent">Delinquent</label>
+                                                                <select class="form-control" name="delinquent" id="delinquent" required>
+                                                                    <option value="">Select Status</option>
+                                                                    <option value="yes">Delinquent</option>
+                                                                    <option value="no" selected>Non-Delinquent</option> <!-- Set default value to "No" -->
+                                                                </select>
+                                                            </div>
 
 
 
                                                                 <div class="form-group">
                                                                     <label for="total_asset" class="form-label">Total Assets</label>
                                                                     <input type="number" class="form-control" name="total_asset" id="total_asset"
-                                                                        placeholder="Enter Total Assets" required />
+                                                                        placeholder="Enter Total Assets" />
                                                                 </div>
 
                                                                 <div class="form-group">

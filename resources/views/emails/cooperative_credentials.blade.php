@@ -13,15 +13,12 @@
     <p>We are notifying you about an upcoming event related to your cooperative, as well as your cooperative credentials.</p>
 
     <h2>Event Details:</h2>
-    @if ($event)
+
         <p>
-            <strong>Event Name:</strong> {{ $event->title }}<br>
-            <strong>Event Date:</strong> {{ $event->start_date ? \Carbon\Carbon::parse($event->start_date)->format('F j, Y') : 'TBD' }}<br>
-            <strong>Event Location:</strong> {{ $event->location ?? 'TBD' }}<br><br>
+            <strong>Event Name:</strong> 51st General Assembly<br>
+            <strong>Event Date:</strong> May 25, 2025<br>
         </p>
-    @else
-        <p><strong>No upcoming event found.</strong></p>
-    @endif
+
 
     <h2>User Login Credentials:</h2>
     @if ($users->isEmpty())

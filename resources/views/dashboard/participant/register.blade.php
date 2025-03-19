@@ -270,7 +270,7 @@
                             <!-- Congress Type -->
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
-                                    <label for="congress_type">Congress Type</label>
+                                    <label for="congress_type">Congress</label>
                                     <input type="text" class="form-control @error('congress_type') is-invalid @enderror" name="congress_type" id="congress_type" placeholder="Enter Congress Type" value="{{ old('congress_type') }}" />
                                     @error('congress_type')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -279,7 +279,7 @@
                             </div>
 
                             <!-- Religious Affiliation -->
-                            <div class="col-md-6 col-lg-4">
+                            {{-- <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="religious_affiliation">Religious Affiliation</label>
                                     <input type="text" class="form-control @error('religious_affiliation') is-invalid @enderror" name="religious_affiliation" id="religious_affiliation" placeholder="Enter Religious Affiliation" value="{{ old('religious_affiliation') }}" />
@@ -287,7 +287,7 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <!-- T-shirt Size -->
                             <div class="col-md-6 col-lg-4">

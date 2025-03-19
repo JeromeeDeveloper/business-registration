@@ -236,16 +236,16 @@
                                             <!-- Stats -->
                                             <div class="col col-stats ms-3 ms-sm-0">
                                                 <div class="numbers">
-                                                    <p class="card-category mb-1">Congress Types to be Attended</p>
+                                                    <p class="card-category mb-1">Congresses to be Attended</p>
 
-                                                    @if ($participant->events->isNotEmpty())
-                                                        @foreach ($participant->events as $event)
-                                                            <span
-                                                                class="badge bg-primary me-1">{{ $event->title }}</span>
-                                                        @endforeach
-                                                    @else
-                                                        <span class="text-muted">No congress types to attend.</span>
-                                                    @endif
+                                                    @if (!empty($participant) && $participant->events && $participant->events->isNotEmpty())
+                                                    @foreach ($participant->events as $event)
+                                                        <span class="badge bg-primary me-1">{{ $event->title }}</span>
+                                                    @endforeach
+                                                @else
+                                                    <span class="text-muted">No congress types to attend.</span>
+                                                @endif
+
 
                                                 </div>
                                             </div>
@@ -296,9 +296,11 @@
                                                 <div class="numbers">
                                                     <p class="card-category">Registration Status</p>
                                                     <h4 class="card-title">
-                                                        {{ $latestRegistration->registration_status }}</h4>
+                                                        {{ $latestRegistration->registration_status === 'Rejected' ? 'Not Available' : $latestRegistration->registration_status }}
+                                                    </h4>
                                                 </div>
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -391,7 +393,7 @@
                         <div class="col-md-4">
                             @if ($latestEvents->count() > 0)
                                 <div id="eventsCarousel" class="carousel slide" data-bs-ride="carousel"
-                                    data-bs-interval="2000" data-bs-wrap="true">
+                                    data-bs-interval="7000" data-bs-wrap="true">
 
                                     <div class="carousel-inner">
                                         @foreach ($latestEvents as $index => $event)
@@ -415,7 +417,7 @@
                                                                         <div class="dropdown-menu"
                                                                             aria-labelledby="dropdownMenuButton{{ $event->event_id }}">
                                                                             <a class="dropdown-item"
-                                                                                href="{{ route('events.index') }}">View
+                                                                                href="{{ route('events_participant') }}">View
                                                                                 Details</a>
                                                                         </div>
                                                                     </div>
@@ -423,16 +425,16 @@
                                                             </div>
                                                             <div class="card-category">
                                                                 {{ \Carbon\Carbon::parse($event->start_date)->format('F d, Y') }}
-                                                                -
-                                                                {{ \Carbon\Carbon::parse($event->end_date)->format('F d, Y') }}
+                                                                {{-- -
+                                                                {{ \Carbon\Carbon::parse($event->end_date)->format('F d, Y') }} --}}
                                                             </div>
                                                         </div>
                                                         <div class="card-body">
-                                                            <p>{{ $event->description }}</p>
+                                                            {{-- <p>{{ $event->description }}</p> --}}
                                                             <ul>
                                                                 <li><strong>📍 Venue:</strong> {{ $event->location }}
                                                                 </li>
-                                                                <li><strong>🕒 Time:</strong> 9:00 AM - 5:00 PM</li>
+                                                                {{-- <li><strong>🕒 Time:</strong> 9:00 AM - 5:00 PM</li> --}}
                                                                 <li><strong>🎤 Guest Speakers:</strong>
                                                                     @if ($event->speakers->count() > 0)
                                                                         {{ $event->speakers->pluck('name')->implode(', ') }}
@@ -440,8 +442,7 @@
                                                                         No speakers listed
                                                                     @endif
                                                                 </li>
-                                                                <li><strong>📌 Activities:</strong> Presentations, Q&A
-                                                                    Sessions, Voting</li>
+
                                                             </ul>
                                                         </div>
                                                     </div>
@@ -486,60 +487,52 @@
                                 }
                             </style>
 
-                            <div class="card shadow-lg border-0 rounded-3 overflow-hidden"
-                                style="transition: 0.3s; max-width: 500px; margin: auto;">
-                                <div class="card-header text-white bg-primary rounded-top">
-                                    <h5 class="mb-1"><i class="fas fa-calendar-alt"></i> Dates to Remember!</h5>
-                                    <small>Join us for the upcoming General Assembly 2024!</small>
-                                </div>
-                                <div class="card-body p-3" style="max-height: 300px; overflow-y: auto;">
-                                    <ul class="list-group list-group-flush">
-                                        <li class="list-group-item d-flex justify-content-between">
-                                            <span class="badge bg-primary">Feb - Apr</span>
-                                            <span class="text-start flex-grow-1 ms-2">Presentation of 2024 election guidelines.</span>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between">
-                                            <span class="badge bg-success">March 4</span>
-                                            <span class="text-start flex-grow-1 ms-2">Start of delegate registration.</span>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between">
-                                            <span class="badge bg-danger">May 20</span>
-                                            <span class="text-start flex-grow-1 ms-2">Start of filing Certificate of Candidacy.</span>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between">
-                                            <span class="badge bg-warning text-dark">May 22-24</span>
-                                            <span class="text-start flex-grow-1 ms-2">End of COC filing, CETF remittance & voter registration.</span>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between">
-                                            <span class="badge bg-info">May 22</span>
-                                            <span class="text-start flex-grow-1 ms-2">Mock election & Elecom review.</span>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between">
-                                            <span class="badge bg-secondary">May 23</span>
-                                            <span class="text-start flex-grow-1 ms-2">Candidate profiles sent to voting delegates.</span>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between">
-                                            <span class="badge bg-primary">May 27</span>
-                                            <span class="text-start flex-grow-1 ms-2">Ceremonial opening of elections.</span>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between">
-                                            <span class="badge bg-success">May 28</span>
-                                            <span class="text-start flex-grow-1 ms-2">Online voting continues.</span>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between">
-                                            <span class="badge bg-danger">May 29</span>
-                                            <span class="text-start flex-grow-1 ms-2">54th Leaders Congress & Election closing.</span>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between">
-                                            <span class="badge bg-warning text-dark">May 30</span>
-                                            <span class="text-start flex-grow-1 ms-2">Holy Mass & Proclamation of winners.</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="card-footer bg-light rounded-bottom">
-                                    <span class="badge bg-primary p-2" style="cursor: pointer; transition: 0.3s;">Don't miss this event!</span>
-                                </div>
-                            </div>
+<div class="card shadow-lg border-0 rounded-3 overflow-hidden" style="transition: 0.3s; max-width: 500px; margin: auto;">
+    <div class="card-header text-white bg-primary rounded-top">
+        <h5 class="mb-1"><i class="fas fa-calendar-alt"></i> Dates To Remember!</h5>
+        <small>Join us for the upcoming General Assembly 2025!</small>
+    </div>
+    <div class="card-body p-3" style="max-height: 300px; overflow-y: auto;">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between">
+                <span class="badge bg-primary">Mar 17</span>
+                <span class="text-start flex-grow-1 ms-2">Start of Online Registration</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+                <span class="badge bg-success">Apr 01</span>
+                <span class="text-start flex-grow-1 ms-2">Start of Filing Candidacy</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+                <span class="badge bg-danger">May 17</span>
+                <span class="text-start flex-grow-1 ms-2">End of Filing of Candidacy</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+                <span class="badge bg-warning text-dark">May 21</span>
+                <span class="text-start flex-grow-1 ms-2">Ceremonial Opening of Election</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+                <span class="badge bg-info">May 22</span>
+                <span class="text-start flex-grow-1 ms-2">End of Reg for Non-Voting</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+                <span class="badge bg-secondary">May 23</span>
+                <span class="text-start flex-grow-1 ms-2">SECTORAL CONGRESS 55th CO-OP LEADERS</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+                <span class="badge bg-primary">May 24</span>
+                <span class="text-start flex-grow-1 ms-2">55th CO-OP LEADERS</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+                <span class="badge bg-success">May 25</span>
+                <span class="text-start flex-grow-1 ms-2">51st General Assembly</span>
+            </li>
+        </ul>
+    </div>
+    <div class="card-footer bg-light rounded-bottom">
+        <span class="badge bg-primary p-2" style="cursor: pointer; transition: 0.3s;">Don't miss this event!</span>
+    </div>
+</div>
+
                         </div>
                     </div>
 

@@ -80,23 +80,7 @@
                             </div>
                         </li> --}}
 
-                        {{-- <li class="nav-item">
-                            <a data-bs-toggle="collapse" href="#attendance">
-                                <i class="fas fa-calendar"></i>
-                                <p>Attendance</p>
-                                <span class="caret"></span>
-                            </a>
-                            <div class="collapse" id="attendance">
-                                <ul class="nav nav-collapse">
-                                    <li>
-                                        <a href="{{ route('attendance.index') }}">
-                                            <span class="sub-item">Manage attendance</span>
-                                        </a>
-                                    </li>
-
-                                </ul>
-                            </div>
-                        </li>
+                        {{--
 
                         <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#user">
@@ -150,6 +134,24 @@
                                 </ul>
                             </div>
                         </li> --}}
+
+                        <li class="nav-item">
+                            <a data-bs-toggle="collapse" href="#attendance">
+                                <i class="fas fa-calendar"></i>
+                                <p>Attendance</p>
+                                <span class="caret"></span>
+                            </a>
+                            <div class="collapse" id="attendance">
+                                <ul class="nav nav-collapse">
+                                    <li>
+                                        <a href="{{ route('support.attendance.index') }}">
+                                            <span class="sub-item">Manage attendance</span>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </li>
 
                     </ul>
                 </div>
@@ -507,14 +509,14 @@
                                                                 </a>
 
                                                                 <!-- Edit Coop -->
-                                                                {{-- <button type="button"
-                                                                    class="btn btn-link btn-info btn-lg"
-                                                                    data-bs-toggle="tooltip" title="Edit Coop">
-                                                                    <a href="{{ route('cooperatives.edit', $coop->coop_id) }}"
+                                                                <button type="button"
+                                                                class="btn btn-link btn-info btn-lg"
+                                                                data-bs-toggle="tooltip" title="Upload Documents">
+                                                                    <a href="{{ route('support.cooperatives.edit', $coop->coop_id) }}"
                                                                         class="text-decoration-none text-primary">
-                                                                        <i class="fa fa-edit"></i>
+                                                                        <i class="fa fa-upload"></i>
                                                                     </a>
-                                                                </button> --}}
+                                                                </button>
 
                                                                 <!-- Delete Coop -->
                                                                 {{-- <form

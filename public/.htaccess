@@ -22,4 +22,13 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
+
+    # Allow access to storage files via symbolic link
+    RewriteCond %{REQUEST_URI} ^/storage/(.*)$
+    RewriteCond %{DOCUMENT_ROOT}/storage/app/public/%1 -f
+    RewriteRule ^storage/(.*)$ /storage/app/public/$1 [L,NC]
+
+    # Allow access to files within storage/app/public
+    RewriteCond %{DOCUMENT_ROOT}/storage/app/public/ -d
+    RewriteRule ^storage/(.*)$ /storage/app/public/$1 [L]
 </IfModule>

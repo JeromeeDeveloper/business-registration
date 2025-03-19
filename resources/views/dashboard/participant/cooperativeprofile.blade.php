@@ -504,7 +504,7 @@
                                                             <td>{{ number_format($cooperative->total_remittance, 2) ?? 'N/A' }}
                                                             </td>
                                                         </tr>
-                                                       
+
                                                         <tr>
                                                             <td class="fw-bold">Net Required Registration Fee:</td>
                                                             <td>{{ number_format($cooperative->net_required_reg_fee, 2) ?? 'N/A' }}
@@ -516,7 +516,7 @@
                                                                 {{ number_format($cooperative->registration_fee * $cooperative->participants->count(), 2) ?? 'N/A' }}
                                                             </td>
                                                         </tr>
-                                                        
+
                                                         <tr>
                                                             <td class="fw-bold">Less Pre-Registration Fee:</td>
                                                             <td id="less_prereg_payment">
@@ -525,7 +525,7 @@
                                                                 </span>
                                                             </td>
                                                         </tr>
-                                                        
+
                                                         <tr>
                                                             <td class="fw-bold">Less CETF Balance:</td>
                                                             <td id="less_cetf_balance">
@@ -534,14 +534,14 @@
                                                                 </span>
                                                             </td>
                                                         </tr>
-                                                        
+
                                                         <tr>
                                                             <td class="fw-bold">Registration Fee Payable:</td>
                                                             <td id="reg_fee_payable" class="fw-bold text-primary">
                                                                 {{ number_format($cooperative->reg_fee_payable, 2) ?? 'N/A' }}
                                                             </td>
                                                         </tr>
-                                                        
+
                                                         <tr>
                                                             <td class="fw-bold">Number of Entitled Votes:</td>
                                                             <td>{{ $cooperative->no_of_entitled_votes ?? 'N/A' }}</td>
@@ -554,8 +554,10 @@
 
                                                         <tr>
                                                             <td class="fw-bold">Services Availed:</td>
-                                                            <td>{{ implode(', ', json_decode($cooperative->services_availed, true ?? 'N/A')) }}
+                                                            <td>
+                                                                {{ is_array($services = json_decode($cooperative->services_availed, true)) ? implode(', ', $services) : 'N/A' }}
                                                             </td>
+
                                                             {{-- <p>{{ implode(', ', json_decode($cooperative->services_availed, true)) }}</p> --}}
                                                         </tr>
                                                         <tr>
@@ -570,7 +572,7 @@
                                                         </tr>
 
                                                         <tr>
-                                                            <td class="fw-bold">Delinquent Status:</td>
+                                                            <td class="fw-bold">Delinquent:</td>
                                                             <td>{{ $cooperative->delinquent ?? 'N/A' }}</td>
                                                         </tr>
                                                         <tr>
@@ -608,28 +610,28 @@
     </div>
 
     </div>
-    <script>
+    {{-- <script>
         document.addEventListener("DOMContentLoaded", function() {
             function calculateRegFeePayable() {
                 let regFee = parseFloat({{ $cooperative->registration_fee ?? 0 }});
                 let numParticipants = parseInt({{ $cooperative->participants->count() ?? 0 }});
                 let preregPayment = parseFloat(document.getElementById('less_prereg_payment').querySelector('span').getAttribute('data-value')) || 0;
                 let cetfBalance = parseFloat(document.getElementById('less_cetf_balance').querySelector('span').getAttribute('data-value')) || 0;
-        
+
                 // Calculate Total Registration Fee
                 let totalRegFee = numParticipants * regFee;
                 document.getElementById('total_reg_fee').textContent = totalRegFee.toFixed(2);
-        
+
                 // Calculate Registration Fee Payable
                 let regFeePayable = Math.max(0, totalRegFee - (preregPayment + cetfBalance));
                 document.getElementById('reg_fee_payable').textContent = regFeePayable.toFixed(2);
             }
-        
+
             // Run calculation on page load
             calculateRegFeePayable();
         });
-        </script>
-        
+        </script> --}}
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const dropdownButton = document.getElementById("servicesDropdown");

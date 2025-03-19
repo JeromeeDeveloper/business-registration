@@ -10,10 +10,13 @@ use App\Models\Cooperative;
 use App\Models\Participant;
 use Illuminate\Http\Request;
 use App\Models\GARegistration;
+use Illuminate\Validation\Rule;
 use App\Models\EventParticipant;
 use App\Models\UploadedDocument;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+
 
 class SupportController extends Controller
 {
@@ -173,4 +176,280 @@ class SupportController extends Controller
 
         return back()->with('success', 'Document status and remarks updated successfully.');
     }
+
+    public function edit($coop_id)
+    {
+        $coop = Cooperative::findOrFail($coop_id);
+
+        $hasFinancialStatement = UploadedDocument::where('coop_id', $coop->coop_id)
+        ->where('document_type', 'Financial Statement')
+        ->exists();
+        // Check if cooperative has MIGS membership
+        $hasMigsRegistration = GARegistration::where('coop_id', $coop->coop_id)
+            ->where('membership_status', 'MIGS')
+            ->exists();
+
+        // Check if cooperative has an MSP Officer participant
+        $hasMspOfficer = Participant::where('coop_id', $coop->coop_id)
+            ->where('is_msp_officer', true)
+            ->exists();
+
+        $coop->cetf_balance = ($coop->cetf_required ?? 0) - ($coop->total_remittance ?? 0);
+        // Check the total remittance
+        $totalRemittance = $coop->total_remittance ?? 0;
+        $free100kCETF = $totalRemittance >= 100000; // Free 1 pax if remittance >= 100K
+        $halfBasedCETF = $totalRemittance >= 50000; // Free 1 pax if remittance >= 50K
+
+        // Get the number of participants
+        $numParticipants = $coop->participants()->count();
+
+        // Calculate the number of free participants
+        $freeParticipants = 0;
+        if ($hasMigsRegistration) {
+            $freeParticipants += 2; // Free 2 participants for MIGS
+        }
+        if ($hasMspOfficer) {
+            $freeParticipants += 1;
+        }
+        if ($free100kCETF) {
+            $freeParticipants += 1;
+        }
+        if ($halfBasedCETF) {
+            $numParticipants = max(0, $numParticipants - 1); // Discount 1 participant by 50%
+        }
+
+        $paidParticipants = max($numParticipants - $freeParticipants, 0);
+
+        // Calculate total registration fee
+        $registrationFee = $coop->registration_fee ?? 0;
+        $totalRegFee = $paidParticipants * $registrationFee;
+
+        // Calculate registration fee payable
+        $netRequiredRegFee = $coop->net_required_reg_fee ?? 0;
+        $lessPreregPayment = $coop->less_prereg_payment ?? 0;
+        $lessCetfBalance = $coop->less_cetf_balance ?? 0;
+
+        $regFeePayable = max(0, $netRequiredRegFee - ($lessPreregPayment + $lessCetfBalance));
+
+        // Store values in the model
+        $coop->total_reg_fee = $totalRegFee;
+        $coop->reg_fee_payable = $regFeePayable;
+
+        return view('dashboard.support.edit', compact(
+            'coop', 'hasMigsRegistration', 'hasMspOfficer', 'free100kCETF', 'halfBasedCETF', 'hasFinancialStatement'
+        ));
+    }
+
+
+
+    public function update(Request $request, $coop_id)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'type' => 'required|string|max:255',
+            'contact_person' => 'required|string|max:255',
+            'general_manager_ceo' => 'nullable|string|max:255',
+            'bod_chairperson' => 'nullable|string|max:255',
+            'coop_identification_no' => 'nullable|string|max:255',
+            'region' => [
+                'required',
+                Rule::in([
+                    'Region I', 'Region II', 'Region III', 'Region IV-A', 'Region IV-B', 'Region V',
+                    'Region VI', 'Region VII', 'Region VIII', 'Region IX', 'Region X', 'Region XI',
+                    'Region XII', 'Region XIII', 'NCR', 'CAR', 'BARMM', 'ZBST','LUZON'
+                ]),
+            ],
+            'phone_number' => 'required|string|max:20',
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('participants', 'email'),
+                Rule::unique('cooperatives', 'email')->ignore($coop_id, 'coop_id'),
+            ],
+            'tin' => 'required|string|max:50',
+            'address' => 'required|string|max:255',
+            'fs_status' => ['nullable', Rule::in(['yes', 'no'])],
+            'delinquent' => ['nullable', Rule::in(['yes', 'no'])],
+
+            // Numeric Fields
+            'total_asset' => 'nullable|numeric|min:0',
+            'loan_balance' => 'nullable|numeric|min:0',
+            'total_overdue' => 'nullable|numeric|min:0',
+            'time_deposit' => 'nullable|numeric|min:0',
+            'accounts_receivable' => 'nullable|numeric|min:0',
+            'savings' => 'nullable|numeric|min:0',
+            'net_surplus' => 'nullable|numeric|min:0',
+            'cetf_due_to_apex' => 'nullable|numeric|min:0',
+            'additional_cetf' => 'nullable|numeric|min:0',
+            'cetf_undertaking' => 'nullable|numeric|min:0',
+            'total_income' => 'nullable|numeric|min:0',
+            'cetf_remittance' => 'nullable|numeric|min:0',
+            'cetf_required' => 'nullable|numeric|min:0',
+            'cetf_balance' => 'nullable|numeric',
+            'total_remittance' => 'nullable|numeric|min:0',
+            'net_required_reg_fee' => 'nullable|numeric|min:0',
+            'total_reg_fee' => 'nullable|numeric|min:0',
+            'share_capital_balance' => 'nullable|numeric|min:0',
+            'less_prereg_payment' => 'nullable|numeric|min:0',
+            'less_cetf_balance' => 'nullable|numeric|min:0',
+
+            // Other Fields
+            'full_cetf_remitted' => ['nullable', Rule::in(['yes', 'no'])],
+            'registration_date_paid' => 'nullable|date',
+            'registration_fee' => 'nullable|numeric|min:0',
+            'ga_remark' => 'nullable|string|max:255',
+            'no_of_entitled_votes' => 'nullable|integer|min:0',
+            'services_availed' => 'nullable|array',
+            'services_availed.*' => 'string|max:255',
+        ]);
+
+        // Convert numeric values (remove commas)
+        $numericFields = [
+            'total_asset', 'loan_balance', 'total_overdue', 'time_deposit',
+            'accounts_receivable', 'savings', 'net_surplus', 'cetf_due_to_apex',
+            'additional_cetf', 'cetf_undertaking', 'total_income', 'cetf_remittance',
+            'cetf_required', 'cetf_balance', 'total_remittance', 'net_required_reg_fee',
+            'total_reg_fee', 'share_capital_balance', 'registration_fee',
+            'less_prereg_payment', 'less_cetf_balance'
+        ];
+
+        foreach ($numericFields as $field) {
+            $validated[$field] = $request->$field ? (float) str_replace(',', '', $request->$field) : null;
+        }
+
+        $netRequiredRegFee = $validated['net_required_reg_fee'] ?? 0;
+        $lessPreregPayment = $validated['less_prereg_payment'] ?? 0;
+        $lessCetfBalance = $validated['less_cetf_balance'] ?? 0;
+
+
+        $validated['reg_fee_payable'] = max(0, $netRequiredRegFee - ($lessPreregPayment + $lessCetfBalance));
+
+        // ✅ Calculate `no_of_entitled_votes`
+        $share_capital = $validated['share_capital_balance'] ?? 0;
+        $votes = 0;
+
+        if ($share_capital >= 100000) {
+            $votes += floor($share_capital / 100000);
+        }
+
+        $validated['cetf_balance'] = ($validated['cetf_required'] ?? 0) - ($validated['total_remittance'] ?? 0);
+
+        $remaining = $share_capital % 100000;
+
+        while ($remaining >= 25000) {
+            if ($remaining >= 75000) {
+                $votes += 3;
+                $remaining -= 75000;
+            } elseif ($remaining >= 50000) {
+                $votes += 2;
+                $remaining -= 50000;
+            } elseif ($remaining >= 25000) {
+                $votes += 1;
+                $remaining -= 25000;
+            }
+        }
+
+        $validated['no_of_entitled_votes'] = min($votes, 5);
+
+        // Convert services_availed array to JSON
+        $validated['services_availed'] = isset($request->services_availed)
+            ? json_encode($request->services_availed)
+            : json_encode([]);
+
+        // ✅ Update the cooperative
+        $coop = Cooperative::findOrFail($coop_id);
+        $coop->update($validated);
+
+        // ✅ Update linked user
+        $user = User::where('coop_id', $coop->coop_id)->first();
+
+        if ($user) {
+            $currentUserEmail = strtolower(trim($user->email));
+            $newCoopEmail = strtolower(trim($coop->email));
+
+            if ($currentUserEmail !== $newCoopEmail) {
+                $emailExists = User::where('email', $coop->email)
+                    ->where('user_id', '!=', $user->user_id)
+                    ->exists();
+
+                if ($emailExists) {
+                    return redirect()->back()->withErrors(['email' => 'The email is already used by another user.']);
+                }
+
+                $user->update([
+                    'name' => $coop->contact_person,
+                    'email' => $coop->email,
+                ]);
+            } else {
+                $user->update([
+                    'name' => $coop->contact_person,
+                ]);
+            }
+        }
+
+        return redirect()->route('supportview')->with('success', 'Cooperative updated successfully!');
+    }
+
+    public function storeDocuments3(Request $request, $id)
+  {
+    $request->validate([
+       'documents.Financial Statement' => 'nullable|mimes:jpg,jpeg,png,pdf,xls,xlsx,csv',
+'documents.Resolution for Voting Delegates' => 'nullable|mimes:jpg,jpeg,png,pdf,xls,xlsx,csv',
+'documents.Deposit Slip for Registration Fee' => 'nullable|mimes:jpg,jpeg,png,pdf,xls,xlsx,csv',
+'documents.Deposit Slip for CETF Remittance' => 'nullable|mimes:jpg,jpeg,png,pdf,xls,xlsx,csv',
+'documents.CETF Undertaking' => 'nullable|mimes:jpg,jpeg,png,pdf,xls,xlsx,csv',
+'documents.Certificate of Candidacy' => 'nullable|mimes:jpg,jpeg,png,pdf,xls,xlsx,csv',
+'documents.CETF Utilization Invoice' => 'nullable|mimes:jpg,jpeg,png,pdf,xls,xlsx,csv',
+
+    ]);
+
+      // Find the cooperative by its ID
+      $cooperative = Cooperative::findOrFail($id);
+
+      $successMessages = [];
+      $uploadedFiles = $request->file('documents', []); // Default to empty array if no files
+
+      if (empty($uploadedFiles)) {
+          return redirect()->route('support.cooperatives.edit', $cooperative->coop_id)
+              ->with('error', 'No files were uploaded.');
+      }
+
+      foreach ($uploadedFiles as $documentType => $file) {
+          if (!$file) {
+              continue; // Skip if file is null
+          }
+
+          // Check if the document already exists
+          $existingDocument = UploadedDocument::where('coop_id', $cooperative->coop_id)
+              ->where('document_type', $documentType)
+              ->first();
+
+          if ($existingDocument) {
+              // Delete the existing document
+              Storage::disk('public')->delete($existingDocument->file_path);
+              $existingDocument->delete();
+              $successMessages[] = "$documentType replaced successfully.";
+          }
+
+          // Store the new file
+          $fileName = time() . '_' . $file->getClientOriginalName();
+          $filePath = $file->storeAs('documents', $fileName, 'public');
+
+          // Create a new document record
+          UploadedDocument::create([
+              'coop_id' => $cooperative->coop_id,
+              'document_type' => $documentType,
+              'file_name' => $file->getClientOriginalName(),
+              'file_path' => $filePath,
+          ]);
+
+          $successMessages[] = "$documentType uploaded successfully.";
+      }
+
+      // Set a unique session key based on the form submitted
+      $formKey = $request->input('form_key', 'default_form');
+      session()->flash("{$formKey}_success", implode('<br>', $successMessages));
+
+      return redirect()->route('support.cooperatives.edit', $cooperative->coop_id);
+  }
 }

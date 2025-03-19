@@ -317,6 +317,14 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('password'),
                 'role' => 'admin',
                 'coop_id' => null, // Add if necessary
+            ],
+
+            [
+                'name' => 'Jerry Mocorro',
+                'email' => 'jm.mocorro@mass-specc.coop',
+                'password' => Hash::make('password'),
+                'role' => 'admin',
+                'coop_id' => null, // Add if necessary
             ]
         ];
 

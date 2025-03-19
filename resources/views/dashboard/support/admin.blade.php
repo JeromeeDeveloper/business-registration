@@ -129,7 +129,7 @@
                             </div>
                         </li> --}}
 
-                        {{-- <li class="nav-item">
+                        <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#attendance">
                                 <i class="fas fa-calendar"></i>
                                 <p>Attendance</p>
@@ -138,14 +138,14 @@
                             <div class="collapse" id="attendance">
                                 <ul class="nav nav-collapse">
                                     <li>
-                                        <a href="{{ route('attendance.index') }}">
+                                        <a href="{{ route('support.attendance.index') }}">
                                             <span class="sub-item">Manage attendance</span>
                                         </a>
                                     </li>
 
                                 </ul>
                             </div>
-                        </li> --}}
+                        </li>
 
                         {{-- <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#user">
@@ -210,7 +210,7 @@
                 <div class="main-header-logo">
                     <!-- Logo Header -->
                     <div class="logo-header" data-background-color="dark">
-                        <a href="{{ route('adminDashboard') }}" class="logo">
+                        <a href="{{ route('supportDashboard') }}" class="logo">
                             <img class="logo-mass-specc" src="{{ asset('images/logo.png') }}" alt="">
                         </a>
                         <div class="nav-toggle">
@@ -627,12 +627,12 @@
                         <div class="col-md-4">
                             @if ($latestEvents->count() > 0)
                                 <div id="eventsCarousel" class="carousel slide" data-bs-ride="carousel"
-                                    data-bs-interval="2000" data-bs-wrap="true">
+                                    data-bs-interval="7000" data-bs-wrap="true">
 
                                     <div class="carousel-inner">
                                         @foreach ($latestEvents as $index => $event)
                                             <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                                                <div style="padding: 0 2px;"> <!-- Added 10px padding -->
+                                                <div style="padding: 0 10px;"> <!-- Added 10px padding -->
                                                     <div class="card card-primary card-round mb-3">
                                                         <div class="card-header">
                                                             <div class="card-head-row">
@@ -643,16 +643,16 @@
                                                             </div>
                                                             <div class="card-category">
                                                                 {{ \Carbon\Carbon::parse($event->start_date)->format('F d, Y') }}
-                                                                -
-                                                                {{ \Carbon\Carbon::parse($event->end_date)->format('F d, Y') }}
+
+                                                                {{-- {{ \Carbon\Carbon::parse($event->end_date)->format('F d, Y') }} --}}
                                                             </div>
                                                         </div>
                                                         <div class="card-body">
-                                                            <p>{{ $event->description }}</p>
+                                                            {{-- <p>{{ $event->description }}</p> --}}
                                                             <ul>
                                                                 <li><strong>📍 Venue:</strong> {{ $event->location }}
                                                                 </li>
-                                                                <li><strong>🕒 Time:</strong> 9:00 AM - 5:00 PM</li>
+                                                                {{-- <li><strong>🕒 Time:</strong> 9:00 AM - 5:00 PM</li> --}}
                                                                 <li><strong>🎤 Guest Speakers:</strong>
                                                                     @if ($event->speakers->count() > 0)
                                                                         {{ $event->speakers->pluck('name')->implode(', ') }}
@@ -660,8 +660,7 @@
                                                                         No speakers listed
                                                                     @endif
                                                                 </li>
-                                                                <li><strong>📌 Activities:</strong> Presentations, Q&A
-                                                                    Sessions, Voting</li>
+
                                                             </ul>
                                                         </div>
                                                     </div>
@@ -689,70 +688,52 @@
 
 
 
-                            <div class="card shadow-lg border-0 rounded-3 overflow-hidden"
-                                style="transition: 0.3s; max-width: 500px; margin: auto;">
+                            <div class="card shadow-lg border-0 rounded-3 overflow-hidden" style="transition: 0.3s; max-width: 500px; margin: auto;">
                                 <div class="card-header text-white bg-primary rounded-top">
-                                    <h5 class="mb-1"><i class="fas fa-calendar-alt"></i> Dates to Remember!</h5>
-                                    <small>Join us for the upcoming General Assembly 2024!</small>
+                                    <h5 class="mb-1"><i class="fas fa-calendar-alt"></i> Dates To Remember!</h5>
+                                    <small>Join us for the upcoming General Assembly 2025!</small>
                                 </div>
                                 <div class="card-body p-3" style="max-height: 300px; overflow-y: auto;">
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item d-flex justify-content-between">
-                                            <span class="badge bg-primary">Feb - Apr</span>
-                                            <span class="text-start flex-grow-1 ms-2">Presentation of 2024 election
-                                                guidelines.</span>
+                                            <span class="badge bg-primary">Mar 17</span>
+                                            <span class="text-start flex-grow-1 ms-2">Start of Online Registration</span>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between">
-                                            <span class="badge bg-success">March 4</span>
-                                            <span class="text-start flex-grow-1 ms-2">Start of delegate
-                                                registration.</span>
+                                            <span class="badge bg-success">Apr 01</span>
+                                            <span class="text-start flex-grow-1 ms-2">Start of Filing Candidacy</span>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between">
-                                            <span class="badge bg-danger">May 20</span>
-                                            <span class="text-start flex-grow-1 ms-2">Start of filing Certificate of
-                                                Candidacy.</span>
+                                            <span class="badge bg-danger">May 17</span>
+                                            <span class="text-start flex-grow-1 ms-2">End of Filing of Candidacy</span>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between">
-                                            <span class="badge bg-warning text-dark">May 22-24</span>
-                                            <span class="text-start flex-grow-1 ms-2">End of COC filing, CETF
-                                                remittance & voter registration.</span>
+                                            <span class="badge bg-warning text-dark">May 21</span>
+                                            <span class="text-start flex-grow-1 ms-2">Ceremonial Opening of Election</span>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between">
                                             <span class="badge bg-info">May 22</span>
-                                            <span class="text-start flex-grow-1 ms-2">Mock election & Elecom
-                                                review.</span>
+                                            <span class="text-start flex-grow-1 ms-2">End of Reg for Non-Voting</span>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between">
                                             <span class="badge bg-secondary">May 23</span>
-                                            <span class="text-start flex-grow-1 ms-2">Candidate profiles sent to voting
-                                                delegates.</span>
+                                            <span class="text-start flex-grow-1 ms-2">SECTORAL CONGRESS 55th CO-OP LEADERS</span>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between">
-                                            <span class="badge bg-primary">May 27</span>
-                                            <span class="text-start flex-grow-1 ms-2">Ceremonial opening of
-                                                elections.</span>
+                                            <span class="badge bg-primary">May 24</span>
+                                            <span class="text-start flex-grow-1 ms-2">55th CO-OP LEADERS</span>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between">
-                                            <span class="badge bg-success">May 28</span>
-                                            <span class="text-start flex-grow-1 ms-2">Online voting continues.</span>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between">
-                                            <span class="badge bg-danger">May 29</span>
-                                            <span class="text-start flex-grow-1 ms-2">54th Leaders Congress & Election
-                                                closing.</span>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between">
-                                            <span class="badge bg-warning text-dark">May 30</span>
-                                            <span class="text-start flex-grow-1 ms-2">Holy Mass & Proclamation of
-                                                winners.</span>
+                                            <span class="badge bg-success">May 25</span>
+                                            <span class="text-start flex-grow-1 ms-2">51st General Assembly</span>
                                         </li>
                                     </ul>
                                 </div>
                                 <div class="card-footer bg-light rounded-bottom">
-                                    <span class="badge bg-primary p-2"
-                                        style="cursor: pointer; transition: 0.3s;">Don't miss this event!</span>
+                                    <span class="badge bg-primary p-2" style="cursor: pointer; transition: 0.3s;">Don't miss this event!</span>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
