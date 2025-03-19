@@ -13,6 +13,7 @@ use App\Models\GARegistration;
 use Illuminate\Validation\Rule;
 use App\Models\EventParticipant;
 use App\Models\UploadedDocument;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -33,11 +34,11 @@ class SupportController extends Controller
         $latestEvents = Event::with('speakers')->orderBy('start_date', 'desc')->take(5)->get();
 
         $totalMigsAttended = EventParticipant::whereNotNull('attendance_datetime')
-        ->whereHas('participant.cooperative.gaRegistration', function ($query) {
-            $query->where('membership_status', 'Migs');
-        })
-        ->distinct('participant_id')
-        ->count('participant_id');
+            ->whereHas('participant.cooperative.gaRegistration', function ($query) {
+                $query->where('membership_status', 'Migs');
+            })
+            ->distinct('participant_id')
+            ->count('participant_id');
 
         $totalMigsParticipants = Participant::whereHas('cooperative.gaRegistration', function ($query) {
             $query->where('membership_status', 'Migs');
@@ -47,7 +48,6 @@ class SupportController extends Controller
             $query->where('membership_status', 'Non-migs');
         })->count();
 
-
         // Get cooperative IDs that are fully and partially registered
         $fullyRegisteredCoops = GARegistration::where('registration_status', 'Fully Registered')
             ->distinct()->count('coop_id');
@@ -56,18 +56,102 @@ class SupportController extends Controller
             ->distinct()->count('coop_id');
 
         // Count participants based on their cooperative's registration status
-        $fullyRegisteredParticipants = Participant::whereIn('coop_id',
+        $fullyRegisteredParticipants = Participant::whereIn(
+            'coop_id',
             GARegistration::where('registration_status', 'Fully Registered')->pluck('coop_id')
         )->count();
 
-        $partiallyRegisteredParticipants = Participant::whereIn('coop_id',
+        $partiallyRegisteredParticipants = Participant::whereIn(
+            'coop_id',
             GARegistration::where('registration_status', 'Partial Registered')->pluck('coop_id')
         )->count();
 
+        // Registered Coops: Fully or Partially Registered with GARegistration
+        $registeredCoops = GARegistration::whereIn('registration_status', ['Fully Registered', 'Partial Registered'])
+            ->whereNotNull('coop_id')
+            ->distinct()
+            ->count('coop_id');
+
+             // Count registered MIGS Coops
+    // Count registered MIGS Coops with Participant connection
+$registeredMigsCoops = GARegistration::where('membership_status', 'Migs')
+->whereHas('cooperative.participants') // Ensuring there's a Participant connected to the Cooperative
+->distinct()->count('coop_id');
+
+// Count registered NON-MIGS Coops with Participant connection
+$registeredNonMigsCoops = GARegistration::where('membership_status', 'Non-migs')
+->whereHas('cooperative.participants') // Ensuring there's a Participant connected to the Cooperative
+->distinct()->count('coop_id');
+
+$totalCoopAttended = DB::table('participants')
+    ->join('event_participant', 'participants.participant_id', '=', 'event_participant.participant_id')
+    ->whereNotNull('event_participant.attendance_datetime') // Ensures the participant attended
+    ->distinct('participants.coop_id') // Counts each coop only once
+    ->count('participants.coop_id');
+
+$totalMigsAttended = DB::table('participants')
+    ->join('event_participant', 'participants.participant_id', '=', 'event_participant.participant_id')
+    ->whereNotNull('event_participant.attendance_datetime') // Ensures the participant attended
+    ->whereIn('participants.coop_id', function ($query) {
+        $query->select('coop_id')
+              ->from('ga_registrations')
+              ->where('membership_status', 'Migs');
+    })
+    ->distinct('participants.coop_id') // Counts MIGS coop only once
+    ->count('participants.coop_id');
+
+$totalNonMigsAttended = DB::table('participants')
+    ->join('event_participant', 'participants.participant_id', '=', 'event_participant.participant_id')
+    ->whereNotNull('event_participant.attendance_datetime') // Ensures the participant attended
+    ->whereIn('participants.coop_id', function ($query) {
+        $query->select('coop_id')
+              ->from('ga_registrations')
+              ->where('membership_status', 'Non-migs');
+    })
+    ->distinct('participants.coop_id') // Counts Non-MIGS coop only once
+    ->count('participants.coop_id');
+
+// Attended Participants with Voting Delegate Type
+$totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
+    ->whereHas('participant', function ($query) {
+        $query->where('delegate_type', 'Voting');  // Only participants with 'voting' delegate type
+    })
+    ->distinct('participant_id')  // Ensures each participant is counted only once
+    ->count('participant_id');
+
+    $events = Event::withCount(['participants' => function ($query) {
+        $query->whereNotNull('event_participant.attendance_datetime'); // Specify the table
+    }])->get();
+
+        // Registered Participants: Those with non-null coop_id
+        $registeredParticipants = Participant::whereNotNull('coop_id')->count();
+
         return view('dashboard.support.admin', compact(
-            'totalParticipants', 'totalUsers', 'totalSpeakers', 'totalEvents', 'latestEvent',
-            'fullyRegisteredCoops', 'partiallyRegisteredCoops',
-            'fullyRegisteredParticipants', 'partiallyRegisteredParticipants', 'totalCooperative', 'totalAttended', 'totalMigsAttended', 'totalMigsParticipants','totalNonMigsParticipants','latestEvents'
+            'totalParticipants',
+            'totalUsers',
+            'totalSpeakers',
+            'totalEvents',
+            'latestEvent',
+            'fullyRegisteredCoops',
+            'partiallyRegisteredCoops',
+            'fullyRegisteredParticipants',
+            'partiallyRegisteredParticipants',
+            'totalCooperative',
+            'totalAttended',
+            'totalMigsAttended',
+            'totalMigsParticipants',
+            'totalNonMigsParticipants',
+            'latestEvents',
+            'registeredCoops',
+            'registeredMigsCoops',
+            'registeredNonMigsCoops',
+            'totalCoopAttended',
+            'totalCoopAttended',
+            'totalMigsAttended',
+            'totalNonMigsAttended',
+            'totalVotingParticipants',
+            'events',
+            'registeredParticipants'
         ));
     }
 

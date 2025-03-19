@@ -254,7 +254,9 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
     ->distinct('participant_id')  // Ensures each participant is counted only once
     ->count('participant_id');
 
-
+    $events = Event::withCount(['participants' => function ($query) {
+        $query->whereNotNull('event_participant.attendance_datetime'); // Specify the table
+    }])->get();
 
         // Registered Participants: Those with non-null coop_id
         $registeredParticipants = Participant::whereNotNull('coop_id')->count();
@@ -283,6 +285,7 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
             'totalMigsAttended',
             'totalNonMigsAttended',
             'totalVotingParticipants',
+            'events',
             'registeredParticipants'
         ));
     }

@@ -396,41 +396,11 @@
                                 </div>
                             </div>
 
-                            <!-- Include FontAwesome for Icons (If Not Already Included) -->
-
-
-
-
-
-
-                            <div class="modal fade" id="qrScannerModal" tabindex="-1"
-                                aria-labelledby="qrScannerModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="qrScannerModalLabel">Scan QR Code</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body text-center">
-                                            <div id="qr-reader" style="width: 100%;"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <input type="text" id="qr-input-field"
-                                style="position: absolute; opacity: 0; width: 1px; height: 1px;" />
-                            <div id="qr-display"></div>
-
                         </div>
-                        <div id="scanner-container" style="display:none;">
-                            <video id="preview" width="100%" height="auto"></video>
-                        </div>
+
 
                     </div>
                     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-3 mb-4">
-
 
                         <!-- Cooperative -->
                         <div class="col">
@@ -647,80 +617,115 @@
                         <div class="col-md-8">
 
 
-                            <div class="card card-round">
-                                <h3 class="p-3 text-center">Attendance Status</h3> <!-- Added title -->
-                                <div class="card-body d-flex">
-                                    <!-- Total Coop Attended -->
-                                    <div class="col">
-                                        <div class="card card-stats card-round shadow-sm h-100">
-                                            <div class="card-body d-flex align-items-center">
-                                                <div class="col-icon me-3">
-                                                    <div class="icon-big text-info text-center">
-                                                        <i class="fas fa-users"></i>
+                            <div class="card card-round shadow-lg">
+                                <h3 class="p-4 text-center text-white bg-primary rounded-top">Attendance Status</h3> <!-- Title -->
+
+                                <div class="card-body p-4">
+                                    <div class="row">
+                                        <!-- Total Coop Attended -->
+                                        <div class="col-md-3 mb-4">
+                                            <div class="card card-stats card-round shadow-sm h-100">
+                                                <div class="card-body d-flex align-items-center p-3">
+                                                    <div class="col-icon me-3">
+                                                        <div class="icon-big text-info text-center rounded-circle bg-light p-3">
+                                                            <i class="fas fa-users fa-lg"></i> <!-- Total Coop Icon -->
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <p class="card-category mb-1 text-muted">Total Coop Attended</p>
+                                                        <h4 class="card-title mb-0 text-dark">{{ number_format($totalCoopAttended) }}</h4>
                                                     </div>
                                                 </div>
-                                                <div>
-                                                    <p class="card-category mb-1">Total Coop Attended</p>
-                                                    <h4 class="card-title mb-0">{{ number_format($totalCoopAttended) }}</h4>
+                                            </div>
+                                        </div>
+
+                                        <!-- Total MIGS Coop Attended -->
+                                        <div class="col-md-3 mb-4">
+                                            <div class="card card-stats card-round shadow-sm h-100">
+                                                <div class="card-body d-flex align-items-center p-3">
+                                                    <div class="col-icon me-3">
+                                                        <div class="icon-big text-success text-center rounded-circle bg-light p-3">
+                                                            <i class="fas fa-user-friends fa-lg"></i> <!-- MIGS Coop Icon -->
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <p class="card-category mb-1 text-muted">Attended MIGS</p>
+                                                        <h4 class="card-title mb-0 text-dark">{{ number_format($totalMigsAttended) }}</h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Total NON-MIGS Coop Attended -->
+                                        <div class="col-md-3 mb-4">
+                                            <div class="card card-stats card-round shadow-sm h-100">
+                                                <div class="card-body d-flex align-items-center p-3">
+                                                    <div class="col-icon me-3">
+                                                        <div class="icon-big text-danger text-center rounded-circle bg-light p-3">
+                                                            <i class="fas fa-user-times fa-lg"></i> <!-- NON-MIGS Coop Icon -->
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <p class="card-category mb-1 text-muted">Attended NON-MIGS</p>
+                                                        <h4 class="card-title mb-0 text-dark">{{ number_format($totalNonMigsAttended) }}</h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Total Attended Voting Participants -->
+                                        <div class="col-md-3 mb-4">
+                                            <div class="card card-stats card-round shadow-sm h-100">
+                                                <div class="card-body d-flex align-items-center p-3">
+                                                    <div class="col-icon me-3">
+                                                        <div class="icon-big text-primary text-center rounded-circle bg-light p-3">
+                                                            <i class="fas fa-check-circle fa-lg"></i> <!-- Voting Icon -->
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <p class="card-category mb-1 text-muted">Total Participants Attended</p>
+                                                        <h4 class="card-title mb-0 text-dark">{{ number_format($totalVotingParticipants) }}</h4>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <!-- Total MIGS Coop Attended -->
-                                    <div class="col">
-                                        <div class="card card-stats card-round shadow-sm h-100">
-                                            <div class="card-body d-flex align-items-center">
-                                                <div class="col-icon me-3">
-                                                    <div class="icon-big text-success text-center">
-                                                        <i class="fas fa-user-friends"></i>
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <p class="card-category mb-1">Attended MIGS</p>
-                                                    <h4 class="card-title mb-0">{{ number_format($totalMigsAttended) }}</h4>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Total NON-MIGS Coop Attended -->
-                                    <div class="col">
-                                        <div class="card card-stats card-round shadow-sm h-100">
-                                            <div class="card-body d-flex align-items-center">
-                                                <div class="col-icon me-3">
-                                                    <div class="icon-big text-danger text-center">
-                                                        <i class="fas fa-user-times"></i>
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <p class="card-category mb-1">Attended NON-MIGS</p>
-                                                    <h4 class="card-title mb-0">{{ number_format($totalNonMigsAttended) }}</h4>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Total Attended Voting Participants -->
-                                    <div class="col">
-                                        <div class="card card-stats card-round shadow-sm h-100">
-                                            <div class="card-body d-flex align-items-center">
-                                                <div class="col-icon me-3">
-                                                    <div class="icon-big text-primary text-center">
-                                                        <i class="fas fa-check-circle"></i>  <!-- New icon -->
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <p class="card-category mb-1">Total Participants Attended</p>
-                                                    <h4 class="card-title mb-0">{{ number_format($totalVotingParticipants) }}</h4>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
                                 </div>
                             </div>
+
+
+                            <div class="card card-round shadow-lg">
+                                <h3 class="p-4 text-center text-white bg-primary rounded-top">Event Attendance Status</h3> <!-- Title -->
+                                <div class="card-header d-flex justify-content-between align-items-center border-0">
+                                    <h5 class="mb-0">Event Attendance Overview</h5>
+                                </div>
+
+                                <div class="card-body p-4">
+                                    <div class="row">
+                                        @foreach($events as $event)
+                                            <div class="col-md-4 mb-4">
+                                                <div class="card card-stats card-round shadow-sm h-100">
+                                                    <div class="card-body d-flex align-items-center p-3">
+                                                        <div class="col-icon me-3">
+                                                            <div class="icon-big text-primary text-center rounded-circle bg-light p-3">
+                                                                <i class="fas fa-calendar-check fa-lg"></i> <!-- Event Icon -->
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <p class="card-category mb-1 text-muted">{{ $event->title }}</p>
+                                                            <h4 class="card-title mb-0 text-dark">
+                                                                {{ number_format($event->participants_count) }} participants attended
+                                                            </h4>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+
+
 
 
 
