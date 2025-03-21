@@ -344,16 +344,18 @@
                                                 </a>
 
 
-                                                <a href="#"
-                                                    class="list-group-item list-group-item-action py-3 fw-semibold">
-                                                    <i class="fas fa-user-friends me-2"></i> Summary of Delegates Per
-                                                    Congress
-                                                </a>
-                                                <a href="#"
-                                                    class="list-group-item list-group-item-action py-3 fw-semibold">
-                                                    <i class="fas fa-tshirt me-2"></i> T-Shirt Sizes (All or Per
-                                                    Congress)
-                                                </a>
+                                                <a href="{{ route('admin.reports.summary_delegates') }}"
+                                                class="list-group-item list-group-item-action py-3 fw-semibold"
+                                                data-report-type="summary_delegates">
+                                                <i class="fas fa-user-friends me-2"></i> Summary of Delegates Per Congress
+                                             </a>
+
+
+                                             <a href="{{ route('admin.reports.tshirt_sizes') }}"
+                                             class="list-group-item list-group-item-action py-3 fw-semibold"
+                                             data-report-type="tshirt_sizes">
+                                             <i class="fas fa-tshirt me-2"></i> T-Shirt Sizes (All or Per Congress)
+                                             </a>
                                                 <a href="#"
                                                     class="list-group-item list-group-item-action py-3 fw-semibold">
                                                     <i class="fas fa-building me-2"></i> Coop Registration Summary with
@@ -556,7 +558,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <p class="card-category mb-1">MIGS Members</p>
+                                        <p class="card-category mb-1">MIGS Participants</p>
                                         <h4 class="card-title mb-0">{{ number_format($totalMigsParticipants ?? 0) }}
                                         </h4>
                                     </div>
@@ -574,7 +576,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <p class="card-category mb-1">NON-MIGS Members</p>
+                                        <p class="card-category mb-1">NON-MIGS Participants</p>
                                         <h4 class="card-title mb-0">
                                             {{ number_format($totalNonMigsParticipants ?? 0) }}</h4>
                                     </div>
@@ -719,9 +721,7 @@
 
                             <div class="card card-round shadow-lg">
                                 <h3 class="p-4 text-center text-white bg-primary rounded-top">Event Attendance Status</h3> <!-- Title -->
-                                <div class="card-header d-flex justify-content-between align-items-center border-0">
-                                    <h5 class="mb-0">Event Attendance Overview</h5>
-                                </div>
+
 
                                 <div class="card-body p-4">
                                     <div class="row">
@@ -737,7 +737,7 @@
                                                         <div>
                                                             <p class="card-category mb-1 text-muted">{{ $event->title }}</p>
                                                             <h4 class="card-title mb-0 text-dark">
-                                                                {{ number_format($event->participants_count) }} participants attended
+                                                                {{ number_format($event->participants_count) }}
                                                             </h4>
                                                         </div>
                                                     </div>

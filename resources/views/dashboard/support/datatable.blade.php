@@ -459,16 +459,18 @@
                                                         <td class="p-2 align-middle text-center">
                                                             <span class="fw-semibold text-primary fs-6 rounded-pill shadow-sm border-0 px-3 py-1"
                                                                   style="min-width: 200px; display: inline-block; background: #eef2ff;">
-                                                                {{ optional($coop->gaRegistration)->registration_status ?? 'Not Set' }}
+                                                              {{ optional($coop->gaRegistration)->registration_status === 'Rejected' ? 'No Registration' : (optional($coop->gaRegistration)->registration_status ?? 'Not Set') }}
                                                             </span>
-                                                        </td>
+                                                          </td>
 
-                                                        <td class="p-2 align-middle text-center">
+
+                                                          <td class="p-2 align-middle text-center">
                                                             <span class="fw-semibold text-success fs-6 rounded-pill shadow-sm border-0 px-3 py-1"
                                                                   style="min-width: 200px; display: inline-block; background: #eaffea;">
-                                                                {{ optional($coop->gaRegistration)->membership_status ?? 'Not Set' }}
+                                                              {{ strtoupper(optional($coop->gaRegistration)->membership_status ?? 'Not Set') }}
                                                             </span>
-                                                        </td>
+                                                          </td>
+
 
                                                         <td class="no-print">
                                                             <div class="form-button-action">

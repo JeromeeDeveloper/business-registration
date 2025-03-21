@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
+use App\Observers\CooperativeObserver;
 use Illuminate\Support\Facades\Storage;
 
 class CooperativeController extends Controller
@@ -470,7 +471,12 @@ class CooperativeController extends Controller
     //       return back()->with('success', 'GA Registration status updated successfully.');
     //   }
 
+    public function updateAllCooperatives()
+    {
+        (new CooperativeObserver())->updateAllCooperativesMembershipStatus();
 
+        return response()->json(['message' => 'All cooperatives membership status updated successfully.']);
+    }
 
 
   public function storeDocuments2(Request $request, $id)

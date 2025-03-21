@@ -168,12 +168,12 @@ class DashboardController extends Controller
         $latestEvent = Event::with('speakers')->orderBy('start_date', 'desc')->first();
         $latestEvents = Event::with('speakers')->orderBy('start_date', 'desc')->take(5)->get();
 
-        $totalMigsAttended = EventParticipant::whereNotNull('attendance_datetime')
-            ->whereHas('participant.cooperative.gaRegistration', function ($query) {
-                $query->where('membership_status', 'Migs');
-            })
-            ->distinct('participant_id')
-            ->count('participant_id');
+        // $totalMigsAttended = EventParticipant::whereNotNull('attendance_datetime')
+        //     ->whereHas('participant.cooperative.gaRegistration', function ($query) {
+        //         $query->where('membership_status', 'Migs');
+        //     })
+        //     ->distinct('participant_id')
+        //     ->count('participant_id');
 
         $totalMigsParticipants = Participant::whereHas('cooperative.gaRegistration', function ($query) {
             $query->where('membership_status', 'Migs');
@@ -246,6 +246,8 @@ $totalNonMigsAttended = DB::table('participants')
     ->distinct('participants.coop_id') // Counts Non-MIGS coop only once
     ->count('participants.coop_id');
 
+    $totalVoting = Participant::where('delegate_type', 'Voting')->count();
+
 // Attended Participants with Voting Delegate Type
 $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
     ->whereHas('participant', function ($query) {
@@ -282,7 +284,7 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
             'registeredNonMigsCoops',
             'totalCoopAttended',
             'totalCoopAttended',
-            'totalMigsAttended',
+            'totalVoting',
             'totalNonMigsAttended',
             'totalVotingParticipants',
             'events',
@@ -428,6 +430,7 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
         $validated = $request->validate([
             'phone_number' => 'required|string|max:20',
             'bod_chairperson' => 'nullable|string|max:255',
+            'address' => 'nullable|string|max:255',
             'tin' => 'required|string|max:50',
             'general_manager_ceo' => 'nullable|string|max:255',
         ]);
@@ -852,7 +855,32 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
         ));
     }
 
+    public function updateStatus(Request $request, $coop_id)
+  {
+      // Validate inputs
+      $request->validate([
+          'registration_status' => 'nullable|in:Partial Registered,Fully Registered,Rejected',
+          'membership_status' => 'nullable|in:Non-migs,Migs',
+      ]);
 
+      // Find or create GA Registration for the Cooperative
+      $gaRegistration = GARegistration::firstOrCreate(
+          ['coop_id' => $coop_id],
+          ['participant_id' => null] // Ensure participant_id is handled
+      );
+
+      // Update only if values are provided
+      if ($request->filled('registration_status')) {
+          $gaRegistration->registration_status = $request->registration_status;
+      }
+      if ($request->filled('membership_status')) {
+          $gaRegistration->membership_status = $request->membership_status;
+      }
+
+      $gaRegistration->save();
+
+      return back()->with('success', 'GA Registration status updated successfully.');
+  }
 
     public function update(Request $request, $coop_id)
     {
@@ -934,7 +962,7 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
         $lessCetfBalance = $validated['less_cetf_balance'] ?? 0;
 
 
-        $validated['reg_fee_payable'] = max(0, $netRequiredRegFee - ($lessPreregPayment + $lessCetfBalance));
+        $validated['reg_fee_payable'] = $netRequiredRegFee - ($lessPreregPayment + $lessCetfBalance);
 
         // ✅ Calculate `no_of_entitled_votes`
         $share_capital = $validated['share_capital_balance'] ?? 0;
@@ -945,6 +973,7 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
         }
 
         $validated['cetf_balance'] = ($validated['cetf_required'] ?? 0) - ($validated['total_remittance'] ?? 0);
+        $validated['delinquent'] = $request->input('delinquent');
 
         $remaining = $share_capital % 100000;
 
@@ -1001,9 +1030,6 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
 
         return redirect()->route('adminview')->with('success', 'Cooperative updated successfully!');
     }
-
-
-
 
 
     public function show($id)

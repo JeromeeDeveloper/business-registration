@@ -33,12 +33,12 @@ class SupportController extends Controller
         $latestEvent = Event::with('speakers')->orderBy('start_date', 'desc')->first();
         $latestEvents = Event::with('speakers')->orderBy('start_date', 'desc')->take(5)->get();
 
-        $totalMigsAttended = EventParticipant::whereNotNull('attendance_datetime')
-            ->whereHas('participant.cooperative.gaRegistration', function ($query) {
-                $query->where('membership_status', 'Migs');
-            })
-            ->distinct('participant_id')
-            ->count('participant_id');
+        // $totalMigsAttended = EventParticipant::whereNotNull('attendance_datetime')
+        //     ->whereHas('participant.cooperative.gaRegistration', function ($query) {
+        //         $query->where('membership_status', 'Migs');
+        //     })
+        //     ->distinct('participant_id')
+        //     ->count('participant_id');
 
         $totalMigsParticipants = Participant::whereHas('cooperative.gaRegistration', function ($query) {
             $query->where('membership_status', 'Migs');
@@ -147,7 +147,7 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
             'registeredNonMigsCoops',
             'totalCoopAttended',
             'totalCoopAttended',
-            'totalMigsAttended',
+
             'totalNonMigsAttended',
             'totalVotingParticipants',
             'events',

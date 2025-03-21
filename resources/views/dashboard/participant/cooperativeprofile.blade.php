@@ -208,8 +208,8 @@
                                                                     class="form-label">Address</label>
                                                                 <input type="text" class="form-control"
                                                                     id="address" name="address"
-                                                                    value="{{ $cooperative->address }}" required
-                                                                    readonly>
+                                                                    value="{{ $cooperative->address }}"
+                                                                    >
                                                             </div>
                                                             <div class="col-md-4 mb-3">
                                                                 <div class="form-group">
@@ -237,7 +237,8 @@
                                                                 <input type="text" class="form-control"
                                                                     id="general_manager_ceo"
                                                                     name="general_manager_ceo"
-                                                                    value="{{ $cooperative->general_manager_ceo }}">
+                                                                    value="{{ $cooperative->general_manager_ceo }}"
+                                                                    placeholder="Enter General Manager CEO">
                                                             </div>
                                                             <div class="col-md-4 mb-3">
                                                                 <label for="email" class="form-label">Email</label>
@@ -250,20 +251,23 @@
                                                                     Number</label>
                                                                 <input type="text" class="form-control"
                                                                     id="phone_number" name="phone_number"
-                                                                    value="{{ $cooperative->phone_number }}">
+                                                                    value="{{ $cooperative->phone_number }}"
+                                                                    placeholder="Enter Phone Number">
                                                             </div>
                                                             <div class="col-md-4 mb-3">
                                                                 <label for="bod_chairperson" class="form-label">BOD
                                                                     Chairperson</label>
                                                                 <input type="text" class="form-control"
                                                                     id="bod_chairperson" name="bod_chairperson"
-                                                                    value="{{ $cooperative->bod_chairperson }}">
+                                                                    value="{{ $cooperative->bod_chairperson }}"
+                                                                    placeholder="Enter BOD Chairperson">
                                                             </div>
                                                             <div class="col-md-4 mb-3">
                                                                 <label for="tin" class="form-label">TIN</label>
                                                                 <input type="text" class="form-control"
                                                                     id="tin" name="tin"
-                                                                    value="{{ $cooperative->tin }}">
+                                                                    value="{{ $cooperative->tin }}"
+                                                                    placeholder="Enter TIN">
                                                             </div>
                                                             <div class="col-md-4 mb-3">
                                                                 <label for="coop_identification_no"
@@ -396,7 +400,8 @@
                                                         </tr>
                                                         <tr>
                                                             <td class="fw-bold">Phone Number:</td>
-                                                            <td>{{ $cooperative->phone_number ?? 'N/A' }}</td>
+<td>{{ $cooperative->phone_number === '0' ? 'N/A' : ($cooperative->phone_number ?? 'N/A') }}</td>
+
                                                         </tr>
                                                         <tr>
                                                             <td class="fw-bold">Email:</td>
@@ -537,7 +542,7 @@
 
                                                         <tr>
                                                             <td class="fw-bold">Registration Fee Payable:</td>
-                                                            <td id="reg_fee_payable" class="fw-bold text-primary">
+                                                            <td id="reg_fee_payable">
                                                                 {{ number_format($cooperative->reg_fee_payable, 2) ?? 'N/A' }}
                                                             </td>
                                                         </tr>
@@ -562,8 +567,8 @@
                                                         </tr>
                                                         <tr>
                                                             <td class="fw-bold">GA Registration Status:</td>
-                                                            <td>{{ optional($cooperative->gaRegistration)->registration_status ?? 'N/A' }}
-                                                            </td>
+                                                            <td>{{ optional($cooperative->gaRegistration)->registration_status == 'Rejected' ? 'Not Available' : (optional($cooperative->gaRegistration)->registration_status ?? 'N/A') }}</td>
+
                                                         </tr>
                                                         <tr>
                                                             <td class="fw-bold">Audtied Financial Statement Status:

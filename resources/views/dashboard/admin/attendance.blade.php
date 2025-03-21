@@ -745,7 +745,7 @@ devices.forEach(device => {
             modal.hide();
         }
     }
-  
+
     function useDroidCamIP(qrScanner, ip) {
         let videoElement = document.createElement("video");
         videoElement.src = ip;

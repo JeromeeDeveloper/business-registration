@@ -391,61 +391,11 @@
 
                                                     <div class="form-group">
                                                         <label for="share_capital_balance">Share Capital</label>
-                                                        <input type="text" class="form-control"
-                                                               name="share_capital_balance" id="share_capital_balance"
-                                                               value="{{ number_format($coop->share_capital_balance, 2) }}"
-                                                               placeholder="Enter Share Capital">
+                                                        <input type="number" class="form-control"
+                                                            name="share_capital_balance" id="share_capital_balance"
+                                                            value="{{ $coop->share_capital_balance }}"
+                                                            placeholder="Enter Share Capital">
                                                     </div>
-
-                                                    <script>
-                                                        const inputElement = document.getElementById('share_capital_balance');
-
-                                                        inputElement.addEventListener('input', function(event) {
-                                                            let value = event.target.value;
-
-                                                            // Remove any non-numeric characters except for the decimal point
-                                                            value = value.replace(/[^0-9.]/g, '');
-
-                                                            // Split the value into integer and decimal parts
-                                                            let [integerPart, decimalPart] = value.split('.');
-
-                                                            // Format the integer part with commas
-                                                            integerPart = new Intl.NumberFormat().format(integerPart);
-
-                                                            // If there is a decimal part, ensure it has at most 2 decimal places
-                                                            if (decimalPart) {
-                                                                decimalPart = decimalPart.substring(0, 2); // Limit to 2 decimal places
-                                                            }
-
-                                                            // Combine integer and decimal parts
-                                                            if (decimalPart) {
-                                                                value = `${integerPart}.${decimalPart}`;
-                                                            } else {
-                                                                value = integerPart;
-                                                            }
-
-                                                            // Delay updating the input field to avoid unwanted jumps
-                                                            setTimeout(() => {
-                                                                event.target.value = value;
-                                                            }, 0); // Delay with 0 milliseconds to give time for value stabilization
-                                                        });
-
-                                                        // Before submitting the form or processing the value, strip commas
-                                                        function getRawValue() {
-                                                            let value = inputElement.value;
-                                                            return value.replace(/,/g, ''); // Remove commas before submitting
-                                                        }
-
-                                                        // Example: submit the form with cleaned value (use this in the form submission)
-                                                        const form = document.querySelector('form');
-                                                        form.addEventListener('submit', function(e) {
-                                                            // Get the raw value (without commas)
-                                                            const rawValue = getRawValue();
-                                                            // Set the cleaned value before submitting the form
-                                                            inputElement.value = rawValue;
-                                                        });
-                                                    </script>
-
 
                                                     <div class="form-group">
                                                         <label for="no_of_entitled_votes">Complied SC Req. / # Voting
@@ -535,18 +485,28 @@
                                                     </div>
 
 
+
+
                                                     <!-- Other Requirement Checklist -->
-                                                    {{-- <h6 class="mt-3 text-secondary">Other Requirement Checklist:</h6>
+                                                    <h6 class="mt-3 text-secondary">Registration Status:</h6>
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox"
-                                                            name="board_resolution" id="board_resolution">
-                                                        <label class="form-check-label" for="board_resolution">Board Resolution Voting Delegate</label>
+                                                      <input class="form-check-input" type="checkbox" name="registration_status" id="registration_status" disabled {{ optional($coop->gaRegistration)->registration_status == 'Fully Registered' ? 'checked' : '' }}>
+                                                      <label class="form-check-label" for="registration_status">Fully Registered</label>
                                                     </div>
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox"
-                                                            name="list_officers" id="list_officers">
-                                                        <label class="form-check-label" for="list_officers">List of Officers</label>
-                                                    </div> --}}
+                                                      <input class="form-check-input" type="checkbox" name="registration_status_partial" id="registration_status_partial" disabled {{ optional($coop->gaRegistration)->registration_status == 'Partial Registered' ? 'checked' : '' }}>
+                                                      <label class="form-check-label" for="registration_status_partial">Partial Registered</label>
+                                                    </div>
+
+                                                    <h6 class="mt-3 text-secondary">Membership Status:</h6>
+                                                    <div class="form-check">
+                                                      <input class="form-check-input" type="checkbox" name="membership_status" id="membership_status" disabled {{ optional($coop->gaRegistration)->membership_status == 'Migs' ? 'checked' : '' }}>
+                                                      <label class="form-check-label" for="membership_status">Migs</label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                      <input class="form-check-input" type="checkbox" name="membership_status_non_migs" id="membership_status_non_migs" disabled {{ optional($coop->gaRegistration)->membership_status == 'Non-migs' ? 'checked' : '' }}>
+                                                      <label class="form-check-label" for="membership_status_non_migs">Non-migs</label>
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -568,16 +528,16 @@
                                                     </div>
 
 
-
                                                     <div class="form-group">
                                                         <label for="delinquent">Delinquent</label>
-                                                        <select class="form-control" name="delinquent" id="delinquent">
-                                                            <option value="yes" {{ old('delinquent', $cooperative->delinquent ?? 'no') == 'yes' ? 'selected' : '' }}>Delinquent</option>
-                                                            <option value="no" {{ old('delinquent', $cooperative->delinquent ?? 'no') == 'no' ? 'selected' : '' }}>Non-Delinquent</option>
+                                                        <select class="form-control" id="delinquent_display" disabled>
+                                                            <option value="yes" {{ ($coop->total_overdue > 0) ? 'selected' : '' }}>Delinquent</option>
+                                                            <option value="no" {{ ($coop->total_overdue <= 0) ? 'selected' : '' }}>Non-Delinquent</option>
                                                         </select>
                                                     </div>
 
-
+                                                    <!-- Hidden input for storing the actual delinquent value -->
+                                                    <input type="hidden" name="delinquent" id="delinquent" value="{{ $coop->total_overdue > 0 ? 'yes' : 'no' }}">
 
                                                     <div class="form-group">
                                                         <label for="total_asset">Total Assets</label>
@@ -988,9 +948,25 @@
         </script>
     @endif
     <script>
+        document.getElementById('total_overdue').addEventListener('input', function () {
+    const totalOverdue = parseFloat(this.value) || 0;
+    const delinquentSelect = document.getElementById('delinquent_display');
+    const delinquentInput = document.getElementById('delinquent');
+
+    if (totalOverdue > 0) {
+        delinquentSelect.value = 'yes';
+        delinquentInput.value = 'yes';
+    } else {
+        delinquentSelect.value = 'no';
+        delinquentInput.value = 'no';
+    }
+});
+
+    </script>
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Simulate your share capital balance (this should be dynamically fetched from your input field or value)
-            const shareCapital = parseFloat(document.getElementById('share_capital_balance').value) || 0; // Replace with your actual share capital input field
+            const shareCapitalInput = document.getElementById('share_capital_balance');
+            const entitledVotesInput = document.getElementById('no_of_entitled_votes');
 
             // Function to calculate the number of entitled votes
             function calculateEntitledVotes(shareCapital) {
@@ -1018,11 +994,22 @@
                 return Math.min(votes, 5); // Ensure that no more than 5 votes are entitled
             }
 
-            // Calculate and display the entitled votes
-            const entitledVotes = calculateEntitledVotes(shareCapital);
-            document.getElementById('no_of_entitled_votes').value = entitledVotes;
+            // Function to update the entitled votes based on share capital
+            function updateEntitledVotes() {
+                const shareCapital = parseFloat(shareCapitalInput.value) || 0; // Get the value from the input field
+                const entitledVotes = calculateEntitledVotes(shareCapital);
+                entitledVotesInput.value = entitledVotes;
+            }
+
+            // Initial calculation on page load
+            updateEntitledVotes();
+
+            // Listen for changes in the share capital input field to update entitled votes
+            shareCapitalInput.addEventListener('input', function() {
+                updateEntitledVotes();
+            });
         });
-        </script>
+    </script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -1082,7 +1069,7 @@
                 netRequiredRegFee = Math.max(0, netRequiredRegFee);
 
                 // GA RegFee Payable: Apply Prereg Payment & CETF Utilization here
-                let regFeePayable = Math.max(0, netRequiredRegFee - (preregPayment + cetfBalance));
+                let regFeePayable = netRequiredRegFee - (preregPayment + cetfBalance);
 
                 // Update Fields
                 document.getElementById('total_reg_fee').value = totalRegFee.toFixed(2);
@@ -1112,8 +1099,8 @@
             let additionalCetf = document.getElementById('additional_cetf');
             let cetfUndertaking = document.getElementById('cetf_undertaking');
             let totalRemittance = document.getElementById('total_remittance');
-            let fullCetfRemitted = document.getElementById('full_cetf_remitted'); // Added
-            let cetfRequired = document.getElementById('cetf_required'); // Added
+            let fullCetfRemitted = document.getElementById('full_cetf_remitted');
+            let cetfRequired = document.getElementById('cetf_required');
 
             function calculateTotalRemittance() {
                 let remittance = parseFloat(cetfRemittance.value) || 0;
@@ -1122,7 +1109,7 @@
                 let total = (remittance + additional + undertaking).toFixed(2);
 
                 totalRemittance.value = total;
-                updateFullCetfRemitted(total); // Call function to update Full CETF Remitted
+                updateFullCetfRemitted(total);
             }
 
             function updateFullCetfRemitted(total) {
@@ -1166,7 +1153,7 @@
             const checkboxes = dropdownMenu.querySelectorAll('input[type="checkbox"]');
             const hiddenInput = document.getElementById("services_availed_json");
 
-            // Prevent dropdown from closing when clicking inside
+
             dropdownMenu.addEventListener("click", function(event) {
                 event.stopPropagation();
             });

@@ -328,10 +328,10 @@
                                                                         Pending</option>
                                                                     <option value="Approved"
                                                                         {{ $document->status == 'Approved' ? 'selected' : '' }}>
-                                                                        Approved</option>
+                                                                        Accepted</option>
                                                                     <option value="Rejected"
                                                                         {{ $document->status == 'Rejected' ? 'selected' : '' }}>
-                                                                        Rejected</option>
+                                                                        Decline</option>
                                                                 </select>
                                                         </td>
                                                         <td>

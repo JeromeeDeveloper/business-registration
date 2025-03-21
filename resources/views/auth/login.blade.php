@@ -21,10 +21,17 @@
     <link rel="stylesheet" href="{{asset('css/auth.css')}}">
 </head>
 <body>
-    @include('layouts.navbar')
+    {{-- @include('layouts.navbar') --}}
     {{-- <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
         <div class="spinner"></div>
     </div> --}}
+    <nav class="navbar">
+        <a href="#" class="navbar-brand">
+          <img src="{{ asset('img/GA-LOGO.png') }}" alt="GA Logo" class="nav-logo">
+        </a>
+      </nav>
+
+
     <section class="content">
     <div class="container_login">
       <input type="checkbox" id="flip">
@@ -79,11 +86,11 @@
 
 
         </div>
-          <div class="signup-form">
+          {{-- <div class="signup-form">
             <img class="logo" src="{{asset('images/logo.png')}}" alt="">
             <div class="title">Signup</div>
 
-           
+
 
             <form action="{{ route('register') }}" method="POST">
                 @csrf
@@ -109,7 +116,7 @@
                 <div class="text sign-up-text">Already have an account? <label for="flip">Login now</label></div>
             </form>
 
-      </div>
+      </div> --}}
       </div>
       </div>
     </div>
@@ -119,15 +126,15 @@
 <div class="modal fade" id="privacyPolicyModal" tabindex="-1" aria-labelledby="privacyPolicyModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="privacyPolicyModalLabel"><img class="logo_modal" src="{{asset('images/logo.png')}}" alt=""></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header"  style="background-color: #002855;">
+                <h5 class="modal-title" id="privacyPolicyModalLabel"><img class="logo_modal" src="{{asset('img/GA-LOGO.png')}}" alt=""></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
             </div>
             <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
-                <h3>Data Privacy Notice</h3>
+                <h3 style= "overflow-y: hidden;">Data Privacy Notice</h3>
                 <p>This notice is intended to inform you that when you visit our website or engage in transactions with MASS-SPECC, we may process your personal data.</p>
 
-                <h4>Personal Information Collected</h4>
+                <h4 style= "overflow-y: hidden;">Personal Information Collected</h4>
                 <p>MASS-SPECC understands the importance of securing your personal information and is committed to respecting your privacy.</p>
                 <p><strong>Personal Information may include, but is not limited to:</strong></p>
                 <ul>
@@ -142,10 +149,10 @@
                     <li>Credit and anti-fraud information relating to your financial situation, your creditworthiness or any criminal or fraudulent activities provided to us by you or third parties.</li>
                 </ul>
 
-                <h4>Your Consent</h4>
+                <h4 style= "overflow-y: hidden;">Your Consent</h4>
                 <p>By using the MASS-SPECC websites, mobile applications and other online services, you are consenting to the collection, storage, use, processing and disclosure of your Personal Information by MASS-SPECC.</p>
 
-                <h4>Use of Personal Information</h4>
+                <h4 style= "overflow-y: hidden;">Use of Personal Information</h4>
                 <p>MASS-SPECC shall use your Personal Information to provide you with details and information regarding our products and services; to conduct billing processing and other business transactions; to provide and manage products and services you have requested to; to communicate effectively with you; to monitor activities and record our correspondence with you; to provide you with marketing materials; to understand our customers; and to develop and tailor our products and services; to run our promotions and our events; to prevent fraud; to conduct certain checks on you, such as KYC and credit checks; to improve and administer our websites, and to ensure that content is relevant; to reorganize or make changes to our services and to comply with legal and regulatory obligations.</p>
                 <p>MASS-SPECC may disclose your Personal Information to third party service providers (such as providers of marketing, IT or administrative services) who may process it on our behalf for any of the purposes set out above.</p>
                   <p><strong>MASS-SPECC may also disclose your Personal Information under any of the following circumstances:</strong></p>
@@ -154,19 +161,19 @@
                         <li>for information, update and marketing purposes; and</li>
                         <li>for research purposes.</li>
                     </ul>
-                <h4>PERIOD OF STORAGE OF PERSONAL INFORMATION</h4>
+                <h4 style= "overflow-y: hidden;">PERIOD OF STORAGE OF PERSONAL INFORMATION</h4>
                 <p>The Personal Information that MASS-SPECC holds about you will not be kept for longer than is permitted by law and will only be kept for as long as necessary to provide you with any requested products, services or information, in addition thereto, we may retain certain transaction details and correspondence until the time limit for claims arising from the transaction has expired, or to comply with regulatory requirements regarding the retention of such data.</p>
 
-                <h4>SAFEGUARD PERSONAL INFORMATION</h4>
+                <h4 style= "overflow-y: hidden;">SAFEGUARD PERSONAL INFORMATION</h4>
                 <p>MASS-SPECC will take all steps reasonably necessary to ensure that your Personal Information is treated securely and in accordance with this privacy notice.
                     Where a password enables you to access certain parts of our websites, you are responsible for keeping this password confidential.
                     Unfortunately, the transmission of information via the Internet is not completely secure. Although we will do our best to protect your personal data, we cannot guarantee the security of your personal data transmitted to our websites. Once we have received your information, we will use strict procedures and security features to try to prevent unauthorized access.</p>
 
-                <h4>YOUR DATA PRIVACY RIGHTS</h4>
+                <h4 style= "overflow-y: hidden;">YOUR DATA PRIVACY RIGHTS</h4>
                 <p>You have the right to be informed, to access, update or correct your personal data, withdraw your consent, request the disposal of your personal data subject to regulatory limitations, request a copy of your data in an electronic format, claim damages for violations of your data privacy rights, and raise data privacy concerns.</p>
                 <p> If you intend to exercise any of your data privacy rights, you can reach out our Data Protection Officer through this email ad, <a href="mailto:privacy@mass-specc.coop">privacy@mass-specc.coop</a>.</p>
 
-                <h4>CHANGES TO THIS PRIVACY NOTICE</h4>
+                <h4 style= "overflow-y: hidden;">CHANGES TO THIS PRIVACY NOTICE</h4>
                 <p>MASS-SPECC reserves the right to change this Privacy Notice from time to time. Please check back frequently to see any updates or changes.</p>
 
                 <p><strong>Data Protection Officer</strong><br>
@@ -178,7 +185,7 @@
 
 
 
-<div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+{{-- <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
     <div class="container py-5 mb-5">
         <div class="bg-white">
             <div class="owl-carousel vendor-carousel">
@@ -203,7 +210,7 @@
         </div>
     </div>
 </div>
-@include('layouts.footer')
+@include('layouts.footer') --}}
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="lib/wow/wow.min.js"></script>

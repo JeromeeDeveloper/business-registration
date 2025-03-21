@@ -628,7 +628,7 @@
                                                                                 aria-labelledby="dropdownMenuButton{{ $event->event_id }}">
                                                                                 <a class="dropdown-item"
                                                                                     href="{{ route('schedule') }}">View
-                                                                                    Details</a>
+                                                                                    Calendar</a>
                                                                             </div>
                                                                         </div>
                                                                     </div>

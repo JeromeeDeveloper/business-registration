@@ -675,7 +675,8 @@
                 let lessPreReg = parseFloat(document.getElementById('less_prereg_payment').value) || 0;
                 let lessCetf = parseFloat(document.getElementById('less_cetf_balance').value) || 0;
 
-                let regFeePayable = Math.max(0, netRequired - (lessPreReg + lessCetf));
+                let regFeePayable = netRequired - (lessPreReg + lessCetf);
+
                 document.getElementById('reg_fee_payable').value = regFeePayable.toFixed(2);
             }
 

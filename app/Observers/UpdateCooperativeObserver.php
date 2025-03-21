@@ -89,6 +89,19 @@ class UpdateCooperativeObserver
 
         // Save the updated GA Registration status
         $gaRegistration->save();
-      
+    }
+
+    /**
+     * Update GA Registration status for all cooperatives.
+     *
+     * @return void
+     */
+    public function updateAllCooperativesGARegistrationStatus()
+    {
+        $cooperatives = Cooperative::all();
+
+        foreach ($cooperatives as $cooperative) {
+            $this->updateGARegistrationStatus($cooperative->coop_id);
+        }
     }
 }

@@ -19,6 +19,7 @@ use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\SupportController;
 use App\Observers\UploadedDocumentObserver;
 use App\Http\Controllers\SpeakersController;
+use App\Observers\UpdateCooperativeObserver;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Middleware\ParticipantMiddleware;
@@ -62,6 +63,11 @@ Route::middleware([AdminOrSupportMiddleware::class])->group(function () {
     Route::get('/admin/reports/documents-status', [ReportsController::class, 'documentsStatus'])
         ->name('admin.reports.documents_status');
 
+    Route::get('/admin/reports/summary-delegates', [ReportsController::class, 'summaryDelegates'])->name('admin.reports.summary_delegates');
+    Route::get('/admin/reports/tshirt-sizes', [ReportsController::class, 'tshirt'])
+    ->name('admin.reports.tshirt_sizes');
+
+
     Route::get('/admin/reports', [ReportsController::class, 'generateReports'])->name('admin.reports');
 
     Route::get('/attendance/print', function () {
@@ -69,6 +75,7 @@ Route::middleware([AdminOrSupportMiddleware::class])->group(function () {
         return view('dashboard.admin.attendance_print', compact('participants'));
     })->name('attendance.print');
 
+    Route::get('/admin/reports/coop-registration-summary', [ReportsController::class, 'coopRegistrationSummary'])->name('admin.reports.coop_registration_summary');
 
     Route::get('/Support/Attendance', [SupportAttendanceController::class, 'supportattendance'])->name('support.attendance.index');
     Route::get('/Support/Attendance/{participant_id}', [SupportAttendanceController::class, 'supportshowattendance'])->name('support.attendance.show');
@@ -77,7 +84,14 @@ Route::middleware([AdminOrSupportMiddleware::class])->group(function () {
 //store
 Route::middleware([AdminMiddleware::class])->group(function () {
 
-  
+    // web.php (or api.php, depending on where you want to trigger this)
+// Route::get('/update-all-cooperatives', [CooperativeController::class, 'updateAllCooperatives']);
+
+// Route::get('/update-all-cooperatives-ga-registration', function () {
+//     (new UpdateCooperativeObserver)->updateAllCooperativesGARegistrationStatus();
+//     return response()->json(['message' => 'All cooperatives GA Registration status updated successfully.']);
+// });
+
 
     Route::get('/registration-overview-pdf', [ReportsController::class, 'showRegistrationOverview'])->name('registration.overview.pdf');
 
