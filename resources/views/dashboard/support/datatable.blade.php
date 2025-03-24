@@ -513,10 +513,10 @@
                                                                 <!-- Edit Coop -->
                                                                 <button type="button"
                                                                 class="btn btn-link btn-info btn-lg"
-                                                                data-bs-toggle="tooltip" title="Upload Documents">
+                                                                data-bs-toggle="tooltip" title="Edit & Upload Documents">
                                                                     <a href="{{ route('support.cooperatives.edit', $coop->coop_id) }}"
                                                                         class="text-decoration-none text-primary">
-                                                                        <i class="fa fa-upload"></i>
+                                                                        <i class="fa fa-edit"></i>
                                                                     </a>
                                                                 </button>
 

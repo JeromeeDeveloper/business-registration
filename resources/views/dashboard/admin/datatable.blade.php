@@ -211,7 +211,7 @@
                             <div class="card">
                                 <div class="card-header">
                                     <!-- Filter Modal -->
-                                    <div class="modal fade" id="filterModal" tabindex="-1"
+                                    {{-- <div class="modal fade" id="filterModal" tabindex="-1"
                                         aria-labelledby="filterModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
@@ -239,7 +239,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
 
                                     <!-- Responsive Layout -->
                                     <div
@@ -260,10 +260,10 @@
 
                                                 <button type="submit" class="btn btn-primary"><i
                                                         class="fa fa-search"></i></button>
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                {{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                                     data-bs-target="#filterModal">
                                                     <i class="fa fa-filter"></i>
-                                                </button>
+                                                </button> --}}
 
                                             </div>
 

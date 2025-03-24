@@ -352,93 +352,93 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
             ],
             'tin' => 'required|string|max:50',
             'address' => 'required|string|max:255',
-            'fs_status' => ['nullable', Rule::in(['yes', 'no'])],
-            'delinquent' => ['nullable', Rule::in(['yes', 'no'])],
+            // 'fs_status' => ['nullable', Rule::in(['yes', 'no'])],
+            // 'delinquent' => ['nullable', Rule::in(['yes', 'no'])],
 
-            // Numeric Fields
-            'total_asset' => 'nullable|numeric|min:0',
-            'loan_balance' => 'nullable|numeric|min:0',
-            'total_overdue' => 'nullable|numeric|min:0',
-            'time_deposit' => 'nullable|numeric|min:0',
-            'accounts_receivable' => 'nullable|numeric|min:0',
-            'savings' => 'nullable|numeric|min:0',
-            'net_surplus' => 'nullable|numeric|min:0',
-            'cetf_due_to_apex' => 'nullable|numeric|min:0',
-            'additional_cetf' => 'nullable|numeric|min:0',
-            'cetf_undertaking' => 'nullable|numeric|min:0',
-            'total_income' => 'nullable|numeric|min:0',
-            'cetf_remittance' => 'nullable|numeric|min:0',
-            'cetf_required' => 'nullable|numeric|min:0',
-            'cetf_balance' => 'nullable|numeric',
-            'total_remittance' => 'nullable|numeric|min:0',
-            'net_required_reg_fee' => 'nullable|numeric|min:0',
-            'total_reg_fee' => 'nullable|numeric|min:0',
-            'share_capital_balance' => 'nullable|numeric|min:0',
-            'less_prereg_payment' => 'nullable|numeric|min:0',
-            'less_cetf_balance' => 'nullable|numeric|min:0',
+            // // Numeric Fields
+            // 'total_asset' => 'nullable|numeric|min:0',
+            // 'loan_balance' => 'nullable|numeric|min:0',
+            // 'total_overdue' => 'nullable|numeric|min:0',
+            // 'time_deposit' => 'nullable|numeric|min:0',
+            // 'accounts_receivable' => 'nullable|numeric|min:0',
+            // 'savings' => 'nullable|numeric|min:0',
+            // 'net_surplus' => 'nullable|numeric|min:0',
+            // 'cetf_due_to_apex' => 'nullable|numeric|min:0',
+            // 'additional_cetf' => 'nullable|numeric|min:0',
+            // 'cetf_undertaking' => 'nullable|numeric|min:0',
+            // 'total_income' => 'nullable|numeric|min:0',
+            // 'cetf_remittance' => 'nullable|numeric|min:0',
+            // 'cetf_required' => 'nullable|numeric|min:0',
+            // 'cetf_balance' => 'nullable|numeric',
+            // 'total_remittance' => 'nullable|numeric|min:0',
+            // 'net_required_reg_fee' => 'nullable|numeric|min:0',
+            // 'total_reg_fee' => 'nullable|numeric|min:0',
+            // 'share_capital_balance' => 'nullable|numeric|min:0',
+            // 'less_prereg_payment' => 'nullable|numeric|min:0',
+            // 'less_cetf_balance' => 'nullable|numeric|min:0',
 
-            // Other Fields
-            'full_cetf_remitted' => ['nullable', Rule::in(['yes', 'no'])],
-            'registration_date_paid' => 'nullable|date',
-            'registration_fee' => 'nullable|numeric|min:0',
-            'ga_remark' => 'nullable|string|max:255',
-            'no_of_entitled_votes' => 'nullable|integer|min:0',
-            'services_availed' => 'nullable|array',
-            'services_availed.*' => 'string|max:255',
+            // // Other Fields
+            // 'full_cetf_remitted' => ['nullable', Rule::in(['yes', 'no'])],
+            // 'registration_date_paid' => 'nullable|date',
+            // 'registration_fee' => 'nullable|numeric|min:0',
+            // 'ga_remark' => 'nullable|string|max:255',
+            // 'no_of_entitled_votes' => 'nullable|integer|min:0',
+            // 'services_availed' => 'nullable|array',
+            // 'services_availed.*' => 'string|max:255',
         ]);
 
         // Convert numeric values (remove commas)
-        $numericFields = [
-            'total_asset', 'loan_balance', 'total_overdue', 'time_deposit',
-            'accounts_receivable', 'savings', 'net_surplus', 'cetf_due_to_apex',
-            'additional_cetf', 'cetf_undertaking', 'total_income', 'cetf_remittance',
-            'cetf_required', 'cetf_balance', 'total_remittance', 'net_required_reg_fee',
-            'total_reg_fee', 'share_capital_balance', 'registration_fee',
-            'less_prereg_payment', 'less_cetf_balance'
-        ];
+        // $numericFields = [
+        //     'total_asset', 'loan_balance', 'total_overdue', 'time_deposit',
+        //     'accounts_receivable', 'savings', 'net_surplus', 'cetf_due_to_apex',
+        //     'additional_cetf', 'cetf_undertaking', 'total_income', 'cetf_remittance',
+        //     'cetf_required', 'cetf_balance', 'total_remittance', 'net_required_reg_fee',
+        //     'total_reg_fee', 'share_capital_balance', 'registration_fee',
+        //     'less_prereg_payment', 'less_cetf_balance'
+        // ];
 
-        foreach ($numericFields as $field) {
-            $validated[$field] = $request->$field ? (float) str_replace(',', '', $request->$field) : null;
-        }
+        // foreach ($numericFields as $field) {
+        //     $validated[$field] = $request->$field ? (float) str_replace(',', '', $request->$field) : null;
+        // }
 
-        $netRequiredRegFee = $validated['net_required_reg_fee'] ?? 0;
-        $lessPreregPayment = $validated['less_prereg_payment'] ?? 0;
-        $lessCetfBalance = $validated['less_cetf_balance'] ?? 0;
+        // $netRequiredRegFee = $validated['net_required_reg_fee'] ?? 0;
+        // $lessPreregPayment = $validated['less_prereg_payment'] ?? 0;
+        // $lessCetfBalance = $validated['less_cetf_balance'] ?? 0;
 
 
-        $validated['reg_fee_payable'] = max(0, $netRequiredRegFee - ($lessPreregPayment + $lessCetfBalance));
+        // $validated['reg_fee_payable'] = max(0, $netRequiredRegFee - ($lessPreregPayment + $lessCetfBalance));
 
-        // ✅ Calculate `no_of_entitled_votes`
-        $share_capital = $validated['share_capital_balance'] ?? 0;
-        $votes = 0;
+        // // ✅ Calculate `no_of_entitled_votes`
+        // $share_capital = $validated['share_capital_balance'] ?? 0;
+        // $votes = 0;
 
-        if ($share_capital >= 100000) {
-            $votes += floor($share_capital / 100000);
-        }
+        // if ($share_capital >= 100000) {
+        //     $votes += floor($share_capital / 100000);
+        // }
 
-        $validated['cetf_balance'] = ($validated['cetf_required'] ?? 0) - ($validated['total_remittance'] ?? 0);
+        // $validated['cetf_balance'] = ($validated['cetf_required'] ?? 0) - ($validated['total_remittance'] ?? 0);
 
-        $remaining = $share_capital % 100000;
+        // $remaining = $share_capital % 100000;
 
-        while ($remaining >= 25000) {
-            if ($remaining >= 75000) {
-                $votes += 3;
-                $remaining -= 75000;
-            } elseif ($remaining >= 50000) {
-                $votes += 2;
-                $remaining -= 50000;
-            } elseif ($remaining >= 25000) {
-                $votes += 1;
-                $remaining -= 25000;
-            }
-        }
+        // while ($remaining >= 25000) {
+        //     if ($remaining >= 75000) {
+        //         $votes += 3;
+        //         $remaining -= 75000;
+        //     } elseif ($remaining >= 50000) {
+        //         $votes += 2;
+        //         $remaining -= 50000;
+        //     } elseif ($remaining >= 25000) {
+        //         $votes += 1;
+        //         $remaining -= 25000;
+        //     }
+        // }
 
-        $validated['no_of_entitled_votes'] = min($votes, 5);
+        // $validated['no_of_entitled_votes'] = min($votes, 5);
 
-        // Convert services_availed array to JSON
-        $validated['services_availed'] = isset($request->services_availed)
-            ? json_encode($request->services_availed)
-            : json_encode([]);
+        // // Convert services_availed array to JSON
+        // $validated['services_availed'] = isset($request->services_availed)
+        //     ? json_encode($request->services_availed)
+        //     : json_encode([]);
 
         // ✅ Update the cooperative
         $coop = Cooperative::findOrFail($coop_id);

@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Exports\ReportsExport;
 use App\Models\GARegistration;
 use App\Models\UploadedDocument;
+use App\Exports\CoopStatusExport;
 use App\Exports\TshirtSizesExport;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\DB;
@@ -84,35 +85,60 @@ class ReportsController extends Controller
     }
 
     public function export(Request $request)
-{
-    $reportType = $request->query('report');
+    {
+        $reportType = $request->query('report');
 
-    if (!$reportType) {
-        return redirect()->back()->with('error', 'No report selected for export.');
-    }
-
-    if ($request->query('export') == 'excel') {
-        switch ($reportType) {
-            case 'documents_status':
-                return Excel::download(new DocumentsStatusExport(), 'documents_status.xlsx');
-            case 'voting_delegates':
-                return Excel::download(new CooperativeReportExport(), 'voting_delegates.xlsx');
-            case 'summary_delegates':
-                return Excel::download(new SummaryDelegatesExport(), 'summary_delegates.xlsx');
-            case 'tshirt_sizes':
-                return Excel::download(new TshirtSizesExport(), 'tshirt_sizes.xlsx');
-            case 'coop_registration':
-                return Excel::download(new CoopRegistrationExport(), 'coop_registration.xlsx');
-            default:
-                return Excel::download(new CooperativeReportExport(), 'cooperative_report.xlsx');
+        if (!$reportType) {
+            return redirect()->back()->with('error', 'No report selected for export.');
         }
-    } elseif ($request->query('export') == 'pdf') {
-        $pdf = PDF::loadView('reports.pdf', ['reportType' => $reportType]);
-        return $pdf->download('report.pdf');
+
+        if ($request->query('export') == 'excel') {
+            switch ($reportType) {
+                case 'documents_status':
+                    return Excel::download(new DocumentsStatusExport(), 'documents_status.xlsx');
+                case 'voting_delegates':
+                    return Excel::download(new CooperativeReportExport(), 'voting_delegates.xlsx');
+                case 'summary_delegates':
+                    return Excel::download(new SummaryDelegatesExport(), 'summary_delegates.xlsx');
+                case 'tshirt_sizes':
+                    return Excel::download(new TshirtSizesExport(), 'tshirt_sizes.xlsx');
+                case 'coop_registration':
+                    return Excel::download(new CoopRegistrationExport(), 'coop_registration.xlsx');
+                case 'coop_status':
+                    return Excel::download(new CoopStatusExport(), 'coop_status.xlsx'); // Added CoopStatusExport
+                default:
+                    return Excel::download(new CooperativeReportExport(), 'cooperative_report.xlsx');
+            }
+        } elseif ($request->query('export') == 'pdf') {
+            $pdf = PDF::loadView('reports.pdf', ['reportType' => $reportType]);
+            return $pdf->download('report.pdf');
+        }
+
+        return redirect()->back()->with('error', 'Invalid export type.');
     }
 
-    return redirect()->back()->with('error', 'Invalid export type.');
+
+    public function coopStatusList(Request $request)
+{
+    $region = $request->input('region');
+
+    // Fetch cooperatives with status filter
+    $query = Cooperative::with(['participants', 'uploadedDocuments', 'gaRegistration'])
+        ->whereHas('gaRegistration', function ($query) {
+            $query->whereIn('registration_status', ['Partial Registered', 'Fully Registered']);
+        });
+
+    // Apply region filter if selected
+    if ($region) {
+        $query->where('region', $region);
+    }
+
+    $cooperatives = $query->get();
+    $regions = Cooperative::select('region')->distinct()->pluck('region');
+
+    return view('dashboard.admin.reports.coop_status_list', compact('cooperatives', 'regions'));
 }
+
 
 
 
@@ -175,12 +201,6 @@ public function coopRegistrationSummary(Request $request)
             'free_4500' => $free4500
         ]);
     });
-
-    
-
-
-
-
     return view('dashboard.admin.reports.coop-registration-summary', compact(
         'totalCoops',
         'compliantCoops',

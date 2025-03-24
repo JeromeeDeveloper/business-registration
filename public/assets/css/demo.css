@@ -394,3 +394,7 @@ body[data-background-color="dark"] .demo-icon .icon-class {
     flex-wrap: wrap;
     gap: 10px;
 }
+
+.doc{
+    padding: 10px;
+}

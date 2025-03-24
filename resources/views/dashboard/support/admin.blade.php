@@ -345,22 +345,33 @@
 
 
                                                 <a href="{{ route('admin.reports.summary_delegates') }}"
-                                                class="list-group-item list-group-item-action py-3 fw-semibold"
-                                                data-report-type="summary_delegates">
-                                                <i class="fas fa-user-friends me-2"></i> Summary of Delegates Per Congress
-                                             </a>
-
-
-                                             <a href="{{ route('admin.reports.tshirt_sizes') }}"
-                                             class="list-group-item list-group-item-action py-3 fw-semibold"
-                                             data-report-type="tshirt_sizes">
-                                             <i class="fas fa-tshirt me-2"></i> T-Shirt Sizes (All or Per Congress)
-                                             </a>
-                                                <a href="#"
-                                                    class="list-group-item list-group-item-action py-3 fw-semibold">
-                                                    <i class="fas fa-building me-2"></i> Coop Registration Summary with
-                                                    Breakdown
+                                                    class="list-group-item list-group-item-action py-3 fw-semibold"
+                                                    data-report-type="summary_delegates">
+                                                    <i class="fas fa-user-friends me-2"></i> Summary of Delegates Per
+                                                    Congress
                                                 </a>
+
+
+                                                <a href="{{ route('admin.reports.tshirt_sizes') }}"
+                                                    class="list-group-item list-group-item-action py-3 fw-semibold"
+                                                    data-report-type="tshirt_sizes">
+                                                    <i class="fas fa-tshirt me-2"></i> T-Shirt Sizes (All or Per
+                                                    Congress)
+                                                </a>
+
+
+                                                <a href="{{ route('admin.reports.coop_registration_summary') }}"
+                                                class="list-group-item list-group-item-action py-3 fw-semibold"
+                                                data-report-type="coop_registration">
+                                                <i class="fas fa-building me-2"></i> Coop Registration Summary with Breakdown
+                                            </a>
+
+                                            <a href="{{ route('admin.reports.coop_status_list') }}"
+                                            class="list-group-item list-group-item-action py-3 fw-semibold"
+                                            data-report-type="coop_status">
+                                            <i class="fas fa-clipboard-list me-2"></i> List of Coop Registration Status
+                                        </a>
+
                                             </div>
 
                                             <hr class="my-4">
@@ -370,6 +381,7 @@
                                                     height="400px" frameborder="0"></iframe>
                                             </div>
                                         </div>
+
 
                                         <div class="modal-footer d-flex justify-content-between">
                                             <button type="button" class="btn btn-secondary px-4"

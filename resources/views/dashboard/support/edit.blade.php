@@ -4,7 +4,12 @@
 <head>
     @include('layouts.adminheader')
 </head>
+<style>
+    .doc{
+    padding: 10px 25px;
+}
 
+</style>
 <body>
     <div class="wrapper">
         <!-- Sidebar -->
@@ -263,18 +268,159 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
+                                <div class="card-header">
+                                    <div class="card-title">Cooperative Edit Form</div>
+                                </div>
+                                <form action="{{ route('support.cooperatives.update', $coop->coop_id) }}" method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <!-- Coop Name -->
+                                            <div class="col-md-6 col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="name">Cooperative Name</label>
+                                                    <input type="text" class="form-control" name="name"
+                                                        id="name" value="{{ $coop->name }}"
+                                                        placeholder="Enter Cooperative Name" />
+                                                </div>
+                                            </div>
+
+                                            <!-- Contact Person -->
+                                            <div class="col-md-6 col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="contact_person">Contact Person</label>
+                                                    <input type="text" class="form-control" name="contact_person"
+                                                        id="contact_person" value="{{ $coop->contact_person }}"
+                                                        placeholder="Enter Contact Person" />
+                                                </div>
+                                            </div>
+
+                                            <!-- Cooperative Type -->
+                                            <div class="col-md-6 col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="type">Cooperative Type</label>
+                                                    <input type="text" class="form-control" name="type"
+                                                        id="type" value="{{ $coop->type }}"
+                                                        placeholder="Enter Cooperative Type" />
+                                                </div>
+                                            </div>
+
+                                            <!-- Address -->
+                                            <div class="col-md-6 col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="address">Address</label>
+                                                    <input class="form-control" id="address" name="address"
+                                                        value="{{ $coop->address }}" placeholder="Enter Address" />
+                                                </div>
+                                            </div>
+
+                                            <!-- Region -->
+                                            <div class="col-md-6 col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="region">Region</label>
+                                                    <select class="form-control" name="region" id="region">
+                                                        <option disabled>Select Region</option>
+                                                        @foreach (['Region I', 'Region II', 'Region III', 'Region IV-A', 'Region IV-B', 'Region V', 'Region VI', 'Region VII', 'Region VIII', 'Region IX', 'Region X', 'Region XI', 'Region XII', 'Region XIII', 'NCR', 'CAR', 'BARMM', 'ZBST', 'LUZON'] as $region)
+                                                            <option value="{{ $region }}"
+                                                                {{ $coop->region == $region ? 'selected' : '' }}>
+                                                                {{ $region }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+
+
+                                            <!-- Phone Number -->
+                                            <div class="col-md-6 col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="phone_number">Phone Number</label>
+                                                    <input type="number" class="form-control" name="phone_number"
+                                                        id="phone_number" value="{{ $coop->phone_number }}"
+                                                        placeholder="Enter Phone Number" />
+                                                </div>
+                                            </div>
+
+                                            <!-- Email -->
+                                            <div class="col-md-6 col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="email">Email</label>
+                                                    <input type="email"
+                                                        class="form-control @error('email') is-invalid @enderror"
+                                                        name="email" id="email"
+                                                        value="{{ old('email', $coop->email) }}"
+                                                        placeholder="Enter Email" />
+
+                                                    {{-- Show error only if the email is different from the cooperative's current email --}}
+                                                    @if ($errors->has('email') && old('email') !== $coop->email)
+                                                        <div class="alert alert-danger">
+                                                            {{ $errors->first('email') }}
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+
+
+
+                                            <!-- TIN -->
+                                            <div class="col-md-6 col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="tin">TIN</label>
+                                                    <input type="text" class="form-control" name="tin"
+                                                        id="tin" value="{{ $coop->tin }}"
+                                                        placeholder="Enter TIN" />
+                                                </div>
+                                            </div>
+
+                                            <!-- Coop Identification No -->
+                                            <div class="col-md-6 col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="coop_identification_no">Cooperative ID</label>
+                                                    <input type="text" class="form-control"
+                                                        name="coop_identification_no" id="coop_identification_no"
+                                                        value="{{ $coop->coop_identification_no }}"
+                                                        placeholder="Enter Coop ID" />
+                                                </div>
+                                            </div>
+
+                                            <!-- BOD Chairperson -->
+                                            <div class="col-md-6 col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="bod_chairperson">BOD Chairperson</label>
+                                                    <input type="text" class="form-control" name="bod_chairperson"
+                                                        id="bod_chairperson" value="{{ $coop->bod_chairperson }}"
+                                                        placeholder="Enter BOD Chairperson" />
+                                                </div>
+                                            </div>
+
+                                            <!-- General Manager/CEO -->
+                                            <div class="col-md-6 col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="general_manager_ceo">General Manager/CEO</label>
+                                                    <input type="text" class="form-control"
+                                                        name="general_manager_ceo" id="general_manager_ceo"
+                                                        value="{{ $coop->general_manager_ceo }}"
+                                                        placeholder="Enter Manager/CEO" />
+                                                </div>
+                                            </div>
+
+
                             </div>
+                            <button class="btn btn-label-info btn-round me-2"
+                            type="submit">Submit</button>
+
                         </div>
 
 
                     </div>
-
+                    <div class="col-md-12">
+                        <div class="card doc">
                     <form action="{{ route('cooperatives.storeDocuments3', $coop->coop_id) }}" method="POST"
                         enctype="multipart/form-data" class="border p-4 rounded shadow-sm bg-light">
                         @csrf
                         <input type="hidden" name="form_key" value="form1">
                         <h3 class="mb-4 text-center text-primary">Upload Documents for {{ $coop->name }}</h3>
-
                         <div class="row">
                             <!-- Financial Statement (Left Column) -->
                             <div class="col-md-6 mb-4">
@@ -414,7 +560,8 @@
                             <button type="submit" class="btn btn-label-info btn-round me-2">Upload Documents</button>
                         </div>
                     </form>
-
+                </div>
+            </div>
 
                 </div>
 

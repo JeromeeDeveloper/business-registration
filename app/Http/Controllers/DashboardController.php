@@ -159,6 +159,9 @@ class DashboardController extends Controller
 
     public function admin()
     {
+
+        $regions = Cooperative::distinct()->pluck('region', 'region')->sort();
+
         $totalAttended = EventParticipant::whereNotNull('attendance_datetime')->count();
         $totalParticipants = Participant::count();
         $totalUsers = User::count();
@@ -264,6 +267,7 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
         $registeredParticipants = Participant::whereNotNull('coop_id')->count();
 
         return view('dashboard.admin.admin', compact(
+            'regions',
             'totalParticipants',
             'totalUsers',
             'totalSpeakers',

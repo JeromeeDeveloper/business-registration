@@ -283,11 +283,12 @@
                                             <div class="col-md-6 col-lg-4">
                                                 <div class="form-group">
                                                     <label for="phone_number">Phone Number</label>
-                                                    <input type="number" class="form-control" name="phone_number"
-                                                        id="phone_number" value="{{ $coop->phone_number }}"
-                                                        placeholder="Enter Phone Number" />
+                                                    <input type="number" class="form-control" name="phone_number" id="phone_number"
+                                                           value="{{ $coop->phone_number ?? 0 }}" placeholder="Enter Phone Number" />
                                                 </div>
                                             </div>
+
+
 
                                             <!-- Email -->
                                             <div class="col-md-6 col-lg-4">
@@ -391,11 +392,10 @@
 
                                                     <div class="form-group">
                                                         <label for="share_capital_balance">Share Capital</label>
-                                                        <input type="number" class="form-control"
-                                                            name="share_capital_balance" id="share_capital_balance"
-                                                            value="{{ $coop->share_capital_balance }}"
-                                                            placeholder="Enter Share Capital">
+                                                        <input type="number" class="form-control" name="share_capital_balance" id="share_capital_balance"
+                                                               value="{{ $coop->share_capital_balance }}" placeholder="Enter Share Capital" step="0.01">
                                                     </div>
+
 
                                                     <div class="form-group">
                                                         <label for="no_of_entitled_votes">Complied SC Req. / # Voting
@@ -410,41 +410,32 @@
 
                                                     <div class="form-group">
                                                         <label for="loan_balance">Loan Balance</label>
-                                                        <input type="number" class="form-control"
-                                                            name="loan_balance" id="loan_balance"
-                                                            value="{{ $coop->loan_balance }}"
-                                                            placeholder="Enter Loan Balance">
+                                                        <input type="number" class="form-control" name="loan_balance" id="loan_balance"
+                                                               value="{{ $coop->loan_balance }}" placeholder="Enter Loan Balance" step="0.01">
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label for="total_overdue">Loan Overdue</label>
-                                                        <input type="number" class="form-control"
-                                                            name="total_overdue" id="total_overdue"
-                                                            value="{{ $coop->total_overdue }}"
-                                                            placeholder="Enter Loan Overdue">
+                                                        <input type="number" class="form-control" name="total_overdue" id="total_overdue"
+                                                               value="{{ $coop->total_overdue }}" placeholder="Enter Loan Overdue" step="0.01">
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label for="time_deposit">Time Deposit</label>
-                                                        <input type="number" class="form-control"
-                                                            name="time_deposit" id="time_deposit"
-                                                            value="{{ $coop->time_deposit }}"
-                                                            placeholder="Enter Time Deposit">
+                                                        <input type="number" class="form-control" name="time_deposit" id="time_deposit"
+                                                               value="{{ $coop->time_deposit }}" placeholder="Enter Time Deposit" step="0.01">
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label for="accounts_receivable">Accounts Receivable</label>
-                                                        <input type="number" class="form-control"
-                                                            name="accounts_receivable" id="accounts_receivable"
-                                                            value="{{ $coop->accounts_receivable }}"
-                                                            placeholder="Enter Accounts Receivable">
+                                                        <input type="number" class="form-control" name="accounts_receivable" id="accounts_receivable"
+                                                               value="{{ $coop->accounts_receivable }}" placeholder="Enter Accounts Receivable" step="0.01">
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label for="savings">Savings</label>
-                                                        <input type="number" class="form-control" name="savings"
-                                                            id="savings" value="{{ $coop->savings }}"
-                                                            placeholder="Enter Savings">
+                                                        <input type="number" class="form-control" name="savings" id="savings"
+                                                               value="{{ $coop->savings }}" placeholder="Enter Savings" step="0.01">
                                                     </div>
 
 
@@ -543,22 +534,22 @@
                                                         <label for="total_asset">Total Assets</label>
                                                         <input type="number" class="form-control" name="total_asset"
                                                             id="total_asset" value="{{ $coop->total_asset }}"
-                                                            placeholder="Enter Total Asset">
+                                                            placeholder="Enter Total Asset" step="0.01">
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label for="net_surplus">Net Surplus</label>
-                                                        <input type="number" class="form-control" name="net_surplus"
-                                                            id="net_surplus" value="{{ $coop->net_surplus }}"
-                                                            placeholder="Enter Net Surplus">
+                                                        <input type="number" class="form-control" name="net_surplus" id="net_surplus"
+                                                               value="{{ $coop->net_surplus }}" placeholder="Enter Net Surplus" step="0.01">
                                                     </div>
+
 
                                                     <div class="form-group">
                                                         <label for="cetf_due_to_apex">CETF Due to Apex</label>
                                                         <input type="number" class="form-control"
                                                             name="cetf_due_to_apex" id="cetf_due_to_apex"
                                                             value="{{ $coop->cetf_due_to_apex }}"
-                                                            placeholder="Enter CETF Due to Apex">
+                                                            placeholder="Enter CETF Due to Apex" step="0.01">
                                                     </div>
 
                                                     <div class="form-group">
@@ -574,7 +565,7 @@
                                                         <input type="number" class="form-control"
                                                             name="cetf_remittance" id="cetf_remittance"
                                                             id="cetf_remittance" value="{{ $coop->cetf_remittance }}"
-                                                            placeholder="Enter CETF Remittance">
+                                                            placeholder="Enter CETF Remittance" step="0.01">
                                                     </div>
 
                                                     <div class="form-group">
@@ -582,7 +573,7 @@
                                                         <input type="number" class="form-control"
                                                             name="additional_cetf" id="additional_cetf"
                                                             id="cetf_remittance" value="{{ $coop->additional_cetf }}"
-                                                            placeholder="Enter Additional CETF">
+                                                            placeholder="Enter Additional CETF" step="0.01">
                                                     </div>
 
                                                     <div class="form-group">
@@ -591,7 +582,7 @@
                                                             name="cetf_undertaking" id="cetf_undertaking"
                                                             id="cetf_undertaking"
                                                             value="{{ $coop->cetf_undertaking }}"
-                                                            placeholder="Enter CETF Undertaking">
+                                                            placeholder="Enter CETF Undertaking" step="0.01">
                                                     </div>
 
                                                     <div class="form-group">
@@ -722,7 +713,7 @@
                                                         <input type="number" class="form-control"
                                                             name="less_prereg_payment" id="less_prereg_payment"
                                                             value="{{ $coop->less_prereg_payment }}"
-                                                            placeholder="Enter PreReg Payment Deduction">
+                                                            placeholder="Enter PreReg Payment Deduction" step="0.01">
                                                     </div>
 
                                                     <div class="form-group">
@@ -730,7 +721,7 @@
                                                         <input type="number" class="form-control"
                                                             name="less_cetf_balance" id="less_cetf_balance"
                                                             value="{{ $coop->less_cetf_balance }}"
-                                                            placeholder="Enter CETF Balance Deduction">
+                                                            placeholder="Enter CETF Balance Deduction" step="0.01">
                                                     </div>
 
                                                     <div class="form-group">

@@ -77,6 +77,8 @@ Route::middleware([AdminOrSupportMiddleware::class])->group(function () {
 
     Route::get('/admin/reports/coop-registration-summary', [ReportsController::class, 'coopRegistrationSummary'])->name('admin.reports.coop_registration_summary');
 
+    Route::get('/admin/reports/coop_status_list', [ReportsController::class, 'coopStatusList'])->name('admin.reports.coop_status_list');
+
     Route::get('/Support/Attendance', [SupportAttendanceController::class, 'supportattendance'])->name('support.attendance.index');
     Route::get('/Support/Attendance/{participant_id}', [SupportAttendanceController::class, 'supportshowattendance'])->name('support.attendance.show');
 });

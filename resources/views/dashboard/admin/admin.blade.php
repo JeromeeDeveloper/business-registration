@@ -364,6 +364,12 @@
                                                 <i class="fas fa-building me-2"></i> Coop Registration Summary with Breakdown
                                             </a>
 
+                                            <a href="{{ route('admin.reports.coop_status_list') }}"
+                                            class="list-group-item list-group-item-action py-3 fw-semibold"
+                                            data-report-type="coop_status">
+                                            <i class="fas fa-clipboard-list me-2"></i> List of Coop Registration Status
+                                        </a>
+
                                             </div>
 
                                             <hr class="my-4">
@@ -379,6 +385,8 @@
                                                 data-bs-dismiss="modal">
                                                 <i class="fas fa-times"></i> Close
                                             </button>
+
+
 
                                             <!-- Export Options -->
                                             <div class="dropdown">
