@@ -1194,29 +1194,28 @@
 
                     applyRegionFilter.disabled = false; // Enable Generate Excel button
 
-                    let registrationStatus = coop.registration_status === "Rejected" ? "Unregistered" : coop.registration_status;
-
-
                     data.forEach(coop => {
-                        let row = `
-                            <tr>
-                                <td>${coop.name}</td>
-                                <td>${coop.coop_identification_no}</td>
-                                <td>${coop.region}</td>
-                                <td>${coop.participants_count}</td>
-                                <td>${registrationStatus}</td>
-                                <td>${coop.membership_status}</td>
-                                <td>${coop.documents['Financial Statement']}</td>
-                                <td>${coop.documents['Resolution for Voting Delegates']}</td>
-                                <td>${coop.documents['Deposit Slip for Registration Fee']}</td>
-                                <td>${coop.documents['Deposit Slip for CETF Remittance']}</td>
-                                <td>${coop.documents['CETF Undertaking']}</td>
-                                <td>${coop.documents['Certificate of Candidacy']}</td>
-                                <td>${coop.documents['CETF Utilization Invoice']}</td>
-                            </tr>
-                        `;
-                        previewTableBody.innerHTML += row;
-                    });
+    let registrationStatus = coop.registration_status === "Rejected" ? "Unregistered" : coop.registration_status;
+
+    let row = `
+        <tr>
+            <td>${coop.name}</td>
+            <td>${coop.coop_identification_no}</td>
+            <td>${coop.region}</td>
+            <td>${coop.participants_count}</td>
+            <td>${registrationStatus}</td>
+            <td>${coop.membership_status}</td>
+            <td>${coop.documents?.['Financial Statement'] ?? 'Not Uploaded'}</td>
+            <td>${coop.documents?.['Resolution for Voting Delegates'] ?? 'Not Uploaded'}</td>
+            <td>${coop.documents?.['Deposit Slip for Registration Fee'] ?? 'Not Uploaded'}</td>
+            <td>${coop.documents?.['Deposit Slip for CETF Remittance'] ?? 'Not Uploaded'}</td>
+            <td>${coop.documents?.['CETF Undertaking'] ?? 'Not Uploaded'}</td>
+            <td>${coop.documents?.['Certificate of Candidacy'] ?? 'Not Uploaded'}</td>
+            <td>${coop.documents?.['CETF Utilization Invoice'] ?? 'Not Uploaded'}</td>
+        </tr>
+    `;
+    previewTableBody.innerHTML += row;
+});
                 })
                 .catch(error => {
                     console.error("Error fetching preview data:", error);
