@@ -365,6 +365,14 @@
                                                     Breakdown
                                                 </a>
 
+
+
+                                                <a href="{{ route('admin.reports.participants_list') }}"
+                                                    class="list-group-item list-group-item-action py-3 fw-semibold"
+                                                    data-report-type="participants_list">
+                                                    <i class="fas fa-users me-2"></i> List of Voting Delegates
+                                                </a>
+
                                                 <div class="d-flex gap-3">
                                                     <a href="{{ route('admin.reports.coop_status_list') }}" class="list-group-item list-group-item-action py-3 fw-semibold" data-report-type="coop_status">
                                                         <i class="fas fa-clipboard-list me-2"></i> List of Coop Registration Status
@@ -375,12 +383,6 @@
                                                     </button>
 
                                                 </div>
-
-                                                <a href="{{ route('admin.reports.participants_list') }}"
-                                                    class="list-group-item list-group-item-action py-3 fw-semibold"
-                                                    data-report-type="participants_list">
-                                                    <i class="fas fa-users me-2"></i> List of Voting Delegates
-                                                </a>
 
                                             </div>
 
@@ -682,41 +684,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Total Attended -->
-                        {{-- <div class="col">
-                            <div class="card card-stats card-round shadow-sm h-100">
-                                <div class="card-body d-flex align-items-center">
-                                    <div class="col-icon me-3">
-                                        <div class="icon-big text-info text-center">
-                                            <i class="fas fa-user-check"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="card-category mb-1">Total Attended</p>
-                                        <h4 class="card-title mb-0">{{ number_format($totalAttended) }}</h4>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> --}}
-
-                        <!-- Attended Migs -->
-                        {{-- <div class="col">
-                            <div class="card card-stats card-round shadow-sm h-100">
-                                <div class="card-body d-flex align-items-center">
-                                    <div class="col-icon me-3">
-                                        <div class="icon-big text-warning text-center">
-                                            <i class="fas fa-user-friends"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="card-category mb-1">Attended MIGSS</p>
-                                        <h4 class="card-title mb-0">{{ number_format($totalMigsAttended) }}</h4>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> --}}
-
                     </div>
 
                     <div class="row">
@@ -1350,34 +1317,7 @@ document.addEventListener("DOMContentLoaded", function () {
     </script>
 
 
-<script>
-    previewDataBtn.addEventListener("click", function () {
-    previewTableBody.innerHTML = `<tr><td colspan="6" class="text-center">Loading...</td></tr>`;
 
-    fetch("{{ route('reports.preview.filtered_coop_status') }}", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-TOKEN": "{{ csrf_token() }}"
-        },
-        body: JSON.stringify({
-            region: selectedRegion || "All",
-            migs_status: migsStatus || "All",
-            registration_status: registrationStatus || "All"
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        previewTableBody.innerHTML = ""; // Clear previous data
-        // Process data as before...
-    })
-    .catch(error => {
-        console.error("Error fetching preview data:", error);
-        previewTableBody.innerHTML = `<tr><td colspan="6" class="text-center text-danger">Error loading data</td></tr>`;
-    });
-});
-
-</script>
 
 
     <script>

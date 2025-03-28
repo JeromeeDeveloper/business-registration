@@ -366,22 +366,24 @@
                                                 <i class="fas fa-building me-2"></i> Coop Registration Summary with Breakdown
                                             </a>
 
-                                            <div class="d-flex gap-3">
-                                                <a href="{{ route('admin.reports.coop_status_list') }}" class="list-group-item list-group-item-action py-3 fw-semibold" data-report-type="coop_status">
-                                                    <i class="fas fa-clipboard-list me-2"></i> List of Coop Registration Status
-                                                </a>
 
-                                                <button type="button" class="list-group-item list-group-item-action py-3 fw-semibold" id="filterRegionBtn" data-bs-toggle="modal" data-bs-target="#regionFilterModal">
-                                                    <i class="fas fa-filter me-2"></i> Filter List of Coop Registration Status
-                                                </button>
-
-                                            </div>
 
                                         <a href="{{ route('admin.reports.participants_list') }}"
                                         class="list-group-item list-group-item-action py-3 fw-semibold"
                                         data-report-type="participants_list">
                                         <i class="fas fa-users me-2"></i> List of Voting Delegates
                                     </a>
+
+                                    <div class="d-flex gap-3">
+                                        <a href="{{ route('admin.reports.coop_status_list') }}" class="list-group-item list-group-item-action py-3 fw-semibold" data-report-type="coop_status">
+                                            <i class="fas fa-clipboard-list me-2"></i> List of Coop Registration Status
+                                        </a>
+
+                                        <button type="button" class="list-group-item list-group-item-action py-3 fw-semibold" id="filterRegionBtn" data-bs-toggle="modal" data-bs-target="#regionFilterModal">
+                                            <i class="fas fa-filter me-2"></i> Filter List of Coop Registration Status
+                                        </button>
+
+                                    </div>
 
                                             </div>
 
@@ -514,6 +516,7 @@
 
                     </div>
                     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-3 mb-4">
+
                         <!-- Cooperative -->
                         <div class="col">
                             <div class="card card-stats card-round shadow-sm h-100">
@@ -542,6 +545,39 @@
                                     <div>
                                         <p class="card-category mb-1">Registered Coops</p>
                                         <h4 class="card-title mb-0">{{ number_format($registeredCoops) }}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="card card-stats card-round shadow-sm h-100">
+                                <div class="card-body d-flex align-items-center">
+                                    <div class="col-icon me-3">
+                                        <div class="icon-big text-success text-center">
+                                            <i class="fas fa-building"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p class="card-category mb-1">Registered Migs Coops</p>
+                                        <h4 class="card-title mb-0">{{ number_format($registeredMigsCoops) }}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Registered Non-Migs Coops -->
+                        <div class="col-md-2">
+                            <div class="card card-stats card-round shadow-sm h-100">
+                                <div class="card-body d-flex align-items-center">
+                                    <div class="col-icon me-3">
+                                        <div class="icon-big text-danger text-center">
+                                            <i class="fas fa-building"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p class="card-category mb-1">Registered Non-Migs Coops</p>
+                                        <h4 class="card-title mb-0">{{ number_format($registeredNonMigsCoops) }}</h4>
                                     </div>
                                 </div>
                             </div>
@@ -582,41 +618,6 @@
                             </div>
                         </div>
 
-
-                        <div class="col-md-2">
-                            <div class="card card-stats card-round shadow-sm h-100">
-                                <div class="card-body d-flex align-items-center">
-                                    <div class="col-icon me-3">
-                                        <div class="icon-big text-success text-center">
-                                            <i class="fas fa-building"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="card-category mb-1">Registered Migs Coops</p>
-                                        <h4 class="card-title mb-0">{{ number_format($registeredMigsCoops) }}</h4>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <!-- Registered Non-Migs Coops -->
-                        <div class="col-md-2">
-                            <div class="card card-stats card-round shadow-sm h-100">
-                                <div class="card-body d-flex align-items-center">
-                                    <div class="col-icon me-3">
-                                        <div class="icon-big text-danger text-center">
-                                            <i class="fas fa-building"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="card-category mb-1">Registered Non-Migs Coops</p>
-                                        <h4 class="card-title mb-0">{{ number_format($registeredNonMigsCoops) }}</h4>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                         <div class="col-md-2">
                             <div class="card card-stats card-round shadow-sm h-100">
                                 <div class="card-body d-flex align-items-center">
@@ -643,7 +644,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <p class="card-category mb-1">MIGS Participants</p>
+                                        <p class="card-category mb-1">Registered MIGS Participants</p>
                                         <h4 class="card-title mb-0">{{ number_format($totalMigsParticipants ?? 0) }}
                                         </h4>
                                     </div>
@@ -661,7 +662,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <p class="card-category mb-1">NON-MIGS Participants</p>
+                                        <p class="card-category mb-1">Registered NON-MIGS Participants</p>
                                         <h4 class="card-title mb-0">
                                             {{ number_format($totalNonMigsParticipants ?? 0) }}</h4>
                                     </div>
@@ -675,51 +676,16 @@
                                 <div class="card-body d-flex align-items-center">
                                     <div class="col-icon me-3">
                                         <div class="icon-big text-success text-center">
-                                            <i class="fas fa-users"></i>
+                                            <i class="fas fa-hand-paper"></i>
                                         </div>
                                     </div>
                                     <div>
-                                        <p class="card-category mb-1">Total Participants</p>
-                                        <h4 class="card-title mb-0">{{ number_format($totalParticipants) }}</h4>
+                                        <p class="card-category mb-1">Total Voting Delegates</p>
+                                        <h4 class="card-title mb-0">{{ number_format($totalVoting) }}</h4>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Total Attended -->
-                        <div class="col">
-                            <div class="card card-stats card-round shadow-sm h-100">
-                                <div class="card-body d-flex align-items-center">
-                                    <div class="col-icon me-3">
-                                        <div class="icon-big text-info text-center">
-                                            <i class="fas fa-user-check"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="card-category mb-1">Total Attended</p>
-                                        <h4 class="card-title mb-0">{{ number_format($totalAttended) }}</h4>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Attended Migs -->
-                        <div class="col">
-                            <div class="card card-stats card-round shadow-sm h-100">
-                                <div class="card-body d-flex align-items-center">
-                                    <div class="col-icon me-3">
-                                        <div class="icon-big text-warning text-center">
-                                            <i class="fas fa-user-friends"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="card-category mb-1">Attended MIGS</p>
-                                        <h4 class="card-title mb-0">{{ number_format($totalMigsAttended) }}</h4>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
 
                     <div class="row">
@@ -1240,38 +1206,6 @@
             });
         });
         </script>
-
-
-    <script>
-        previewDataBtn.addEventListener("click", function () {
-        previewTableBody.innerHTML = `<tr><td colspan="6" class="text-center">Loading...</td></tr>`;
-
-        fetch("{{ route('reports.preview.filtered_coop_status') }}", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": "{{ csrf_token() }}"
-            },
-            body: JSON.stringify({
-                region: selectedRegion || "All",
-                migs_status: migsStatus || "All",
-                registration_status: registrationStatus || "All"
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            previewTableBody.innerHTML = ""; // Clear previous data
-            // Process data as before...
-        })
-        .catch(error => {
-            console.error("Error fetching preview data:", error);
-            previewTableBody.innerHTML = `<tr><td colspan="6" class="text-center text-danger">Error loading data</td></tr>`;
-        });
-    });
-
-    </script>
-
-
 
     @include('layouts.links')
 </body>

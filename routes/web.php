@@ -328,4 +328,7 @@ Route::middleware([SupportMiddleware::class])->group(function () {
     Route::post('/Support/Cooperatives/Edit/{id}/Documents', [SupportController::class, 'storeDocuments3'])->name('cooperatives.storeDocuments3');
 
     Route::post('/Support/cooperatives/{coop_id}/notify', [SupportController::class, 'sendNotificationsupport'])->name('support.cooperatives.notify');
+
+    Route::get('/Support/Register/Cooperatives', [SupportController::class, 'supportregister'])->name('supportregister');
+    Route::post('/Support/store-cooperative', [SupportController::class, 'supportstoreCooperative'])->name('support.storeCooperative');
 });

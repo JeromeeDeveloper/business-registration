@@ -4,7 +4,12 @@
 <head>
     @include('layouts.adminheader')
 </head>
+<style>
+    .doc{
+    padding: 10px 25px;
+}
 
+</style>
 <body>
     <div class="wrapper">
         <!-- Sidebar -->
@@ -12,7 +17,7 @@
             <div class="sidebar-logo">
                 <!-- Logo Header -->
                 <div class="logo-header" data-background-color="dark">
-                    <a href="{{ route('adminDashboard') }}" class="logo">
+                    <a href="{{ route('supportDashboard') }}" class="logo">
                         <img class="logo-mass-specc" src="{{ asset('images/logo.png') }}" alt="">
                     </a>
                     <div class="nav-toggle">
@@ -34,7 +39,7 @@
                     <ul class="nav nav-secondary">
 
                         <li class="nav-item">
-                            <a href="{{ route('adminDashboard') }}" class="collapsed">
+                            <a href="{{ route('supportDashboard') }}" class="collapsed">
                                 <i class="fas fa-home"></i>
                                 <p>Dashboard</p>
                             </a>
@@ -56,14 +61,14 @@
                             <div class="collapse show" id="cooperative">
                                 <ul class="nav nav-collapse">
                                     <li class="active">
-                                        <a href="{{ route('adminview') }}">
+                                        <a href="{{ route('supportview') }}">
                                             <span class="sub-item">Manage Cooperative</span>
                                         </a>
                                     </li>
                                 </ul>
                             </div>
                         </li>
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#participant">
                                 <i class="fas fa-user-cog"></i>
                                 <p>Participant</p>
@@ -78,7 +83,7 @@
                                     </li>
                                 </ul>
                             </div>
-                        </li>
+                        </li> --}}
 
                         <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#attendance">
@@ -89,7 +94,7 @@
                             <div class="collapse" id="attendance">
                                 <ul class="nav nav-collapse">
                                     <li>
-                                        <a href="{{ route('attendance.index') }}">
+                                        <a href="{{ route('support.attendance.index') }}">
                                             <span class="sub-item">Manage attendance</span>
                                         </a>
                                     </li>
@@ -98,7 +103,7 @@
                             </div>
                         </li>
 
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#user">
                                 <i class="fas fa-user"></i>
                                 <p>User</p>
@@ -148,7 +153,7 @@
                                     </li>
                                 </ul>
                             </div>
-                        </li>
+                        </li> --}}
 
                     </ul>
                 </div>
@@ -161,27 +166,76 @@
                 <div class="main-header-logo">
                     <!-- Logo Header -->
                     <div class="logo-header" data-background-color="dark">
-                        <a href="{{ route('adminDashboard') }}" class="logo">
+                        <a href="{{ route('supportDashboard') }}" class="logo">
                             <img class="logo-mass-specc" src="{{ asset('images/logo.png') }}" alt="">
-                        </a>
-                        <div class="nav-toggle">
-                            <button class="btn btn-toggle toggle-sidebar">
-                                <i class="gg-menu-right"></i>
+                            <div class="nav-toggle">
+                                <button class="btn btn-toggle toggle-sidebar">
+                                    <i class="gg-menu-right"></i>
+                                </button>
+                                <button class="btn btn-toggle sidenav-toggler">
+                                    <i class="gg-menu-left"></i>
+                                </button>
+                            </div>
+                            <button class="topbar-toggler more">
+                                <i class="gg-more-vertical-alt"></i>
                             </button>
-                            <button class="btn btn-toggle sidenav-toggler">
-                                <i class="gg-menu-left"></i>
-                            </button>
-                        </div>
-                        <button class="topbar-toggler more">
-                            <i class="gg-more-vertical-alt"></i>
-                        </button>
                     </div>
                     <!-- End Logo Header -->
                 </div>
                 <!-- Navbar Header -->
-                @include('layouts.adminnav')
+                <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
+                    <div class="container-fluid">
+                        <nav
+                            class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
+
+                        </nav>
+
+                        <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
+                            <li class="nav-item topbar-user dropdown hidden-caret">
+
+                                <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#"
+                                    aria-expanded="false">
+                                    <i class="fa fa-user"></i>
+                                    <span class="profile-username">
+                                        <span class="op-7">Hi,</span>
+                                        <span class="fw-bold" style="text-transform: capitalize;">
+                                            {{ Auth::user()->name }}
+                                        </span>
+
+                                    </span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-user animated fadeIn">
+                                    <div class="dropdown-user-scroll scrollbar-outer">
+                                        <li>
+                                            <div class="user-box">
+                                                <div class="u-text">
+                                                    <h4> {{ Auth::user()->name }}</h4>
+                                                    <p class="text-muted"> {{ Auth::user()->email }}</p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="{{ route('profile.edit3') }}">My
+                                                Profile</a>
+                                            <div class="dropdown-divider"></div>
+                                            <form action="{{ route('logout') }}" method="POST" id="logout-form"
+                                                style="display: none;">
+                                                @csrf
+                                            </form>
+                                            <a class="dropdown-item" href="#"
+                                                onclick="document.getElementById('logout-form').submit();">Logout</a>
+                                        </li>
+                                    </div>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
                 <!-- End Navbar -->
             </div>
+                <!-- End Navbar -->
+
 
             <div class="container">
                 <div class="page-inner">
@@ -219,7 +273,7 @@
                                 <div class="card-header">
                                     <div class="card-title">Cooperative Registration Form</div>
                                 </div>
-                                <form id="coopForm" method="POST" action="{{ route('admin.storeCooperative') }}">
+                                <form id="coopForm" method="POST" action="{{ route('support.storeCooperative') }}">
                                     @csrf
                                     <div class="card-body">
                                         <div class="row">
@@ -398,7 +452,7 @@
 
                                             </div> --}}
 
-                                            <div class="col-12">
+                                            {{-- <div class="col-12">
                                                 <h4 class="mt-4">Verifier</h4>
                                                 <hr>
                                             </div>
@@ -743,18 +797,19 @@
                                                         </fieldset>
                                                     </div>
                                                 </div>
-                                            </div>
-
-
+                                            </div> --}}
 
                                         </div>
 
+                                    </div>
                                         <div class="card-action">
                                             <button class="btn btn-label-info btn-round">Submit</button>
                                             <button type="button" class="btn btn-primary btn-round"
-                                                onclick="window.location.href='{{ route('adminview') }}'">Back</button>
+                                                onclick="window.location.href='{{ route('supportview') }}'">Back</button>
                                 </form>
+
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -767,7 +822,7 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script>
+    {{-- <script>
         document.addEventListener("DOMContentLoaded", function() {
             const dropdownButton = document.getElementById("servicesDropdown");
             const dropdownMenu = document.getElementById("dropdownMenu");
@@ -808,31 +863,12 @@
             // Load preselected values
             updateDropdownText();
         });
-    </script>
+    </script> --}}
 
 
-@if ($errors->any())
-<script>
-    console.error('Validation Errors:', @json($errors->all()));
-    Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: '@foreach ($errors->all() as $error){{ $error }}@endforeach',
-    });
-</script>
-@endif
-    @if ($errors->any())
-        <script>
-            console.error('Validation Errors:', @json($errors->all()));
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: '@foreach ($errors->all() as $error){{ $error }}@endforeach',
-            });
-        </script>
-    @endif
 
-    <script>
+
+    {{-- <script>
         document.addEventListener('DOMContentLoaded', function () {
             const shareCapitalInput = document.getElementById('share_capital_balance');
             const entitledVotesInput = document.getElementById('no_of_entitled_votes');
@@ -1024,65 +1060,55 @@
             updateCetfRequired();
             updateTotalRemittance();
         });
-    </script>
+    </script> --}}
 
     <script>
-  document.getElementById('coopForm').addEventListener('submit', function (e) {
+    document.getElementById('coopForm').addEventListener('submit', function(e) {
     e.preventDefault();
     let formData = new FormData(this);
 
-    fetch("{{ route('admin.storeCooperative') }}", {
+    fetch("{{ route('support.storeCooperative') }}", {
         method: 'POST',
         body: formData,
-        headers: { 'Accept': 'application/json' }
+        headers: {
+            'Accept': 'application/json'
+        }
     })
-    .then(response => response.text().then(text => {
-        console.log("🔍 Full Server Response:", text); // ✅ Log full response
-        try {
-            return { json: JSON.parse(text), response }; // ✅ Parse JSON safely
-        } catch (error) {
-            throw new Error(`Invalid JSON Response: ${text}`); // ✅ Handle invalid JSON errors
-        }
-    }))
-    .then(({ json, response }) => {
+    .then(response => {
         if (!response.ok) {
-            if (response.status === 422 && json.errors) {
-                let errorMessages = Object.entries(json.errors)
-                    .map(([field, messages]) => `${field}: ${messages.join(', ')}`)
-                    .join('\n');
-
-                Swal.fire({
-                    title: 'Validation Error!',
-                    html: `<pre>${errorMessages}</pre>`, // ✅ Displays errors in a readable format
-                    icon: 'error',
-                    confirmButtonText: 'Try Again'
-                });
-                return;
-            }
-
-            throw new Error(json.message || `Error ${response.status}: ${response.statusText}`);
+            return response.text().then(text => {
+                try {
+                    let json = JSON.parse(text);
+                    if (json.errors) {
+                        let errorMessages = Object.values(json.errors).flat().join("\n");
+                        Swal.fire({ title: 'Validation Error!', text: errorMessages, icon: 'error', confirmButtonText: 'Try Again' });
+                        return Promise.reject(new Error("Validation Error!"));
+                    } else {
+                        return Promise.reject(new Error(json.message || `Error ${response.status}: ${response.statusText}`));
+                    }
+                } catch {
+                    return Promise.reject(new Error(`Server Error (${response.status}): ${text}`));
+                }
+            });
         }
-
-        Swal.fire({
-            title: 'Success!',
-            text: json.success || "Cooperative registered successfully.",
-            icon: 'success',
-            confirmButtonText: 'Okay'
-        });
-        document.getElementById('coopForm').reset();
+        return response.json();
+    })
+    .then(data => {
+        if (data && data.success) {
+            Swal.fire({
+                title: 'Success!',
+                text: data.success,
+                icon: 'success',
+                confirmButtonText: 'Okay'
+            });
+            document.getElementById('coopForm').reset();
+        } else {
+            throw new Error("Unexpected response format");
+        }
     })
     .catch(error => {
-        console.error("❌ Error:", error);
-
-        Swal.fire({
-            title: 'Error!',
-            html: `
-                <strong>Message:</strong> ${error.message} <br>
-                <strong>Possible Cause:</strong> ${error.message.includes('<!DOCTYPE') ? "Server returned an HTML page instead of JSON. Check Laravel logs." : "Unknown issue"}
-            `,
-            icon: 'error',
-            confirmButtonText: 'Debug'
-        });
+        console.error("Fetch Error:", error);
+        Swal.fire({ title: 'Error!', text: error.message, icon: 'error', confirmButtonText: 'Try Again' });
     });
 });
 

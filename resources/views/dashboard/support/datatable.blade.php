@@ -261,35 +261,7 @@
                             <div class="card">
                                 <div class="card-header">
                                     <!-- Filter Modal -->
-                                    <div class="modal fade" id="filterModal" tabindex="-1"
-                                        aria-labelledby="filterModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="filterModalLabel">Filter Options</h5>
 
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox"
-                                                            name="filter_no_ga2" value="1" id="filterNoGA"
-                                                            form="searchForm"
-                                                            {{ request('filter_no_ga2') == '1' ? 'checked' : '' }}>
-                                                        <label class="form-check-label" for="filterNoGA">
-                                                            Show only cooperatives with <strong>no GA
-                                                                registrations</strong>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-label-info btn-round"
-                                                        data-bs-dismiss="modal">Close</button>
-                                                    <button type="submit" class="btn btn-primary btn-round"
-                                                        form="searchForm">Apply Filter</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
 
                                     <!-- Responsive Layout -->
                                     <div
@@ -310,19 +282,13 @@
 
                                                 <button type="submit" class="btn btn-primary"><i
                                                         class="fa fa-search"></i></button>
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                                    data-bs-target="#filterModal">
-                                                    <i class="fa fa-filter"></i>
-                                                </button>
+
 
                                             </div>
 
                                             <!-- Action Buttons -->
                                             {{-- <div class="d-flex flex-row gap-2">
-                                                <a href="{{ route('adminregister') }}" class="btn btn-primary"
-                                                    data-bs-toggle="tooltip" title="Add Cooperative">
-                                                    <i class="fa fa-plus"></i>
-                                                </a>
+
                                                 <a href="{{ route('import.form') }}" class="btn btn-primary"
                                                     data-bs-toggle="tooltip" title="Import Cooperative">
                                                     <i class="fa fa-upload"></i>
@@ -333,6 +299,11 @@
                                                     <i class="fa fa-print"></i>
                                                 </button>
                                             </div> --}}
+
+                                            <a href="{{ route('supportregister') }}" class="btn btn-primary"
+                                                    data-bs-toggle="tooltip" title="Add Cooperative">
+                                                    <i class="fa fa-plus"></i>
+                                                </a>
 
                                         </form>
                                     </div>

@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\CooperativeNotification;
 use Illuminate\Support\Facades\Storage;
@@ -27,6 +28,9 @@ class SupportController extends Controller
 
     public function support()
     {
+
+        $regions = Cooperative::distinct()->pluck('region', 'region')->sort();
+
         $totalAttended = EventParticipant::whereNotNull('attendance_datetime')->count();
         $totalParticipants = Participant::count();
         $totalUsers = User::count();
@@ -78,12 +82,12 @@ class SupportController extends Controller
              // Count registered MIGS Coops
     // Count registered MIGS Coops with Participant connection
 $registeredMigsCoops = GARegistration::where('membership_status', 'Migs')
-->whereHas('cooperative.participants') // Ensuring there's a Participant connected to the Cooperative
+->whereHas('cooperative.participants')
 ->distinct()->count('coop_id');
 
 // Count registered NON-MIGS Coops with Participant connection
 $registeredNonMigsCoops = GARegistration::where('membership_status', 'Non-migs')
-->whereHas('cooperative.participants') // Ensuring there's a Participant connected to the Cooperative
+->whereHas('cooperative.participants')
 ->distinct()->count('coop_id');
 
 $totalCoopAttended = DB::table('participants')
@@ -114,6 +118,8 @@ $totalNonMigsAttended = DB::table('participants')
     ->distinct('participants.coop_id') // Counts Non-MIGS coop only once
     ->count('participants.coop_id');
 
+    $totalVoting = Participant::where('delegate_type', 'Voting')->count();
+
 // Attended Participants with Voting Delegate Type
 $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
     ->whereHas('participant', function ($query) {
@@ -130,6 +136,7 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
         $registeredParticipants = Participant::whereNotNull('coop_id')->count();
 
         return view('dashboard.support.admin', compact(
+            'regions',
             'totalParticipants',
             'totalUsers',
             'totalSpeakers',
@@ -150,7 +157,7 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
             'registeredNonMigsCoops',
             'totalCoopAttended',
             'totalCoopAttended',
-
+            'totalVoting',
             'totalNonMigsAttended',
             'totalVotingParticipants',
             'events',
@@ -583,5 +590,66 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
           \Log::error('Error sending notification: ' . $e->getMessage());
           return back()->with('error', 'Error sending notification: ' . $e->getMessage());
       }
+  }
+
+
+  public function supportregister()
+  {
+      return view('dashboard.support.add');
+  }
+
+  public function supportstoreCooperative(Request $request)
+  {
+      // Validate the incoming data
+      $request->validate([
+          'name' => 'required|string|max:255',
+          'contact_person' => 'required|string|max:255',
+          'type' => 'required|string|max:255',
+          'address' => 'required|string|max:255',
+          'region' => 'required|string|max:255|in:Region I,Region II,Region III,Region IV-A,Region IV-B,Region V,Region VI,Region VII,Region VIII,Region IX,Region X,Region XI,Region XII,Region XIII,NCR,CAR,BARMM,ZBST,LUZON',
+          'phone_number' => 'required|string|max:20',
+          'email' => 'required|email|unique:cooperatives,email',
+          'tin' => 'required|string|max:255',
+          'coop_identification_no' => 'nullable|string|max:255',
+          'bod_chairperson' => 'nullable|string|max:255',
+          'general_manager_ceo' => 'nullable|string|max:255',
+
+      ]);
+
+
+
+      $cooperative = Cooperative::create([
+          'name' => $request->name,
+          'contact_person' => $request->contact_person,
+          'type' => $request->type,
+          'address' => $request->address,
+          'region' => $request->region,
+          'phone_number' => $request->phone_number,
+          'email' => $request->email,
+          'tin' => $request->tin,
+      ]);
+
+
+      $words = preg_split('/\s+/', trim($cooperative->name));
+      $acronym = '';
+      foreach ($words as $word) {
+          $acronym .= strtoupper($word[0]);
+      }
+
+      $sanitizedPassword = $acronym . 'GA2025';
+
+      // Create the user account
+      User::create([
+          'name' => $cooperative->contact_person,
+          'coop_id' => $cooperative->coop_id,
+          'email' => $cooperative->email,
+          'password' => Hash::make($sanitizedPassword),
+          'role' => 'cooperative',
+      ]);
+
+      return response()->json([
+          'success' => 'Cooperative and User registered successfully!',
+          'generated_password' => $sanitizedPassword,
+      ]);
   }
 }
