@@ -29,20 +29,14 @@ class ParticipantObserver
      */
     private function updateGARegistrationStatus($coop_id)
     {
-        $coop = Cooperative::find($coop_id);
+        $coop = Cooperative::find($coop_id)->fresh();
+        if (!$coop) return;
 
-        if (!$coop) {
-            \Log::error("Cooperative not found with ID: $coop_id");
-            return;
-        }
-
-        // Get or create the GA Registration record
         $gaRegistration = GARegistration::updateOrCreate(
             ['coop_id' => $coop_id],
             ['participant_id' => null]
         );
 
-        // Define the required documents
         $requiredDocuments = [
             'Financial Statement',
             'Resolution for Voting delegates',
@@ -53,27 +47,23 @@ class ParticipantObserver
             'CETF Utilization invoice'
         ];
 
-        // Count the approved documents
         $approvedDocumentsCount = UploadedDocument::where('coop_id', $coop_id)
             ->whereIn('document_type', $requiredDocuments)
             ->where('status', 'Approved')
             ->count();
 
-        // Check if any required document has been rejected
         $hasRejectedDocument = UploadedDocument::where('coop_id', $coop_id)
             ->whereIn('document_type', $requiredDocuments)
             ->where('status', 'Rejected')
             ->exists();
 
-        // Check if payment is sufficient
         $isPaymentSufficient = !is_null($coop->less_prereg_payment) &&
             $coop->less_prereg_payment >= $coop->net_required_reg_fee;
 
-        // Check if a participant exists
         $hasParticipant = Participant::where('coop_id', $coop_id)->exists();
 
-        // Determine registration status based on conditions
-        if (!$hasRejectedDocument && ($approvedDocumentsCount === count($requiredDocuments) || $isPaymentSufficient)) {
+        // Ensure all documents are approved and payment is sufficient for Fully Registered
+        if (!$hasRejectedDocument && $approvedDocumentsCount === count($requiredDocuments) && $isPaymentSufficient) {
             $gaRegistration->registration_status = 'Fully Registered';
         } elseif ($hasParticipant) {
             $gaRegistration->registration_status = 'Partial Registered';
@@ -81,7 +71,6 @@ class ParticipantObserver
             $gaRegistration->registration_status = 'Rejected';
         }
 
-        // Save the updated GA Registration status
         $gaRegistration->save();
     }
 

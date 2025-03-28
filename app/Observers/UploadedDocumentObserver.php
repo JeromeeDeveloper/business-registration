@@ -74,19 +74,18 @@ class UploadedDocumentObserver
         $isPaymentSufficient = !is_null($coop->less_prereg_payment) &&
             $coop->less_prereg_payment >= $coop->net_required_reg_fee;
 
-            $hasParticipant = Participant::where('coop_id', $coop_id)->count() > 0;
+        $hasParticipant = Participant::where('coop_id', $coop_id)->exists();
 
-            if (!$hasRejectedDocument && ($approvedDocumentsCount === count($requiredDocuments) || $isPaymentSufficient)) {
-                $gaRegistration->registration_status = 'Fully Registered';
-            } elseif ($hasParticipant) {
-                $gaRegistration->registration_status = 'Partial Registered';
-            } else {
-                $gaRegistration->registration_status = 'Rejected';
-            }
-
+        // Ensure all documents are approved and payment is sufficient for Fully Registered
+        if (!$hasRejectedDocument && $approvedDocumentsCount === count($requiredDocuments) && $isPaymentSufficient) {
+            $gaRegistration->registration_status = 'Fully Registered';
+        } elseif ($hasParticipant) {
+            $gaRegistration->registration_status = 'Partial Registered';
+        } else {
+            $gaRegistration->registration_status = 'Rejected';
+        }
 
         $gaRegistration->save();
-        \Log::info("GA Registration Status Updated: Coop ID $coop_id, Status: {$gaRegistration->registration_status}");
     }
 
     private function updateMembershipStatus($cooperative_id)

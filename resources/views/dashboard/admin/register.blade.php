@@ -224,13 +224,13 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <!-- Coop Name -->
-
+                                            <!-- Cooperative Name -->
                                             <div class="col-md-6 col-lg-4">
                                                 <div class="form-group">
                                                     <label for="name">Cooperative Name</label>
                                                     <input type="text" class="form-control" name="name"
                                                         id="name" placeholder="Enter Cooperative Name"
-                                                        required />
+                                                        value="{{ old('name') }}" required />
                                                 </div>
                                             </div>
 
@@ -240,7 +240,7 @@
                                                     <label for="contact_person">Contact Person</label>
                                                     <input type="text" class="form-control" name="contact_person"
                                                         id="contact_person" placeholder="Enter Contact Person"
-                                                        required />
+                                                        value="{{ old('contact_person') }}" required />
                                                 </div>
                                             </div>
 
@@ -250,7 +250,7 @@
                                                     <label for="type">Cooperative Type</label>
                                                     <input type="text" class="form-control" name="type"
                                                         id="type" placeholder="Enter Cooperative Type"
-                                                        required />
+                                                        value="{{ old('type') }}" required />
                                                 </div>
                                             </div>
 
@@ -258,8 +258,7 @@
                                             <div class="col-md-6 col-lg-4">
                                                 <div class="form-group">
                                                     <label for="address">Address</label>
-                                                    <input class="form-control" id="address" name="address"
-                                                        rows="3" placeholder="Enter Address" required></input>
+                                                    <input class="form-control" id="address" name="address" rows="3" placeholder="Enter Address" required>{{ old('address') }}</input>
                                                 </div>
                                             </div>
 
@@ -267,30 +266,69 @@
                                             <div class="col-md-6 col-lg-4">
                                                 <div class="form-group">
                                                     <label for="region">Region</label>
-                                                    <select class="form-control" name="region" id="region" required>
+                                                    <select class="form-control" name="region" id="region"
+                                                        required>
                                                         <option value="">Select Region</option>
-                                                        <option value="Region I">Region I</option>
-                                                        <option value="Region II">Region II</option>
-                                                        <option value="Region III">Region III</option>
-                                                        <option value="Region IV-A">Region IV-A</option>
-                                                        <option value="Region IV-B">Region IV-B</option>
-                                                        <option value="Region V">Region V</option>
-                                                        <option value="Region VI">Region VI</option>
-                                                        <option value="Region VII">Region VII</option>
-                                                        <option value="Region VIII">Region VIII</option>
-                                                        <option value="Region IX">Region IX</option>
-                                                        <option value="Region X">Region X</option>
-                                                        <option value="Region XI">Region XI</option>
-                                                        <option value="Region XII">Region XII</option>
-                                                        <option value="Region XIII">Region XIII</option>
-                                                        <option value="NCR">National Capital Region</option>
-                                                        <option value="CAR">Cordillera Administrative Region</option>
-                                                        <option value="BARMM">Bangsamoro Autonomous Region</option>
-                                                        <option value="ZBST">ZBST</option>
-                                                        <option value="LUZON">LUZON</option>
+                                                        @php $selectedRegion = old('region'); @endphp
+                                                        <option value="Region I"
+                                                            {{ $selectedRegion === 'Region I' ? 'selected' : '' }}>
+                                                            Region I</option>
+                                                        <option value="Region II"
+                                                            {{ $selectedRegion === 'Region II' ? 'selected' : '' }}>
+                                                            Region II</option>
+                                                        <option value="Region III"
+                                                            {{ $selectedRegion === 'Region III' ? 'selected' : '' }}>
+                                                            Region III</option>
+                                                        <option value="Region IV-A"
+                                                            {{ $selectedRegion === 'Region IV-A' ? 'selected' : '' }}>
+                                                            Region IV-A</option>
+                                                        <option value="Region IV-B"
+                                                            {{ $selectedRegion === 'Region IV-B' ? 'selected' : '' }}>
+                                                            Region IV-B</option>
+                                                        <option value="Region V"
+                                                            {{ $selectedRegion === 'Region V' ? 'selected' : '' }}>
+                                                            Region V</option>
+                                                        <option value="Region VI"
+                                                            {{ $selectedRegion === 'Region VI' ? 'selected' : '' }}>
+                                                            Region VI</option>
+                                                        <option value="Region VII"
+                                                            {{ $selectedRegion === 'Region VII' ? 'selected' : '' }}>
+                                                            Region VII</option>
+                                                        <option value="Region VIII"
+                                                            {{ $selectedRegion === 'Region VIII' ? 'selected' : '' }}>
+                                                            Region VIII</option>
+                                                        <option value="Region IX"
+                                                            {{ $selectedRegion === 'Region IX' ? 'selected' : '' }}>
+                                                            Region IX</option>
+                                                        <option value="Region X"
+                                                            {{ $selectedRegion === 'Region X' ? 'selected' : '' }}>
+                                                            Region X</option>
+                                                        <option value="Region XI"
+                                                            {{ $selectedRegion === 'Region XI' ? 'selected' : '' }}>
+                                                            Region XI</option>
+                                                        <option value="Region XII"
+                                                            {{ $selectedRegion === 'Region XII' ? 'selected' : '' }}>
+                                                            Region XII</option>
+                                                        <option value="Region XIII"
+                                                            {{ $selectedRegion === 'Region XIII' ? 'selected' : '' }}>
+                                                            Region XIII</option>
+                                                        <option value="NCR"
+                                                            {{ $selectedRegion === 'NCR' ? 'selected' : '' }}>National
+                                                            Capital Region</option>
+                                                        <option value="CAR"
+                                                            {{ $selectedRegion === 'CAR' ? 'selected' : '' }}>
+                                                            Cordillera Administrative Region</option>
+                                                        <option value="BARMM"
+                                                            {{ $selectedRegion === 'BARMM' ? 'selected' : '' }}>
+                                                            Bangsamoro Autonomous Region</option>
+                                                        <option value="ZBST"
+                                                            {{ $selectedRegion === 'ZBST' ? 'selected' : '' }}>ZBST
+                                                        </option>
+                                                        <option value="LUZON"
+                                                            {{ $selectedRegion === 'LUZON' ? 'selected' : '' }}>LUZON
+                                                        </option>
                                                     </select>
                                                 </div>
-
                                             </div>
 
                                             <!-- Phone Number -->
@@ -298,7 +336,8 @@
                                                 <div class="form-group">
                                                     <label for="phone_number">Phone Number</label>
                                                     <input type="number" class="form-control" name="phone_number"
-                                                        id="phone_number" placeholder="Enter Phone Number" required />
+                                                        id="phone_number" placeholder="Enter Phone Number"
+                                                        value="{{ old('phone_number') }}" required />
                                                 </div>
                                             </div>
 
@@ -307,16 +346,20 @@
                                                 <div class="form-group">
                                                     <label for="email">Email</label>
                                                     <input type="email" class="form-control" name="email"
-                                                        id="email" placeholder="Enter Email" required />
+                                                        id="email" placeholder="Enter Email"
+                                                        value="{{ old('email') }}" required />
                                                 </div>
                                             </div>
 
+
+                                            <!-- TIN -->
                                             <!-- TIN -->
                                             <div class="col-md-6 col-lg-4">
                                                 <div class="form-group">
                                                     <label for="tin">TIN</label>
                                                     <input type="text" class="form-control" name="tin"
-                                                        id="tin" placeholder="Enter TIN" required />
+                                                        id="tin" placeholder="Enter TIN"
+                                                        value="{{ old('tin') }}" required />
                                                 </div>
                                             </div>
 
@@ -326,11 +369,10 @@
                                                     <label for="coop_identification_no">Cooperative ID</label>
                                                     <input type="text" class="form-control"
                                                         name="coop_identification_no" id="coop_identification_no"
-                                                        placeholder="Enter Coop ID" required />
+                                                        placeholder="Enter Coop ID"
+                                                        value="{{ old('coop_identification_no') }}" required />
                                                 </div>
                                             </div>
-
-
 
                                             <!-- BOD Chairperson -->
                                             <div class="col-md-6 col-lg-4">
@@ -338,9 +380,10 @@
                                                     <label for="bod_chairperson">BOD Chairperson</label>
                                                     <input type="text" class="form-control" name="bod_chairperson"
                                                         id="bod_chairperson" placeholder="Enter BOD Chairperson"
-                                                        required />
+                                                        value="{{ old('bod_chairperson') }}" required />
                                                 </div>
                                             </div>
+
 
                                             <!-- General Manager/CEO -->
                                             <div class="col-md-6 col-lg-4">
@@ -348,9 +391,11 @@
                                                     <label for="general_manager_ceo">General Manager/CEO</label>
                                                     <input type="text" class="form-control"
                                                         name="general_manager_ceo" id="general_manager_ceo"
-                                                        placeholder="Enter Manager/CEO" required />
+                                                        placeholder="Enter Manager/CEO"
+                                                        value="{{ old('general_manager_ceo') }}" required />
                                                 </div>
                                             </div>
+
 
                                             {{-- <div class="col-md-6 col-lg-4">
 
@@ -366,46 +411,63 @@
                                                     <!-- Financial Information -->
                                                     <div class="col-md-4">
                                                         <fieldset class="border rounded p-3 shadow-sm h-100">
-                                                            <legend class="h5 text-primary">MIGS / Voting Delegate Requirements</legend>
+                                                            <legend class="h5 text-primary">MIGS / Voting Delegate
+                                                                Requirements</legend>
                                                             <div class="form-group mb-3">
-                                                                <label for="share_capital_balance" class="form-label fw-bold">Share Capital Balance</label>
-                                                                <input type="number" class="form-control" name="share_capital_balance" id="share_capital_balance"
-                                                                step="0.01" placeholder="Enter Share Capital Balance" />
+                                                                <label for="share_capital_balance"
+                                                                    class="form-label fw-bold">Share Capital
+                                                                    Balance</label>
+                                                                <input type="number" class="form-control"
+                                                                    name="share_capital_balance"
+                                                                    id="share_capital_balance" step="0.01"
+                                                                    placeholder="Enter Share Capital Balance" />
                                                             </div>
                                                             <div class="form-group">
-                                                                <label for="no_of_entitled_votes" class="form-label fw-bold">Number of Entitled Votes</label>
-                                                                <input type="number" class="form-control" name="no_of_entitled_votes" id="no_of_entitled_votes"
-                                                                    placeholder="Enter Number of Entitled Votes" disabled />
+                                                                <label for="no_of_entitled_votes"
+                                                                    class="form-label fw-bold">Number of Entitled
+                                                                    Votes</label>
+                                                                <input type="number" class="form-control"
+                                                                    name="no_of_entitled_votes"
+                                                                    id="no_of_entitled_votes"
+                                                                    placeholder="Enter Number of Entitled Votes"
+                                                                    disabled />
                                                             </div>
 
                                                             <div class="form-group">
                                                                 <label for="loan_balance">Loan Balance</label>
-                                                                <input type="number" class="form-control" name="loan_balance" id="loan_balance"
-                                                                   step="0.01" placeholder="Enter Loan Overdue" />
+                                                                <input type="number" class="form-control"
+                                                                    name="loan_balance" id="loan_balance"
+                                                                    step="0.01" placeholder="Enter Loan Overdue" />
                                                             </div>
 
                                                             <div class="form-group">
                                                                 <label for="total_overdue">Loan Overdue</label>
-                                                                <input type="number" class="form-control" name="total_overdue" id="total_overdue"
-                                                                step="0.01" placeholder="Enter Loan Overdue" />
+                                                                <input type="number" class="form-control"
+                                                                    name="total_overdue" id="total_overdue"
+                                                                    step="0.01" placeholder="Enter Loan Overdue" />
                                                             </div>
 
                                                             <div class="form-group">
-                                                                <label for="accounts_receivable">Accounts Receivable</label>
-                                                                <input type="number" class="form-control" name="accounts_receivable" id="accounts_receivable"
-                                                                step="0.01" placeholder="Enter Accounts Receivable" />
+                                                                <label for="accounts_receivable">Accounts
+                                                                    Receivable</label>
+                                                                <input type="number" class="form-control"
+                                                                    name="accounts_receivable"
+                                                                    id="accounts_receivable" step="0.01"
+                                                                    placeholder="Enter Accounts Receivable" />
                                                             </div>
 
                                                             <div class="form-group">
                                                                 <label for="savings">Savings</label>
-                                                                <input type="number" class="form-control" name="savings" id="savings"
-                                                                step="0.01"   placeholder="Enter Savings" />
+                                                                <input type="number" class="form-control"
+                                                                    name="savings" id="savings" step="0.01"
+                                                                    placeholder="Enter Savings" />
                                                             </div>
 
                                                             <div class="form-group">
                                                                 <label for="time_deposit">Time Deposit</label>
-                                                                <input type="number" class="form-control" name="time_deposit" id="time_deposit"
-                                                                step="0.01"   placeholder="Enter Time Deposit" />
+                                                                <input type="number" class="form-control"
+                                                                    name="time_deposit" id="time_deposit"
+                                                                    step="0.01" placeholder="Enter Time Deposit" />
                                                             </div>
 
                                                             <div class="form-group">
@@ -418,38 +480,60 @@
                                                                         Select Services
                                                                     </button>
                                                                     <ul class="dropdown-menu w-100" id="dropdownMenu">
-                                                                        <li><label class="dropdown-item"><input type="checkbox"
-                                                                                    name="services_availed[]" value="CF">
+                                                                        <li><label class="dropdown-item"><input
+                                                                                    type="checkbox"
+                                                                                    name="services_availed[]"
+                                                                                    value="CF">
                                                                                 CF</label></li>
-                                                                        <li><label class="dropdown-item"><input type="checkbox"
-                                                                                    name="services_availed[]" value="IT">
+                                                                        <li><label class="dropdown-item"><input
+                                                                                    type="checkbox"
+                                                                                    name="services_availed[]"
+                                                                                    value="IT">
                                                                                 IT</label></li>
-                                                                        <li><label class="dropdown-item"><input type="checkbox"
-                                                                                    name="services_availed[]" value="MSU">
+                                                                        <li><label class="dropdown-item"><input
+                                                                                    type="checkbox"
+                                                                                    name="services_availed[]"
+                                                                                    value="MSU">
                                                                                 MSU</label></li>
-                                                                        <li><label class="dropdown-item"><input type="checkbox"
-                                                                                    name="services_availed[]" value="ICS">
+                                                                        <li><label class="dropdown-item"><input
+                                                                                    type="checkbox"
+                                                                                    name="services_availed[]"
+                                                                                    value="ICS">
                                                                                 ICS</label></li>
-                                                                        <li><label class="dropdown-item"><input type="checkbox"
-                                                                                    name="services_availed[]" value="MCU">
+                                                                        <li><label class="dropdown-item"><input
+                                                                                    type="checkbox"
+                                                                                    name="services_availed[]"
+                                                                                    value="MCU">
                                                                                 MCU</label></li>
-                                                                        <li><label class="dropdown-item"><input type="checkbox"
-                                                                                    name="services_availed[]" value="ADMIN">
+                                                                        <li><label class="dropdown-item"><input
+                                                                                    type="checkbox"
+                                                                                    name="services_availed[]"
+                                                                                    value="ADMIN">
                                                                                 ADMIN</label></li>
-                                                                        <li><label class="dropdown-item"><input type="checkbox"
-                                                                                    name="services_availed[]" value="GAD">
+                                                                        <li><label class="dropdown-item"><input
+                                                                                    type="checkbox"
+                                                                                    name="services_availed[]"
+                                                                                    value="GAD">
                                                                                 GAD</label></li>
-                                                                        <li><label class="dropdown-item"><input type="checkbox"
-                                                                                    name="services_availed[]" value="YOUTH">
+                                                                        <li><label class="dropdown-item"><input
+                                                                                    type="checkbox"
+                                                                                    name="services_availed[]"
+                                                                                    value="YOUTH">
                                                                                 YOUTH</label></li>
-                                                                        <li><label class="dropdown-item"><input type="checkbox"
-                                                                                    name="services_availed[]" value="SCOOPS">
+                                                                        <li><label class="dropdown-item"><input
+                                                                                    type="checkbox"
+                                                                                    name="services_availed[]"
+                                                                                    value="SCOOPS">
                                                                                 SCOOPS</label></li>
-                                                                        <li><label class="dropdown-item"><input type="checkbox"
-                                                                                    name="services_availed[]" value="YAKAP">
+                                                                        <li><label class="dropdown-item"><input
+                                                                                    type="checkbox"
+                                                                                    name="services_availed[]"
+                                                                                    value="YAKAP">
                                                                                 YAKAP</label></li>
-                                                                        <li><label class="dropdown-item"><input type="checkbox"
-                                                                                    name="services_availed[]" value="AGRIBEST">
+                                                                        <li><label class="dropdown-item"><input
+                                                                                    type="checkbox"
+                                                                                    name="services_availed[]"
+                                                                                    value="AGRIBEST">
                                                                                 AGRIBEST</label></li>
                                                                     </ul>
                                                                 </div>
@@ -460,15 +544,18 @@
                                                     <!-- CETF Information -->
                                                     <div class="col-md-4">
                                                         <fieldset class="border rounded p-3 shadow-sm h-100">
-                                                            <legend class="h5 text-success">CETF Requirement Computation</legend>
+                                                            <legend class="h5 text-success">CETF Requirement
+                                                                Computation</legend>
 
 
                                                             <div class="form-group">
                                                                 <label for="fs_status">FS(YES/NO)</label>
-                                                                <select class="form-control" name="fs_status" id="fs_status">
+                                                                <select class="form-control" name="fs_status"
+                                                                    id="fs_status">
                                                                     <option value="">Select Status</option>
                                                                     <option value="yes">Yes</option>
-                                                                    <option value="no" selected>No</option> <!-- Set default value to "No" -->
+                                                                    <option value="no" selected>No</option>
+                                                                    <!-- Set default value to "No" -->
                                                                 </select>
                                                             </div>
 
@@ -477,72 +564,103 @@
 
                                                             <div class="form-group">
                                                                 <label for="delinquent">Delinquent</label>
-                                                                <select class="form-control" name="delinquent" id="delinquent">
+                                                                <select class="form-control" name="delinquent"
+                                                                    id="delinquent">
                                                                     <option value="">Select Status</option>
                                                                     <option value="yes">Delinquent</option>
-                                                                    <option value="no" selected>Non-Delinquent</option> <!-- Set default value to "No" -->
+                                                                    <option value="no" selected>Non-Delinquent
+                                                                    </option> <!-- Set default value to "No" -->
                                                                 </select>
                                                             </div>
 
 
 
-                                                                <div class="form-group">
-                                                                    <label for="total_asset" class="form-label">Total Assets</label>
-                                                                    <input type="number" class="form-control" name="total_asset" id="total_asset"
-                                                                    step="0.01"    placeholder="Enter Total Assets" />
-                                                                </div>
+                                                            <div class="form-group">
+                                                                <label for="total_asset" class="form-label">Total
+                                                                    Assets</label>
+                                                                <input type="number" class="form-control"
+                                                                    name="total_asset" id="total_asset"
+                                                                    step="0.01" placeholder="Enter Total Assets" />
+                                                            </div>
 
-                                                                <div class="form-group">
-                                                                    <label for="net_surplus">Net Surplus</label>
-                                                                    <input type="number" class="form-control" name="net_surplus" id="net_surplus"
-                                                                    step="0.01"   placeholder="Enter Net Surplus" />
-                                                                </div>
+                                                            <div class="form-group">
+                                                                <label for="net_surplus">Net Surplus</label>
+                                                                <input type="number" class="form-control"
+                                                                    name="net_surplus" id="net_surplus"
+                                                                    step="0.01" placeholder="Enter Net Surplus" />
+                                                            </div>
                                                             <div class="form-group mb-3">
-                                                                <label for="cetf_due_to_apex" class="form-label fw-bold">CETF Due to Apex</label>
-                                                                <input type="number" class="form-control" name="cetf_due_to_apex" id="cetf_due_to_apex"
-                                                                step="0.01"   placeholder="Enter CETF Due to Apex" />
+                                                                <label for="cetf_due_to_apex"
+                                                                    class="form-label fw-bold">CETF Due to Apex</label>
+                                                                <input type="number" class="form-control"
+                                                                    name="cetf_due_to_apex" id="cetf_due_to_apex"
+                                                                    step="0.01"
+                                                                    placeholder="Enter CETF Due to Apex" />
                                                             </div>
                                                             <div class="form-group">
-                                                                <label for="cetf_required" class="form-label fw-bold">Required CETF</label>
-                                                                <input type="number" class="form-control" name="cetf_required" id="cetf_required"
-                                                                    placeholder="Auto-calculated CETF Required" readonly />
-                                                                <input type="hidden" name="cetf_required_hidden" id="cetf_required_hidden" />
+                                                                <label for="cetf_required"
+                                                                    class="form-label fw-bold">Required CETF</label>
+                                                                <input type="number" class="form-control"
+                                                                    name="cetf_required" id="cetf_required"
+                                                                    placeholder="Auto-calculated CETF Required"
+                                                                    readonly />
+                                                                <input type="hidden" name="cetf_required_hidden"
+                                                                    id="cetf_required_hidden" />
                                                             </div>
 
                                                             <div class="form-group">
                                                                 <label for="cetf_remittance">CETF Remittance</label>
-                                                                <input type="number" class="form-control" name="cetf_remittance" id="cetf_remittance"
-                                                                step="0.01" placeholder="Enter CETF Remittance" />
+                                                                <input type="number" class="form-control"
+                                                                    name="cetf_remittance" id="cetf_remittance"
+                                                                    step="0.01"
+                                                                    placeholder="Enter CETF Remittance" />
                                                             </div>
                                                             <div class="form-group">
-                                                                <label for="additional_cetf" class="form-label fw-bold">Additional CETF</label>
-                                                                <input type="number" class="form-control" name="additional_cetf" id="additional_cetf"
-                                                                step="0.01"  placeholder="Enter Additional CETF" />
+                                                                <label for="additional_cetf"
+                                                                    class="form-label fw-bold">Additional CETF</label>
+                                                                <input type="number" class="form-control"
+                                                                    name="additional_cetf" id="additional_cetf"
+                                                                    step="0.01"
+                                                                    placeholder="Enter Additional CETF" />
                                                             </div>
                                                             <div class="form-group">
-                                                                <label for="cetf_undertaking" class="form-label fw-bold">CETF Undertaking</label>
-                                                                <input type="number" class="form-control" name="cetf_undertaking" id="cetf_undertaking"
-                                                                step="0.01"  placeholder="Enter CETF Undertaking" />
+                                                                <label for="cetf_undertaking"
+                                                                    class="form-label fw-bold">CETF Undertaking</label>
+                                                                <input type="number" class="form-control"
+                                                                    name="cetf_undertaking" id="cetf_undertaking"
+                                                                    step="0.01"
+                                                                    placeholder="Enter CETF Undertaking" />
                                                             </div>
                                                             <div class="form-group">
-                                                                <label for="total_remittance" class="form-label fw-bold">Total Remittance</label>
-                                                                <input type="number" class="form-control" name="total_remittance" id="total_remittance"
-                                                                    placeholder="Auto-calculated Total Remittance" readonly />
-                                                                <input step="0.01" type="hidden" name="total_remittance_hidden" id="total_remittance_hidden" />
+                                                                <label for="total_remittance"
+                                                                    class="form-label fw-bold">Total Remittance</label>
+                                                                <input type="number" class="form-control"
+                                                                    name="total_remittance" id="total_remittance"
+                                                                    placeholder="Auto-calculated Total Remittance"
+                                                                    readonly />
+                                                                <input step="0.01" type="hidden"
+                                                                    name="total_remittance_hidden"
+                                                                    id="total_remittance_hidden" />
                                                             </div>
                                                             <div class="form-group">
-                                                                <label for="full_cetf_remitted" class="form-label fw-bold">Full CETF Remitted</label>
-                                                                <select class="form-control" name="full_cetf_remitted" id="full_cetf_remitted" readonly>
+                                                                <label for="full_cetf_remitted"
+                                                                    class="form-label fw-bold">Full CETF
+                                                                    Remitted</label>
+                                                                <select class="form-control" name="full_cetf_remitted"
+                                                                    id="full_cetf_remitted" readonly>
                                                                     <option value="yes">Yes</option>
                                                                     <option value="no">No</option>
                                                                 </select>
-                                                                <input type="hidden" name="full_cetf_remitted_hidden" id="full_cetf_remitted_hidden" />
+                                                                <input type="hidden" name="full_cetf_remitted_hidden"
+                                                                    id="full_cetf_remitted_hidden" />
                                                             </div>
 
                                                             <div class="form-group">
-                                                                <label for="cetf_balance" class="form-label fw-bold">CETF Balance</label>
-                                                                <input type="number" class="form-control" name="cetf_balance" id="cetf_balance"
-                                                                step="0.01"  placeholder="Enter CETF Balance"/>
+                                                                <label for="cetf_balance"
+                                                                    class="form-label fw-bold">CETF Balance</label>
+                                                                <input type="number" class="form-control"
+                                                                    name="cetf_balance" id="cetf_balance"
+                                                                    step="0.01" placeholder="Enter CETF Balance" />
                                                             </div>
                                                         </fieldset>
                                                     </div>
@@ -553,64 +671,76 @@
                                                             <legend class="h5 text-dark">Registration Fee</legend>
 
                                                             <div class="form-group">
-                                                                <label for="registration_date_paid">Registration Date Paid</label>
-                                                                <input type="date" class="form-control" name="registration_date_paid"
+                                                                <label for="registration_date_paid">Registration Date
+                                                                    Paid</label>
+                                                                <input type="date" class="form-control"
+                                                                    name="registration_date_paid"
                                                                     id="registration_date_paid" />
                                                             </div>
 
                                                             <div class="form-group">
                                                                 <label for="registration_fee">Registration Fee</label>
-                                                                <input type="number" class="form-control" name="registration_fee" id="registration_fee"
-                                                                    placeholder="Enter Registration Fee" value="4500" readonly />
+                                                                <input type="number" class="form-control"
+                                                                    name="registration_fee" id="registration_fee"
+                                                                    placeholder="Enter Registration Fee"
+                                                                    value="4500" readonly />
                                                             </div>
 
 
                                                             <div class="form-group">
-                                                                <label for="total_reg_fee">Total Registration Fee</label>
+                                                                <label for="total_reg_fee">Total Registration
+                                                                    Fee</label>
                                                                 <input type="number" class="form-control"
                                                                     name="total_reg_fee" id="total_reg_fee"
-                                                                    step="0.01"  placeholder="Enter Total Registration Fee" readonly>
+                                                                    step="0.01"
+                                                                    placeholder="Enter Total Registration Fee"
+                                                                    readonly>
                                                             </div>
 
                                                             <div class="form-group">
-                                                                <label for="net_required_reg_fee">Net Required Reg Fee</label>
+                                                                <label for="net_required_reg_fee">Net Required Reg
+                                                                    Fee</label>
                                                                 <input type="number" class="form-control"
-                                                                    name="net_required_reg_fee" id="net_required_reg_fee"
-                                                                    step="0.01"  placeholder="Enter Total Registration Fee">
+                                                                    name="net_required_reg_fee"
+                                                                    id="net_required_reg_fee" step="0.01"
+                                                                    placeholder="Enter Total Registration Fee">
                                                             </div>
 
                                                             <div class="form-group">
-                                                                <label for="less_prereg_payment">Less: PreReg Payment</label>
+                                                                <label for="less_prereg_payment">Less: PreReg
+                                                                    Payment</label>
                                                                 <input type="number" class="form-control"
-                                                                    name="less_prereg_payment" id="less_prereg_payment"
-
-                                                                    step="0.01" placeholder="Enter PreReg Payment Deduction">
+                                                                    name="less_prereg_payment"
+                                                                    id="less_prereg_payment" step="0.01"
+                                                                    placeholder="Enter PreReg Payment Deduction">
                                                             </div>
 
                                                             <div class="form-group">
-                                                                <label for="less_cetf_balance">Less: CETF Utilization</label>
+                                                                <label for="less_cetf_balance">Less: CETF
+                                                                    Utilization</label>
                                                                 <input type="number" class="form-control"
                                                                     name="less_cetf_balance" id="less_cetf_balance"
-
-                                                                    step="0.01" placeholder="Enter CETF Balance Deduction">
+                                                                    step="0.01"
+                                                                    placeholder="Enter CETF Balance Deduction">
                                                             </div>
 
                                                             <div class="form-group">
                                                                 <label for="reg_fee_payable">GA RegFee Payable</label>
                                                                 <input type="number" class="form-control"
                                                                     name="reg_fee_payable" id="reg_fee_payable"
-                                                                    step="0.01"  placeholder="Enter GA RegFee Payable">
+                                                                    step="0.01"
+                                                                    placeholder="Enter GA RegFee Payable">
                                                             </div>
 
 
 
 
-                                                                <div class="form-group">
-                                                                    <label for="ga_remark">GA Remark</label>
-                                                                    <input type="text" class="form-control"
-                                                                        name="ga_remark" id="ga_remark"
-                                                                        placeholder="GA Remark" />
-                                                                </div>
+                                                            <div class="form-group">
+                                                                <label for="ga_remark">GA Remark</label>
+                                                                <input type="text" class="form-control"
+                                                                    name="ga_remark" id="ga_remark"
+                                                                    placeholder="GA Remark" />
+                                                            </div>
 
 
                                                         </fieldset>
@@ -640,161 +770,167 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-@if ($errors->any())
-<script>
-    console.error('Validation Errors:', @json($errors->all()));
-    Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: '@foreach ($errors->all() as $error){{ $error }}@endforeach',
-    });
-</script>
-@endif
+    @if ($errors->any())
+        <script>
+            console.error('Validation Errors:', @json($errors->all()));
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: '@foreach ($errors->all() as $error){{ $error }}@endforeach',
+            });
+        </script>
+    @endif
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        console.log("DOM Loaded - Initializing CETF Calculation");
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            console.log("DOM Loaded - Initializing CETF Calculation");
 
-        let cetfRequired = document.getElementById('cetf_required');
-        let totalRemittance = document.getElementById('total_remittance');
-        let cetfBalance = document.getElementById('cetf_balance');
+            let cetfRequired = document.getElementById('cetf_required');
+            let totalRemittance = document.getElementById('total_remittance');
+            let cetfBalance = document.getElementById('cetf_balance');
 
-        function updateCetfBalance() {
-            let required = parseFloat(cetfRequired?.value) || 0;
-            let remitted = parseFloat(totalRemittance?.value) || 0;
-            let balance = (required - remitted).toFixed(2);
-            cetfBalance.value = balance;
+            function updateCetfBalance() {
+                let required = parseFloat(cetfRequired?.value) || 0;
+                let remitted = parseFloat(totalRemittance?.value) || 0;
+                let balance = (required - remitted).toFixed(2);
+                cetfBalance.value = balance;
 
-            console.log(`CETF Update: Required = ${required}, Remitted = ${remitted}, Balance = ${balance}`);
-        }
-
-        cetfRequired?.addEventListener('input', updateCetfBalance);
-        totalRemittance?.addEventListener('input', updateCetfBalance);
-        updateCetfBalance();
-    });
-</script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        console.log("DOM Loaded - Initializing Registration Fee Calculation");
-
-        function updateRegFeePayable() {
-            let netRequired = parseFloat(document.getElementById('net_required_reg_fee')?.value) || 0;
-            let lessPreReg = parseFloat(document.getElementById('less_prereg_payment')?.value) || 0;
-            let lessCetf = parseFloat(document.getElementById('less_cetf_balance')?.value) || 0;
-
-            let regFeePayable = netRequired - (lessPreReg + lessCetf);
-            document.getElementById('reg_fee_payable').value = regFeePayable.toFixed(2);
-
-            console.log(`Registration Fee Calculation: Net = ${netRequired}, PreReg = ${lessPreReg}, CETF = ${lessCetf}, Payable = ${regFeePayable}`);
-        }
-
-        ['net_required_reg_fee', 'less_prereg_payment', 'less_cetf_balance'].forEach(id => {
-            document.getElementById(id)?.addEventListener('input', updateRegFeePayable);
-        });
-    });
-</script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const dropdownButton = document.getElementById("servicesDropdown");
-        const dropdownMenu = document.getElementById("dropdownMenu");
-        const checkboxes = dropdownMenu.querySelectorAll('input[type="checkbox"]');
-        const hiddenInput = document.getElementById("services_availed_json");
-
-
-        dropdownMenu.addEventListener("click", function(event) {
-            event.stopPropagation();
-        });
-
-        dropdownButton.addEventListener("click", function(event) {
-            event.stopPropagation();
-            dropdownMenu.classList.toggle("show");
-        });
-
-        document.addEventListener("click", function(event) {
-            if (!dropdownMenu.contains(event.target) && event.target !== dropdownButton) {
-                dropdownMenu.classList.remove("show");
+                console.log(`CETF Update: Required = ${required}, Remitted = ${remitted}, Balance = ${balance}`);
             }
+
+            cetfRequired?.addEventListener('input', updateCetfBalance);
+            totalRemittance?.addEventListener('input', updateCetfBalance);
+            updateCetfBalance();
         });
+    </script>
 
-        function updateDropdownText() {
-            let selected = Array.from(checkboxes)
-                .filter(i => i.checked)
-                .map(i => i.value)
-                .join(", ");
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("DOM Loaded - Initializing Registration Fee Calculation");
 
-            dropdownButton.innerText = selected ? selected : "Select Services";
-            hiddenInput.value = JSON.stringify(selected.split(", ").filter(Boolean)); // Store as JSON
-        }
+            function updateRegFeePayable() {
+                let netRequired = parseFloat(document.getElementById('net_required_reg_fee')?.value) || 0;
+                let lessPreReg = parseFloat(document.getElementById('less_prereg_payment')?.value) || 0;
+                let lessCetf = parseFloat(document.getElementById('less_cetf_balance')?.value) || 0;
 
-        // Update on checkbox change
-        checkboxes.forEach(checkbox => {
-            checkbox.addEventListener("change", updateDropdownText);
+                let regFeePayable = netRequired - (lessPreReg + lessCetf);
+                document.getElementById('reg_fee_payable').value = regFeePayable.toFixed(2);
+
+                console.log(
+                    `Registration Fee Calculation: Net = ${netRequired}, PreReg = ${lessPreReg}, CETF = ${lessCetf}, Payable = ${regFeePayable}`
+                );
+            }
+
+            ['net_required_reg_fee', 'less_prereg_payment', 'less_cetf_balance'].forEach(id => {
+                document.getElementById(id)?.addEventListener('input', updateRegFeePayable);
+            });
         });
+    </script>
 
-        // Load preselected values
-        updateDropdownText();
-    });
-</script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const dropdownButton = document.getElementById("servicesDropdown");
+            const dropdownMenu = document.getElementById("dropdownMenu");
+            const checkboxes = dropdownMenu.querySelectorAll('input[type="checkbox"]');
+            const hiddenInput = document.getElementById("services_availed_json");
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        console.log("DOM Loaded - CETF Remittance Calculation Started");
 
-        let cetfRemittance = document.getElementById('cetf_remittance');
-        let additionalCetf = document.getElementById('additional_cetf');
-        let cetfUndertaking = document.getElementById('cetf_undertaking');
-        let totalRemittance = document.getElementById('total_remittance');
-        let totalRemittanceHidden = document.getElementById('total_remittance_hidden');
-        let fullCetfRemitted = document.getElementById('full_cetf_remitted');
+            dropdownMenu.addEventListener("click", function(event) {
+                event.stopPropagation();
+            });
 
-        let cetfDueToApexInput = document.getElementById('cetf_due_to_apex');
-        let cetfRequiredInput = document.getElementById('cetf_required');
-        let cetfRequiredHidden = document.getElementById('cetf_required_hidden');
+            dropdownButton.addEventListener("click", function(event) {
+                event.stopPropagation();
+                dropdownMenu.classList.toggle("show");
+            });
 
-        function updateCetfRequired() {
-            let dueToApex = parseFloat(cetfDueToApexInput?.value) || 0;
-            let cetfRequired = (dueToApex * 0.30).toFixed(2);
+            document.addEventListener("click", function(event) {
+                if (!dropdownMenu.contains(event.target) && event.target !== dropdownButton) {
+                    dropdownMenu.classList.remove("show");
+                }
+            });
 
-            if (cetfRequiredInput) cetfRequiredInput.value = cetfRequired;
-            if (cetfRequiredHidden) cetfRequiredHidden.value = cetfRequired;
+            function updateDropdownText() {
+                let selected = Array.from(checkboxes)
+                    .filter(i => i.checked)
+                    .map(i => i.value)
+                    .join(", ");
 
-            console.log(`Updated CETF Required: Due to Apex = ${dueToApex}, Required = ${cetfRequired}`);
-            updateFullCetfRemitted();
-        }
+                dropdownButton.innerText = selected ? selected : "Select Services";
+                hiddenInput.value = JSON.stringify(selected.split(", ").filter(Boolean)); // Store as JSON
+            }
 
-        function updateTotalRemittance() {
-            let cetf = parseFloat(cetfRemittance?.value) || 0;
-            let additional = parseFloat(additionalCetf?.value) || 0;
-            let undertaking = parseFloat(cetfUndertaking?.value) || 0;
-            let total = (cetf + additional + undertaking).toFixed(2);
+            // Update on checkbox change
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener("change", updateDropdownText);
+            });
 
-            if (totalRemittance) totalRemittance.value = total;
-            if (totalRemittanceHidden) totalRemittanceHidden.value = total;
+            // Load preselected values
+            updateDropdownText();
+        });
+    </script>
 
-            console.log(`Updated Total Remittance: CETF = ${cetf}, Additional = ${additional}, Undertaking = ${undertaking}, Total = ${total}`);
-            updateFullCetfRemitted();
-        }
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            console.log("DOM Loaded - CETF Remittance Calculation Started");
 
-        function updateFullCetfRemitted() {
-            let total = parseFloat(totalRemittance?.value) || 0;
-            let required = parseFloat(cetfRequiredHidden?.value) || 0;
+            let cetfRemittance = document.getElementById('cetf_remittance');
+            let additionalCetf = document.getElementById('additional_cetf');
+            let cetfUndertaking = document.getElementById('cetf_undertaking');
+            let totalRemittance = document.getElementById('total_remittance');
+            let totalRemittanceHidden = document.getElementById('total_remittance_hidden');
+            let fullCetfRemitted = document.getElementById('full_cetf_remitted');
 
-            fullCetfRemitted.value = total === required ? "yes" : "no";
-            console.log(`Full CETF Remitted: ${fullCetfRemitted.value} (Total = ${total}, Required = ${required})`);
-        }
+            let cetfDueToApexInput = document.getElementById('cetf_due_to_apex');
+            let cetfRequiredInput = document.getElementById('cetf_required');
+            let cetfRequiredHidden = document.getElementById('cetf_required_hidden');
 
-        [cetfRemittance, additionalCetf, cetfUndertaking].forEach(input => input?.addEventListener('input', updateTotalRemittance));
-        cetfDueToApexInput?.addEventListener('input', updateCetfRequired);
+            function updateCetfRequired() {
+                let dueToApex = parseFloat(cetfDueToApexInput?.value) || 0;
+                let cetfRequired = (dueToApex * 0.30).toFixed(2);
 
-        updateCetfRequired();
-        updateTotalRemittance();
-    });
-</script>
+                if (cetfRequiredInput) cetfRequiredInput.value = cetfRequired;
+                if (cetfRequiredHidden) cetfRequiredHidden.value = cetfRequired;
 
-<script>
-  document.getElementById('coopForm').addEventListener('submit', function(e) {
+                console.log(`Updated CETF Required: Due to Apex = ${dueToApex}, Required = ${cetfRequired}`);
+                updateFullCetfRemitted();
+            }
+
+            function updateTotalRemittance() {
+                let cetf = parseFloat(cetfRemittance?.value) || 0;
+                let additional = parseFloat(additionalCetf?.value) || 0;
+                let undertaking = parseFloat(cetfUndertaking?.value) || 0;
+                let total = (cetf + additional + undertaking).toFixed(2);
+
+                if (totalRemittance) totalRemittance.value = total;
+                if (totalRemittanceHidden) totalRemittanceHidden.value = total;
+
+                console.log(
+                    `Updated Total Remittance: CETF = ${cetf}, Additional = ${additional}, Undertaking = ${undertaking}, Total = ${total}`
+                );
+                updateFullCetfRemitted();
+            }
+
+            function updateFullCetfRemitted() {
+                let total = parseFloat(totalRemittance?.value) || 0;
+                let required = parseFloat(cetfRequiredHidden?.value) || 0;
+
+                fullCetfRemitted.value = total === required ? "yes" : "no";
+                console.log(
+                    `Full CETF Remitted: ${fullCetfRemitted.value} (Total = ${total}, Required = ${required})`);
+            }
+
+            [cetfRemittance, additionalCetf, cetfUndertaking].forEach(input => input?.addEventListener('input',
+                updateTotalRemittance));
+            cetfDueToApexInput?.addEventListener('input', updateCetfRequired);
+
+            updateCetfRequired();
+            updateTotalRemittance();
+        });
+    </script>
+
+    <script>
+       document.getElementById('coopForm').addEventListener('submit', function(e) {
     e.preventDefault();
     let formData = new FormData(this);
 
@@ -808,6 +944,35 @@
     .then(response => {
         if (!response.ok) {
             return response.json().then(err => {
+                // Check for validation errors
+                if (response.status === 422 && err.errors) {
+                    const errors = err.errors;
+                    let errorMessages = '';
+
+                    for (let field in errors) {
+                        errorMessages += `${errors[field].join(' ')}\n`;
+
+                        // Specifically check for email errors
+                        if (field === 'email' && errors[field].some(msg => msg.toLowerCase().includes('already taken'))) {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'The email address is already registered. Please use a different email.',
+                                icon: 'error',
+                                confirmButtonText: 'Try Again'
+                            });
+                            return; // Prevent further processing
+                        }
+                    }
+
+                    Swal.fire({
+                        title: 'Validation Error!',
+                        text: errorMessages,
+                        icon: 'error',
+                        confirmButtonText: 'Try Again'
+                    });
+                    return;
+                }
+
                 throw new Error(err.message || 'An error occurred');
             });
         }
@@ -826,24 +991,24 @@
     })
     .catch(error => {
         console.error('Error:', error);
+        if (!error.message.includes('Validation Error!')) {
+            let errorMessage = error.message;
 
-        let errorMessage = error.message;
+            if (errorMessage.includes('Duplicate entry')) {
+                errorMessage = 'The email address is already registered. Please use a different email.';
+            }
 
-        if (errorMessage.includes('Duplicate entry')) {
-            errorMessage = 'The email address is already registered. Please use a different email.';
+            Swal.fire({
+                title: 'Error!',
+                text: errorMessage,
+                icon: 'error',
+                confirmButtonText: 'Try Again'
+            });
         }
-
-        Swal.fire({
-            title: 'Error!',
-            text: errorMessage,
-            icon: 'error',
-            confirmButtonText: 'Try Again'
-        });
     });
 });
 
-
-</script>
+    </script>
 
     @include('layouts.links')
 </body>
