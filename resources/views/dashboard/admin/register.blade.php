@@ -370,7 +370,7 @@
                                                             <div class="form-group mb-3">
                                                                 <label for="share_capital_balance" class="form-label fw-bold">Share Capital Balance</label>
                                                                 <input type="number" class="form-control" name="share_capital_balance" id="share_capital_balance"
-                                                                    placeholder="Enter Share Capital Balance" />
+                                                                step="0.01" placeholder="Enter Share Capital Balance" />
                                                             </div>
                                                             <div class="form-group">
                                                                 <label for="no_of_entitled_votes" class="form-label fw-bold">Number of Entitled Votes</label>
@@ -381,31 +381,31 @@
                                                             <div class="form-group">
                                                                 <label for="loan_balance">Loan Balance</label>
                                                                 <input type="number" class="form-control" name="loan_balance" id="loan_balance"
-                                                                    placeholder="Enter Loan Overdue" />
+                                                                   step="0.01" placeholder="Enter Loan Overdue" />
                                                             </div>
 
                                                             <div class="form-group">
                                                                 <label for="total_overdue">Loan Overdue</label>
                                                                 <input type="number" class="form-control" name="total_overdue" id="total_overdue"
-                                                                    placeholder="Enter Loan Overdue" />
+                                                                step="0.01" placeholder="Enter Loan Overdue" />
                                                             </div>
 
                                                             <div class="form-group">
                                                                 <label for="accounts_receivable">Accounts Receivable</label>
                                                                 <input type="number" class="form-control" name="accounts_receivable" id="accounts_receivable"
-                                                                    placeholder="Enter Accounts Receivable" />
+                                                                step="0.01" placeholder="Enter Accounts Receivable" />
                                                             </div>
 
                                                             <div class="form-group">
                                                                 <label for="savings">Savings</label>
                                                                 <input type="number" class="form-control" name="savings" id="savings"
-                                                                    placeholder="Enter Savings" />
+                                                                step="0.01"   placeholder="Enter Savings" />
                                                             </div>
 
                                                             <div class="form-group">
                                                                 <label for="time_deposit">Time Deposit</label>
                                                                 <input type="number" class="form-control" name="time_deposit" id="time_deposit"
-                                                                    placeholder="Enter Time Deposit" />
+                                                                step="0.01"   placeholder="Enter Time Deposit" />
                                                             </div>
 
                                                             <div class="form-group">
@@ -489,18 +489,18 @@
                                                                 <div class="form-group">
                                                                     <label for="total_asset" class="form-label">Total Assets</label>
                                                                     <input type="number" class="form-control" name="total_asset" id="total_asset"
-                                                                        placeholder="Enter Total Assets" />
+                                                                    step="0.01"    placeholder="Enter Total Assets" />
                                                                 </div>
 
                                                                 <div class="form-group">
                                                                     <label for="net_surplus">Net Surplus</label>
                                                                     <input type="number" class="form-control" name="net_surplus" id="net_surplus"
-                                                                        placeholder="Enter Net Surplus" />
+                                                                    step="0.01"   placeholder="Enter Net Surplus" />
                                                                 </div>
                                                             <div class="form-group mb-3">
                                                                 <label for="cetf_due_to_apex" class="form-label fw-bold">CETF Due to Apex</label>
                                                                 <input type="number" class="form-control" name="cetf_due_to_apex" id="cetf_due_to_apex"
-                                                                    placeholder="Enter CETF Due to Apex" />
+                                                                step="0.01"   placeholder="Enter CETF Due to Apex" />
                                                             </div>
                                                             <div class="form-group">
                                                                 <label for="cetf_required" class="form-label fw-bold">Required CETF</label>
@@ -512,23 +512,23 @@
                                                             <div class="form-group">
                                                                 <label for="cetf_remittance">CETF Remittance</label>
                                                                 <input type="number" class="form-control" name="cetf_remittance" id="cetf_remittance"
-                                                                    placeholder="Enter CETF Remittance" />
+                                                                step="0.01" placeholder="Enter CETF Remittance" />
                                                             </div>
                                                             <div class="form-group">
                                                                 <label for="additional_cetf" class="form-label fw-bold">Additional CETF</label>
                                                                 <input type="number" class="form-control" name="additional_cetf" id="additional_cetf"
-                                                                    placeholder="Enter Additional CETF" />
+                                                                step="0.01"  placeholder="Enter Additional CETF" />
                                                             </div>
                                                             <div class="form-group">
                                                                 <label for="cetf_undertaking" class="form-label fw-bold">CETF Undertaking</label>
                                                                 <input type="number" class="form-control" name="cetf_undertaking" id="cetf_undertaking"
-                                                                    placeholder="Enter CETF Undertaking" />
+                                                                step="0.01"  placeholder="Enter CETF Undertaking" />
                                                             </div>
                                                             <div class="form-group">
                                                                 <label for="total_remittance" class="form-label fw-bold">Total Remittance</label>
                                                                 <input type="number" class="form-control" name="total_remittance" id="total_remittance"
                                                                     placeholder="Auto-calculated Total Remittance" readonly />
-                                                                <input type="hidden" name="total_remittance_hidden" id="total_remittance_hidden" />
+                                                                <input step="0.01" type="hidden" name="total_remittance_hidden" id="total_remittance_hidden" />
                                                             </div>
                                                             <div class="form-group">
                                                                 <label for="full_cetf_remitted" class="form-label fw-bold">Full CETF Remitted</label>
@@ -542,7 +542,7 @@
                                                             <div class="form-group">
                                                                 <label for="cetf_balance" class="form-label fw-bold">CETF Balance</label>
                                                                 <input type="number" class="form-control" name="cetf_balance" id="cetf_balance"
-                                                                    placeholder="Enter CETF Balance"/>
+                                                                step="0.01"  placeholder="Enter CETF Balance"/>
                                                             </div>
                                                         </fieldset>
                                                     </div>
@@ -569,14 +569,14 @@
                                                                 <label for="total_reg_fee">Total Registration Fee</label>
                                                                 <input type="number" class="form-control"
                                                                     name="total_reg_fee" id="total_reg_fee"
-                                                                    placeholder="Enter Total Registration Fee" readonly>
+                                                                    step="0.01"  placeholder="Enter Total Registration Fee" readonly>
                                                             </div>
 
                                                             <div class="form-group">
                                                                 <label for="net_required_reg_fee">Net Required Reg Fee</label>
                                                                 <input type="number" class="form-control"
                                                                     name="net_required_reg_fee" id="net_required_reg_fee"
-                                                                    placeholder="Enter Total Registration Fee">
+                                                                    step="0.01"  placeholder="Enter Total Registration Fee">
                                                             </div>
 
                                                             <div class="form-group">
@@ -584,7 +584,7 @@
                                                                 <input type="number" class="form-control"
                                                                     name="less_prereg_payment" id="less_prereg_payment"
 
-                                                                    placeholder="Enter PreReg Payment Deduction">
+                                                                    step="0.01" placeholder="Enter PreReg Payment Deduction">
                                                             </div>
 
                                                             <div class="form-group">
@@ -592,14 +592,14 @@
                                                                 <input type="number" class="form-control"
                                                                     name="less_cetf_balance" id="less_cetf_balance"
 
-                                                                    placeholder="Enter CETF Balance Deduction">
+                                                                    step="0.01" placeholder="Enter CETF Balance Deduction">
                                                             </div>
 
                                                             <div class="form-group">
                                                                 <label for="reg_fee_payable">GA RegFee Payable</label>
                                                                 <input type="number" class="form-control"
                                                                     name="reg_fee_payable" id="reg_fee_payable"
-                                                                    placeholder="Enter GA RegFee Payable">
+                                                                    step="0.01"  placeholder="Enter GA RegFee Payable">
                                                             </div>
 
 
@@ -692,6 +692,49 @@
         ['net_required_reg_fee', 'less_prereg_payment', 'less_cetf_balance'].forEach(id => {
             document.getElementById(id)?.addEventListener('input', updateRegFeePayable);
         });
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const dropdownButton = document.getElementById("servicesDropdown");
+        const dropdownMenu = document.getElementById("dropdownMenu");
+        const checkboxes = dropdownMenu.querySelectorAll('input[type="checkbox"]');
+        const hiddenInput = document.getElementById("services_availed_json");
+
+
+        dropdownMenu.addEventListener("click", function(event) {
+            event.stopPropagation();
+        });
+
+        dropdownButton.addEventListener("click", function(event) {
+            event.stopPropagation();
+            dropdownMenu.classList.toggle("show");
+        });
+
+        document.addEventListener("click", function(event) {
+            if (!dropdownMenu.contains(event.target) && event.target !== dropdownButton) {
+                dropdownMenu.classList.remove("show");
+            }
+        });
+
+        function updateDropdownText() {
+            let selected = Array.from(checkboxes)
+                .filter(i => i.checked)
+                .map(i => i.value)
+                .join(", ");
+
+            dropdownButton.innerText = selected ? selected : "Select Services";
+            hiddenInput.value = JSON.stringify(selected.split(", ").filter(Boolean)); // Store as JSON
+        }
+
+        // Update on checkbox change
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener("change", updateDropdownText);
+        });
+
+        // Load preselected values
+        updateDropdownText();
     });
 </script>
 
