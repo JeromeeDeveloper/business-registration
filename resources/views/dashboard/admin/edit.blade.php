@@ -489,49 +489,27 @@
                                                             value="{{ json_encode($selectedServices) }}">
                                                     </div>
 
-
-
-
-                                                    <!-- Other Requirement Checklist -->
-                                                    <h6 class="mt-3 text-secondary">Registration Status:</h6>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox"
-                                                            name="registration_status" id="registration_status"
-                                                            disabled
-                                                            {{ optional($coop->gaRegistration)->registration_status == 'Fully Registered' ? 'checked' : '' }}>
-                                                        <label class="form-check-label"
-                                                            for="registration_status">Fully Registered</label>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox"
-                                                            name="registration_status_partial"
-                                                            id="registration_status_partial" disabled
-                                                            {{ optional($coop->gaRegistration)->registration_status == 'Partial Registered' ? 'checked' : '' }}>
-                                                        <label class="form-check-label"
-                                                            for="registration_status_partial">Partial
-                                                            Registered</label>
-                                                    </div>
-
                                                     <h6 class="mt-3 text-secondary">Membership Status:</h6>
+
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="checkbox"
-                                                            name="membership_status" id="membership_status" disabled
-                                                            {{ optional($coop->gaRegistration)->membership_status == 'Migs' ? 'checked' : '' }}>
-                                                        <label class="form-check-label text-uppercase"
-                                                            for="membership_status">Migs</label>
+                                                               name="membership_status" id="membership_status" disabled
+                                                               {{ optional($coop->gaRegistration)->membership_status == 'Migs' ? 'checked' : '' }}>
+                                                        <label class="form-check-label text-uppercase fw-bold text-dark opacity-75"
+                                                               for="membership_status">Migs</label>
                                                     </div>
+
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="checkbox"
-                                                            name="membership_status_non_migs"
-                                                            id="membership_status_non_migs" disabled
-                                                            {{ optional($coop->gaRegistration)->membership_status == 'Non-migs' ? 'checked' : '' }}>
-                                                        <label class="form-check-label text-uppercase"
-                                                            for="membership_status_non_migs">Non-migs</label>
+                                                               name="membership_status_non_migs"
+                                                               id="membership_status_non_migs" disabled
+                                                               {{ optional($coop->gaRegistration)->membership_status == 'Non-migs' ? 'checked' : '' }}>
+                                                        <label class="form-check-label text-uppercase fw-bold text-danger opacity-75"
+                                                               for="membership_status_non_migs">Non-migs</label>
                                                     </div>
 
                                                 </div>
                                             </div>
-
 
                                             <!-- Second Column: CETF Requirement Computation -->
                                             <div class="col-md-6 col-lg-4">
@@ -779,6 +757,30 @@
                                                             id="ga_remark" value="{{ $coop->ga_remark }}"
                                                             placeholder="GA Remark" />
                                                     </div>
+
+                                                    <h6 class="mt-3 text-secondary">Registration Status:</h6>
+
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" name="registration_status"
+                                                               id="registration_status" disabled
+                                                               {{ optional($coop->gaRegistration)->registration_status == 'Fully Registered' ? 'checked' : '' }}>
+                                                        <label class="form-check-label fw-bold text-dark opacity-75" for="registration_status">
+                                                            Fully Registered
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" name="registration_status_partial"
+                                                               id="registration_status_partial" disabled
+                                                               {{ optional($coop->gaRegistration)->registration_status == 'Partial Registered' ? 'checked' : '' }}>
+                                                        <label class="form-check-label fw-bold text-danger opacity-75" for="registration_status_partial">
+                                                            Partially Registered
+                                                        </label>
+                                                    </div>
+
+
+
+
                                                 </div>
                                             </div>
                                         </div>
