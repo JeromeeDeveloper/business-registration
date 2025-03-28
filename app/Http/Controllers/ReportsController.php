@@ -142,6 +142,73 @@ public function exportFilteredCoopStatus(Request $request)
     return Excel::download(new FilteredCoopStatusExport($region, $migsStatus, $registrationStatus), 'Filtered_Coop_Status_Report.xlsx');
 }
 
+public function previewFilteredCoopStatus(Request $request)
+{
+    $region = $request->input('region');
+    $migsStatus = $request->input('migs_status');
+    $registrationStatus = $request->input('registration_status');
+
+    $query = Cooperative::with(['participants', 'uploadedDocuments', 'gaRegistration']);
+
+    if ($region && $region !== 'All') {
+        $query->where('region', $region);
+    }
+
+    if ($migsStatus && $migsStatus !== 'All') {
+        $query->whereHas('gaRegistration', function ($query) use ($migsStatus) {
+            $query->where('membership_status', ucfirst(strtolower($migsStatus)));
+        });
+    }
+
+    if ($registrationStatus && $registrationStatus !== 'All') {
+        $query->whereHas('gaRegistration', function ($query) use ($registrationStatus) {
+            $query->where('registration_status', $registrationStatus);
+        });
+    }
+
+    $cooperatives = $query->get()->map(function ($coop) {
+        $registrationStatus = $coop->gaRegistration->registration_status ?? 'Not Available';
+        $membershipStatus = strtoupper($coop->gaRegistration->membership_status ?? 'NOT AVAILABLE');
+
+        $documents = [
+            'Financial Statement',
+            'Resolution for Voting Delegates',
+            'Deposit Slip for Registration Fee',
+            'Deposit Slip for CETF Remittance',
+            'CETF Undertaking',
+            'Certificate of Candidacy',
+            'CETF Utilization Invoice',
+        ];
+
+        $documentStatuses = [];
+        foreach ($documents as $doc) {
+            $docStatus = $coop->uploadedDocuments->where('document_type', $doc)->first();
+            $documentStatuses[$doc] = $docStatus ? match ($docStatus->status) {
+                'Pending' => 'Pending',
+                'Checked' => 'Checked',
+                'Approved' => 'Accepted',
+                'Rejected' => 'Declined',
+                default => 'Not Uploaded',
+            } : 'Not Uploaded';
+        }
+
+        return [
+            'name' => $coop->name,
+            'coop_identification_no' => $coop->coop_identification_no,
+            'region' => $coop->region,
+            'participants_count' => $coop->participants->count(),
+            'registration_status' => $registrationStatus,
+            'membership_status' => $membershipStatus,
+            'documents' => $documentStatuses,
+        ];
+    });
+
+    return response()->json($cooperatives);
+}
+
+
+
+
 
     public function generatePDF(Request $request)
     {

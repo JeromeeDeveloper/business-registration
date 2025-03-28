@@ -424,10 +424,10 @@
                         </div>
 
                         <div class="modal fade" id="regionFilterModal" tabindex="-1" aria-labelledby="regionFilterLabel" aria-hidden="true">
-                            <div class="modal-dialog">
+                            <div class="modal-dialog modal-lg"> <!-- Increased size for better preview -->
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="regionFilterLabel">Select a Region</h5>
+                                        <h5 class="modal-title" id="regionFilterLabel">Filter Cooperatives</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
@@ -468,15 +468,47 @@
                                             <option value="Fully Registered">Fully Registered</option>
                                             <option value="Partial Registered">Partial Registered</option>
                                         </select>
+
+                                        <!-- Table to Preview Filtered Data -->
+                                        <h5 class="mt-3">Preview</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Cooperative Name</th>
+                                                        <th>Coop ID</th>
+                                                        <th>Region</th>
+                                                        <th>No. of Participants</th>
+                                                        <th>GA Registration Status</th>
+                                                        <th>GA Membership Status</th>
+                                                        <th>Financial Statement</th>
+                                                        <th>Resolution for Voting Delegates</th>
+                                                        <th>Deposit Slip for Registration Fee</th>
+                                                        <th>Deposit Slip for CETF Remittance</th>
+                                                        <th>CETF Undertaking</th>
+                                                        <th>Certificate of Candidacy</th>
+                                                        <th>CETF Utilization Invoice</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="previewTableBody">
+                                                    <tr>
+                                                        <td colspan="13" class="text-center">No data available</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                        </div>
                                     </div>
 
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" id="previewData" class="btn btn-info">Preview Data</button>
                                         <button type="button" id="applyRegionFilter" class="btn btn-primary">Generate Excel</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
 
                     </div>
                     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-3 mb-4">
@@ -1233,6 +1265,116 @@ document.addEventListener("DOMContentLoaded", function () {
         window.location.href = exportUrl + "?" + params.toString();
     });
 });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const previewDataBtn = document.getElementById("previewData");
+        const applyRegionFilter = document.getElementById("applyRegionFilter");
+        const previewTableBody = document.getElementById("previewTableBody");
+
+        previewDataBtn.addEventListener("click", function () {
+            let selectedRegion = document.getElementById("regionSelect").value.trim();
+            let migsStatus = document.getElementById("migsStatusSelect").value.trim();
+            let registrationStatus = document.getElementById("registrationStatusSelect").value.trim();
+
+            fetch("{{ route('reports.preview.filtered_coop_status') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                },
+                body: JSON.stringify({
+                    region: selectedRegion || "All",
+                    migs_status: migsStatus || "All",
+                    registration_status: registrationStatus || "All"
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                previewTableBody.innerHTML = ""; // Clear previous data
+
+                if (data.length === 0) {
+                    previewTableBody.innerHTML = `<tr><td colspan="13" class="text-center">No data found</td></tr>`;
+                    applyRegionFilter.disabled = true;
+                    return;
+                }
+
+                applyRegionFilter.disabled = false; // Enable Generate Excel button
+
+                data.forEach(coop => {
+                    let row = `
+                        <tr>
+                            <td>${coop.name}</td>
+                            <td>${coop.coop_identification_no}</td>
+                            <td>${coop.region}</td>
+                            <td>${coop.participants_count}</td>
+                            <td>${coop.registration_status}</td>
+                            <td>${coop.membership_status}</td>
+                            <td>${coop.documents['Financial Statement']}</td>
+                            <td>${coop.documents['Resolution for Voting Delegates']}</td>
+                            <td>${coop.documents['Deposit Slip for Registration Fee']}</td>
+                            <td>${coop.documents['Deposit Slip for CETF Remittance']}</td>
+                            <td>${coop.documents['CETF Undertaking']}</td>
+                            <td>${coop.documents['Certificate of Candidacy']}</td>
+                            <td>${coop.documents['CETF Utilization Invoice']}</td>
+                        </tr>
+                    `;
+                    previewTableBody.innerHTML += row;
+                });
+            })
+            .catch(error => {
+                console.error("Error fetching preview data:", error);
+                previewTableBody.innerHTML = `<tr><td colspan="13" class="text-center text-danger">Error loading data</td></tr>`;
+            });
+        });
+
+        applyRegionFilter.addEventListener("click", function () {
+            let selectedRegion = document.getElementById("regionSelect").value.trim();
+            let migsStatus = document.getElementById("migsStatusSelect").value.trim();
+            let registrationStatus = document.getElementById("registrationStatusSelect").value.trim();
+
+            let exportUrl = "{{ route('reports.export.filtered_coop_status') }}";
+
+            let params = new URLSearchParams({
+                region: selectedRegion || "All",
+                migs_status: migsStatus || "All",
+                registration_status: registrationStatus || "All"
+            });
+
+            window.location.href = exportUrl + "?" + params.toString();
+        });
+    });
+    </script>
+
+
+<script>
+    previewDataBtn.addEventListener("click", function () {
+    previewTableBody.innerHTML = `<tr><td colspan="6" class="text-center">Loading...</td></tr>`;
+
+    fetch("{{ route('reports.preview.filtered_coop_status') }}", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": "{{ csrf_token() }}"
+        },
+        body: JSON.stringify({
+            region: selectedRegion || "All",
+            migs_status: migsStatus || "All",
+            registration_status: registrationStatus || "All"
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        previewTableBody.innerHTML = ""; // Clear previous data
+        // Process data as before...
+    })
+    .catch(error => {
+        console.error("Error fetching preview data:", error);
+        previewTableBody.innerHTML = `<tr><td colspan="6" class="text-center text-danger">Error loading data</td></tr>`;
+    });
+});
+
 </script>
 
 
