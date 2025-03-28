@@ -78,9 +78,6 @@ class SupportController extends Controller
             ->whereNotNull('coop_id')
             ->distinct()
             ->count('coop_id');
-
-             // Count registered MIGS Coops
-    // Count registered MIGS Coops with Participant connection
 $registeredMigsCoops = GARegistration::where('membership_status', 'Migs')
 ->whereHas('cooperative.participants')
 ->distinct()->count('coop_id');

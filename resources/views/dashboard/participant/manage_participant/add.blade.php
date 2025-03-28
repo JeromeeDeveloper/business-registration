@@ -431,7 +431,7 @@
                     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
                     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-                    <script>
+                    {{-- <script>
                         document.getElementById('delegate_type').addEventListener('change', function () {
                             const selectedValue = this.value;
                             const canAddVoting = {{ $canAddVoting ? 'true' : 'false' }};
@@ -457,7 +457,7 @@
                                 modal.show();
                             }
                         });
-                        </script>
+                        </script> --}}
                     <script>
                         $(document).ready(function() {
                             $('#event_ids').select2({
