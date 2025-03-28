@@ -511,7 +511,6 @@
                                                 </div>
                                             </div>
 
-
                                             <!-- Second Column: CETF Requirement Computation -->
                                             <div class="col-md-6 col-lg-4">
                                                 <div class="card shadow-sm p-3">

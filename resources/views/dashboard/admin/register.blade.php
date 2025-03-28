@@ -779,6 +779,52 @@
     @endif
 
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const shareCapitalInput = document.getElementById('share_capital_balance');
+            const entitledVotesInput = document.getElementById('no_of_entitled_votes');
+
+            // Function to calculate the number of entitled votes
+            function calculateEntitledVotes(shareCapital) {
+                let votes = 0;
+                let remaining = shareCapital;
+
+                if (remaining >= 100000) {
+                    votes += Math.floor(remaining / 100000);
+                    remaining = remaining % 100000; // Remaining capital
+                }
+
+                while (remaining >= 25000) {
+                    if (remaining >= 75000) {
+                        votes += 3;
+                        remaining -= 75000;
+                    } else if (remaining >= 50000) {
+                        votes += 2;
+                        remaining -= 50000;
+                    } else if (remaining >= 25000) {
+                        votes += 1;
+                        remaining -= 25000;
+                    }
+                }
+
+                return Math.min(votes, 5); // Max of 5 votes
+            }
+
+            // Update entitled votes
+            function updateEntitledVotes() {
+                const shareCapital = parseFloat(shareCapitalInput.value) || 0;
+                const entitledVotes = calculateEntitledVotes(shareCapital);
+                entitledVotesInput.value = entitledVotes;
+            }
+
+            // Initial calculation
+            updateEntitledVotes();
+
+            // Listen for input changes
+            shareCapitalInput.addEventListener('input', updateEntitledVotes);
+        });
+    </script>
+    
+    <script>
         document.addEventListener("DOMContentLoaded", function() {
             console.log("DOM Loaded - Initializing CETF Calculation");
 
