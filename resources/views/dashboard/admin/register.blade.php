@@ -350,9 +350,6 @@
                                                         value="{{ old('email') }}" required />
                                                 </div>
                                             </div>
-
-
-                                            <!-- TIN -->
                                             <!-- TIN -->
                                             <div class="col-md-6 col-lg-4">
                                                 <div class="form-group">
