@@ -397,7 +397,7 @@
                     <!-- Dashboard Cards -->
                     <div class="row">
                         <!-- Registration Status -->
-                        <div class="col-sm-6 col-md-3">
+                        <div class="col-sm-6 col-md-4">
                             <div class="card card-stats card-round">
                                 <div class="card-body">
                                     <div class="row align-items-center">
@@ -409,7 +409,8 @@
                                         <div class="col col-stats ms-3 ms-sm-0">
                                             <div class="numbers">
                                                 <p class="card-category">Registration Status</p>
-                                                <h4 class="card-title
+                                                <h4
+                                                    class="card-title
                                                     {{ $registrationStatus === 'Fully Registered'
                                                         ? 'text-success'
                                                         : ($registrationStatus === 'Partial Registered'
@@ -422,12 +423,10 @@
                                     </div>
                                 </div>
                             </div>
-
-                    </div>
-
+                        </div>
 
                         <!-- Membership Status -->
-                        <div class="col-sm-6 col-md-3">
+                        <div class="col-sm-6 col-md-4">
                             <div class="card card-stats card-round">
                                 <div class="card-body">
                                     <div class="row align-items-center">
@@ -445,15 +444,13 @@
                                                 </h4>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-
-                        <!-- Registration Section -->
-                        <div class="col-sm-6 col-md-3">
+                        <!-- Total Participants -->
+                        <div class="col-sm-6 col-md-4">
                             <div class="card card-stats card-round">
                                 <div class="card-body">
                                     <div class="row align-items-center">
@@ -470,14 +467,61 @@
                                                 </h4>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
+                    <div class="row mt-4">
+                        <!-- Registered Voting Delegate -->
+                        <div class="col-sm-6 col-md-4">
+                            <div class="card card-stats card-round">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-icon">
+                                            <div class="icon-big text-center icon-info bubble-shadow-small">
+                                                <i class="fas fa-check"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col col-stats ms-3 ms-sm-0">
+                                            <div class="numbers">
+                                                <p class="card-category">Registered Voting Delegates</p>
+                                                <h4 class="card-title">
+                                                    {{ $currentVotingCount }}
+                                                </h4>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Upload Required Documents -->
-                        <div class="col-sm-6 col-md-3">
+                        <!-- Entitled Voting Delegate -->
+                        <div class="col-sm-6 col-md-4">
+                            <div class="card card-stats card-round">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-icon">
+                                            <div class="icon-big text-center icon-info bubble-shadow-small">
+                                                <i class="fas fa-user-tie"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col col-stats ms-3 ms-sm-0">
+                                            <div class="numbers">
+                                                <p class="card-category">Entitled Voting Delegates</p>
+                                                <h4 class="card-title">
+                                                    {{ $votes }}
+                                                </h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Uploaded Documents -->
+                        <div class="col-sm-6 col-md-4">
                             <div class="card card-stats card-round">
                                 <div class="card-body">
                                     <div class="row align-items-center">
@@ -489,7 +533,6 @@
                                         <div class="col col-stats ms-3 ms-sm-0">
                                             <div class="numbers">
                                                 <p class="card-category">Uploaded Documents</p>
-                                                <!-- Display the count of uploaded documents -->
                                                 <a href="#" id="viewDocumentsBtn2">
                                                     <h4 class="card-title">
                                                         {{ $totalDocuments }} / 7
@@ -501,6 +544,8 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+
 
 
                         <div class="row">
@@ -690,7 +735,8 @@
                                         width: auto;
                                         max-width: 300px;
                                         display: flex;
-                                        flex-direction: column; /* Align content vertically */
+                                        flex-direction: column;
+                                        /* Align content vertically */
                                     }
 
                                     .notice-content {
@@ -723,7 +769,9 @@
                                 <div class="floating-notice">
                                     <button class="close-btn" onclick="closeNotice()">×</button>
                                     <div class="notice-content">
-                                        <p><strong>Notice:</strong> Please note the cut-off date for T-shirt size selection is <strong>May 10, 2025</strong>. Ensure you choose your T-shirt size before the deadline.</p>
+                                        <p><strong>Notice:</strong> To ensure you get your preferred t-shirt size,
+                                            please <strong>register early!</strong> Sizes will be available on a
+                                            first-come, first-served basis.</p>
                                     </div>
                                 </div>
 

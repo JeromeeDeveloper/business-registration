@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Models\Cooperative;
+use App\Models\Participant;
 use App\Models\UploadedDocument;
 use App\Observers\CooperativeObserver;
+use App\Observers\ParticipantObserver;
 use Illuminate\Support\ServiceProvider;
 use App\Observers\UploadedDocumentObserver;
 use App\Observers\UpdateCooperativeObserver;
@@ -27,5 +29,6 @@ class AppServiceProvider extends ServiceProvider
         UploadedDocument::observe(UploadedDocumentObserver::class);
         Cooperative::observe(CooperativeObserver::class);
         Cooperative::observe(UpdateCooperativeObserver::class);
+        Participant::observe(ParticipantObserver::class);
     }
 }

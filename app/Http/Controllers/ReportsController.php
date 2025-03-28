@@ -9,11 +9,13 @@ use App\Models\Participant;
 use Illuminate\Http\Request;
 use App\Exports\ReportsExport;
 use App\Models\GARegistration;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\UploadedDocument;
 use App\Exports\CoopStatusExport;
 use App\Exports\TshirtSizesExport;
-use Barryvdh\DomPDF\Facade as PDF;
+// use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\DB;
+use App\Exports\ParticipantsExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\DocumentsStatusExport;
 use App\Exports\CoopRegistrationExport;
@@ -83,6 +85,97 @@ class ReportsController extends Controller
             'totalVotingDelegatesNonMigs'
         ));
     }
+    public function printcoop(Request $request)
+{
+    $filter = $request->input('filter');
+
+    $query = GARegistration::query();
+
+    // Apply filters
+    switch ($filter) {
+        case 'fully_registered_non_migs':
+            $query->where('registration_status', 'Fully Registered')
+                ->where('membership_status', 'Non-migs');
+            break;
+        case 'fully_registered_migs':
+            $query->where('registration_status', 'Fully Registered')
+                ->where('membership_status', 'Migs');
+            break;
+        case 'partial_registered_non_migs':
+            $query->where('registration_status', 'Partial Registered')
+                ->where('membership_status', 'Non-migs');
+            break;
+        case 'partial_registered_migs':
+            $query->where('registration_status', 'Partial Registered')
+                ->where('membership_status', 'Migs');
+            break;
+        default:
+            // No additional filters
+            break;
+    }
+
+    // Fetch the registrations with cooperative data
+    $registrations = $query->with('cooperative')->get();
+
+    // Fetch participants directly from the Participant table based on coop_id
+    $cooperativeIds = $registrations->pluck('coop_id')->unique();
+    $participants = Participant::whereIn('coop_id', $cooperativeIds)->get();
+
+    // Calculate the registration fees for each cooperative
+    $registrationFees = [];
+    foreach ($registrations as $registration) {
+        $coopId = $registration->coop_id;
+        $participantCount = $participants->where('coop_id', $coopId)->count();
+        $registrationFees[$coopId] = $participantCount * 4500; // Calculate fee
+    }
+
+    return view('dashboard.admin.reports.registration_form', compact('registrations', 'participants', 'registrationFees'));
+}
+
+
+
+    public function generatePDF(Request $request)
+    {
+        $filter = $request->input('filter');
+        $isPrint = $request->input('print'); // Check if it's a print request
+
+        $query = GARegistration::with('cooperative', 'participant');
+
+        // Apply filters
+        switch ($filter) {
+            case 'fully_registered_non_migs':
+                $query->where('registration_status', 'Fully Registered')
+                    ->where('membership_status', 'Non-migs');
+                break;
+            case 'fully_registered_migs':
+                $query->where('registration_status', 'Fully Registered')
+                    ->where('membership_status', 'Migs');
+                break;
+            case 'partial_registered_non_migs':
+                $query->where('registration_status', 'Partial Registered')
+                    ->where('membership_status', 'Non-migs');
+                break;
+            case 'partial_registered_migs':
+                $query->where('registration_status', 'Partial Registered')
+                    ->where('membership_status', 'Migs');
+                break;
+            default:
+                // No additional filters
+                break;
+        }
+
+        $registrations = $query->get();
+
+        // Handle print request
+        if ($isPrint) {
+            return view('dashboard.admin.reports.registration_form', compact('registrations'));
+        }
+
+        // Handle PDF generation
+        $pdf = Pdf::loadView('dashboard.admin.reports.registration_form', compact('registrations'));
+        return $pdf->download('cooperative_report.pdf');
+    }
+
 
     public function export(Request $request)
     {
@@ -104,8 +197,10 @@ class ReportsController extends Controller
                     return Excel::download(new TshirtSizesExport(), 'tshirt_sizes.xlsx');
                 case 'coop_registration':
                     return Excel::download(new CoopRegistrationExport(), 'coop_registration.xlsx');
+                    case 'participants_list':
+                        return Excel::download(new ParticipantsExport(), 'voting_list.xlsx');
                 case 'coop_status':
-                    return Excel::download(new CoopStatusExport(), 'coop_status.xlsx'); // Added CoopStatusExport
+                    return Excel::download(new CoopStatusExport(), 'coop_status.xlsx');
                 default:
                     return Excel::download(new CooperativeReportExport(), 'cooperative_report.xlsx');
             }
@@ -117,28 +212,25 @@ class ReportsController extends Controller
         return redirect()->back()->with('error', 'Invalid export type.');
     }
 
+    public function participantsList()
+{
+    $participants = Participant::with('cooperative')
+                                ->where('delegate_type', 'Voting')
+                                ->get();
+    return view('dashboard.admin.reports.participants_list', compact('participants'));
+}
+
 
     public function coopStatusList(Request $request)
 {
-    $region = $request->input('region');
-
-    // Fetch cooperatives with status filter
-    $query = Cooperative::with(['participants', 'uploadedDocuments', 'gaRegistration'])
+    $cooperatives = Cooperative::with(['participants', 'uploadedDocuments', 'gaRegistration'])
         ->whereHas('gaRegistration', function ($query) {
             $query->whereIn('registration_status', ['Partial Registered', 'Fully Registered']);
-        });
+        })
+        ->get();
 
-    // Apply region filter if selected
-    if ($region) {
-        $query->where('region', $region);
-    }
-
-    $cooperatives = $query->get();
-    $regions = Cooperative::select('region')->distinct()->pluck('region');
-
-    return view('dashboard.admin.reports.coop_status_list', compact('cooperatives', 'regions'));
+    return view('dashboard.admin.reports.coop_status_list', compact('cooperatives'));
 }
-
 
 
 

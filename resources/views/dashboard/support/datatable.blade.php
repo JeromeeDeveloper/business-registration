@@ -495,6 +495,19 @@
                                                                     </button>
                                                                 </form> --}}
 
+                                                                <form
+                                                                action="{{ route('support.cooperatives.notify', $coop->coop_id) }}"
+                                                                method="POST" style="display:inline;"
+                                                                onsubmit="showSwalLoader(event, this, 'Sending Status & Invitation...')">
+                                                                @csrf
+                                                                <button type="submit"
+                                                                    class="btn btn-link btn-info btn-lg"
+                                                                    data-bs-toggle="tooltip"
+                                                                    title="Send Invitation & Credentials">
+                                                                    <i class="fa fa-bell"></i>
+                                                                </button>
+                                                            </form>
+
                                                                 <a href="{{ route('support.documents.view', ['coop_id' => $coop->coop_id]) }}"
                                                                     class="btn btn-link btn-info btn-lg"
                                                                     data-bs-toggle="tooltip"

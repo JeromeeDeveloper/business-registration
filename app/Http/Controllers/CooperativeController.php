@@ -70,11 +70,49 @@ class CooperativeController extends Controller
         $events = Event::all();
         $cooperatives = Cooperative::all();
         $users = User::whereDoesntHave('cooperative')
-                    ->where('role', 'cooperative') // Filter by role
+                    ->where('role', 'cooperative')
                     ->get();
 
-        return view('dashboard.participant.manage_participant.add', compact('cooperatives', 'users', 'events'));
+        $user = Auth::user();
+        $cooperative = Cooperative::find($user->coop_id);
+        $shareCapital = $cooperative->share_capital_balance ?? 0;
+
+        // Calculate max votes based on share capital
+        $votes = 0;
+        $remaining = $shareCapital;
+
+        if ($remaining >= 100000) {
+            $votes += floor($remaining / 100000);
+            $remaining %= 100000;
+        }
+
+        while ($remaining >= 25000) {
+            if ($remaining >= 75000) {
+                $votes += 3;
+                $remaining -= 75000;
+            } else if ($remaining >= 50000) {
+                $votes += 2;
+                $remaining -= 50000;
+            } else if ($remaining >= 25000) {
+                $votes += 1;
+                $remaining -= 25000;
+            }
+        }
+
+        $votes = min($votes, 5);
+
+        // Count existing voting participants
+        $existingVotingParticipants = Participant::where('coop_id', $user->coop_id)
+            ->where('delegate_type', 'Voting')
+            ->count();
+
+        // Determine if voting is allowed
+        $canAddVoting = $existingVotingParticipants < $votes;
+
+        return view('dashboard.participant.manage_participant.add', compact('cooperatives', 'users', 'events', 'shareCapital', 'votes', 'canAddVoting'));
     }
+
+
 
     public function store(Request $request)
     {
@@ -98,6 +136,7 @@ class CooperativeController extends Controller
             'event_ids' => 'nullable|array',
             'event_ids.*' => 'exists:events,event_id',
         ]);
+
 
         $validatedData['coop_id'] = Auth::user()->coop_id;
 
@@ -212,12 +251,47 @@ class CooperativeController extends Controller
  }
 
  public function edit($participant_id)
- {
-     $participant = Participant::where('participant_id', $participant_id)->firstOrFail();
-     $cooperatives = Cooperative::all(); // Fetch all cooperatives
+{
+    $participant = Participant::where('participant_id', $participant_id)->firstOrFail();
+    $cooperatives = Cooperative::all();
 
-     return view('dashboard.participant.manage_participant.edit', compact('participant', 'cooperatives'));
- }
+    // Calculate votes based on share capital
+    $shareCapital = $participant->cooperative->share_capital_balance ?? 0;
+    $votes = 0;
+    $remaining = $shareCapital;
+
+    if ($remaining >= 100000) {
+        $votes += floor($remaining / 100000);
+        $remaining %= 100000;
+    }
+
+    while ($remaining >= 25000) {
+        if ($remaining >= 75000) {
+            $votes += 3;
+            $remaining -= 75000;
+        } elseif ($remaining >= 50000) {
+            $votes += 2;
+            $remaining -= 50000;
+        } elseif ($remaining >= 25000) {
+            $votes += 1;
+            $remaining -= 25000;
+        }
+    }
+
+    $votes = min($votes, 5); // Max 5 votes
+
+    // Check current Voting participants excluding the current one
+    $currentVotingCount = Participant::where('coop_id', $participant->coop_id)
+        ->where('delegate_type', 'Voting')
+        ->where('participant_id', '!=', $participant->participant_id)
+        ->count();
+
+    // Allow Voting only if within limit or if participant is already Voting
+    $canAddVoting = $currentVotingCount < $votes || $participant->delegate_type === 'Voting';
+
+    return view('dashboard.participant.manage_participant.edit', compact('participant', 'cooperatives', 'votes', 'canAddVoting', 'shareCapital', 'currentVotingCount'));
+}
+
 
 
 

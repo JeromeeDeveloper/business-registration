@@ -287,7 +287,7 @@
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
                                         <label for="is_msp_officer">Mass-Specc Officer</label>
-                                        <div>{{ $participant->is_msp_officer ? 'Yes' : 'No' }}</div>
+                                        <div>{{ $participant->is_msp_officer ?? 'N/A' }}</div>
                                     </div>
                                 </div>
 

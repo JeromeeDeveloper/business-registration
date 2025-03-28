@@ -313,17 +313,43 @@
                                         </div>
 
                                         <!-- Notifications Button -->
-                                        <div>
-                                            <button
-                                                class="btn btn-label-info btn-round fw-bold d-flex align-items-center px-4 py-2"
-                                                data-bs-toggle="modal" data-bs-target="#notifyModal">
-                                                <i class="fa fa-bell me-2"></i> Open Notifications
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <button class="btn btn-label-info btn-round fw-bold d-flex align-items-center px-4 py-2" data-bs-toggle="modal" data-bs-target="#notifyModal">
+                                              <i class="fa fa-bell me-2"></i> Open Notifications
                                             </button>
+                                            <button class="btn btn-label-info btn-round fw-bold d-flex align-items-center px-4 py-2" data-bs-toggle="modal" data-bs-target="#cooperativeModal">
+                                                <i class="fa fa-building me-2"></i> Cooperative Summary Report
+                                              </button>
+                                          </div>
+
+                                          <div class="modal fade" id="cooperativeModal" tabindex="-1" aria-labelledby="cooperativeModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="cooperativeModalLabel">Cooperative Summary Report</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form action="{{ route('generate.pdf') }}" method="POST" target="_blank">
+                                                            @csrf
+                                                            <label for="filter" class="form-label">Select Filter</label>
+                                                            <select id="filter" name="filter" class="form-select">
+                                                                <option value="all">All Cooperative</option>
+                                                                <option value="fully_registered_migs">Fully Registered MIGS Cooperatives</option>
+                                                                <option value="fully_registered_non_migs">Fully Registered NON-MIGS Cooperatives</option>
+                                                                <option value="partial_registered_migs">Partial Registered MIGS Cooperatives</option>
+                                                                <option value="partial_registered_non_migs">Partial Registered NON MIGS Cooperatives</option>
+                                                            </select>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                {{-- <button type="submit" class="btn btn-primary">Generate PDF</button> --}}
+                                                                <button type="button" class="btn btn-success" onclick="printReport()">Print or Export as PDF</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-
-
-
-
 
                                     @if(session('status'))
                                     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -423,7 +449,7 @@
                                                             <div class="form-control text-center fw-semibold text-primary fs-6" style="min-width: 200px;">
                                                                 @php
                                                                     $status = optional($coop->gaRegistration)->registration_status;
-                                                                    echo $status === 'Rejected' ? 'NOT AVAILABLE' : ($status ?? 'NOT AVAILABLE');
+                                                                    echo $status === 'Rejected' ? 'NO REGISTRATION' : ($status ?? 'NO REGISTRATION');
                                                                 @endphp
                                                             </div>
                                                         </td>
@@ -432,7 +458,7 @@
                                                         <td class="p-2 align-middle text-center">
                                                             <div class="form-control text-center fw-semibold text-success fs-6" style="min-width: 200px;">
                                                                 @php
-                                                                    $membershipStatus = optional($coop->gaRegistration)->membership_status ?? 'Not Available';
+                                                                    $membershipStatus = optional($coop->gaRegistration)->membership_status ?? 'NO REGISTRATION';
                                                                 @endphp
                                                                 {{ strtoupper($membershipStatus) }}
                                                             </div>
@@ -712,5 +738,21 @@ MASS-SPECC Cooperative Development Center`);
 
     @include('layouts.links')
 </body>
+<script>
+    function printReport() {
+        const selectedFilter = document.getElementById('filter').value;
+        const printUrl = `{{ route('cooperative.print') }}?filter=${selectedFilter}`;
+        const printWindow = window.open(printUrl, '_blank');
+
+        printWindow.onload = function() {
+            printWindow.print();
+
+            // Add a cancel option by listening for when the print dialog is closed
+            printWindow.onafterprint = function() {
+                printWindow.close();
+            };
+        };
+    }
+    </script>
 
 </html>

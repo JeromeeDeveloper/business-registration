@@ -213,12 +213,12 @@ class DashboardController extends Controller
              // Count registered MIGS Coops
     // Count registered MIGS Coops with Participant connection
 $registeredMigsCoops = GARegistration::where('membership_status', 'Migs')
-->whereHas('cooperative.participants') // Ensuring there's a Participant connected to the Cooperative
+->whereHas('cooperative.participants')
 ->distinct()->count('coop_id');
 
 // Count registered NON-MIGS Coops with Participant connection
 $registeredNonMigsCoops = GARegistration::where('membership_status', 'Non-migs')
-->whereHas('cooperative.participants') // Ensuring there's a Participant connected to the Cooperative
+->whereHas('cooperative.participants')
 ->distinct()->count('coop_id');
 
 $totalCoopAttended = DB::table('participants')
@@ -321,9 +321,8 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
         // Count total speakers
         $totalSpeakers = Speaker::count();
 
-        // Count total participants
+        // Count total participants for the cooperative
         $totalParticipants = Participant::where('coop_id', $user->coop_id)->count();
-
 
         // Fetch the cooperative from the participant relationship (ensure coop_id exists)
         $cooperative = $participant ? $participant->cooperative : null;
@@ -331,7 +330,6 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
         $totalDocuments = UploadedDocument::where('coop_id', $user->coop_id)
             ->where('status', 'Approved')
             ->count();
-
 
         // Fetch GARegistration record based on the user's coop_id
         $gaRegistration = $user && $user->coop_id
@@ -345,18 +343,50 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
         // Fetch Cooperative based on logged-in user's coop_id
         $coop = $user && $user->coop_id ? Cooperative::where('coop_id', $user->coop_id)->first() : null;
 
+        // ✅ Calculate votes based on share capital
+        $shareCapital = $coop ? $coop->share_capital_balance : 0;
+        $votes = 0;
+        $remaining = $shareCapital;
+
+        if ($remaining >= 100000) {
+            $votes += floor($remaining / 100000);
+            $remaining %= 100000;
+        }
+
+        while ($remaining >= 25000) {
+            if ($remaining >= 75000) {
+                $votes += 3;
+                $remaining -= 75000;
+            } elseif ($remaining >= 50000) {
+                $votes += 2;
+                $remaining -= 50000;
+            } elseif ($remaining >= 25000) {
+                $votes += 1;
+                $remaining -= 25000;
+            }
+        }
+
+        $votes = min($votes, 5); // Max 5 votes
+
+        // ✅ Count current Voting participants
+        $currentVotingCount = Participant::where('coop_id', $user->coop_id)
+            ->where('delegate_type', 'Voting')
+            ->count();
+
         return view('dashboard.participant.participant', [
             'participant' => $participant,
             'event' => $latestEvent,
             'totalEvents' => $totalEvents,
             'totalSpeakers' => $totalSpeakers,
-            'totalParticipants' => $totalParticipants, // Pass total participants
-            'totalDocuments' => $totalDocuments, // Pass total uploaded documents
+            'totalParticipants' => $totalParticipants,
+            'totalDocuments' => $totalDocuments,
             'registrationStatus' => $registrationStatus,
             'membershipStatus' => $membershipStatus,
             'cooperative' => $cooperative,
             'coop' => $coop,
-            'latestEvents' => $latestEvents, // ✅ FIXED: added to pass the events
+            'latestEvents' => $latestEvents,
+            'votes' => $votes, // ✅ Pass votes to view
+            'currentVotingCount' => $currentVotingCount, // ✅ Pass current voting count to view
         ]);
     }
 
@@ -369,18 +399,17 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
 
         // Check if cooperative has MIGS membership
         $hasMigsRegistration = GARegistration::where('coop_id', $cooperative->coop_id)
-            ->where('membership_status', 'MIGS')
-            ->exists();
+        ->where('membership_status', 'MIGS')
+        ->exists();
 
-        // Check if cooperative has an MSP Officer participant
-        $hasMspOfficer = Participant::where('coop_id', $cooperative->coop_id)
-            ->where('is_msp_officer', true)
-            ->exists();
+           $hasMspOfficer = Participant::where('coop_id', $cooperative->coop_id)
+        ->where('is_msp_officer', true)
+        ->exists();
 
         // Check the total remittance
         $totalRemittance = $cooperative->total_remittance ?? 0;
         $free100kCETF = $totalRemittance >= 100000; // Free 1 pax if remittance >= 100K
-        $halfBasedCETF = $totalRemittance >= 50000; // Discount 1 pax by 50%
+        $halfBasedCETF = $totalRemittance >= 50000; // Free 1 pax if remittance >= 50K
 
         // Get the number of participants
         $numParticipants = $cooperative->participants()->count();
@@ -414,9 +443,10 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
         $regFeePayable = max(0, $netRequiredRegFee - ($lessPreregPayment + $lessCetfBalance));
 
         return view('dashboard.participant.cooperativeprofile', compact(
-            'cooperative', 'totalRegFee', 'regFeePayable'
+            'cooperative', 'totalRegFee', 'regFeePayable', 'hasMigsRegistration', 'hasMspOfficer', 'free100kCETF', 'halfBasedCETF'
         ));
     }
+
 
 
 
@@ -477,6 +507,7 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
             'msp_officer_position' => 'nullable|string|max:255',
             'delegate_type' => 'required|string|max:10',
         ]);
+
 
         // Store the participant data
         $participant = Participant::create($validatedData);
@@ -580,13 +611,12 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
     {
         $search = $request->input('search');
         $filterNoGA = $request->input('filter_no_ga');
-        $limit = $request->input('limit', 5);  // Default to 5 if no 'limit' is provided
+        $limit = $request->input('limit', 5); // Default to 5 if no 'limit' is provided
 
         $emailsall = Cooperative::pluck('email')->toArray();
-
         $cooperatives = Cooperative::query();
 
-        // Apply filter first
+        // Apply filter for No GA Registration
         if ($filterNoGA === '1') {
             $cooperatives->whereDoesntHave('gaRegistration');
         }
@@ -599,22 +629,27 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
                     ->orWhere('email', 'LIKE', "%{$search}%")
                     ->orWhere('address', 'LIKE', "%{$search}%")
                     ->orWhereHas('gaRegistration', function ($query) use ($search) {
-                        $query->where('registration_status', 'LIKE', "%{$search}%")
-                            ->orWhere('membership_status', 'LIKE', "%{$search}%");
+                        if (strtoupper($search) === 'NO REGISTRATION') {
+                            $query->whereNull('registration_status')
+                                  ->orWhere('registration_status', 'Rejected');
+                        } else {
+                            $query->where('registration_status', 'LIKE', "%{$search}%")
+                                  ->orWhere('membership_status', 'LIKE', "%{$search}%");
+                        }
                     });
             });
         }
 
         // Apply pagination with the dynamic limit
         $cooperatives = $cooperatives->orderBy('created_at', 'desc')
-        ->paginate($limit)
-        ->appends($request->query()); // Append all query parameters
-
+            ->paginate($limit)
+            ->appends($request->query()); // Append all query parameters
 
         $emails = $cooperatives->pluck('email')->filter()->implode(',');
 
         return view('dashboard.admin.datatable', compact('cooperatives', 'search', 'emails', 'emailsall', 'filterNoGA'));
     }
+
 
 
     public function storeCooperative(Request $request)
@@ -671,6 +706,8 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
             'affiliated_orgs' => 'nullable|string|max:255'
         ]);
 
+
+
         // Calculate entitled votes based on share capital balance
         $shareCapital = $request->share_capital_balance;
         $votes = 0;
@@ -703,9 +740,10 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
         }
 
         // Store the selected services as JSON
-        $servicesAvailed = json_encode($request->services_availed);
+      $servicesAvailed = json_encode($request->services_availed ?? []);
 
-        $cetfBalance = ($request->cetf_required ?? 0) - ($request->total_remittance ?? 0);
+
+        // $cetfBalance = ($request->cetf_required ?? 0) - ($request->total_remittance ?? 0);
 
         // Create the cooperative entry
         $cooperative = Cooperative::create([
@@ -931,7 +969,7 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
             'cetf_required' => 'nullable|numeric|min:0',
             'cetf_balance' => 'nullable|numeric',
             'total_remittance' => 'nullable|numeric|min:0',
-            'net_required_reg_fee' => 'nullable|numeric|min:0',
+            'net_required_reg_fee' => 'nullable|numeric',
             'total_reg_fee' => 'nullable|numeric|min:0',
             'share_capital_balance' => 'nullable|numeric|min:0',
             'less_prereg_payment' => 'nullable|numeric|min:0',

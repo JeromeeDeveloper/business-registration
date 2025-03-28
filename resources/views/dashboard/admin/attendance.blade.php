@@ -275,22 +275,30 @@
                                             <div class="col-12 col-md-4">
                                                 <label class="form-label fw-bold">Date Range</label>
                                                 <div class="input-group shadow-sm">
-                                                    <input type="text" id="date-range" class="form-control" placeholder="Select date & time range">
-                                                    <button type="button" id="clear-date-range" class="btn btn-danger d-flex align-items-center px-3" title="Clear Date Range">
+                                                    <input type="text" id="date-range" class="form-control"
+                                                        placeholder="Select date & time range">
+                                                    <button type="button" id="clear-date-range"
+                                                        class="btn btn-danger d-flex align-items-center px-3"
+                                                        title="Clear Date Range">
                                                         <i class="fa fa-times fs-5"></i>
                                                     </button>
                                                 </div>
                                             </div>
 
                                             <!-- Hidden fields for start and end datetime -->
-                                            <input type="hidden" name="start_datetime" id="start_datetime" value="{{ request('start_datetime') }}">
-                                            <input type="hidden" name="end_datetime" id="end_datetime" value="{{ request('end_datetime') }}">
+                                            <input type="hidden" name="start_datetime" id="start_datetime"
+                                                value="{{ request('start_datetime') }}">
+                                            <input type="hidden" name="end_datetime" id="end_datetime"
+                                                value="{{ request('end_datetime') }}">
 
                                             <!-- Search -->
                                             <div class="col-12 col-md-4">
-                                                <label class="form-label fw-semibold text-muted">Search Participant</label>
+                                                <label class="form-label fw-semibold text-muted">Search
+                                                    Participant</label>
                                                 <div class="input-group shadow-sm">
-                                                    <input type="text" name="search" class="form-control" placeholder="Enter name or ID..." value="{{ request('search') }}">
+                                                    <input type="text" name="search" class="form-control"
+                                                        placeholder="Enter name or ID..."
+                                                        value="{{ request('search') }}">
                                                     <button type="submit" class="btn btn-primary px-4">
                                                         <i class="fa fa-search"></i>
                                                     </button>
@@ -300,15 +308,18 @@
                                             <!-- Print Button -->
                                             <div class="col-12 col-md-2 d-grid">
                                                 <label class="form-label fw-semibold text-muted">Print List</label>
-                                                <button type="button" onclick="printAttendance()" class="btn btn-outline-primary d-flex align-items-center justify-content-center gap-2 shadow-sm">
+                                                <button type="button" onclick="printAttendance()"
+                                                    class="btn btn-outline-primary d-flex align-items-center justify-content-center gap-2 shadow-sm">
                                                     <i class="fa fa-print"></i> Print
                                                 </button>
                                             </div>
 
                                             <!-- Excel Button -->
                                             <div class="col-12 col-md-2 d-grid">
-                                                <label class="form-label fw-semibold text-muted">Generate Report</label>
-                                                <a class="btn btn-outline-success d-flex align-items-center justify-content-center gap-2 shadow-sm" href="{{ route('export-event-participants') }}">
+                                                <label class="form-label fw-semibold text-muted">Generate
+                                                    Report</label>
+                                                <a class="btn btn-outline-success d-flex align-items-center justify-content-center gap-2 shadow-sm"
+                                                    href="{{ route('export-event-participants') }}">
                                                     <i class="fas fa-file-excel" style="color: #2a9d8f;"></i> Excel
                                                 </a>
                                             </div>
@@ -322,8 +333,10 @@
 
                                             <!-- Event Selector -->
                                             <div class="col-12 col-md-5">
-                                                <label for="eventSelect" class="form-label fw-bold">Select Event</label>
-                                                <select id="eventSelect" name="event_id" class="form-select shadow-sm" required>
+                                                <label for="eventSelect" class="form-label fw-bold">Select
+                                                    Event</label>
+                                                <select id="eventSelect" name="event_id"
+                                                    class="form-select shadow-sm" required>
                                                     <option value="" disabled selected>Select event</option>
                                                     @foreach ($events as $eventOption)
                                                         <option value="{{ $eventOption->event_id }}"
@@ -335,7 +348,8 @@
                                             </div>
 
                                             <!-- Event Link Indicator -->
-                                            <div class="col-12 col-md-auto d-flex align-items-center justify-content-center">
+                                            <div
+                                                class="col-12 col-md-auto d-flex align-items-center justify-content-center">
                                                 <div class="d-flex flex-column align-items-center gap-1 text-muted">
                                                     <i class="fa fa-link fs-4"></i>
                                                     <small class="text-center">Select Event for Scanning</small>
@@ -347,9 +361,7 @@
                                                 <label class="form-label fw-bold invisible">Open QR Scanner</label>
                                                 <button id="openQRModal"
                                                     class="btn btn-outline-primary d-flex align-items-center gap-2 shadow-sm w-100"
-                                                    disabled
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#qrScannerModal">
+                                                    disabled data-bs-toggle="modal" data-bs-target="#qrScannerModal">
                                                     <i class="fa fa-qrcode"></i> Open QR Scanner
                                                 </button>
                                             </div>
@@ -476,7 +488,7 @@
 
 
 
-<script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+    <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/html5-qrcode/minified/html5-qrcode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- Include SweetAlert -->
@@ -574,201 +586,203 @@
         }
     </script>
 
-<script>
-    let qrScanner;
+    <script>
+        let qrScanner;
 
-    function checkEventSelection() {
-        const eventSelect = document.getElementById('eventSelect');
-        const openQRModal = document.getElementById('openQRModal');
-        openQRModal.disabled = !eventSelect.value;
-    }
+        function checkEventSelection() {
+            const eventSelect = document.getElementById('eventSelect');
+            const openQRModal = document.getElementById('openQRModal');
+            openQRModal.disabled = !eventSelect.value;
+        }
 
-    document.addEventListener("DOMContentLoaded", function() {
-        const eventSelect = document.getElementById('eventSelect');
+        document.addEventListener("DOMContentLoaded", function() {
+            const eventSelect = document.getElementById('eventSelect');
 
-        // Initial check on page load
-        checkEventSelection();
+            // Initial check on page load
+            checkEventSelection();
 
-        // Enable/disable button on event selection change
-        eventSelect.addEventListener('change', checkEventSelection);
+            // Enable/disable button on event selection change
+            eventSelect.addEventListener('change', checkEventSelection);
 
-        document.getElementById("qrScannerModal").addEventListener("shown.bs.modal", async function() {
-            if (typeof Html5Qrcode === "undefined") {
-                console.error("Html5Qrcode is NOT loaded!");
-                return;
-            }
-
-            const selectedEvent = eventSelect.value;
-
-            if (!selectedEvent) {
-                Swal.fire({
-                    icon: "warning",
-                    title: "No Event Selected",
-                    text: "Please select an event first before scanning.",
-                });
-                const modal = bootstrap.Modal.getInstance(document.getElementById(
-                'qrScannerModal'));
-                modal.hide();
-                return;
-            }
-
-            qrScanner = new Html5Qrcode("qr-reader");
-            try {
-                let devices = await navigator.mediaDevices.enumerateDevices();
-                let cameraId = null;
-devices.forEach(device => {
-    if (device.kind === "videoinput") {
-        cameraId = device.deviceId;
-        return; // Select the first video input device found
-    }
-});
-
-
-                if (cameraId) {
-                    qrScanner.start(
-                        cameraId, {
-                            fps: 10,
-                            qrbox: {
-                                width: 250,
-                                height: 250
-                            }
-                        },
-                        decodedText => handleScannedQR(decodedText, qrScanner),
-                        errorMessage => console.warn(errorMessage)
-                    ).catch(err => console.error("Error starting QR scanner:", err));
+            document.getElementById("qrScannerModal").addEventListener("shown.bs.modal", async function() {
+                if (typeof Html5Qrcode === "undefined") {
+                    console.error("Html5Qrcode is NOT loaded!");
+                    return;
                 }
-            } catch (err) {
-                console.error("Error accessing cameras:", err);
-            }
+
+                const selectedEvent = eventSelect.value;
+
+                if (!selectedEvent) {
+                    Swal.fire({
+                        icon: "warning",
+                        title: "No Event Selected",
+                        text: "Please select an event first before scanning.",
+                    });
+                    const modal = bootstrap.Modal.getInstance(document.getElementById(
+                        'qrScannerModal'));
+                    modal.hide();
+                    return;
+                }
+
+                qrScanner = new Html5Qrcode("qr-reader");
+                try {
+                    let devices = await navigator.mediaDevices.enumerateDevices();
+                    let cameraId = null;
+                    devices.forEach(device => {
+                        if (device.kind === "videoinput") {
+                            cameraId = device.deviceId;
+                            return; // Select the first video input device found
+                        }
+                    });
+
+
+                    if (cameraId) {
+                        qrScanner.start(
+                            cameraId, {
+                                fps: 10,
+                                qrbox: {
+                                    width: 250,
+                                    height: 250
+                                }
+                            },
+                            decodedText => handleScannedQR(decodedText, qrScanner),
+                            errorMessage => console.warn(errorMessage)
+                        ).catch(err => console.error("Error starting QR scanner:", err));
+                    }
+                } catch (err) {
+                    console.error("Error accessing cameras:", err);
+                }
+            });
+
+            document.getElementById("qrScannerModal").addEventListener("hidden.bs.modal", function() {
+                if (qrScanner) {
+                    qrScanner.stop().catch(err => console.warn("Error stopping scanner:", err));
+                }
+            });
         });
 
-        document.getElementById("qrScannerModal").addEventListener("hidden.bs.modal", function() {
+        function handleScannedQR(decodedText, qrScanner) {
+            console.log("Scanned QR Code:", decodedText);
+
+            // ✅ Stop the scanner immediately to prevent multiple detections
             if (qrScanner) {
                 qrScanner.stop().catch(err => console.warn("Error stopping scanner:", err));
             }
-        });
-    });
 
-    function handleScannedQR(decodedText, qrScanner) {
-    console.log("Scanned QR Code:", decodedText);
+            let participantId;
 
-    // ✅ Stop the scanner immediately to prevent multiple detections
-    if (qrScanner) {
-        qrScanner.stop().catch(err => console.warn("Error stopping scanner:", err));
-    }
+            try {
+                const url = new URL(decodedText);
+                const pathParts = url.pathname.split('/');
+                participantId = pathParts[pathParts.length - 1];
+            } catch (e) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Invalid QR Code",
+                    text: "QR code does not contain a valid URL with a participant ID.",
+                }).then(() => {
+                    closeScannerModal(); // Ensure modal closes
+                });
+                return;
+            }
 
-    let participantId;
+            if (!participantId || isNaN(participantId)) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Invalid QR Code",
+                    text: "No valid participant ID found.",
+                }).then(() => {
+                    closeScannerModal();
+                });
+                return;
+            }
 
-    try {
-        const url = new URL(decodedText);
-        const pathParts = url.pathname.split('/');
-        participantId = pathParts[pathParts.length - 1];
-    } catch (e) {
-        Swal.fire({
-            icon: "error",
-            title: "Invalid QR Code",
-            text: "QR code does not contain a valid URL with a participant ID.",
-        }).then(() => {
-            closeScannerModal(); // Ensure modal closes
-        });
-        return;
-    }
+            const eventId = document.getElementById("eventSelect").value;
+            if (!eventId) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "No Event Selected",
+                    text: "Please select an event before scanning.",
+                }).then(() => {
+                    closeScannerModal();
+                });
+                return;
+            }
 
-    if (!participantId || isNaN(participantId)) {
-        Swal.fire({
-            icon: "error",
-            title: "Invalid QR Code",
-            text: "No valid participant ID found.",
-        }).then(() => {
-            closeScannerModal();
-        });
-        return;
-    }
+            console.log("Extracted Participant ID:", participantId, "Selected Event ID:", eventId);
 
-    const eventId = document.getElementById("eventSelect").value;
-    if (!eventId) {
-        Swal.fire({
-            icon: "warning",
-            title: "No Event Selected",
-            text: "Please select an event before scanning.",
-        }).then(() => {
-            closeScannerModal();
-        });
-        return;
-    }
-
-    console.log("Extracted Participant ID:", participantId, "Selected Event ID:", eventId);
-
-    fetch(`/scan-qr?participant_id=${participantId}&event_id=${eventId}`, {
-        method: "GET",
-        headers: { "Accept": "application/json" },
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.error) {
-            let iconType = data.error.includes("already recorded") ? "warning" : "error";
-            Swal.fire({
-                icon: iconType,
-                title: "Scan Error",
-                text: data.error,
-            }).then(() => {
-                closeScannerModal();
-            });
-        } else {
-            Swal.fire({
-                icon: "success",
-                title: "Attendance Recorded!",
-                text: data.success,
-            }).then(() => {
-                closeScannerModal();
-            });
-        }
-    })
-    .catch(error => {
-        Swal.fire({
-            icon: "error",
-            title: "Scan Failed",
-            text: `Failed to record attendance. Error: ${error.message || 'Unknown error'}`,
-        }).then(() => {
-            closeScannerModal();
-        });
-    });
-}
-
-
-    function closeScannerModal(qrScanner) {
-        if (qrScanner) {
-            qrScanner.stop().catch(err => console.warn("Error stopping scanner:", err));
-        }
-        const modal = bootstrap.Modal.getInstance(document.getElementById('qrScannerModal'));
-        if (modal) {
-            modal.hide();
-        }
-    }
-
-    function useDroidCamIP(qrScanner, ip) {
-        let videoElement = document.createElement("video");
-        videoElement.src = ip;
-        videoElement.setAttribute("autoplay", "");
-        videoElement.setAttribute("playsinline", "");
-
-        videoElement.addEventListener("loadedmetadata", function() {
-            qrScanner.start(
-                videoElement, {
-                    fps: 10,
-                    qrbox: {
-                        width: 250,
-                        height: 250
+            fetch(`/scan-qr?participant_id=${participantId}&event_id=${eventId}`, {
+                    method: "GET",
+                    headers: {
+                        "Accept": "application/json"
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        let iconType = data.error.includes("already recorded") ? "warning" : "error";
+                        Swal.fire({
+                            icon: iconType,
+                            title: "Scan Error",
+                            text: data.error,
+                        }).then(() => {
+                            closeScannerModal();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Attendance Recorded!",
+                            text: data.success,
+                        }).then(() => {
+                            closeScannerModal();
+                        });
                     }
-                },
-                decodedText => handleScannedQR(decodedText, qrScanner),
-                errorMessage => console.warn(errorMessage)
-            ).catch(err => console.error("Error starting QR scanner:", err));
-        });
+                })
+                .catch(error => {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Scan Failed",
+                        text: `Failed to record attendance. Error: ${error.message || 'Unknown error'}`,
+                    }).then(() => {
+                        closeScannerModal();
+                    });
+                });
+        }
 
-        document.getElementById("qr-reader").appendChild(videoElement);
-    }
-</script>
+
+        function closeScannerModal(qrScanner) {
+            if (qrScanner) {
+                qrScanner.stop().catch(err => console.warn("Error stopping scanner:", err));
+            }
+            const modal = bootstrap.Modal.getInstance(document.getElementById('qrScannerModal'));
+            if (modal) {
+                modal.hide();
+            }
+        }
+
+        function useDroidCamIP(qrScanner, ip) {
+            let videoElement = document.createElement("video");
+            videoElement.src = ip;
+            videoElement.setAttribute("autoplay", "");
+            videoElement.setAttribute("playsinline", "");
+
+            videoElement.addEventListener("loadedmetadata", function() {
+                qrScanner.start(
+                    videoElement, {
+                        fps: 10,
+                        qrbox: {
+                            width: 250,
+                            height: 250
+                        }
+                    },
+                    decodedText => handleScannedQR(decodedText, qrScanner),
+                    errorMessage => console.warn(errorMessage)
+                ).catch(err => console.error("Error starting QR scanner:", err));
+            });
+
+            document.getElementById("qr-reader").appendChild(videoElement);
+        }
+    </script>
 </body>
 
 </html>

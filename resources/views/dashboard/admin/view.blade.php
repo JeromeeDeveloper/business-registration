@@ -448,7 +448,7 @@
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="registration_fee">Registration Fee</label>
-                                    <p>{{ $coop->registration_fee }}</p>
+                                    <p>{{ $coop->registration_fee}}</p>
                                 </div>
                             </div>
 

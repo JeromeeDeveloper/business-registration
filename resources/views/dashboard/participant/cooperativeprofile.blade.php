@@ -481,7 +481,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td class="fw-bold">Registration Fee:</td>
-                                                            <td>{{ number_format($cooperative->registration_fee, 2) ?? 'N/A' }}
+                                                            <td id="registration_fee">{{ number_format($cooperative->registration_fee, 2) ?? 'N/A' }}
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -512,7 +512,7 @@
 
                                                         <tr>
                                                             <td class="fw-bold">Net Required Registration Fee:</td>
-                                                            <td>{{ number_format($cooperative->net_required_reg_fee, 2) ?? 'N/A' }}
+                                                            <td id="net_required_reg_fee">{{ number_format($cooperative->net_required_reg_fee, 2) ?? 'N/A' }}
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -582,12 +582,41 @@
                                                         </tr>
                                                         <tr>
                                                             <td class="fw-bold">Number of Participants:</td>
-                                                            <td>{{ $cooperative->participants()->count() }}</td>
+                                                            <td id="num_participants">{{ $cooperative->participants()->count() }}</td>
                                                         </tr>
                                                         <tr>
                                                             <td class="fw-bold">GA Remark:</td>
                                                             <td>{{ $cooperative->ga_remark ?? 'N/A' }}</td>
                                                         </tr>
+
+                                                        <tr>
+                                                            <td class="fw-bold">Free 2 Pax for MIGS</td>
+                                                            <td>
+                                                                <input class="form-check-input" type="checkbox" name="free_2pax_migs" id="free_2pax_migs" value="1" {{ $hasMigsRegistration ? 'checked' : '' }} disabled />
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td class="fw-bold">1 Pax Free Officer</td>
+                                                            <td>
+                                                                <input class="form-check-input" type="checkbox" name="free_migs_pax" id="free_migs_pax" value="1" {{ $hasMspOfficer ? 'checked' : '' }} disabled />
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td class="fw-bold">1 Pax Free 100K CETF</td>
+                                                            <td>
+                                                                <input class="form-check-input" type="checkbox" name="free_100k_cetf" id="free_100k_cetf" value="1" {{ $free100kCETF ? 'checked' : '' }} disabled />
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td class="fw-bold">1/2 Based on CETF</td>
+                                                            <td>
+                                                                <input class="form-check-input" type="checkbox" name="half_based_cetf" id="half_based_cetf" value="1" {{ $halfBasedCETF ? 'checked' : '' }} disabled />
+                                                            </td>
+                                                        </tr>
+
                                                     </tbody>
                                                 </table>
                                             @else
@@ -615,27 +644,70 @@
     </div>
 
     </div>
-    {{-- <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            function calculateRegFeePayable() {
-                let regFee = parseFloat({{ $cooperative->registration_fee ?? 0 }});
-                let numParticipants = parseInt({{ $cooperative->participants->count() ?? 0 }});
-                let preregPayment = parseFloat(document.getElementById('less_prereg_payment').querySelector('span').getAttribute('data-value')) || 0;
-                let cetfBalance = parseFloat(document.getElementById('less_cetf_balance').querySelector('span').getAttribute('data-value')) || 0;
 
-                // Calculate Total Registration Fee
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            function calculateFees() {
+                // Fetch the text content and remove any commas before converting to float
+                let regFee = parseFloat(document.getElementById('registration_fee').textContent.replace(/,/g, '')) || 0;
+                let numParticipants = parseInt(document.getElementById('num_participants').textContent) || 0;
+                let preregPayment = parseFloat(document.getElementById('less_prereg_payment').textContent.replace(/,/g, '')) || 0;
+                let cetfBalance = parseFloat(document.getElementById('less_cetf_balance').textContent.replace(/,/g, '')) || 0;
+
+                // Calculate Total Registration Fee: (ALL participants counted, NO DEDUCTIONS)
                 let totalRegFee = numParticipants * regFee;
-                document.getElementById('total_reg_fee').textContent = totalRegFee.toFixed(2);
+
+                // Calculate Free Amounts
+                let freeAmount = 0;
+                if (document.getElementById('free_2pax_migs').checked) {
+                    freeAmount += 9000;
+                }
+                if (document.getElementById('free_migs_pax').checked) {
+                    freeAmount += 4500;
+                }
+                if (document.getElementById('free_100k_cetf').checked) {
+                    freeAmount += 4500;
+                }
+
+                if (document.getElementById('half_based_cetf').checked) {
+                    freeAmount += 2250;
+                }
+
+                // Calculate Net Required Registration Fee after applying deductions
+                let netRequiredRegFee = totalRegFee - freeAmount;
 
                 // Calculate Registration Fee Payable
-                let regFeePayable = Math.max(0, totalRegFee - (preregPayment + cetfBalance));
+                let regFeePayable = netRequiredRegFee - (preregPayment + cetfBalance);
+
+                // Update the corresponding td elements with the calculated values
+                document.getElementById('total_reg_fee').textContent = totalRegFee.toFixed(2);
+                document.getElementById('net_required_reg_fee').textContent = netRequiredRegFee.toFixed(2);
                 document.getElementById('reg_fee_payable').textContent = regFeePayable.toFixed(2);
             }
 
-            // Run calculation on page load
-            calculateRegFeePayable();
+            // List of ids for elements to watch for changes
+            let fields = [
+                'registration_fee', 'num_participants', 'less_prereg_payment', 'less_cetf_balance',
+                'free_2pax_migs', 'free_migs_pax', 'free_100k_cetf', 'half_based_cetf'
+            ];
+
+            // Attach event listeners to all relevant fields
+            fields.forEach(id => {
+                let element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('input', calculateFees); // For inputs
+                    element.addEventListener('change', calculateFees); // For checkboxes
+                }
+            });
+
+            // Run the calculation on page load
+            calculateFees();
         });
-        </script> --}}
+    </script>
+
+
+
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {

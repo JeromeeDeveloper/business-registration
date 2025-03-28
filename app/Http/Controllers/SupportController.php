@@ -14,8 +14,11 @@ use Illuminate\Validation\Rule;
 use App\Models\EventParticipant;
 use App\Models\UploadedDocument;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\CooperativeNotification;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -163,7 +166,7 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
 
         $cooperatives = Cooperative::query();
 
-        // Apply filter first
+        // Apply filter for No GA Registration
         if ($filterNoGA === '1') {
             $cooperatives->whereDoesntHave('gaRegistration');
         }
@@ -176,18 +179,26 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
                     ->orWhere('email', 'LIKE', "%{$search}%")
                     ->orWhere('address', 'LIKE', "%{$search}%")
                     ->orWhereHas('gaRegistration', function ($query) use ($search) {
-                        $query->where('registration_status', 'LIKE', "%{$search}%")
-                              ->orWhere('membership_status', 'LIKE', "%{$search}%");
+                        // Check for "No Registration" search
+                        if (strtoupper($search) === 'NO REGISTRATION') {
+                            $query->whereNull('registration_status')
+                                  ->orWhere('registration_status', 'Rejected');
+                        } else {
+                            $query->where('registration_status', 'LIKE', "%{$search}%")
+                                  ->orWhere('membership_status', 'LIKE', "%{$search}%");
+                        }
                     });
             });
         }
 
-         $cooperatives = $cooperatives->orderBy('created_at', 'desc')->paginate($limit);
+        // Apply pagination
+        $cooperatives = $cooperatives->orderBy('created_at', 'desc')->paginate($limit);
 
         $emails = $cooperatives->pluck('email')->filter()->implode(',');
 
         return view('dashboard.support.datatable', compact('cooperatives', 'search', 'emails', 'filterNoGA'));
     }
+
 
     public function editProfile3()
     {
@@ -535,5 +546,42 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
       session()->flash("{$formKey}_success", implode('<br>', $successMessages));
 
       return redirect()->route('support.cooperatives.edit', $cooperative->coop_id);
+  }
+
+  public function sendNotificationsupport($coopId)
+  {
+      try {
+          \Log::info('Notification request received for Coop ID: ' . $coopId);
+
+          // Find the cooperative by ID
+          $coop = Cooperative::findOrFail($coopId);
+          \Log::info('Found cooperative: ' . $coop->name . ' with email: ' . $coop->email);
+
+          // Get the latest event for the cooperative
+          $event = Event::latest()->first();
+
+          // Fetch GA Registration details
+          $gaRegistration = GARegistration::where('coop_id', $coopId)->latest()->first();
+
+          // Fetch only users with role "cooperative" belonging to the current cooperative
+          $users = User::where('coop_id', $coop->coop_id)
+              ->where('role', 'cooperative')
+              ->get();
+
+          if ($users->isNotEmpty()) {
+              Mail::to($coop->email)->queue(new CooperativeNotification($coop, $event, $gaRegistration, $users));
+              \Log::info("Notification sent to: {$coop->email}");
+          } else {
+              \Log::info("Skipped cooperative: {$coop->name} (No cooperative users found)");
+          }
+
+          return redirect()->route('supportview')->with('success', 'Notification sent to the cooperative!');
+      } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+          \Log::error('Cooperative not found: ' . $e->getMessage());
+          return back()->with('error', 'Cooperative not found.');
+      } catch (\Exception $e) {
+          \Log::error('Error sending notification: ' . $e->getMessage());
+          return back()->with('error', 'Error sending notification: ' . $e->getMessage());
+      }
   }
 }

@@ -283,10 +283,13 @@
                                             <div class="col-md-6 col-lg-4">
                                                 <div class="form-group">
                                                     <label for="phone_number">Phone Number</label>
-                                                    <input type="number" class="form-control" name="phone_number" id="phone_number"
-                                                           value="{{ $coop->phone_number ?? 0 }}" placeholder="Enter Phone Number" />
+                                                    <input type="number" class="form-control" name="phone_number"
+                                                        id="phone_number"
+                                                        value="{{ is_numeric($coop->phone_number) ? $coop->phone_number : 0 }}"
+                                                        placeholder="Enter Phone Number" />
                                                 </div>
                                             </div>
+
 
 
 
@@ -392,8 +395,10 @@
 
                                                     <div class="form-group">
                                                         <label for="share_capital_balance">Share Capital</label>
-                                                        <input type="number" class="form-control" name="share_capital_balance" id="share_capital_balance"
-                                                               value="{{ $coop->share_capital_balance }}" placeholder="Enter Share Capital" step="0.01">
+                                                        <input type="number" class="form-control"
+                                                            name="share_capital_balance" id="share_capital_balance"
+                                                            value="{{ $coop->share_capital_balance }}"
+                                                            placeholder="Enter Share Capital" step="0.01">
                                                     </div>
 
 
@@ -410,32 +415,41 @@
 
                                                     <div class="form-group">
                                                         <label for="loan_balance">Loan Balance</label>
-                                                        <input type="number" class="form-control" name="loan_balance" id="loan_balance"
-                                                               value="{{ $coop->loan_balance }}" placeholder="Enter Loan Balance" step="0.01">
+                                                        <input type="number" class="form-control"
+                                                            name="loan_balance" id="loan_balance"
+                                                            value="{{ $coop->loan_balance }}"
+                                                            placeholder="Enter Loan Balance" step="0.01">
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label for="total_overdue">Loan Overdue</label>
-                                                        <input type="number" class="form-control" name="total_overdue" id="total_overdue"
-                                                               value="{{ $coop->total_overdue }}" placeholder="Enter Loan Overdue" step="0.01">
+                                                        <input type="number" class="form-control"
+                                                            name="total_overdue" id="total_overdue"
+                                                            value="{{ $coop->total_overdue }}"
+                                                            placeholder="Enter Loan Overdue" step="0.01">
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label for="time_deposit">Time Deposit</label>
-                                                        <input type="number" class="form-control" name="time_deposit" id="time_deposit"
-                                                               value="{{ $coop->time_deposit }}" placeholder="Enter Time Deposit" step="0.01">
+                                                        <input type="number" class="form-control"
+                                                            name="time_deposit" id="time_deposit"
+                                                            value="{{ $coop->time_deposit }}"
+                                                            placeholder="Enter Time Deposit" step="0.01">
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label for="accounts_receivable">Accounts Receivable</label>
-                                                        <input type="number" class="form-control" name="accounts_receivable" id="accounts_receivable"
-                                                               value="{{ $coop->accounts_receivable }}" placeholder="Enter Accounts Receivable" step="0.01">
+                                                        <input type="number" class="form-control"
+                                                            name="accounts_receivable" id="accounts_receivable"
+                                                            value="{{ $coop->accounts_receivable }}"
+                                                            placeholder="Enter Accounts Receivable" step="0.01">
                                                     </div>
 
                                                     <div class="form-group">
                                                         <label for="savings">Savings</label>
-                                                        <input type="number" class="form-control" name="savings" id="savings"
-                                                               value="{{ $coop->savings }}" placeholder="Enter Savings" step="0.01">
+                                                        <input type="number" class="form-control" name="savings"
+                                                            id="savings" value="{{ $coop->savings }}"
+                                                            placeholder="Enter Savings" step="0.01">
                                                     </div>
 
 
@@ -481,23 +495,40 @@
                                                     <!-- Other Requirement Checklist -->
                                                     <h6 class="mt-3 text-secondary">Registration Status:</h6>
                                                     <div class="form-check">
-                                                      <input class="form-check-input" type="checkbox" name="registration_status" id="registration_status" disabled {{ optional($coop->gaRegistration)->registration_status == 'Fully Registered' ? 'checked' : '' }}>
-                                                      <label class="form-check-label" for="registration_status">Fully Registered</label>
+                                                        <input class="form-check-input" type="checkbox"
+                                                            name="registration_status" id="registration_status"
+                                                            disabled
+                                                            {{ optional($coop->gaRegistration)->registration_status == 'Fully Registered' ? 'checked' : '' }}>
+                                                        <label class="form-check-label"
+                                                            for="registration_status">Fully Registered</label>
                                                     </div>
                                                     <div class="form-check">
-                                                      <input class="form-check-input" type="checkbox" name="registration_status_partial" id="registration_status_partial" disabled {{ optional($coop->gaRegistration)->registration_status == 'Partial Registered' ? 'checked' : '' }}>
-                                                      <label class="form-check-label" for="registration_status_partial">Partial Registered</label>
+                                                        <input class="form-check-input" type="checkbox"
+                                                            name="registration_status_partial"
+                                                            id="registration_status_partial" disabled
+                                                            {{ optional($coop->gaRegistration)->registration_status == 'Partial Registered' ? 'checked' : '' }}>
+                                                        <label class="form-check-label"
+                                                            for="registration_status_partial">Partial
+                                                            Registered</label>
                                                     </div>
 
                                                     <h6 class="mt-3 text-secondary">Membership Status:</h6>
                                                     <div class="form-check">
-                                                      <input class="form-check-input" type="checkbox" name="membership_status" id="membership_status" disabled {{ optional($coop->gaRegistration)->membership_status == 'Migs' ? 'checked' : '' }}>
-                                                      <label class="form-check-label" for="membership_status">Migs</label>
+                                                        <input class="form-check-input" type="checkbox"
+                                                            name="membership_status" id="membership_status" disabled
+                                                            {{ optional($coop->gaRegistration)->membership_status == 'Migs' ? 'checked' : '' }}>
+                                                        <label class="form-check-label text-uppercase"
+                                                            for="membership_status">Migs</label>
                                                     </div>
                                                     <div class="form-check">
-                                                      <input class="form-check-input" type="checkbox" name="membership_status_non_migs" id="membership_status_non_migs" disabled {{ optional($coop->gaRegistration)->membership_status == 'Non-migs' ? 'checked' : '' }}>
-                                                      <label class="form-check-label" for="membership_status_non_migs">Non-migs</label>
+                                                        <input class="form-check-input" type="checkbox"
+                                                            name="membership_status_non_migs"
+                                                            id="membership_status_non_migs" disabled
+                                                            {{ optional($coop->gaRegistration)->membership_status == 'Non-migs' ? 'checked' : '' }}>
+                                                        <label class="form-check-label text-uppercase"
+                                                            for="membership_status_non_migs">Non-migs</label>
                                                     </div>
+
                                                 </div>
                                             </div>
 
@@ -511,24 +542,34 @@
                                                     <div class="form-group">
                                                         <label for="fs_status">FS (YES/NO)</label>
                                                         <select class="form-control" id="fs_status" disabled>
-                                                            <option value="yes" {{ $hasFinancialStatement == true ? 'selected' : '' }}>Yes</option>
-                                                            <option value="no" {{ $hasFinancialStatement == false ? 'selected' : '' }}>No</option>
+                                                            <option value="yes"
+                                                                {{ $hasFinancialStatement == true ? 'selected' : '' }}>
+                                                                Yes</option>
+                                                            <option value="no"
+                                                                {{ $hasFinancialStatement == false ? 'selected' : '' }}>
+                                                                No</option>
                                                         </select>
                                                         <!-- Hidden input to store value -->
-                                                        <input type="hidden" name="fs_status" value="{{ $hasFinancialStatement ? 'yes' : 'no' }}">
+                                                        <input type="hidden" name="fs_status"
+                                                            value="{{ $hasFinancialStatement ? 'yes' : 'no' }}">
                                                     </div>
 
 
                                                     <div class="form-group">
                                                         <label for="delinquent">Delinquent</label>
                                                         <select class="form-control" id="delinquent_display" disabled>
-                                                            <option value="yes" {{ ($coop->total_overdue > 0) ? 'selected' : '' }}>Delinquent</option>
-                                                            <option value="no" {{ ($coop->total_overdue <= 0) ? 'selected' : '' }}>Non-Delinquent</option>
+                                                            <option value="yes"
+                                                                {{ $coop->total_overdue > 0 ? 'selected' : '' }}>
+                                                                Delinquent</option>
+                                                            <option value="no"
+                                                                {{ $coop->total_overdue <= 0 ? 'selected' : '' }}>
+                                                                Non-Delinquent</option>
                                                         </select>
                                                     </div>
 
                                                     <!-- Hidden input for storing the actual delinquent value -->
-                                                    <input type="hidden" name="delinquent" id="delinquent" value="{{ $coop->total_overdue > 0 ? 'yes' : 'no' }}">
+                                                    <input type="hidden" name="delinquent" id="delinquent"
+                                                        value="{{ $coop->total_overdue > 0 ? 'yes' : 'no' }}">
 
                                                     <div class="form-group">
                                                         <label for="total_asset">Total Assets</label>
@@ -539,8 +580,9 @@
 
                                                     <div class="form-group">
                                                         <label for="net_surplus">Net Surplus</label>
-                                                        <input type="number" class="form-control" name="net_surplus" id="net_surplus"
-                                                               value="{{ $coop->net_surplus }}" placeholder="Enter Net Surplus" step="0.01">
+                                                        <input type="number" class="form-control" name="net_surplus"
+                                                            id="net_surplus" value="{{ $coop->net_surplus }}"
+                                                            placeholder="Enter Net Surplus" step="0.01">
                                                     </div>
 
 
@@ -635,10 +677,9 @@
                                                     <div class="form-group">
                                                         <label for="registration_fee">Registration Fee</label>
                                                         <input type="number" class="form-control"
-                                                               name="registration_fee" id="registration_fee"
-                                                               value="4500"
-                                                               placeholder="Enter Registration Fee"
-                                                               readonly>
+                                                            name="registration_fee" id="registration_fee"
+                                                            value="4500" placeholder="Enter Registration Fee"
+                                                            readonly>
                                                     </div>
 
 
@@ -699,7 +740,6 @@
                                                         </div>
                                                     </div>
 
-
                                                     <div class="form-group">
                                                         <label for="net_required_regfee">Net Required RegFee</label>
                                                         <input type="number" class="form-control"
@@ -713,7 +753,8 @@
                                                         <input type="number" class="form-control"
                                                             name="less_prereg_payment" id="less_prereg_payment"
                                                             value="{{ $coop->less_prereg_payment }}"
-                                                            placeholder="Enter PreReg Payment Deduction" step="0.01">
+                                                            placeholder="Enter PreReg Payment Deduction"
+                                                            step="0.01">
                                                     </div>
 
                                                     <div class="form-group">
@@ -732,7 +773,6 @@
                                                             placeholder="Enter GA RegFee Payable" readonly>
                                                     </div>
 
-
                                                     <div class="form-group">
                                                         <label for="ga_remark">GA Remark</label>
                                                         <input type="text" class="form-control" name="ga_remark"
@@ -741,11 +781,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
-
-
-
-
                                         </div>
                                     </div>
 
@@ -788,7 +823,8 @@
                                     <small class="form-text text-muted">You can upload a new file or keep the existing
                                         one.</small>
                                 @endif
-                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (no file size limit).</small>
+                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (no file size
+                                    limit).</small>
 
                             </div>
 
@@ -805,7 +841,8 @@
                                     <small class="form-text text-muted">You can upload a new file or keep the existing
                                         one.</small>
                                 @endif
-                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (no file size limit).</small>
+                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (no file size
+                                    limit).</small>
 
                             </div>
                         </div>
@@ -824,7 +861,8 @@
                                     <small class="form-text text-muted">You can upload a new file or keep the existing
                                         one.</small>
                                 @endif
-                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (no file size limit).</small>
+                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (no file size
+                                    limit).</small>
 
                             </div>
 
@@ -841,7 +879,8 @@
                                     <small class="form-text text-muted">You can upload a new file or keep the existing
                                         one.</small>
                                 @endif
-                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (no file size limit).</small>
+                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (no file size
+                                    limit).</small>
 
                             </div>
                         </div>
@@ -859,7 +898,8 @@
                                     <small class="form-text text-muted">You can upload a new file or keep the existing
                                         one.</small>
                                 @endif
-                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (no file size limit).</small>
+                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (no file size
+                                    limit).</small>
 
                             </div>
 
@@ -876,7 +916,8 @@
                                     <small class="form-text text-muted">You can upload a new file or keep the existing
                                         one.</small>
                                 @endif
-                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (no file size limit).</small>
+                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (no file size
+                                    limit).</small>
 
                             </div>
                         </div>
@@ -895,7 +936,8 @@
                                     <small class="form-text text-muted">You can upload a new file or keep the existing
                                         one.</small>
                                 @endif
-                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (no file size limit).</small>
+                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (no file size
+                                    limit).</small>
 
                             </div>
                         </div>
@@ -920,14 +962,14 @@
 
     </div>
     @if ($errors->any())
-    <script>
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: '@foreach ($errors->all() as $error){{ $error }}@endforeach',
-        });
-    </script>
-@endif
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: '@foreach ($errors->all() as $error){{ $error }}@endforeach',
+            });
+        </script>
+    @endif
     @if (session('form1_success'))
         <script>
             Swal.fire({
@@ -939,20 +981,19 @@
         </script>
     @endif
     <script>
-        document.getElementById('total_overdue').addEventListener('input', function () {
-    const totalOverdue = parseFloat(this.value) || 0;
-    const delinquentSelect = document.getElementById('delinquent_display');
-    const delinquentInput = document.getElementById('delinquent');
+        document.getElementById('total_overdue').addEventListener('input', function() {
+            const totalOverdue = parseFloat(this.value) || 0;
+            const delinquentSelect = document.getElementById('delinquent_display');
+            const delinquentInput = document.getElementById('delinquent');
 
-    if (totalOverdue > 0) {
-        delinquentSelect.value = 'yes';
-        delinquentInput.value = 'yes';
-    } else {
-        delinquentSelect.value = 'no';
-        delinquentInput.value = 'no';
-    }
-});
-
+            if (totalOverdue > 0) {
+                delinquentSelect.value = 'yes';
+                delinquentInput.value = 'yes';
+            } else {
+                delinquentSelect.value = 'no';
+                delinquentInput.value = 'no';
+            }
+        });
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -1033,31 +1074,29 @@
                 // Total Registration Fee: (ALL participants counted, NO DEDUCTIONS)
                 let totalRegFee = numParticipants * regFee;
 
-                // Free participants logic (affects only Net Required Fee)
-                let freeParticipants = 0;
+                // Calculate Free Amounts
+                let freeAmount = 0;
                 if (document.getElementById('free_2pax_migs').checked) {
-                    freeParticipants += 2;
+                    freeAmount += 9000;
                 }
                 if (document.getElementById('free_migs_pax').checked) {
-                    freeParticipants += 1;
+                    freeAmount += 4500;
                 }
                 if (document.getElementById('free_100k_cetf').checked) {
-                    freeParticipants += 1;
+                    freeAmount += 4500;
                 }
 
-                // Paid participants (only for Net Required Fee)
-                let paidParticipants = Math.max(numParticipants - freeParticipants, 0);
+                if (document.getElementById('half_based_cetf').checked) {
+                    freeAmount += 2250;
+                }
 
-                // Net Required Registration Fee: Only Free Pax deduction applied
-                let netRequiredRegFee = Math.max(0, paidParticipants * regFee);
+                // Net Required Registration Fee
+                let netRequiredRegFee = (numParticipants * regFee) - freeAmount;
 
                 // Apply 50% discount on ONE participant if half_based_cetf is checked
-                if (document.getElementById('half_based_cetf').checked && paidParticipants > 0) {
-                    netRequiredRegFee -= regFee * 0.5;
-                }
-
-                // Ensure Net Required Fee doesn't go negative
-                netRequiredRegFee = Math.max(0, netRequiredRegFee);
+                // if (document.getElementById('half_based_cetf').checked && numParticipants > 0) {
+                //     netRequiredRegFee -= 2250; // Half of ₱4,500
+                // }
 
                 // GA RegFee Payable: Apply Prereg Payment & CETF Utilization here
                 let regFeePayable = netRequiredRegFee - (preregPayment + cetfBalance);
@@ -1069,7 +1108,8 @@
             }
 
             // Attach event listeners
-            let fields = ['registration_fee', 'num_participants', 'less_prereg_payment', 'less_cetf_balance',
+            let fields = [
+                'registration_fee', 'num_participants', 'less_prereg_payment', 'less_cetf_balance',
                 'free_2pax_migs', 'free_migs_pax', 'free_100k_cetf', 'half_based_cetf'
             ];
 

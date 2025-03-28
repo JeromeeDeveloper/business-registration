@@ -359,16 +359,26 @@
 
 
                                                 <a href="{{ route('admin.reports.coop_registration_summary') }}"
-                                                class="list-group-item list-group-item-action py-3 fw-semibold"
-                                                data-report-type="coop_registration">
-                                                <i class="fas fa-building me-2"></i> Coop Registration Summary with Breakdown
-                                            </a>
+                                                    class="list-group-item list-group-item-action py-3 fw-semibold"
+                                                    data-report-type="coop_registration">
+                                                    <i class="fas fa-building me-2"></i> Coop Registration Summary with
+                                                    Breakdown
+                                                </a>
 
-                                            <a href="{{ route('admin.reports.coop_status_list') }}"
-                                            class="list-group-item list-group-item-action py-3 fw-semibold"
-                                            data-report-type="coop_status">
-                                            <i class="fas fa-clipboard-list me-2"></i> List of Coop Registration Status
-                                        </a>
+                                                <a href="{{ route('admin.reports.coop_status_list') }}"
+                                                    class="list-group-item list-group-item-action py-3 fw-semibold"
+                                                    data-report-type="coop_status">
+                                                    <i class="fas fa-clipboard-list me-2"></i> List of Coop
+                                                    Registration Status
+                                                </a>
+
+
+                                                <a href="{{ route('admin.reports.participants_list') }}"
+                                                    class="list-group-item list-group-item-action py-3 fw-semibold"
+                                                    data-report-type="participants_list">
+                                                    <i class="fas fa-users me-2"></i> List of Voting Delegates
+                                                </a>
+
 
                                             </div>
 
@@ -672,7 +682,8 @@
                                                         </div>
                                                     </div>
                                                     <div>
-                                                        <p class="card-category mb-1 text-muted">Attended MIGS COOPS</p>
+                                                        <p class="card-category mb-1 text-muted">Attended MIGS COOPS
+                                                        </p>
                                                         <h4 class="card-title mb-0 text-dark">
                                                             {{ number_format($totalMigsAttended) }}</h4>
                                                     </div>
@@ -692,7 +703,8 @@
                                                         </div>
                                                     </div>
                                                     <div>
-                                                        <p class="card-category mb-1 text-muted">Attended NON-MIGS COOPS</p>
+                                                        <p class="card-category mb-1 text-muted">Attended NON-MIGS
+                                                            COOPS</p>
                                                         <h4 class="card-title mb-0 text-dark">
                                                             {{ number_format($totalNonMigsAttended) }}</h4>
                                                     </div>
@@ -1157,6 +1169,14 @@
             iframe.focus();
             iframe.print();
         }
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            setInterval(() => {
+                location.reload();
+            }, 180000);
+        });
     </script>
 
 </body>

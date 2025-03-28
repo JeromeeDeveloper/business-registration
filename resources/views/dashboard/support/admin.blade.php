@@ -372,6 +372,12 @@
                                             <i class="fas fa-clipboard-list me-2"></i> List of Coop Registration Status
                                         </a>
 
+                                        <a href="{{ route('admin.reports.participants_list') }}"
+                                        class="list-group-item list-group-item-action py-3 fw-semibold"
+                                        data-report-type="participants_list">
+                                        <i class="fas fa-users me-2"></i> List of Voting Delegates
+                                    </a>
+
                                             </div>
 
                                             <hr class="my-4">

@@ -477,7 +477,7 @@
 
                                                             <div class="form-group">
                                                                 <label for="delinquent">Delinquent</label>
-                                                                <select class="form-control" name="delinquent" id="delinquent" required>
+                                                                <select class="form-control" name="delinquent" id="delinquent">
                                                                     <option value="">Select Status</option>
                                                                     <option value="yes">Delinquent</option>
                                                                     <option value="no" selected>Non-Delinquent</option> <!-- Set default value to "No" -->
@@ -640,238 +640,168 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    @if ($errors->any())
-    <script>
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: '@foreach ($errors->all() as $error){{ $error }}@endforeach',
-        });
-    </script>
+@if ($errors->any())
+<script>
+    console.error('Validation Errors:', @json($errors->all()));
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: '@foreach ($errors->all() as $error){{ $error }}@endforeach',
+    });
+</script>
 @endif
+
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+        console.log("DOM Loaded - Initializing CETF Calculation");
+
         let cetfRequired = document.getElementById('cetf_required');
         let totalRemittance = document.getElementById('total_remittance');
         let cetfBalance = document.getElementById('cetf_balance');
 
         function updateCetfBalance() {
-            let required = parseFloat(cetfRequired.value) || 0;
-            let remitted = parseFloat(totalRemittance.value) || 0;
+            let required = parseFloat(cetfRequired?.value) || 0;
+            let remitted = parseFloat(totalRemittance?.value) || 0;
             let balance = (required - remitted).toFixed(2);
-
             cetfBalance.value = balance;
+
+            console.log(`CETF Update: Required = ${required}, Remitted = ${remitted}, Balance = ${balance}`);
         }
 
-        cetfRequired.addEventListener('input', updateCetfBalance);
-        totalRemittance.addEventListener('input', updateCetfBalance);
-        updateCetfBalance(); // Initialize on page load
+        cetfRequired?.addEventListener('input', updateCetfBalance);
+        totalRemittance?.addEventListener('input', updateCetfBalance);
+        updateCetfBalance();
     });
 </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            function updateRegFeePayable() {
-                let netRequired = parseFloat(document.getElementById('net_required_reg_fee').value) || 0;
-                let lessPreReg = parseFloat(document.getElementById('less_prereg_payment').value) || 0;
-                let lessCetf = parseFloat(document.getElementById('less_cetf_balance').value) || 0;
 
-                let regFeePayable = netRequired - (lessPreReg + lessCetf);
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        console.log("DOM Loaded - Initializing Registration Fee Calculation");
 
-                document.getElementById('reg_fee_payable').value = regFeePayable.toFixed(2);
-            }
+        function updateRegFeePayable() {
+            let netRequired = parseFloat(document.getElementById('net_required_reg_fee')?.value) || 0;
+            let lessPreReg = parseFloat(document.getElementById('less_prereg_payment')?.value) || 0;
+            let lessCetf = parseFloat(document.getElementById('less_cetf_balance')?.value) || 0;
 
-            document.getElementById('net_required_reg_fee').addEventListener('input', updateRegFeePayable);
-            document.getElementById('less_prereg_payment').addEventListener('input', updateRegFeePayable);
-            document.getElementById('less_cetf_balance').addEventListener('input', updateRegFeePayable);
-        });
-    </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            let cetfRemittance = document.getElementById('cetf_remittance');
-            let additionalCetf = document.getElementById('additional_cetf');
-            let cetfUndertaking = document.getElementById('cetf_undertaking');
-            let totalRemittance = document.getElementById('total_remittance');
-            let totalRemittanceHidden = document.getElementById('total_remittance_hidden'); // Hidden field
-            let fullCetfRemitted = document.getElementById('full_cetf_remitted');
+            let regFeePayable = netRequired - (lessPreReg + lessCetf);
+            document.getElementById('reg_fee_payable').value = regFeePayable.toFixed(2);
 
-            let cetfDueToApexInput = document.getElementById('cetf_due_to_apex');
-            let cetfRequiredInput = document.getElementById('cetf_required'); // Displayed input
-            let cetfRequiredHidden = document.getElementById('cetf_required_hidden'); // Hidden field
-
-            function updateCetfRequired() {
-                let dueToApex = parseFloat(cetfDueToApexInput.value) || 0;
-                let cetfRequired = (dueToApex * 0.30).toFixed(2);
-
-                cetfRequiredInput.value = cetfRequired;
-                cetfRequiredHidden.value = cetfRequired;
-
-                updateFullCetfRemitted();
-            }
-
-            function updateTotalRemittance() {
-                let cetf = parseFloat(cetfRemittance.value) || 0;
-                let additional = parseFloat(additionalCetf.value) || 0;
-                let undertaking = parseFloat(cetfUndertaking.value) || 0;
-
-                let total = (cetf + additional + undertaking).toFixed(2);
-                totalRemittance.value = total; // Update readonly input
-                totalRemittanceHidden.value = total; // Store in hidden field
-
-                updateFullCetfRemitted();
-            }
-
-            function updateFullCetfRemitted() {
-                let total = parseFloat(totalRemittance.value) || 0;
-                let required = parseFloat(cetfRequiredHidden.value) || 0;
-
-                if (total === required) {
-                    fullCetfRemitted.value = "yes";
-                } else {
-                    fullCetfRemitted.value = "no";
-                }
-            }
-
-            // Attach event listeners to input fields
-            [cetfRemittance, additionalCetf, cetfUndertaking].forEach(input => {
-                input.addEventListener('input', updateTotalRemittance);
-            });
-
-            cetfDueToApexInput.addEventListener('input', updateCetfRequired);
-
-            // Initialize values on page load
-            updateCetfRequired();
-            updateTotalRemittance();
-        });
-    </script>
-
-    <script>
-        // Function to calculate the number of entitled votes
-        function calculateVotes() {
-            var shareCapital = parseFloat(document.getElementById('share_capital_balance').value);
-            var votes = 0;
-            var remaining = shareCapital;
-
-            if (isNaN(shareCapital) || shareCapital <= 0) {
-                document.getElementById('no_of_entitled_votes').value = 0;
-                return;
-            }
-
-            // Calculate based on ₱100,000 blocks
-            if (remaining >= 100000) {
-                votes += Math.floor(remaining / 100000); // Every ₱100,000 gives 1 vote
-            }
-
-            remaining = remaining % 100000; // Remaining after full ₱100,000 blocks
-
-            while (remaining >= 25000) {
-                if (remaining >= 75000) {
-                    votes += 3; // ₱75,000 → +3 votes
-                    remaining -= 75000;
-                } else if (remaining >= 50000) {
-                    votes += 2; // ₱50,000 → +2 votes
-                    remaining -= 50000;
-                } else if (remaining >= 25000) {
-                    votes += 1; // ₱25,000 → +1 vote
-                    remaining -= 25000;
-                }
-            }
-
-            // Max votes = 5
-            var noOfVotes = Math.min(votes, 5);
-            document.getElementById('no_of_entitled_votes').value = noOfVotes;
+            console.log(`Registration Fee Calculation: Net = ${netRequired}, PreReg = ${lessPreReg}, CETF = ${lessCetf}, Payable = ${regFeePayable}`);
         }
 
-        // Add event listener for share capital balance input change
-        document.getElementById('share_capital_balance').addEventListener('input', calculateVotes);
-    </script>
-
-    <script>
-        document.querySelectorAll('.format-number').forEach(input => {
-            input.addEventListener('input', function(event) {
-                let value = event.target.value.replace(/,/g, ""); // Remove existing commas
-                if (!isNaN(value) && value !== "") {
-                    event.target.value = parseFloat(value).toLocaleString("en-US", {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
-                    });
-                }
-            });
+        ['net_required_reg_fee', 'less_prereg_payment', 'less_cetf_balance'].forEach(id => {
+            document.getElementById(id)?.addEventListener('input', updateRegFeePayable);
         });
-    </script>
-    <!-- Include Bootstrap (if not already included) -->
-    {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
-    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> --}}
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const dropdownButton = document.getElementById("servicesDropdown");
-            const dropdownMenu = document.getElementById("dropdownMenu");
-            const checkboxes = dropdownMenu.querySelectorAll('input[type="checkbox"]');
+    });
+</script>
 
-            // Toggle dropdown manually
-            dropdownButton.addEventListener("click", function(event) {
-                event.stopPropagation(); // Prevents event from bubbling
-                dropdownMenu.classList.toggle("show");
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        console.log("DOM Loaded - CETF Remittance Calculation Started");
+
+        let cetfRemittance = document.getElementById('cetf_remittance');
+        let additionalCetf = document.getElementById('additional_cetf');
+        let cetfUndertaking = document.getElementById('cetf_undertaking');
+        let totalRemittance = document.getElementById('total_remittance');
+        let totalRemittanceHidden = document.getElementById('total_remittance_hidden');
+        let fullCetfRemitted = document.getElementById('full_cetf_remitted');
+
+        let cetfDueToApexInput = document.getElementById('cetf_due_to_apex');
+        let cetfRequiredInput = document.getElementById('cetf_required');
+        let cetfRequiredHidden = document.getElementById('cetf_required_hidden');
+
+        function updateCetfRequired() {
+            let dueToApex = parseFloat(cetfDueToApexInput?.value) || 0;
+            let cetfRequired = (dueToApex * 0.30).toFixed(2);
+
+            if (cetfRequiredInput) cetfRequiredInput.value = cetfRequired;
+            if (cetfRequiredHidden) cetfRequiredHidden.value = cetfRequired;
+
+            console.log(`Updated CETF Required: Due to Apex = ${dueToApex}, Required = ${cetfRequired}`);
+            updateFullCetfRemitted();
+        }
+
+        function updateTotalRemittance() {
+            let cetf = parseFloat(cetfRemittance?.value) || 0;
+            let additional = parseFloat(additionalCetf?.value) || 0;
+            let undertaking = parseFloat(cetfUndertaking?.value) || 0;
+            let total = (cetf + additional + undertaking).toFixed(2);
+
+            if (totalRemittance) totalRemittance.value = total;
+            if (totalRemittanceHidden) totalRemittanceHidden.value = total;
+
+            console.log(`Updated Total Remittance: CETF = ${cetf}, Additional = ${additional}, Undertaking = ${undertaking}, Total = ${total}`);
+            updateFullCetfRemitted();
+        }
+
+        function updateFullCetfRemitted() {
+            let total = parseFloat(totalRemittance?.value) || 0;
+            let required = parseFloat(cetfRequiredHidden?.value) || 0;
+
+            fullCetfRemitted.value = total === required ? "yes" : "no";
+            console.log(`Full CETF Remitted: ${fullCetfRemitted.value} (Total = ${total}, Required = ${required})`);
+        }
+
+        [cetfRemittance, additionalCetf, cetfUndertaking].forEach(input => input?.addEventListener('input', updateTotalRemittance));
+        cetfDueToApexInput?.addEventListener('input', updateCetfRequired);
+
+        updateCetfRequired();
+        updateTotalRemittance();
+    });
+</script>
+
+<script>
+  document.getElementById('coopForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    let formData = new FormData(this);
+
+    fetch("{{ route('admin.storeCooperative') }}", {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(err => {
+                throw new Error(err.message || 'An error occurred');
             });
-
-            // Close dropdown if clicked outside
-            document.addEventListener("click", function(event) {
-                if (!dropdownMenu.contains(event.target) && event.target !== dropdownButton) {
-                    dropdownMenu.classList.remove("show");
-                }
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            Swal.fire({
+                title: 'Success!',
+                text: data.success,
+                icon: 'success',
+                confirmButtonText: 'Okay'
             });
+            document.getElementById('coopForm').reset();
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
 
-            // Update button text when checkboxes are selected
-            checkboxes.forEach(checkbox => {
-                checkbox.addEventListener("change", function() {
-                    let selected = Array.from(checkboxes)
-                        .filter(i => i.checked)
-                        .map(i => i.value)
-                        .join(", ");
+        let errorMessage = error.message;
 
-                    dropdownButton.textContent = selected || "Select Services";
-                });
-            });
+        if (errorMessage.includes('Duplicate entry')) {
+            errorMessage = 'The email address is already registered. Please use a different email.';
+        }
+
+        Swal.fire({
+            title: 'Error!',
+            text: errorMessage,
+            icon: 'error',
+            confirmButtonText: 'Try Again'
         });
-    </script>
-    <script>
-        // Handle the form submission using AJAX
-        document.getElementById('coopForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // Prevent the default form submission
+    });
+});
 
-            let formData = new FormData(this);
 
-            // Send AJAX request to submit the form
-            fetch("{{ route('admin.storeCooperative') }}", {
-                    method: 'POST',
-                    body: formData,
-                })
-                .then(response => response.json())
-                .then(data => {
-                    // Check if the response contains a success message
-                    if (data.success) {
-                        // Display the success message using SweetAlert
-                        Swal.fire({
-                            title: 'Success!',
-                            text: data.success,
-                            icon: 'success',
-                            confirmButtonText: 'Okay'
-                        });
+</script>
 
-                        // Optionally, you can reset the form here
-                        document.getElementById('coopForm').reset();
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    Swal.fire({
-                        title: 'Error!',
-                        text: 'An error occurred while submitting the form.',
-                        icon: 'error',
-                        confirmButtonText: 'Try Again'
-                    });
-                });
-        });
-    </script>
     @include('layouts.links')
 </body>
 

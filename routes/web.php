@@ -81,6 +81,17 @@ Route::middleware([AdminOrSupportMiddleware::class])->group(function () {
 
     Route::get('/Support/Attendance', [SupportAttendanceController::class, 'supportattendance'])->name('support.attendance.index');
     Route::get('/Support/Attendance/{participant_id}', [SupportAttendanceController::class, 'supportshowattendance'])->name('support.attendance.show');
+
+    Route::get('/cooperative/print', [ReportsController::class, 'printcoop'])->name('cooperative.print');
+
+    Route::post('/generate-pdf', [ReportsController::class, 'generatePDF'])->name('generate.pdf');
+
+    Route::get('/admin/reports/participants-list', [ReportsController::class, 'participantsList'])->name('admin.reports.participants_list');
+
+    // In your web.php (routes file)
+// Route::get('/get-participant-count/{coop_id}', [YourController::class, 'getParticipantCount']);
+
+
 });
 
 //store
@@ -93,6 +104,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
 //     (new UpdateCooperativeObserver)->updateAllCooperativesGARegistrationStatus();
 //     return response()->json(['message' => 'All cooperatives GA Registration status updated successfully.']);
 // });
+
 
 
     Route::get('/registration-overview-pdf', [ReportsController::class, 'showRegistrationOverview'])->name('registration.overview.pdf');
@@ -307,4 +319,6 @@ Route::middleware([SupportMiddleware::class])->group(function () {
     Route::put('/Support/Cooperatives/{coop_id}', [SupportController::class, 'update'])->name('support.cooperatives.update');
 
     Route::post('/Support/Cooperatives/Edit/{id}/Documents', [SupportController::class, 'storeDocuments3'])->name('cooperatives.storeDocuments3');
+
+    Route::post('/Support/cooperatives/{coop_id}/notify', [SupportController::class, 'sendNotificationsupport'])->name('support.cooperatives.notify');
 });

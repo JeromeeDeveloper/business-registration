@@ -20,16 +20,22 @@ class UpdateCooperativeObserver
         $this->updateGARegistrationStatus($cooperative->coop_id);
     }
 
+    public function created(Cooperative $cooperative): void
+    {
+        $this->updateGARegistrationStatus($cooperative->coop_id);
+    }
+
     /**
      * Handle the Participant "created" event.
      *
      * @param  \App\Models\Participant  $participant
      * @return void
      */
-    public function created(Participant $participant): void
-    {
-        $this->updateGARegistrationStatus($participant->coop_id);
-    }
+    // public function created(Cooperative $cooperative): void
+    // {
+    //     $this->updateGARegistrationStatus($cooperative->coop_id);
+    // }
+
 
     /**
      * Update the GA Registration status based on the cooperative and uploaded documents.

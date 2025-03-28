@@ -129,7 +129,6 @@
                         @endif
                     </td>
 
-
                     {{-- Document Status Columns --}}
                     @php
                         $documents = [

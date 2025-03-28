@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Models\Cooperative;
 use App\Models\Participant;
 use App\Models\GARegistration;
+use App\Models\UploadedDocument;
 
 class CooperativeObserver
 {
@@ -14,10 +15,11 @@ class CooperativeObserver
      * @param  \App\Models\Participant  $participant
      * @return void
      */
-    public function created(Participant $participant): void
-    {
-        $this->updateMembershipStatus($participant->coop_id);
-    }
+    public function created(Cooperative $cooperative): void
+{
+    $this->updateMembershipStatus($cooperative->coop_id);
+}
+
 
     /**
      * Handle the Cooperative "updated" event.
@@ -29,6 +31,7 @@ class CooperativeObserver
     {
         $this->updateMembershipStatus($cooperative->coop_id);
     }
+    
 
     /**
      * Update the membership status of the cooperative.
@@ -42,7 +45,7 @@ class CooperativeObserver
         if (!$cooperative) return;
 
         // Get or create the GA Registration record
-        $gaRegistration2 = GARegistration::firstOrCreate(
+        $gaRegistration = GARegistration::updateOrCreate(
             ['coop_id' => $cooperative_id],
             ['participant_id' => null]
         );
@@ -51,21 +54,37 @@ class CooperativeObserver
         $decodedServices = json_decode($cooperative->services_availed, true);
         $hasServicesAvailed = is_array($decodedServices) && count($decodedServices) > 0;
 
+        // Define the required documents
+        $requiredDocuments = [
+            'Financial Statement',
+            'Resolution for Voting delegates',
+        ];
+
+        // Count the approved documents
+        $approvedDocumentsCount = UploadedDocument::where('coop_id', $cooperative_id)
+            ->whereIn('document_type', $requiredDocuments)
+            ->where('status', 'Approved')
+            ->count();
+
+        // Check if all required documents are approved
+        $allDocumentsApproved = $approvedDocumentsCount === count($requiredDocuments);
+
         // Determine membership status based on conditions
         if (
             $cooperative->delinquent === 'no' &&
             $hasServicesAvailed &&
             $cooperative->share_capital_balance >= 25000 &&
             $cooperative->cetf_balance <= 0 &&
-            !is_null($cooperative->cetf_remittance)
+            !is_null($cooperative->cetf_remittance) &&
+            $allDocumentsApproved
         ) {
-            $gaRegistration2->membership_status = 'Migs';
+            $gaRegistration->membership_status = 'Migs';
         } else {
-            $gaRegistration2->membership_status = 'Non-migs';
+            $gaRegistration->membership_status = 'Non-migs';
         }
 
         // Save the updated GA Registration status
-        $gaRegistration2->save();
+        $gaRegistration->save();
     }
 
     /**

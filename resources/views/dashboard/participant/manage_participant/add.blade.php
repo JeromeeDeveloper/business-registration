@@ -179,6 +179,12 @@
                                 $userCoopId = $user->coop_id ?? null; // Get the logged-in user's cooperative ID
                             @endphp
 
+@if(!$canAddVoting)
+<div class="alert alert-warning mt-2">
+    You have reached the maximum allowed voting participants ({{ $votes }}). You cannot add more voting participants.
+</div>
+@endif
+
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="coop_id">Cooperative</label>
@@ -299,16 +305,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Congress Type -->
-                                {{-- <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="congress_type">Congress Type</label>
-                                        <input type="text" class="form-control @error('congress_type') is-invalid @enderror" name="congress_type" id="congress_type" placeholder="Enter Congress Type" value="{{ old('congress_type') }}" required/>
-                                        @error('congress_type')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div> --}}
 
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
@@ -333,16 +329,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Religious Affiliation -->
-                                {{-- <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="religious_affiliation">Religious Affiliation</label>
-                                        <input type="text" class="form-control @error('religious_affiliation') is-invalid @enderror" name="religious_affiliation" id="religious_affiliation" placeholder="Enter Religious Affiliation" value="{{ old('religious_affiliation') }}" required/>
-                                        @error('religious_affiliation')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div> --}}
+
 
                                 <!-- T-shirt Size -->
                                 <div class="col-md-6 col-lg-4">
@@ -400,15 +387,39 @@
                                         <label for="delegate_type">Delegate Type</label>
                                         <select class="form-control @error('delegate_type') is-invalid @enderror" name="delegate_type" id="delegate_type" required>
                                             <option value="" disabled selected>Select Delegate Type</option>
-                                            <option value="Voting" {{ old('delegate_type') == 'Voting' ? 'selected' : '' }}>Voting</option>
+                                            <option value="Voting" {{ !$canAddVoting ? 'disabled' : '' }} {{ old('delegate_type') == 'Voting' ? 'selected' : '' }}>Voting</option>
                                             <option value="Non-Voting" {{ old('delegate_type') == 'Non-Voting' ? 'selected' : '' }}>Non-Voting</option>
                                         </select>
                                         @error('delegate_type')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
-
                                 </div>
+
+
+
+                                <!-- Modal for Limit Reached -->
+                                <div class="modal fade" id="limitReachedModal" tabindex="-1" aria-labelledby="limitReachedModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="limitReachedModalLabel">Voting Eligibility</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body" id="modalMessage">
+                                                <!-- Message updates dynamically -->
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Understood</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                    <input type="hidden" id="share_capital" value="{{ $shareCapital ?? 0 }}">
+
                                 <div class="card-action">
                                     <button type="submit" class="btn btn-label-info btn-round">Submit</button>
                                     <button type="button" class="btn btn-primary btn-round" onclick="window.location.href='{{ route('coop.index') }}'">Back</button>
@@ -420,6 +431,33 @@
                     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
                     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
+                    <script>
+                        document.getElementById('delegate_type').addEventListener('change', function () {
+                            const selectedValue = this.value;
+                            const canAddVoting = {{ $canAddVoting ? 'true' : 'false' }};
+                            const votes = {{ $votes }};
+                            const remainingVotes = Math.max(5 - votes, 0);
+
+                            if (selectedValue === 'Voting' && !canAddVoting) {
+                                document.getElementById('modalMessage').innerHTML = `
+                                    You have reached the maximum limit of voting participants (<strong>${votes}</strong>).
+                                    No additional voting delegates can be added. Please select 'Non-Voting' or contact support if needed.
+                                `;
+                                const modal = new bootstrap.Modal(document.getElementById('limitReachedModal'));
+                                modal.show();
+                                this.value = ''; // Reset selection
+                            } else if (selectedValue === 'Voting') {
+                                const message = votes === 5
+                                    ? `You have reached the maximum of <strong>5 voting privileges</strong>. No additional votes can be added.`
+                                    : `You currently have <strong>${votes} voting privilege${votes > 1 ? 's' : ''}</strong>.
+                                       You can add up to <strong>${remainingVotes} more vote${remainingVotes > 1 ? 's' : ''}</strong> if eligible.`;
+
+                                document.getElementById('modalMessage').innerHTML = message;
+                                const modal = new bootstrap.Modal(document.getElementById('limitReachedModal'));
+                                modal.show();
+                            }
+                        });
+                        </script>
                     <script>
                         $(document).ready(function() {
                             $('#event_ids').select2({

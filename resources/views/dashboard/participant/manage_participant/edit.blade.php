@@ -180,6 +180,18 @@
                                 $userCoopId = $user->coop_id ?? null; // Get the logged-in user's cooperative ID
                             @endphp
 
+    @if(!$canAddVoting && $participant->delegate_type !== 'Voting')
+                                <div class="alert alert-warning mt-2">
+                                    The maximum number of Voting delegates ({{ $votes }}) has been reached.
+                                    You cannot change this participant to Voting status.
+                                </div>
+                                @elseif($participant->delegate_type === 'Voting')
+                                <div class="alert alert-info mt-2">
+                                    This participant is currently a Voting delegate. Total votes allowed: {{ $votes }}.
+                                    You may change their delegate type if necessary.
+                                </div>
+                                @endif
+
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="coop_id">Cooperative</label>
@@ -363,12 +375,23 @@
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
                                         <label for="delegate_type">Delegate Type</label>
-                                        <select class="form-control" name="delegate_type">
-                                            <option value="Voting" {{ old('delegate_type', $participant->delegate_type) == 'Voting' ? 'selected' : '' }}>Voting</option>
-                                            <option value="Non-Voting" {{ old('delegate_type', $participant->delegate_type) == 'Non-Voting' ? 'selected' : '' }}>Non-Voting</option>
+                                        <select class="form-control" name="delegate_type" id="delegate_type">
+                                            <option value="Voting"
+                                                {{ old('delegate_type', $participant->delegate_type) == 'Voting' ? 'selected' : '' }}
+                                                {{ (!$canAddVoting && $participant->delegate_type !== 'Voting') ? 'disabled' : '' }}>
+                                                Voting
+                                            </option>
+                                            <option value="Non-Voting"
+                                                {{ old('delegate_type', $participant->delegate_type) == 'Non-Voting' ? 'selected' : '' }}>
+                                                Non-Voting
+                                            </option>
                                         </select>
                                     </div>
                                 </div>
+
+
+
+
 
                             </div>
                         </div>
@@ -426,7 +449,7 @@
                     <div class="floating-notice">
                         <button class="close-btn" onclick="closeNotice()">×</button>
                         <div class="notice-content">
-                            <p><strong>Notice:</strong> Please note the cut-off date for T-shirt size selection is <strong>May 10, 2025</strong>. Ensure you choose your T-shirt size before the deadline.</p>
+                            <p><strong>Notice:</strong> To ensure you get your preferred  t-shirt size, please <strong>register early!</strong> Sizes will be available on a first-come, first-served basis.</p>
                         </div>
                     </div>
 
