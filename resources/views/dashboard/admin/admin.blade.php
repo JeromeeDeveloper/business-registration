@@ -431,6 +431,7 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
+                                        <label for="regionSelect">Select Region:</label>
                                         <select id="regionSelect" class="form-select">
                                             <option value="">All Regions</option>
                                             <option value="Region I">Region I</option>
@@ -453,7 +454,22 @@
                                             <option value="ZBST">ZBST</option>
                                             <option value="LUZON">LUZON</option>
                                         </select>
+
+                                        <label for="migsStatusSelect">Select MIGS Status:</label>
+                                        <select id="migsStatusSelect" class="form-select">
+                                            <option value="">All</option>
+                                            <option value="Migs">MIGS</option>
+                                            <option value="Non-migs">Non-MIGS</option>
+                                        </select>
+
+                                        <label for="registrationStatusSelect">Select GA Registration Status:</label>
+                                        <select id="registrationStatusSelect" class="form-select">
+                                            <option value="">All</option>
+                                            <option value="Fully Registered">Fully Registered</option>
+                                            <option value="Partial Registered">Partial Registered</option>
+                                        </select>
                                     </div>
+
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                         <button type="button" id="applyRegionFilter" class="btn btn-primary">Generate Excel</button>
@@ -1197,20 +1213,26 @@
     </script>
 
 <script>
- document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () {
     const applyRegionFilter = document.getElementById("applyRegionFilter");
-    const regionSelect = document.getElementById("regionSelect");
 
     applyRegionFilter.addEventListener("click", function () {
-        let selectedRegion = regionSelect.value.trim(); // Get the selected region
+        let selectedRegion = document.getElementById("regionSelect").value.trim();
+        let migsStatus = document.getElementById("migsStatusSelect").value.trim();
+        let registrationStatus = document.getElementById("registrationStatusSelect").value.trim();
+
         let exportUrl = "{{ route('reports.export.filtered_coop_status') }}"; // Laravel route
 
-        // Redirect to the export URL with the selected region as a query parameter
-        window.location.href = exportUrl + "?region=" + encodeURIComponent(selectedRegion || "All");
+        let params = new URLSearchParams({
+            region: selectedRegion || "All",
+            migs_status: migsStatus || "All",
+            registration_status: registrationStatus || "All"
+        });
+
+        // Redirect to export URL with filters
+        window.location.href = exportUrl + "?" + params.toString();
     });
 });
-
-
 </script>
 
 

@@ -9,23 +9,37 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 class FilteredCoopStatusExport implements FromCollection, WithHeadings
 {
     protected $region;
+    protected $migsStatus;
+    protected $registrationStatus;
 
-    // Accepts selected region
-    public function __construct($region = null)
+    public function __construct($region = null, $migsStatus = null, $registrationStatus = null)
     {
         $this->region = $region;
+        $this->migsStatus = $migsStatus;
+        $this->registrationStatus = $registrationStatus;
     }
 
     public function collection()
     {
-        $query = Cooperative::with(['participants', 'uploadedDocuments', 'gaRegistration'])
-            ->whereHas('gaRegistration', function ($query) {
-                $query->whereIn('registration_status', ['Partial Registered', 'Fully Registered']);
-            });
+        $query = Cooperative::with(['participants', 'uploadedDocuments', 'gaRegistration']);
 
-        // Filter by selected region
+        // ✅ Apply **Region Filter**
         if ($this->region && $this->region !== 'All') {
             $query->where('region', $this->region);
+        }
+
+        // ✅ Apply **MIGS Status Filter**
+        if ($this->migsStatus && $this->migsStatus !== 'All') {
+            $query->whereHas('gaRegistration', function ($query) {
+                $query->where('membership_status', ucfirst(strtolower($this->migsStatus)));
+            });
+        }
+
+        // ✅ Apply **GA Registration Status Filter**
+        if ($this->registrationStatus && $this->registrationStatus !== 'All') {
+            $query->whereHas('gaRegistration', function ($query) {
+                $query->where('registration_status', $this->registrationStatus);
+            });
         }
 
         $cooperatives = $query->get();

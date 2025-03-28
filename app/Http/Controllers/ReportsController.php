@@ -135,9 +135,13 @@ class ReportsController extends Controller
 
 public function exportFilteredCoopStatus(Request $request)
 {
-    $region = $request->input('region'); // Get the selected region from request
-    return Excel::download(new FilteredCoopStatusExport($region), 'Filtered_Coop_Status_Report.xlsx');
+    $region = $request->input('region');
+    $migsStatus = $request->input('migs_status');
+    $registrationStatus = $request->input('registration_status');
+
+    return Excel::download(new FilteredCoopStatusExport($region, $migsStatus, $registrationStatus), 'Filtered_Coop_Status_Report.xlsx');
 }
+
 
     public function generatePDF(Request $request)
     {
