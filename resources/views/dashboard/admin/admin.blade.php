@@ -365,20 +365,22 @@
                                                     Breakdown
                                                 </a>
 
-                                                <a href="{{ route('admin.reports.coop_status_list') }}"
-                                                    class="list-group-item list-group-item-action py-3 fw-semibold"
-                                                    data-report-type="coop_status">
-                                                    <i class="fas fa-clipboard-list me-2"></i> List of Coop
-                                                    Registration Status
-                                                </a>
+                                                <div class="d-flex gap-3">
+                                                    <a href="{{ route('admin.reports.coop_status_list') }}" class="list-group-item list-group-item-action py-3 fw-semibold" data-report-type="coop_status">
+                                                        <i class="fas fa-clipboard-list me-2"></i> List of Coop Registration Status
+                                                    </a>
 
+                                                    <button type="button" class="list-group-item list-group-item-action py-3 fw-semibold" id="filterRegionBtn" data-bs-toggle="modal" data-bs-target="#regionFilterModal">
+                                                        <i class="fas fa-filter me-2"></i> Filter List of Coop Registration Status
+                                                    </button>
+
+                                                </div>
 
                                                 <a href="{{ route('admin.reports.participants_list') }}"
                                                     class="list-group-item list-group-item-action py-3 fw-semibold"
                                                     data-report-type="participants_list">
                                                     <i class="fas fa-users me-2"></i> List of Voting Delegates
                                                 </a>
-
 
                                             </div>
 
@@ -395,8 +397,6 @@
                                                 data-bs-dismiss="modal">
                                                 <i class="fas fa-times"></i> Close
                                             </button>
-
-
 
                                             <!-- Export Options -->
                                             <div class="dropdown">
@@ -423,6 +423,44 @@
 
                         </div>
 
+                        <div class="modal fade" id="regionFilterModal" tabindex="-1" aria-labelledby="regionFilterLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="regionFilterLabel">Select a Region</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <select id="regionSelect" class="form-select">
+                                            <option value="">All Regions</option>
+                                            <option value="Region I">Region I</option>
+                                            <option value="Region II">Region II</option>
+                                            <option value="Region III">Region III</option>
+                                            <option value="Region IV-A">Region IV-A</option>
+                                            <option value="Region IV-B">Region IV-B</option>
+                                            <option value="Region V">Region V</option>
+                                            <option value="Region VI">Region VI</option>
+                                            <option value="Region VII">Region VII</option>
+                                            <option value="Region VIII">Region VIII</option>
+                                            <option value="Region IX">Region IX</option>
+                                            <option value="Region X">Region X</option>
+                                            <option value="Region XI">Region XI</option>
+                                            <option value="Region XII">Region XII</option>
+                                            <option value="Region XIII">Region XIII</option>
+                                            <option value="NCR">NCR</option>
+                                            <option value="CAR">CAR</option>
+                                            <option value="BARMM">BARMM</option>
+                                            <option value="ZBST">ZBST</option>
+                                            <option value="LUZON">LUZON</option>
+                                        </select>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" id="applyRegionFilter" class="btn btn-primary">Generate Excel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
                     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-3 mb-4">
@@ -476,7 +514,6 @@
                             </div>
                         </div>
 
-
                         <!-- Registered Non-Migs Coops -->
                         <div class="col-md-2">
                             <div class="card card-stats card-round shadow-sm h-100">
@@ -528,9 +565,6 @@
                                 </div>
                             </div>
                         </div>
-
-
-
 
                         <div class="col-md-2">
                             <div class="card card-stats card-round shadow-sm h-100">
@@ -636,8 +670,6 @@
                         </div> --}}
 
                     </div>
-
-
 
                     <div class="row">
 
@@ -992,13 +1024,6 @@
 
 
     </div>
-    {{-- refresh every 2 minutes --}}
-    {{-- <script>
-        setTimeout(function() {
-          location.reload();
-        }, 120000);
-      </script> --}}
-
     <script>
         // Open the modal when the "Preview Overview" button is clicked
         document.getElementById("openModal").addEventListener("click", function() {
@@ -1018,7 +1043,7 @@
         });
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             var ctx = document.getElementById('registrationChart').getContext('2d');
@@ -1130,7 +1155,7 @@
             registrationChart.update();
         });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- Include SweetAlert -->
+
 
     @include('layouts.links')
     <!-- JavaScript -->
@@ -1170,6 +1195,24 @@
             iframe.print();
         }
     </script>
+
+<script>
+ document.addEventListener("DOMContentLoaded", function () {
+    const applyRegionFilter = document.getElementById("applyRegionFilter");
+    const regionSelect = document.getElementById("regionSelect");
+
+    applyRegionFilter.addEventListener("click", function () {
+        let selectedRegion = regionSelect.value.trim(); // Get the selected region
+        let exportUrl = "{{ route('reports.export.filtered_coop_status') }}"; // Laravel route
+
+        // Redirect to the export URL with the selected region as a query parameter
+        window.location.href = exportUrl + "?region=" + encodeURIComponent(selectedRegion || "All");
+    });
+});
+
+
+</script>
+
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {

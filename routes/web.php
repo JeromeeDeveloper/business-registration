@@ -57,6 +57,10 @@ Route::post('/logout', function () {
 })->name('logout');
 
 Route::middleware([AdminOrSupportMiddleware::class])->group(function () {
+
+    Route::get('/reports/export-filtered-coop-status', [ReportsController::class, 'exportFilteredCoopStatus'])->name('reports.export.filtered_coop_status');
+
+
     Route::get('export-event-participants', [EventParticipantExportController::class, 'export'])->name('export-event-participants');
     Route::get('/admin/reports/export', [ReportsController::class, 'export'])->name('reports.export');
 

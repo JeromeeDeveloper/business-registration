@@ -21,6 +21,7 @@ use App\Exports\DocumentsStatusExport;
 use App\Exports\CoopRegistrationExport;
 use App\Exports\SummaryDelegatesExport;
 use App\Exports\CooperativeReportExport;
+use App\Exports\FilteredCoopStatusExport;
 
 
 class ReportsController extends Controller
@@ -132,7 +133,11 @@ class ReportsController extends Controller
     return view('dashboard.admin.reports.registration_form', compact('registrations', 'participants', 'registrationFees'));
 }
 
-
+public function exportFilteredCoopStatus(Request $request)
+{
+    $region = $request->input('region'); // Get the selected region from request
+    return Excel::download(new FilteredCoopStatusExport($region), 'Filtered_Coop_Status_Report.xlsx');
+}
 
     public function generatePDF(Request $request)
     {

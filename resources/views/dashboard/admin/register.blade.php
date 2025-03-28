@@ -640,6 +640,50 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const dropdownButton = document.getElementById("servicesDropdown");
+            const dropdownMenu = document.getElementById("dropdownMenu");
+            const checkboxes = dropdownMenu.querySelectorAll('input[type="checkbox"]');
+            const hiddenInput = document.getElementById("services_availed_json");
+
+
+            dropdownMenu.addEventListener("click", function(event) {
+                event.stopPropagation();
+            });
+
+            dropdownButton.addEventListener("click", function(event) {
+                event.stopPropagation();
+                dropdownMenu.classList.toggle("show");
+            });
+
+            document.addEventListener("click", function(event) {
+                if (!dropdownMenu.contains(event.target) && event.target !== dropdownButton) {
+                    dropdownMenu.classList.remove("show");
+                }
+            });
+
+            function updateDropdownText() {
+                let selected = Array.from(checkboxes)
+                    .filter(i => i.checked)
+                    .map(i => i.value)
+                    .join(", ");
+
+                dropdownButton.innerText = selected ? selected : "Select Services";
+                hiddenInput.value = JSON.stringify(selected.split(", ").filter(Boolean)); // Store as JSON
+            }
+
+            // Update on checkbox change
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener("change", updateDropdownText);
+            });
+
+            // Load preselected values
+            updateDropdownText();
+        });
+    </script>
+
+
 @if ($errors->any())
 <script>
     console.error('Validation Errors:', @json($errors->all()));
