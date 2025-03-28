@@ -366,11 +366,16 @@
                                                 <i class="fas fa-building me-2"></i> Coop Registration Summary with Breakdown
                                             </a>
 
-                                            <a href="{{ route('admin.reports.coop_status_list') }}"
-                                            class="list-group-item list-group-item-action py-3 fw-semibold"
-                                            data-report-type="coop_status">
-                                            <i class="fas fa-clipboard-list me-2"></i> List of Coop Registration Status
-                                        </a>
+                                            <div class="d-flex gap-3">
+                                                <a href="{{ route('admin.reports.coop_status_list') }}" class="list-group-item list-group-item-action py-3 fw-semibold" data-report-type="coop_status">
+                                                    <i class="fas fa-clipboard-list me-2"></i> List of Coop Registration Status
+                                                </a>
+
+                                                <button type="button" class="list-group-item list-group-item-action py-3 fw-semibold" id="filterRegionBtn" data-bs-toggle="modal" data-bs-target="#regionFilterModal">
+                                                    <i class="fas fa-filter me-2"></i> Filter List of Coop Registration Status
+                                                </button>
+
+                                            </div>
 
                                         <a href="{{ route('admin.reports.participants_list') }}"
                                         class="list-group-item list-group-item-action py-3 fw-semibold"
@@ -418,32 +423,94 @@
                                 </div>
                             </div>
 
+                        </div>
 
+                        <div class="modal fade" id="regionFilterModal" tabindex="-1" aria-labelledby="regionFilterLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg"> <!-- Increased size for better preview -->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="regionFilterLabel">Filter Cooperatives</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <label for="regionSelect">Select Region:</label>
+                                        <select id="regionSelect" class="form-select">
+                                            <option value="">All Regions</option>
+                                            <option value="Region I">Region I</option>
+                                            <option value="Region II">Region II</option>
+                                            <option value="Region III">Region III</option>
+                                            <option value="Region IV-A">Region IV-A</option>
+                                            <option value="Region IV-B">Region IV-B</option>
+                                            <option value="Region V">Region V</option>
+                                            <option value="Region VI">Region VI</option>
+                                            <option value="Region VII">Region VII</option>
+                                            <option value="Region VIII">Region VIII</option>
+                                            <option value="Region IX">Region IX</option>
+                                            <option value="Region X">Region X</option>
+                                            <option value="Region XI">Region XI</option>
+                                            <option value="Region XII">Region XII</option>
+                                            <option value="Region XIII">Region XIII</option>
+                                            <option value="NCR">NCR</option>
+                                            <option value="CAR">CAR</option>
+                                            <option value="BARMM">BARMM</option>
+                                            <option value="ZBST">ZBST</option>
+                                            <option value="LUZON">LUZON</option>
+                                        </select>
 
-                            <div class="modal fade" id="qrScannerModal" tabindex="-1"
-                                aria-labelledby="qrScannerModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="qrScannerModalLabel">Scan QR Code</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
+                                        <label for="migsStatusSelect">Select MIGS Status:</label>
+                                        <select id="migsStatusSelect" class="form-select">
+                                            <option value="">All</option>
+                                            <option value="Migs">MIGS</option>
+                                            <option value="Non-migs">Non-MIGS</option>
+                                        </select>
+
+                                        <label for="registrationStatusSelect">Select GA Registration Status:</label>
+                                        <select id="registrationStatusSelect" class="form-select">
+                                            <option value="">All</option>
+                                            <option value="Fully Registered">Fully Registered</option>
+                                            <option value="Partial Registered">Partial Registered</option>
+                                        </select>
+
+                                        <!-- Table to Preview Filtered Data -->
+                                        <h5 class="mt-3">Preview</h5>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Cooperative Name</th>
+                                                        <th>Coop ID</th>
+                                                        <th>Region</th>
+                                                        <th>No. of Participants</th>
+                                                        <th>GA Registration Status</th>
+                                                        <th>GA Membership Status</th>
+                                                        <th>Financial Statement</th>
+                                                        <th>Resolution for Voting Delegates</th>
+                                                        <th>Deposit Slip for Registration Fee</th>
+                                                        <th>Deposit Slip for CETF Remittance</th>
+                                                        <th>CETF Undertaking</th>
+                                                        <th>Certificate of Candidacy</th>
+                                                        <th>CETF Utilization Invoice</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="previewTableBody">
+                                                    <tr>
+                                                        <td colspan="13" class="text-center">No data available</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
                                         </div>
-                                        <div class="modal-body text-center">
-                                            <div id="qr-reader" style="width: 100%;"></div>
-                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" id="previewData" class="btn btn-info">Preview Data</button>
+                                        <button type="button" id="applyRegionFilter" class="btn btn-primary">Generate Excel</button>
                                     </div>
                                 </div>
                             </div>
-
-                            <input type="text" id="qr-input-field"
-                                style="position: absolute; opacity: 0; width: 1px; height: 1px;" />
-                            <div id="qr-display"></div>
-
                         </div>
-                        <div id="scanner-container" style="display:none;">
-                            <video id="preview" width="100%" height="auto"></video>
-                        </div>
+
 
                     </div>
                     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-3 mb-4">
@@ -1068,6 +1135,144 @@
             iframe.print();
         }
     </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const applyRegionFilter = document.getElementById("applyRegionFilter");
+
+        applyRegionFilter.addEventListener("click", function () {
+            let selectedRegion = document.getElementById("regionSelect").value.trim();
+            let migsStatus = document.getElementById("migsStatusSelect").value.trim();
+            let registrationStatus = document.getElementById("registrationStatusSelect").value.trim();
+
+            let exportUrl = "{{ route('reports.export.filtered_coop_status') }}"; // Laravel route
+
+            let params = new URLSearchParams({
+                region: selectedRegion || "All",
+                migs_status: migsStatus || "All",
+                registration_status: registrationStatus || "All"
+            });
+
+            // Redirect to export URL with filters
+            window.location.href = exportUrl + "?" + params.toString();
+        });
+    });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const previewDataBtn = document.getElementById("previewData");
+            const applyRegionFilter = document.getElementById("applyRegionFilter");
+            const previewTableBody = document.getElementById("previewTableBody");
+
+            previewDataBtn.addEventListener("click", function () {
+                let selectedRegion = document.getElementById("regionSelect").value.trim();
+                let migsStatus = document.getElementById("migsStatusSelect").value.trim();
+                let registrationStatus = document.getElementById("registrationStatusSelect").value.trim();
+
+                fetch("{{ route('reports.preview.filtered_coop_status') }}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    },
+                    body: JSON.stringify({
+                        region: selectedRegion || "All",
+                        migs_status: migsStatus || "All",
+                        registration_status: registrationStatus || "All"
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    previewTableBody.innerHTML = ""; // Clear previous data
+
+                    if (data.length === 0) {
+                        previewTableBody.innerHTML = `<tr><td colspan="13" class="text-center">No data found</td></tr>`;
+                        applyRegionFilter.disabled = true;
+                        return;
+                    }
+
+                    applyRegionFilter.disabled = false; // Enable Generate Excel button
+
+                    let registrationStatus = coop.registration_status === "Rejected" ? "Unregistered" : coop.registration_status;
+
+
+                    data.forEach(coop => {
+                        let row = `
+                            <tr>
+                                <td>${coop.name}</td>
+                                <td>${coop.coop_identification_no}</td>
+                                <td>${coop.region}</td>
+                                <td>${coop.participants_count}</td>
+                                <td>${registrationStatus}</td>
+                                <td>${coop.membership_status}</td>
+                                <td>${coop.documents['Financial Statement']}</td>
+                                <td>${coop.documents['Resolution for Voting Delegates']}</td>
+                                <td>${coop.documents['Deposit Slip for Registration Fee']}</td>
+                                <td>${coop.documents['Deposit Slip for CETF Remittance']}</td>
+                                <td>${coop.documents['CETF Undertaking']}</td>
+                                <td>${coop.documents['Certificate of Candidacy']}</td>
+                                <td>${coop.documents['CETF Utilization Invoice']}</td>
+                            </tr>
+                        `;
+                        previewTableBody.innerHTML += row;
+                    });
+                })
+                .catch(error => {
+                    console.error("Error fetching preview data:", error);
+                    previewTableBody.innerHTML = `<tr><td colspan="13" class="text-center text-danger">Error loading data</td></tr>`;
+                });
+            });
+
+            applyRegionFilter.addEventListener("click", function () {
+                let selectedRegion = document.getElementById("regionSelect").value.trim();
+                let migsStatus = document.getElementById("migsStatusSelect").value.trim();
+                let registrationStatus = document.getElementById("registrationStatusSelect").value.trim();
+
+                let exportUrl = "{{ route('reports.export.filtered_coop_status') }}";
+
+                let params = new URLSearchParams({
+                    region: selectedRegion || "All",
+                    migs_status: migsStatus || "All",
+                    registration_status: registrationStatus || "All"
+                });
+
+                window.location.href = exportUrl + "?" + params.toString();
+            });
+        });
+        </script>
+
+
+    <script>
+        previewDataBtn.addEventListener("click", function () {
+        previewTableBody.innerHTML = `<tr><td colspan="6" class="text-center">Loading...</td></tr>`;
+
+        fetch("{{ route('reports.preview.filtered_coop_status') }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+            },
+            body: JSON.stringify({
+                region: selectedRegion || "All",
+                migs_status: migsStatus || "All",
+                registration_status: registrationStatus || "All"
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            previewTableBody.innerHTML = ""; // Clear previous data
+            // Process data as before...
+        })
+        .catch(error => {
+            console.error("Error fetching preview data:", error);
+            previewTableBody.innerHTML = `<tr><td colspan="6" class="text-center text-danger">Error loading data</td></tr>`;
+        });
+    });
+
+    </script>
+
+
 
     @include('layouts.links')
 </body>

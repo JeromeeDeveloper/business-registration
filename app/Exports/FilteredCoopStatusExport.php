@@ -45,7 +45,7 @@ class FilteredCoopStatusExport implements FromCollection, WithHeadings
         $cooperatives = $query->get();
 
         return $cooperatives->map(function ($coop) {
-            $registrationStatus = $coop->gaRegistration->registration_status ?? 'Not Available';
+            $registrationStatus = ($coop->gaRegistration->registration_status ?? 'Not Available') === 'Rejected' ? 'No Registration' : $coop->gaRegistration->registration_status;
             $membershipStatus = strtoupper($coop->gaRegistration->membership_status ?? 'NOT AVAILABLE');
 
             $documents = [

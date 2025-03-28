@@ -1302,6 +1302,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 applyRegionFilter.disabled = false; // Enable Generate Excel button
 
+                let registrationStatus = coop.registration_status === "Rejected" ? "Unregistered" : coop.registration_status;
+
+
                 data.forEach(coop => {
                     let row = `
                         <tr>
@@ -1309,7 +1312,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             <td>${coop.coop_identification_no}</td>
                             <td>${coop.region}</td>
                             <td>${coop.participants_count}</td>
-                            <td>${coop.registration_status}</td>
+                            <td>${registrationStatus}</td>
                             <td>${coop.membership_status}</td>
                             <td>${coop.documents['Financial Statement']}</td>
                             <td>${coop.documents['Resolution for Voting Delegates']}</td>
