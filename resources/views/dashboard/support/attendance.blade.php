@@ -634,203 +634,287 @@
         }
     </script>
 
-    <script>
-        let qrScanner;
+<script>
+    let qrScanner;
 
-        function checkEventSelection() {
-            const eventSelect = document.getElementById('eventSelect');
-            const openQRModal = document.getElementById('openQRModal');
-            openQRModal.disabled = !eventSelect.value;
-        }
+async function requestCameraPermission() {
+try {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    stream.getTracks().forEach(track => track.stop()); // Stop the stream after permission is granted
+} catch (err) {
+    console.error("Camera permission denied:", err);
+}
+}
 
-        document.addEventListener("DOMContentLoaded", function() {
-            const eventSelect = document.getElementById('eventSelect');
+function checkEventSelection() {
+const eventSelect = document.getElementById('eventSelect');
+const openQRModal = document.getElementById('openQRModal');
+openQRModal.disabled = !eventSelect.value;
+}
 
-            // Initial check on page load
-            checkEventSelection();
+async function startQRScanner() {
+const eventSelect = document.getElementById("eventSelect");
+const selectedEvent = eventSelect.value;
 
-            // Enable/disable button on event selection change
-            eventSelect.addEventListener('change', checkEventSelection);
+if (!selectedEvent) {
+    Swal.fire({
+        icon: "warning",
+        title: "No Event Selected",
+        text: "Please select an event first before scanning.",
+    });
+    const modal = bootstrap.Modal.getInstance(document.getElementById("qrScannerModal"));
+    modal.hide();
+    return;
+}
 
-            document.getElementById("qrScannerModal").addEventListener("shown.bs.modal", async function() {
-                if (typeof Html5Qrcode === "undefined") {
-                    console.error("Html5Qrcode is NOT loaded!");
-                    return;
-                }
+await requestCameraPermission(); // Ensure camera permission is requested
 
-                const selectedEvent = eventSelect.value;
+qrScanner = new Html5Qrcode("qr-reader");
 
-                if (!selectedEvent) {
-                    Swal.fire({
-                        icon: "warning",
-                        title: "No Event Selected",
-                        text: "Please select an event first before scanning.",
-                    });
-                    const modal = bootstrap.Modal.getInstance(document.getElementById(
-                        'qrScannerModal'));
-                    modal.hide();
-                    return;
-                }
+try {
+    let devices = await navigator.mediaDevices.enumerateDevices();
+    let cameraId = devices.find(device => device.kind === "videoinput")?.deviceId;
 
-                qrScanner = new Html5Qrcode("qr-reader");
-                try {
-                    let devices = await navigator.mediaDevices.enumerateDevices();
-                    let cameraId = null;
-                    devices.forEach(device => {
-                        if (device.kind === "videoinput") {
-                            cameraId = device.deviceId;
-                            return; // Select the first video input device found
-                        }
-                    });
+    if (cameraId) {
+        qrScanner.start(
+            cameraId,
+            {
+                fps: 10,
+                qrbox: { width: 250, height: 250 }
+            },
+            decodedText => handleScannedQR(decodedText, qrScanner),
+            errorMessage => console.warn(errorMessage)
+        ).catch(err => console.error("Error starting QR scanner:", err));
+    }
+} catch (err) {
+    console.error("Error accessing cameras:", err);
+}
+}
 
+    document.addEventListener("DOMContentLoaded", function() {
+        const eventSelect = document.getElementById('eventSelect');
 
-                    if (cameraId) {
-                        qrScanner.start(
-                            cameraId, {
-                                fps: 10,
-                                qrbox: {
-                                    width: 250,
-                                    height: 250
-                                }
-                            },
-                            decodedText => handleScannedQR(decodedText, qrScanner),
-                            errorMessage => console.warn(errorMessage)
-                        ).catch(err => console.error("Error starting QR scanner:", err));
-                    }
-                } catch (err) {
-                    console.error("Error accessing cameras:", err);
-                }
-            });
+        // Initial check on page load
+        checkEventSelection();
 
-            document.getElementById("qrScannerModal").addEventListener("hidden.bs.modal", function() {
-                if (qrScanner) {
-                    qrScanner.stop().catch(err => console.warn("Error stopping scanner:", err));
-                }
-            });
-        });
+        // Enable/disable button on event selection change
+        eventSelect.addEventListener('change', checkEventSelection);
 
-        function handleScannedQR(decodedText, qrScanner) {
-            console.log("Scanned QR Code:", decodedText);
-
-            // ✅ Stop the scanner immediately to prevent multiple detections
-            if (qrScanner) {
-                qrScanner.stop().catch(err => console.warn("Error stopping scanner:", err));
-            }
-
-            let participantId;
-
-            try {
-                const url = new URL(decodedText);
-                const pathParts = url.pathname.split('/');
-                participantId = pathParts[pathParts.length - 1];
-            } catch (e) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Invalid QR Code",
-                    text: "QR code does not contain a valid URL with a participant ID.",
-                }).then(() => {
-                    closeScannerModal(); // Ensure modal closes
-                });
+        document.getElementById("qrScannerModal").addEventListener("shown.bs.modal", async function() {
+            if (typeof Html5Qrcode === "undefined") {
+                console.error("Html5Qrcode is NOT loaded!");
                 return;
             }
 
-            if (!participantId || isNaN(participantId)) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Invalid QR Code",
-                    text: "No valid participant ID found.",
-                }).then(() => {
-                    closeScannerModal();
-                });
-                return;
-            }
+            await requestCameraPermission();
 
-            const eventId = document.getElementById("eventSelect").value;
-            if (!eventId) {
+            const selectedEvent = eventSelect.value;
+
+            if (!selectedEvent) {
                 Swal.fire({
                     icon: "warning",
                     title: "No Event Selected",
-                    text: "Please select an event before scanning.",
-                }).then(() => {
-                    closeScannerModal();
+                    text: "Please select an event first before scanning.",
                 });
+                const modal = bootstrap.Modal.getInstance(document.getElementById(
+                    'qrScannerModal'));
+                modal.hide();
                 return;
             }
 
-            console.log("Extracted Participant ID:", participantId, "Selected Event ID:", eventId);
-
-            fetch(`/scan-qr?participant_id=${participantId}&event_id=${eventId}`, {
-                    method: "GET",
-                    headers: {
-                        "Accept": "application/json"
-                    },
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        let iconType = data.error.includes("already recorded") ? "warning" : "error";
-                        Swal.fire({
-                            icon: iconType,
-                            title: "Scan Error",
-                            text: data.error,
-                        }).then(() => {
-                            closeScannerModal();
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: "success",
-                            title: "Attendance Recorded!",
-                            text: data.success,
-                        }).then(() => {
-                            closeScannerModal();
-                        });
+            qrScanner = new Html5Qrcode("qr-reader");
+            try {
+                let devices = await navigator.mediaDevices.enumerateDevices();
+                let cameraId = null;
+                devices.forEach(device => {
+                    if (device.kind === "videoinput") {
+                        cameraId = device.deviceId;
+                        return; // Select the first video input device found
                     }
-                })
-                .catch(error => {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Scan Failed",
-                        text: `Failed to record attendance. Error: ${error.message || 'Unknown error'}`,
-                    }).then(() => {
-                        closeScannerModal();
-                    });
                 });
-        }
 
 
-        function closeScannerModal(qrScanner) {
+                if (cameraId) {
+                    qrScanner.start(
+                        cameraId, {
+                            fps: 10,
+                            qrbox: {
+                                width: 250,
+                                height: 250
+                            }
+                        },
+                        decodedText => handleScannedQR(decodedText, qrScanner),
+                        errorMessage => console.warn(errorMessage)
+                    ).catch(err => console.error("Error starting QR scanner:", err));
+                }
+            } catch (err) {
+                console.error("Error accessing cameras:", err);
+            }
+        });
+
+        document.getElementById("qrScannerModal").addEventListener("hidden.bs.modal", function() {
             if (qrScanner) {
                 qrScanner.stop().catch(err => console.warn("Error stopping scanner:", err));
             }
-            const modal = bootstrap.Modal.getInstance(document.getElementById('qrScannerModal'));
-            if (modal) {
-                modal.hide();
-            }
+        });
+    });
+
+    function handleScannedQR(decodedText, qrScanner) {
+console.log("Scanned QR Code:", decodedText);
+
+// ✅ Stop the scanner immediately to prevent multiple detections
+if (qrScanner) {
+    qrScanner.stop().catch(err => console.warn("Error stopping scanner:", err));
+}
+
+let participantId = null;
+let coopId = null;
+
+try {
+    const url = new URL(decodedText);
+    const pathParts = url.pathname.split('/');
+
+    // ✅ Attempt to extract `participant_id` from the URL path (e.g., `/scan/123`)
+    if (!isNaN(pathParts[pathParts.length - 1])) {
+        participantId = pathParts[pathParts.length - 1];
+    }
+
+    // ✅ Attempt to extract `participant_id` from query parameters (`?participant_id=123`)
+    const params = new URLSearchParams(url.search);
+    if (params.get("participant_id")) {
+        participantId = params.get("participant_id");
+    }
+
+    // ✅ Extract `coop_id` from query parameters (`?coop_id=456`)
+    if (params.get("coop_id")) {
+        coopId = params.get("coop_id");
+    }
+
+    console.log("Extracted Participant ID:", participantId, "Coop ID:", coopId);
+} catch (e) {
+    Swal.fire({
+        icon: "error",
+        title: "Invalid QR Code",
+        text: "QR code does not contain a valid URL.",
+    }).then(() => {
+        closeScannerModal();
+    });
+    return;
+}
+
+// ✅ If the scanned QR is for a cooperative (admin dashboard access)
+if (coopId && !isNaN(coopId.trim())) {
+    console.log("Redirecting to Admin Dashboard for Coop ID:", coopId);
+    Swal.fire({
+        icon: "info",
+        title: "Redirecting...",
+        text: "Opening Admin Dashboard.",
+        showConfirmButton: false,
+        timer: 1500
+    }).then(() => {
+        window.location.href = `/Admin/Dashboard?coop_id=${coopId}`;
+    });
+    return;
+}
+
+// ✅ If the scanned QR is for a participant (attendance tracking)
+if (!participantId || isNaN(participantId.trim())) {
+    Swal.fire({
+        icon: "error",
+        title: "Invalid QR Code",
+        text: "No valid participant ID found.",
+    }).then(() => {
+        closeScannerModal();
+    });
+    return;
+}
+
+const eventId = document.getElementById("eventSelect").value;
+if (!eventId) {
+    Swal.fire({
+        icon: "warning",
+        title: "No Event Selected",
+        text: "Please select an event before scanning.",
+    }).then(() => {
+        closeScannerModal();
+    });
+    return;
+}
+
+console.log("Processing Participant ID:", participantId, "for Event ID:", eventId);
+
+fetch(`/scan-qr?participant_id=${participantId}&event_id=${eventId}`, {
+    method: "GET",
+    headers: {
+        "Accept": "application/json"
+    },
+})
+.then(response => response.json())
+.then(data => {
+    if (data.error) {
+        let iconType = data.error.includes("already recorded") ? "warning" : "error";
+        Swal.fire({
+            icon: iconType,
+            title: "Scan Error",
+            text: data.error,
+        }).then(() => {
+            closeScannerModal();
+        });
+    } else {
+        Swal.fire({
+            icon: "success",
+            title: "Attendance Recorded!",
+            text: data.success,
+        }).then(() => {
+            closeScannerModal();
+            location.reload();
+        });
+    }
+})
+.catch(error => {
+    Swal.fire({
+        icon: "error",
+        title: "Scan Failed",
+        text: `Failed to record attendance. Error: ${error.message || 'Unknown error'}`,
+    }).then(() => {
+        closeScannerModal();
+    });
+});
+}
+
+    function closeScannerModal(qrScanner) {
+        if (qrScanner) {
+            qrScanner.stop().catch(err => console.warn("Error stopping scanner:", err));
         }
-
-        function useDroidCamIP(qrScanner, ip) {
-            let videoElement = document.createElement("video");
-            videoElement.src = ip;
-            videoElement.setAttribute("autoplay", "");
-            videoElement.setAttribute("playsinline", "");
-
-            videoElement.addEventListener("loadedmetadata", function() {
-                qrScanner.start(
-                    videoElement, {
-                        fps: 10,
-                        qrbox: {
-                            width: 250,
-                            height: 250
-                        }
-                    },
-                    decodedText => handleScannedQR(decodedText, qrScanner),
-                    errorMessage => console.warn(errorMessage)
-                ).catch(err => console.error("Error starting QR scanner:", err));
-            });
-
-            document.getElementById("qr-reader").appendChild(videoElement);
+        const modal = bootstrap.Modal.getInstance(document.getElementById('qrScannerModal'));
+        if (modal) {
+            modal.hide();
         }
-    </script>
+    }
+
+    function useDroidCamIP(qrScanner, ip) {
+        let videoElement = document.createElement("video");
+        videoElement.src = ip;
+        videoElement.setAttribute("autoplay", "");
+        videoElement.setAttribute("playsinline", "");
+
+        videoElement.addEventListener("loadedmetadata", function() {
+            qrScanner.start(
+                videoElement, {
+                    fps: 10,
+                    qrbox: {
+                        width: 250,
+                        height: 250
+                    }
+                },
+                decodedText => handleScannedQR(decodedText, qrScanner),
+                errorMessage => console.warn(errorMessage)
+            ).catch(err => console.error("Error starting QR scanner:", err));
+        });
+
+        document.getElementById("qr-reader").appendChild(videoElement);
+    }
+</script>
 </body>
 
 </html>
