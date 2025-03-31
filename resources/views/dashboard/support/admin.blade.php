@@ -515,7 +515,8 @@
 
 
                     </div>
-                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-3 mb-4">
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-3 mb-4">
+
 
                         <!-- Cooperative -->
                         <div class="col">
@@ -601,7 +602,7 @@
                         </div>
 
                         <!-- Partially Registered Coops -->
-                        <div class="col-md-2">
+                        <div class="col">
                             <div class="card card-stats card-round shadow-sm h-100">
                                 <div class="card-body d-flex align-items-center">
                                     <div class="col-icon me-3">

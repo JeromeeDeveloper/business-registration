@@ -78,45 +78,11 @@
                     <a href="#" data-bs-toggle="modal" data-bs-target="#privacyPolicyModal" style="color: rgb(47, 0, 255);">Privacy Policy</a>
                     <!-- Modal -->
                 </div>
-                {{-- <div class="text sign-up-text">Sign in to access the General Assembly portal.
-                    <label for="flip">Sign up</label>
-                </div> --}}
+
             </form>
-
-
 
         </div>
-          {{-- <div class="signup-form">
-            <img class="logo" src="{{asset('images/logo.png')}}" alt="">
-            <div class="title">Signup</div>
 
-
-
-            <form action="{{ route('register') }}" method="POST">
-                @csrf
-
-                <div class="input-box">
-                    <i class="fas fa-user"></i>
-                    <input type="text" name="name" placeholder="Enter your name" required>
-                </div>
-
-                <div class="input-box">
-                    <i class="fas fa-envelope"></i>
-                    <input type="email" name="email" placeholder="Enter your email" required>
-                </div>
-
-                <div class="input-box">
-                    <i class="fas fa-lock"></i>
-                    <input type="password" name="password" placeholder="Enter your password" required>
-                </div>
-
-                <div class="button input-box">
-                    <input type="submit" value="Register">
-                </div>
-                <div class="text sign-up-text">Already have an account? <label for="flip">Login now</label></div>
-            </form>
-
-      </div> --}}
       </div>
       </div>
     </div>
@@ -183,46 +149,7 @@
     </div>
 </div>
 
-
-
-{{-- <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
-    <div class="container py-5 mb-5">
-        <div class="bg-white">
-            <div class="owl-carousel vendor-carousel">
-                <img src="images/vendor-1.jpg" alt="">
-                <img src="images/vendor-2.jpg" alt="">
-                <img src="images/vendor-3.jpg" alt="">
-                <img src="images/vendor-4.jpg" alt="">
-                <img src="images/vendor-5.jpg" alt="">
-                <img src="images/vendor-6.jpg" alt="">
-                <img src="images/vendor-7.jpg" alt="">
-                <img src="images/vendor-8.jpg" alt="">
-                <img src="images/vendor-9.jpg" alt="">
-                <img src="images/vendor-10.jpg" alt="">
-                <img src="images/vendor-11.jpg" alt="">
-                <img src="images/vendor-12.jpg" alt="">
-                <img src="images/vendor-13.jpg" alt="">
-                <img src="images/vendor-15.jpg" alt="">
-                <img src="images/vendor-14.jpg" alt="">
-                <img src="images/vendor-16.jpg" alt="">
-                <img src="images/vendor-17.jpg" alt="">
-            </div>
-        </div>
-    </div>
-</div>
-@include('layouts.footer') --}}
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="lib/wow/wow.min.js"></script>
-<script src="lib/easing/easing.min.js"></script>
-<script src="lib/waypoints/waypoints.min.js"></script>
-<script src="lib/counterup/counterup.min.js"></script>
-<script src="lib/owlcarousel/owl.carousel.min.js"></script>
-
-<!-- Template Javascript -->
 <script src="js/main.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     document.getElementById("togglePassword").addEventListener("click", function () {
@@ -252,7 +179,7 @@ function showAgreement() {
         showConfirmButton: false
     });
 
-    // Submit the form after a short delay
+
     setTimeout(() => {
         document.querySelector("form").submit();
     }, 1500);
