@@ -872,20 +872,35 @@
     </script>
 
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        @if(!empty($missingDocuments))
             Swal.fire({
-                icon: 'info',
-                title: 'Important Reminder',
-                text: 'Please ensure that you upload all required documents.',
-                timer: 4000, // Auto-closes after 4 seconds
-                timerProgressBar: true, // Shows a progress bar
-                showConfirmButton: true, // Allows user to acknowledge
-                confirmButtonText: 'Understood',
-                showCloseButton: true // Adds a close (X) button
+                icon: 'warning',
+                title: 'Reminder: Missing Documents',
+                html: `
+                    <p>The following required documents are missing:</p>
+                    <ul style="text-align: left;">
+                        @foreach($missingDocuments as $doc)
+                            <li>{{ $doc }}</li>
+                        @endforeach
+                    </ul>
+                    <p>Please upload them as soon as possible.</p>
+                `,
+                timer: 7000, // Auto-closes after 7 seconds
+                timerProgressBar: true,
+                showConfirmButton: true,
+                confirmButtonText: 'Upload Now',
+                showCloseButton: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "{{ route('documents') }}"; // Update with actual upload route
+                }
             });
-        });
-    </script>
+        @endif
+    });
+</script>
+
 
 
 

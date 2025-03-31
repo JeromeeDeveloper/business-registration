@@ -122,7 +122,7 @@
                             </div>
                         </li>
 
-                        {{-- <li class="nav-item">
+                        <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#participant">
                                 <i class="fas fa-user-cog"></i>
                                 <p>Participant</p>
@@ -131,13 +131,13 @@
                             <div class="collapse" id="participant">
                                 <ul class="nav nav-collapse">
                                     <li>
-                                        <a href="{{ route('participants.index') }}">
+                                        <a href="{{ route('support.participants.index') }}">
                                             <span class="sub-item">Manage Participant</span>
                                         </a>
                                     </li>
                                 </ul>
                             </div>
-                        </li> --}}
+                        </li>
 
                         <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#attendance">

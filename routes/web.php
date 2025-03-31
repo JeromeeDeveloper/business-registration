@@ -331,4 +331,11 @@ Route::middleware([SupportMiddleware::class])->group(function () {
 
     Route::get('/Support/Register/Cooperatives', [SupportController::class, 'supportregister'])->name('supportregister');
     Route::post('/Support/store-cooperative', [SupportController::class, 'supportstoreCooperative'])->name('support.storeCooperative');
+
+    Route::get('Support/Participants', [SupportController::class, 'participant_list'])->name('support.participants.index');
+    Route::get('/Support/Participant/{participant_id}', [SupportController::class, 'show'])->name('support.participants.show');
+
+    Route::get('/participants/{userId}/resend-email-admin', [ParticipantController::class, 'resendEmail2'])
+    ->name('participants.resendEmail2');
+
 });

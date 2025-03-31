@@ -649,4 +649,52 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
           'generated_password' => $sanitizedPassword,
       ]);
   }
+
+  public function participant_list(Request $request)
+  {
+      $perPage = $request->input('limit', 5);
+
+      $query = Participant::with(['registration', 'cooperative', 'user']);
+
+      if ($request->search) {
+          $query->where('first_name', 'like', '%' . $request->search . '%')
+              ->orWhere('last_name', 'like', '%' . $request->search . '%')
+              ->orWhere('middle_name', 'like', '%' . $request->search . '%')
+              ->orWhere('designation', 'like', '%' . $request->search . '%')
+              ->orWhereHas('user', function ($userQuery) use ($request) {
+                  $userQuery->where('name', 'like', '%' . $request->search . '%');
+              })
+              ->orWhereHas('cooperative', function ($cooperativeQuery) use ($request) {
+                  $cooperativeQuery->where('name', 'like', '%' . $request->search . '%');
+              });
+      }
+
+      if ($request->has('sort_by')) {
+          $sortBy = $request->sort_by;
+          $sortOrder = $request->sort_order === 'desc' ? 'desc' : 'asc';
+
+          if (in_array($sortBy, ['first_name', 'last_name', 'middle_name', 'designation'])) {
+              $query->orderBy($sortBy, $sortOrder);
+          } elseif ($sortBy === 'cooperative') {
+              $query->join('cooperatives', 'participants.cooperative_id', '=', 'cooperatives.id')
+                  ->orderBy('cooperatives.name', $sortOrder);
+          } elseif ($sortBy === 'user') {
+              $query->join('users', 'participants.user_id', '=', 'users.id')
+                  ->orderBy('users.name', $sortOrder);
+          }
+      }
+
+      $participants = $query->paginate($perPage);
+
+      return view('dashboard.support.participant', compact('participants'));
+  }
+
+  public function show($participant_id)
+  {
+      $participant = Participant::with('events')->where('participant_id', $participant_id)->firstOrFail();
+      $events = Event::all(); 
+
+      return view('dashboard.support.viewparticipant', compact('participant', 'events'));
+  }
+
 }

@@ -373,6 +373,24 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
             ->where('delegate_type', 'Voting')
             ->count();
 
+            $requiredDocuments = [
+                'Financial Statement',
+                'Resolution for Voting delegates',
+                'Deposit Slip for Registration Fee',
+                'Deposit Slip for CETF Remittance',
+                'CETF Undertaking',
+                'Certificate of Candidacy',
+                'CETF Utilization invoice'
+            ];
+
+            // Get uploaded documents
+            $uploadedDocuments = UploadedDocument::where('coop_id', $user->coop_id)
+                ->pluck('document_type')
+                ->toArray();
+
+            // Find missing documents
+            $missingDocuments = array_diff($requiredDocuments, $uploadedDocuments);
+
         return view('dashboard.participant.participant', [
             'participant' => $participant,
             'event' => $latestEvent,
@@ -385,8 +403,9 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
             'cooperative' => $cooperative,
             'coop' => $coop,
             'latestEvents' => $latestEvents,
-            'votes' => $votes, // ✅ Pass votes to view
-            'currentVotingCount' => $currentVotingCount, // ✅ Pass current voting count to view
+            'votes' => $votes,
+            'currentVotingCount' => $currentVotingCount,
+            'missingDocuments' => $missingDocuments,
         ]);
     }
 
