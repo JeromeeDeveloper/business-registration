@@ -82,21 +82,21 @@
 
                         <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#attendance">
-                              <i class="fas fa-calendar"></i>
-                              <p>Attendance</p>
-                              <span class="caret"></span>
+                                <i class="fas fa-calendar"></i>
+                                <p>Attendance</p>
+                                <span class="caret"></span>
                             </a>
                             <div class="collapse" id="attendance">
-                              <ul class="nav nav-collapse">
-                                <li>
-                                    <a href="{{ route('attendance.index') }}">
-                                        <span class="sub-item">Manage attendance</span>
-                                    </a>
-                                </li>
+                                <ul class="nav nav-collapse">
+                                    <li>
+                                        <a href="{{ route('attendance.index') }}">
+                                            <span class="sub-item">Manage attendance</span>
+                                        </a>
+                                    </li>
 
-                              </ul>
+                                </ul>
                             </div>
-                          </li>
+                        </li>
 
                         <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#user">
@@ -210,20 +210,23 @@
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <div class="d-flex align-items-center justify-content-between flex-wrap w-100 gap-2">
+                                    <div
+                                        class="d-flex align-items-center justify-content-between flex-wrap w-100 gap-2">
                                         <!-- Title -->
                                         <h4 class="card-title m-0">Participants</h4>
 
                                         <!-- Search Form & Buttons -->
                                         <form method="GET" class="d-flex align-items-center ms-auto">
                                             <div class="input-group w-auto w-sm-50 w-md-25">
-                                                <input type="text" name="search" class="form-control" placeholder="Search..." value="{{ request('search') }}">
+                                                <input type="text" name="search" class="form-control"
+                                                    placeholder="Search..." value="{{ request('search') }}">
                                                 <button type="submit" class="btn btn-primary">
                                                     <i class="fa fa-search"></i>
                                                 </button>
                                             </div>
                                             <div class="d-flex gap-2 ms-2">
-                                                <button type="button" class="btn btn-primary text-white" data-bs-toggle="tooltip" title="Add Participant"
+                                                <button type="button" class="btn btn-primary text-white"
+                                                    data-bs-toggle="tooltip" title="Add Participant"
                                                     onclick="location.href='{{ route('participantadd') }}'">
                                                     <i class="fa fa-plus"></i>
                                                 </button>
@@ -242,11 +245,16 @@
                                     <div class="d-flex justify-content-between mb-3">
                                         <div>
                                             <label>Show
-                                                <select id="showEntries" class="form-select form-select-sm" style="width: auto; display: inline;">
-                                                    <option value="5" {{ request('limit') == 5 ? 'selected' : '' }}>5</option>
-                                                    <option value="10" {{ request('limit') == 10 ? 'selected' : '' }}>10</option>
-                                                    <option value="25" {{ request('limit') == 25 ? 'selected' : '' }}>25</option>
-                                                    <option value="50" {{ request('limit') == 50 ? 'selected' : '' }}>50</option>
+                                                <select id="showEntries" class="form-select form-select-sm"
+                                                    style="width: auto; display: inline;">
+                                                    <option value="5"
+                                                        {{ request('limit') == 5 ? 'selected' : '' }}>5</option>
+                                                    <option value="10"
+                                                        {{ request('limit') == 10 ? 'selected' : '' }}>10</option>
+                                                    <option value="25"
+                                                        {{ request('limit') == 25 ? 'selected' : '' }}>25</option>
+                                                    <option value="50"
+                                                        {{ request('limit') == 50 ? 'selected' : '' }}>50</option>
                                                 </select> entries
                                             </label>
                                         </div>
@@ -263,13 +271,17 @@
                                                     </th>
                                                     <th>
                                                         First Name
-                                                        <a href="{{ request()->fullUrlWithQuery(['sort_by' => 'first_name', 'sort_order' => 'asc']) }}" class="btn btn-sm btn-light p-0 mx-1">↑</a>
-                                                        <a href="{{ request()->fullUrlWithQuery(['sort_by' => 'first_name', 'sort_order' => 'desc']) }}" class="btn btn-sm btn-light p-0">↓</a>
+                                                        <a href="{{ request()->fullUrlWithQuery(['sort_by' => 'first_name', 'sort_order' => 'asc']) }}"
+                                                            class="btn btn-sm btn-light p-0 mx-1">↑</a>
+                                                        <a href="{{ request()->fullUrlWithQuery(['sort_by' => 'first_name', 'sort_order' => 'desc']) }}"
+                                                            class="btn btn-sm btn-light p-0">↓</a>
                                                     </th>
                                                     <th>
                                                         Last Name
-                                                        <a href="{{ request()->fullUrlWithQuery(['sort_by' => 'last_name', 'sort_order' => 'asc']) }}" class="btn btn-sm btn-light p-0 mx-1">↑</a>
-                                                        <a href="{{ request()->fullUrlWithQuery(['sort_by' => 'last_name', 'sort_order' => 'desc']) }}" class="btn btn-sm btn-light p-0">↓</a>
+                                                        <a href="{{ request()->fullUrlWithQuery(['sort_by' => 'last_name', 'sort_order' => 'asc']) }}"
+                                                            class="btn btn-sm btn-light p-0 mx-1">↑</a>
+                                                        <a href="{{ request()->fullUrlWithQuery(['sort_by' => 'last_name', 'sort_order' => 'desc']) }}"
+                                                            class="btn btn-sm btn-light p-0">↓</a>
                                                     </th>
                                                     <th>
                                                         Designation
@@ -299,20 +311,14 @@
                                                                 N/A
                                                             @endif
                                                         </td>
-
-
-
-
-
-
-
                                                         <td class="no-print">
                                                             <div class="form-button-action no-print">
 
-                                                                <button class="btn btn-link btn-success btn-lg no-print"
-                                                                data-bs-toggle="tooltip"
-                                                                title="Generate & Print ID"
-                                                                onclick="printParticipantID(
+                                                                <button
+                                                                    class="btn btn-link btn-success btn-lg no-print"
+                                                                    data-bs-toggle="tooltip"
+                                                                    title="Generate & Print ID"
+                                                                    onclick="printParticipantID(
                                                                     {{ $participant->participant_id }},
                                                                     '{{ $participant->first_name }}',
                                                                     '{{ $participant->last_name }}',
@@ -321,18 +327,20 @@
                                                                     '{{ optional($participant->cooperative)->name ?? 'N/A' }}',
                                                                     'https://api.qrserver.com/v1/create-qr-code/?data={{ urlencode(route('adminDashboard', ['participant_id' => $participant->participant_id])) }}&size=200x200'
                                                                 )">
-                                                                <i class="fa fa-id-card"></i>
-                                                            </button>
+                                                                    <i class="fa fa-id-card"></i>
+                                                                </button>
 
-                                                            @if ($participant->user && $participant->user->user_id)
-                                                            <a href="javascript:void(0);"
-                                                               onclick="resendEmail2({{ $participant->user->user_id }})"
-                                                               class="btn btn-link btn-warning btn-lg" data-bs-toggle="tooltip" title="Resend Credentials">
-                                                               <i class="fas fa-envelope"></i>
-                                                            </a>
-                                                        @else
-                                                            <span class="text-danger">No user assigned</span>
-                                                        @endif
+                                                                @if ($participant->user && $participant->user->user_id)
+                                                                    <a href="javascript:void(0);"
+                                                                        onclick="resendEmail2({{ $participant->user->user_id }})"
+                                                                        class="btn btn-link btn-warning btn-lg"
+                                                                        data-bs-toggle="tooltip"
+                                                                        title="Resend Credentials">
+                                                                        <i class="fas fa-envelope"></i>
+                                                                    </a>
+                                                                @else
+                                                                    <span class="text-danger">No user assigned</span>
+                                                                @endif
 
                                                                 <a href="{{ route('participants.show', $participant->participant_id) }}"
                                                                     class="btn btn-link btn-info btn-lg"
@@ -422,37 +430,37 @@
         @include('layouts.adminfooter')
     </div>
     </div>
-     {{-- Include SweetAlert2 if not already included --}}
-     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {{-- Include SweetAlert2 if not already included --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-     <script>
-         function resendEmail2(userId) {
-             Swal.fire({
-                 title: 'Sending Email...',
-                 text: 'Please wait while we resend the email.',
-                 allowOutsideClick: false,
-                 allowEscapeKey: false,
-                 didOpen: () => {
-                     Swal.showLoading();
-                 }
-             });
+    <script>
+        function resendEmail2(userId) {
+            Swal.fire({
+                title: 'Sending Email...',
+                text: 'Please wait while we resend the email.',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
 
-             fetch("{{ url('/participants') }}/" + userId + "/resend-email-admin")
-                 .then(response => response.json()) // Expecting JSON response from Laravel
-                 .then(data => {
-                     Swal.close(); // Close the loading Swal
-                     if (data.success) {
-                         Swal.fire('Success!', data.message, 'success');
-                     } else {
-                         Swal.fire('Error!', data.message, 'error');
-                     }
-                 })
-                 .catch(error => {
-                     Swal.close();
-                     Swal.fire('Error!', 'Something went wrong. Please try again.', 'error');
-                 });
-         }
-     </script>
+            fetch("{{ url('/participants') }}/" + userId + "/resend-email-admin")
+                .then(response => response.json()) // Expecting JSON response from Laravel
+                .then(data => {
+                    Swal.close(); // Close the loading Swal
+                    if (data.success) {
+                        Swal.fire('Success!', data.message, 'success');
+                    } else {
+                        Swal.fire('Error!', data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    Swal.close();
+                    Swal.fire('Error!', 'Something went wrong. Please try again.', 'error');
+                });
+        }
+    </script>
 
     <script>
         document.getElementById('showEntries').addEventListener('change', function() {

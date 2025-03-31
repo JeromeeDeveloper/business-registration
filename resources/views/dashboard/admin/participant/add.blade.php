@@ -492,6 +492,27 @@
             isMspOfficer.addEventListener("change", togglePositionField);
         });
     </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("participantForm").addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            Swal.fire({
+                title: 'Processing...',
+                text: 'Please wait while we register the participant.',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            this.submit(); // Submit the form after showing the loader
+        });
+    });
+</script>
+
+
     @include('layouts.links')
   </body>
 </html>

@@ -117,59 +117,6 @@ class ParticipantController extends Controller
         return view('dashboard.admin.participant.add', compact('cooperatives', 'users' ,'events'));
     }
 
-
-// public function store(Request $request)
-// {
-//     // Validate the form data
-//     $validatedData = $request->validate([
-//         'coop_id' => 'required|exists:cooperatives,coop_id',
-//         'user_id' => 'nullable|exists:users,user_id',
-//         'first_name' => 'required|string|max:255',
-//         'middle_name' => 'nullable|string|max:255',
-//         'email' => 'required|email|unique:participants',
-//         'last_name' => 'required|string|max:255',
-//         'nickname' => 'nullable|string|max:255',
-//         'gender' => 'required|string|max:255',
-//         'phone_number' => 'required|string|max:15',
-//         'designation' => 'nullable|string|max:255',
-//         'congress_type' => 'nullable|string|max:255',
-//         'religious_affiliation' => 'nullable|string|max:255',
-//         'tshirt_size' => 'nullable|string|max:5',
-//         'is_msp_officer' => 'required|string|max:3',
-//         'msp_officer_position' => 'nullable|string|max:255',
-//         'delegate_type' => 'required|string|max:10',
-//     ]);
-
-//     // Store the participant data
-//     $participant = Participant::create($validatedData);
-
-//     // Generate QR code data (e.g., a URL to their profile page)
-//     $qrData = route('adminDashboard', ['participant_id' => $participant->participant_id]); // Adjust this route as needed
-
-//     // Call the external QR code API
-//     $response = Http::get('https://api.qrserver.com/v1/create-qr-code/', [
-//         'data' => $qrData,
-//         'size' => '200x200' // You can adjust the size here
-//     ]);
-
-//     // Check if the QR code generation is successful
-//     if ($response->successful()) {
-//         // Save the QR code image
-//         $path = 'qrcodes/participant_' . $participant->participant_id . '.png';
-//         Storage::disk('public')->put($path, $response->body());
-
-//         // Optionally, save the QR code path to the participant
-//         $participant->qr_code = $path;
-//         $participant->save();
-//     } else {
-//         // Handle failure if the QR code generation fails
-//         return redirect()->route('participants.index')->with('error', 'Failed to generate QR code.');
-//     }
-
-//     // Redirect or return a response
-//     return redirect()->route('participants.index')->with('success', 'Participant registered successfully!');
-// }
-
 public function generateId($id)
 {
     $participant = Participant::findOrFail($id);

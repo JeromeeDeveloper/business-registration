@@ -54,7 +54,7 @@ class UpdateCooperativeObserver
 
         $hasParticipant = Participant::where('coop_id', $coop_id)->exists();
 
-        // Ensure all documents are approved and payment is sufficient for Fully Registered
+      
         if (!$hasRejectedDocument && $approvedDocumentsCount === count($requiredDocuments) && $isPaymentSufficient) {
             $gaRegistration->registration_status = 'Fully Registered';
         } elseif ($hasParticipant) {

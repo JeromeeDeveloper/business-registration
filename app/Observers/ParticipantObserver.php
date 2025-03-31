@@ -21,6 +21,27 @@ class ParticipantObserver
         $this->updateMembershipStatus($participant->coop_id);
     }
 
+    public function updated(Participant $participant): void
+    {
+        $this->updateGARegistrationStatus($participant->coop_id);
+        $this->updateMembershipStatus($participant->coop_id);
+    }
+
+    /**
+     * Handle the Participant "deleted" event.
+     */
+    public function deleted(Participant $participant): void
+    {
+        $this->updateGARegistrationStatus($participant->coop_id);
+        $this->updateMembershipStatus($participant->coop_id);
+    }
+
+    public function restored(Participant $participant): void
+    {
+        $this->updateGARegistrationStatus($participant->coop_id);
+        $this->updateMembershipStatus($participant->coop_id);
+    }
+
     /**
      * Update the GA Registration status based on the cooperative and uploaded documents.
      *

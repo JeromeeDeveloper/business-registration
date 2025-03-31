@@ -309,7 +309,7 @@
                                                                     value="{{ $cooperative->no_of_entitled_votes }}"
                                                                     readonly>
                                                             </div>
-                                                            <div class="col-md-12 mb-3">
+                                                            {{-- <div class="col-md-12 mb-3">
                                                                 <div class="form-group">
                                                                     <label for="services_availed">Services
                                                                         Availed</label>
@@ -347,7 +347,7 @@
                                                                         id="services_availed_json"
                                                                         value="{{ $cooperative->services_availed }}">
                                                                 </div>
-                                                            </div>
+                                                            </div> --}}
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
