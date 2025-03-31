@@ -335,8 +335,8 @@ Route::middleware([SupportMiddleware::class])->group(function () {
     Route::get('Support/Participants', [SupportController::class, 'participant_list'])->name('support.participants.index');
     Route::get('/Support/Participant/{participant_id}', [SupportController::class, 'show'])->name('support.participants.show');
 
-    Route::get('/participants/{userId}/resend-email-admin', [ParticipantController::class, 'resendEmail2'])
-    ->name('participants.resendEmail2');
+    Route::get('/participants/{userId}/resend-email-support', [SupportController::class, 'resendEmail3'])
+    ->name('participants.resendEmail3');
 
     Route::get('/scan-qr2', [SupportController::class, 'scanQR'])->name('scan.qr');
     Route::post('/scan-qr2', [SupportController::class, 'scanQR'])->name('scan.qr');

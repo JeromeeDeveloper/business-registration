@@ -794,59 +794,123 @@
                                 </div>
                             </div>
 
-                            <div class="card shadow-lg border-0 rounded-3 overflow-hidden"
-                                style="transition: 0.3s; max-width: 500px; margin: auto;">
-                                <div class="card-header text-white bg-primary rounded-top">
-                                    <h5 class="mb-1"><i class="fas fa-calendar-alt"></i> Dates To Remember!</h5>
-                                    <small>Join us for the upcoming General Assembly 2025!</small>
+                            <style>
+                                .event-card {
+                                    transition: 0.3s;
+                                    max-width: 550px;
+                                    margin: auto;
+                                    border-radius: 15px;
+                                    overflow: hidden;
+                                    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+                                }
+
+                                .event-card:hover {
+                                    transform: scale(1.02);
+                                    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+                                }
+
+                                .event-card-header {
+                                    background: linear-gradient(45deg, #007bff, #00c6ff);
+                                    color: white;
+                                    padding: 15px;
+                                    text-align: center;
+                                }
+
+                                .event-card-header h5 {
+                                    margin-bottom: 5px;
+                                    font-weight: bold;
+                                }
+
+                                .event-card-body {
+                                    max-height: 400px;
+                                    overflow-y: auto;
+                                    padding: 15px;
+                                }
+
+                                .event-item {
+                                    display: flex;
+                                    align-items: center;
+                                    padding: 10px 15px;
+                                    transition: 0.3s;
+                                    border-bottom: 1px solid #ddd;
+                                }
+
+                                .event-item:hover {
+                                    background: #f8f9fa;
+                                    transform: scale(1.01);
+                                }
+
+                                .event-item .badge {
+                                    font-size: 14px;
+                                    padding: 8px 12px;
+                                    min-width: 60px;
+                                    text-align: center;
+                                    font-weight: bold;
+                                    border-radius: 10px;
+                                }
+
+                                .event-footer {
+                                    background: linear-gradient(45deg, #ff6f61, #ff9068);
+                                    color: white;
+                                    padding: 12px;
+                                    text-align: center;
+                                    font-weight: bold;
+                                    cursor: pointer;
+                                    transition: 0.3s;
+                                    border-bottom-left-radius: 15px;
+                                    border-bottom-right-radius: 15px;
+                                }
+
+                                .event-footer:hover {
+                                    background: linear-gradient(45deg, #ff5733, #ff784f);
+                                    transform: scale(1.02);
+                                }
+                            </style>
+
+                            <div class="card event-card">
+                                <div class="event-card-header">
+                                    <h5><i class="fas fa-calendar-alt"></i> Important Dates</h5>
+                                    <small>Don't miss the General Assembly 2025!</small>
                                 </div>
-                                <div class="card-body p-3" style="max-height: 300px; overflow-y: auto;">
-                                    <ul class="list-group list-group-flush">
-                                        <li class="list-group-item d-flex justify-content-between">
-                                            <span class="badge bg-primary">Mar 17</span>
-                                            <span class="text-start flex-grow-1 ms-2">Start of Online
-                                                Registration</span>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between">
-                                            <span class="badge bg-success">Apr 01</span>
-                                            <span class="text-start flex-grow-1 ms-2">Start of Filing
-                                                Candidacy</span>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between">
-                                            <span class="badge bg-danger">May 17</span>
-                                            <span class="text-start flex-grow-1 ms-2">End of Filing of
-                                                Candidacy</span>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between">
-                                            <span class="badge bg-warning text-dark">May 21</span>
-                                            <span class="text-start flex-grow-1 ms-2">Ceremonial Opening of
-                                                Election</span>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between">
-                                            <span class="badge bg-info">May 22</span>
-                                            <span class="text-start flex-grow-1 ms-2">End of Reg for
-                                                Non-Voting</span>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between">
-                                            <span class="badge bg-secondary">May 23</span>
-                                            <span class="text-start flex-grow-1 ms-2">SECTORAL CONGRESS 55th CO-OP
-                                                LEADERS</span>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between">
-                                            <span class="badge bg-primary">May 24</span>
-                                            <span class="text-start flex-grow-1 ms-2">55th CO-OP LEADERS</span>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between">
-                                            <span class="badge bg-success">May 25</span>
-                                            <span class="text-start flex-grow-1 ms-2">51st General Assembly</span>
-                                        </li>
-                                    </ul>
+                                <div class="event-card-body">
+                                    <div class="event-item">
+                                        <span class="badge bg-primary">Mar 17</span>
+                                        <span class="text-start flex-grow-1 ms-3">Start of Online Registration</span>
+                                    </div>
+                                    <div class="event-item">
+                                        <span class="badge bg-success">Apr 01</span>
+                                        <span class="text-start flex-grow-1 ms-3">Start of Filing Candidacy</span>
+                                    </div>
+                                    <div class="event-item">
+                                        <span class="badge bg-danger">May 17</span>
+                                        <span class="text-start flex-grow-1 ms-3">End of Filing of Candidacy</span>
+                                    </div>
+                                    <div class="event-item">
+                                        <span class="badge bg-warning text-dark">May 21</span>
+                                        <span class="text-start flex-grow-1 ms-3">Ceremonial Opening of Election</span>
+                                    </div>
+                                    <div class="event-item">
+                                        <span class="badge bg-info">May 22</span>
+                                        <span class="text-start flex-grow-1 ms-3">End of Registration for Non-Voting</span>
+                                    </div>
+                                    <div class="event-item">
+                                        <span class="badge bg-secondary">May 23</span>
+                                        <span class="text-start flex-grow-1 ms-3">Sectoral Congress 55th Co-op Leaders</span>
+                                    </div>
+                                    <div class="event-item">
+                                        <span class="badge bg-primary">May 24</span>
+                                        <span class="text-start flex-grow-1 ms-3">55th Co-op Leaders Assembly</span>
+                                    </div>
+                                    <div class="event-item">
+                                        <span class="badge bg-success">May 25</span>
+                                        <span class="text-start flex-grow-1 ms-3">51st General Assembly</span>
+                                    </div>
                                 </div>
-                                <div class="card-footer bg-light rounded-bottom">
-                                    <span class="badge bg-primary p-2"
-                                        style="cursor: pointer; transition: 0.3s;">Don't miss this event!</span>
+                                <div class="event-footer">
+                                    🚀 Be part of this amazing event!
                                 </div>
                             </div>
+
 
                         </div>
                     </div>
@@ -866,31 +930,55 @@
         function closeNotice() {
             document.querySelector('.floating-notice').style.display = 'none';
         }
-
-
         setTimeout(closeNotice, 15000);
     </script>
 
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        @if(!empty($missingDocuments))
+        @if(!empty($missingDocuments) || !empty($declinedDocuments))
+            let issues = [];
+
+            @if(!empty($missingDocuments))
+                issues.push({
+                    title: '📌 Missing Documents',
+                    list: [
+                        @foreach($missingDocuments as $doc)
+                            "{{ $doc }}",
+                        @endforeach
+                    ],
+                    message: "These are required for your submission. Please upload them as soon as possible."
+                });
+            @endif
+
+            @if(!empty($declinedDocuments))
+                issues.push({
+                    title: '⚠️ Declined Documents',
+                    list: [
+                        @foreach($declinedDocuments as $doc)
+                            "{{ $doc }}",
+                        @endforeach
+                    ],
+                    message: "These documents were declined and need to be re-uploaded."
+                });
+            @endif
+
+            let message = issues.map(issue => `
+                <h3 style="margin-bottom: 5px;">${issue.title}</h3>
+                <ul style="text-align: left; margin-bottom: 10px;">
+                    ${issue.list.map(doc => `<li>📄 ${doc}</li>`).join('')}
+                </ul>
+                <p>${issue.message}</p>
+            `).join('<hr>');
+
             Swal.fire({
                 icon: 'warning',
-                title: 'Reminder: Missing Documents',
-                html: `
-                    <p>The following required documents are missing:</p>
-                    <ul style="text-align: left;">
-                        @foreach($missingDocuments as $doc)
-                            <li>{{ $doc }}</li>
-                        @endforeach
-                    </ul>
-                    <p>Please upload them as soon as possible.</p>
-                `,
-                timer: 7000, // Auto-closes after 7 seconds
+                // title: '🔔 Important Notice!',
+                html: message,
+                timer: 15000, // Auto-closes after 10 seconds
                 timerProgressBar: true,
                 showConfirmButton: true,
-                confirmButtonText: 'Upload Now',
+                confirmButtonText: '📤 Upload Now',
                 showCloseButton: true
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -900,6 +988,8 @@
         @endif
     });
 </script>
+
+
 
 
 

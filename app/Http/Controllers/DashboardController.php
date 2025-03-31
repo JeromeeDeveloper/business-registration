@@ -409,6 +409,11 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
             // Find missing documents
             $missingDocuments = array_diff($requiredDocuments, $uploadedDocuments);
 
+            $declinedDocuments = UploadedDocument::where('coop_id', $user->coop_id)
+    ->where('status', 'Rejected')
+    ->pluck('document_type')
+    ->toArray();
+
         return view('dashboard.participant.participant', [
             'participant' => $participant,
             'event' => $latestEvent,
@@ -424,6 +429,7 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
             'votes' => $votes,
             'currentVotingCount' => $currentVotingCount,
             'missingDocuments' => $missingDocuments,
+            'declinedDocuments' => $declinedDocuments,
         ]);
     }
 

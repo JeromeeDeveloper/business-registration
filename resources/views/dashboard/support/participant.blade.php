@@ -375,7 +375,7 @@
 
                                                                 @if ($participant->user && $participant->user->user_id)
                                                                     <a href="javascript:void(0);"
-                                                                        onclick="resendEmail2({{ $participant->user->user_id }})"
+                                                                        onclick="resendEmail3({{ $participant->user->user_id }})"
                                                                         class="btn btn-link btn-warning btn-lg"
                                                                         data-bs-toggle="tooltip"
                                                                         title="Resend Credentials">
@@ -477,7 +477,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        function resendEmail2(userId) {
+        function resendEmail3(userId) {
             Swal.fire({
                 title: 'Sending Email...',
                 text: 'Please wait while we resend the email.',
@@ -488,7 +488,7 @@
                 }
             });
 
-            fetch("{{ url('/participants') }}/" + userId + "/resend-email-admin")
+            fetch("{{ url('/participants') }}/" + userId + "/resend-email-support")
                 .then(response => response.json()) // Expecting JSON response from Laravel
                 .then(data => {
                     Swal.close(); // Close the loading Swal

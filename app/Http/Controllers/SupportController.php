@@ -8,9 +8,11 @@ use App\Models\Event;
 use App\Models\Speaker;
 use App\Models\Cooperative;
 use App\Models\Participant;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\GARegistration;
 use Illuminate\Validation\Rule;
+use App\Mail\ParticipantCreated;
 use App\Models\EventParticipant;
 use App\Models\UploadedDocument;
 use Illuminate\Support\Facades\DB;
@@ -550,6 +552,26 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
       session()->flash("{$formKey}_success", implode('<br>', $successMessages));
 
       return redirect()->route('support.cooperatives.edit', $cooperative->coop_id);
+  }
+
+  public function resendEmail3($userId)
+  {
+      $user = User::where('user_id', $userId)->firstOrFail();
+
+      // Generate a temporary password
+      $temporaryPassword = Str::random(6);
+
+      // Update the user's password in the database
+      $user->password = Hash::make($temporaryPassword);
+      $user->save();
+
+      // Send email with the new password
+      Mail::to($user->email)->queue(new ParticipantCreated($user, $temporaryPassword));
+
+      return response()->json([
+          'success' => true,
+          'message' => 'A new password has been generated and sent to the user.'
+      ]);
   }
 
   public function sendNotificationsupport($coopId)
