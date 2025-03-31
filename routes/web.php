@@ -338,4 +338,7 @@ Route::middleware([SupportMiddleware::class])->group(function () {
     Route::get('/participants/{userId}/resend-email-admin', [ParticipantController::class, 'resendEmail2'])
     ->name('participants.resendEmail2');
 
+    Route::get('/scan-qr2', [SupportController::class, 'scanQR'])->name('scan.qr');
+    Route::post('/scan-qr2', [SupportController::class, 'scanQR'])->name('scan.qr');
+
 });

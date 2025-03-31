@@ -692,9 +692,63 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
   public function show($participant_id)
   {
       $participant = Participant::with('events')->where('participant_id', $participant_id)->firstOrFail();
-      $events = Event::all(); 
+      $events = Event::all();
 
       return view('dashboard.support.viewparticipant', compact('participant', 'events'));
+  }
+
+  public function scanQR(Request $request)
+  {
+      $participantId = $request->query('participant_id');
+      $eventId = $request->query('event_id');
+
+      $participant = Participant::find($participantId);
+      if (!$participant) {
+          return response()->json(['error' => 'Participant not found.'], 404);
+      }
+
+      $event = Event::find($eventId);
+      if (!$event) {
+          return response()->json(['error' => 'Event not found.'], 404);
+      }
+
+      $gaRegistration = GARegistration::where('coop_id', $participant->coop_id)->first();
+
+      if (!$gaRegistration || $gaRegistration->registration_status === 'Partial Registered' || $gaRegistration->registration_status === null) {
+          return response()->json(['error' => 'Participant cannot be scanned. GA registration is incomplete.'], 403);
+      }
+
+      // Check if participant is registered in this congress (event)
+      $isRegisteredInEvent = $participant->events()
+          ->where('event_participant.event_id', $eventId) // Explicitly use event_participant.event_id
+          ->exists();
+
+      if (!$isRegisteredInEvent) {
+          return response()->json(['error' => 'Participant is not added in this congress.'], 403);
+      }
+
+      // Check if attendance is already recorded
+      $existingAttendance = EventParticipant::where('event_id', $eventId)
+          ->where('participant_id', $participantId)
+          ->whereNotNull('attendance_datetime')
+          ->first();
+
+      if ($existingAttendance) {
+          return response()->json(['error' => 'Attendance already recorded for this participant.'], 409);
+      }
+
+      // Record attendance
+      $attendance = EventParticipant::updateOrCreate(
+          [
+              'event_id' => $eventId,
+              'participant_id' => $participantId,
+          ],
+          [
+              'attendance_datetime' => now(),
+          ]
+      );
+
+      return response()->json(['success' => 'Attendance recorded successfully!', 'participant' => $participant]);
   }
 
 }
