@@ -553,41 +553,56 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
   }
 
   public function sendNotificationsupport($coopId)
-  {
-      try {
-          \Log::info('Notification request received for Coop ID: ' . $coopId);
+{
+    try {
+        \Log::info('Notification request received for Coop ID: ' . $coopId);
 
-          // Find the cooperative by ID
-          $coop = Cooperative::findOrFail($coopId);
-          \Log::info('Found cooperative: ' . $coop->name . ' with email: ' . $coop->email);
+        // Find the cooperative by ID
+        $coop = Cooperative::findOrFail($coopId);
+        \Log::info('Found cooperative: ' . $coop->name . ' with email: ' . $coop->email);
 
-          // Get the latest event for the cooperative
-          $event = Event::latest()->first();
+        // Get the latest event for the cooperative
+        $event = Event::latest()->first();
 
-          // Fetch GA Registration details
-          $gaRegistration = GARegistration::where('coop_id', $coopId)->latest()->first();
+        // Fetch GA Registration details
+        $gaRegistration = GARegistration::where('coop_id', $coopId)->latest()->first();
 
-          // Fetch only users with role "cooperative" belonging to the current cooperative
-          $users = User::where('coop_id', $coop->coop_id)
-              ->where('role', 'cooperative')
-              ->get();
+        // Fetch only users with role "cooperative" belonging to the current cooperative
+        $users = User::where('coop_id', $coop->coop_id)
+            ->where('role', 'cooperative')
+            ->get();
 
-          if ($users->isNotEmpty()) {
-              Mail::to($coop->email)->queue(new CooperativeNotification($coop, $event, $gaRegistration, $users));
-              \Log::info("Notification sent to: {$coop->email}");
-          } else {
-              \Log::info("Skipped cooperative: {$coop->name} (No cooperative users found)");
-          }
+        if ($users->isNotEmpty()) {
+            foreach ($users as $user) {
+                // Generate password using the first letter of each word in the cooperative name
+                $acronym = strtoupper(implode('', array_map(fn($word) => $word[0], explode(' ', trim($coop->name)))));
+                $sanitizedPassword = $acronym . 'GA2025';
 
-          return redirect()->route('supportview')->with('success', 'Notification sent to the cooperative!');
-      } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-          \Log::error('Cooperative not found: ' . $e->getMessage());
-          return back()->with('error', 'Cooperative not found.');
-      } catch (\Exception $e) {
-          \Log::error('Error sending notification: ' . $e->getMessage());
-          return back()->with('error', 'Error sending notification: ' . $e->getMessage());
-      }
-  }
+                // Update user password
+                $user->password = Hash::make($sanitizedPassword);
+                $user->save();
+
+                \Log::info("New password set for user: {$user->email} -> {$sanitizedPassword}");
+            }
+
+            // Send notification email
+            Mail::to($coop->email)->queue(new CooperativeNotification($coop, $event, $gaRegistration, $users, $sanitizedPassword));
+            \Log::info("Notification sent to: {$coop->email}");
+
+            return redirect()->route('supportview')->with('success', 'Notification sent with updated password!');
+        } else {
+            \Log::info("Skipped cooperative: {$coop->name} (No cooperative users found)");
+        }
+
+        return redirect()->route('supportview')->with('success', 'Notification sent to the cooperative!');
+    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        \Log::error('Cooperative not found: ' . $e->getMessage());
+        return back()->with('error', 'Cooperative not found.');
+    } catch (\Exception $e) {
+        \Log::error('Error sending notification: ' . $e->getMessage());
+        return back()->with('error', 'Error sending notification: ' . $e->getMessage());
+    }
+}
 
 
   public function supportregister()
