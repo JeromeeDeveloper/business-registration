@@ -406,6 +406,11 @@
                                                 </div>
                                             </div>
 
+                                            <div class="col-md-6 col-lg-4">
+                                                <label for="ga_remark">Remark</label>
+                                                <textarea class="form-control" name="ga_remark" id="ga_remark" rows="4" placeholder="Remark">{{ $coop->ga_remark }}</textarea>
+                                            </div>
+
 
                                         </div>
 

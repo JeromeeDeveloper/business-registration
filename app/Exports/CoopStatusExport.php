@@ -10,16 +10,21 @@ class CoopStatusExport implements FromCollection, WithHeadings
 {
     public function collection()
     {
-        // Get only those with Partial or Fully Registered status
         $cooperatives = Cooperative::with(['participants', 'uploadedDocuments', 'gaRegistration'])
             ->whereHas('gaRegistration', function ($query) {
                 $query->whereIn('registration_status', ['Partial Registered', 'Fully Registered']);
             })
+            ->orWhereHas('uploadedDocuments') // Include those with uploaded documents
             ->get();
 
         return $cooperatives->map(function ($coop) {
             // Determine registration status
             $registrationStatus = $coop->gaRegistration->registration_status ?? 'Not Available';
+
+            // If the registration status is "Rejected", change it to "Unregistered"
+            if ($registrationStatus === 'Rejected') {
+                $registrationStatus = 'Unregistered';
+            }
 
             // Determine membership status
             $membershipStatus = strtoupper($coop->gaRegistration->membership_status ?? 'NOT AVAILABLE');
@@ -60,6 +65,7 @@ class CoopStatusExport implements FromCollection, WithHeadings
             ];
         });
     }
+
 
     public function headings(): array
     {

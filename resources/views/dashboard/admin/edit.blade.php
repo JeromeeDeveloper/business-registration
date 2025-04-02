@@ -752,11 +752,10 @@
                                                     </div>
 
                                                     <div class="form-group">
-                                                        <label for="ga_remark">GA Remark</label>
-                                                        <input type="text" class="form-control" name="ga_remark"
-                                                            id="ga_remark" value="{{ $coop->ga_remark }}"
-                                                            placeholder="GA Remark" />
+                                                        <label for="ga_remark">Remark</label>
+                                                        <textarea class="form-control" name="ga_remark" id="ga_remark" rows="4" placeholder="GA Remark">{{ $coop->ga_remark }}</textarea>
                                                     </div>
+
 
                                                     <h6 class="mt-3 text-secondary">Registration Status:</h6>
 

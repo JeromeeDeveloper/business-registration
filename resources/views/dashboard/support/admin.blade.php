@@ -560,7 +560,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <p class="card-category mb-1">Registered Migs Coops</p>
+                                        <p class="card-category mb-1">Registered MIGS Coops</p>
                                         <h4 class="card-title mb-0">{{ number_format($registeredMigsCoops) }}</h4>
                                     </div>
                                 </div>
@@ -577,7 +577,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <p class="card-category mb-1">Registered Non-Migs Coops</p>
+                                        <p class="card-category mb-1">Registered NON-MIGS Coops</p>
                                         <h4 class="card-title mb-0">{{ number_format($registeredNonMigsCoops) }}</h4>
                                     </div>
                                 </div>

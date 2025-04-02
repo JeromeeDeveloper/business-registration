@@ -297,16 +297,19 @@ public function previewFilteredCoopStatus(Request $request)
 }
 
 
-    public function coopStatusList(Request $request)
+public function coopStatusList(Request $request)
 {
     $cooperatives = Cooperative::with(['participants', 'uploadedDocuments', 'gaRegistration'])
         ->whereHas('gaRegistration', function ($query) {
             $query->whereIn('registration_status', ['Partial Registered', 'Fully Registered']);
         })
+        ->orWhereHas('uploadedDocuments') // Includes those with uploaded documents
         ->get();
 
     return view('dashboard.admin.reports.coop_status_list', compact('cooperatives'));
 }
+
+
 
 
 

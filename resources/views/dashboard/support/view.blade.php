@@ -327,9 +327,12 @@
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="ga_registration_status">Registration Status</label>
-                                    <p>{{ optional($coop->gaRegistration)->registration_status ?? 'N/A' }}</p>
+                                    <p>
+                                        {{ optional($coop->gaRegistration)->registration_status === 'Rejected' ? 'Unregistered' : (optional($coop->gaRegistration)->registration_status ?? 'N/A') }}
+                                    </p>
                                 </div>
                             </div>
+
 
                             <!-- Membership Status -->
                             <div class="col-md-6 col-lg-4">
@@ -338,6 +341,14 @@
                                     <p>{{ strtoupper(optional($coop->gaRegistration)->membership_status ?? 'N/A') }}</p>
                                 </div>
                             </div>
+
+                            <div class="col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="ga_remark">Remark</label>
+                                    <textarea class="form-control" name="ga_remark" id="ga_remark" rows="4" readonly>{{ $coop->ga_remark ?? 'N/A' }}</textarea>
+                                </div>
+                            </div>
+
 
                             <div class="col-12">
                                 <h4 class="mt-4">Verifier</h4>
@@ -523,12 +534,6 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="reg_fee_payable">Registration Fee Payable</label>
-                                    <p>{{ $coop->reg_fee_payable }}</p>
-                                </div>
-                            </div>
 
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
@@ -537,13 +542,16 @@
                                 </div>
                             </div>
 
-
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
-                                    <label for="ga_remark">GA Remark</label>
-                                    <p>{{ $coop->ga_remark }}</p>
+                                    <label for="reg_fee_payable">Registration Fee Payable</label>
+                                    <p>{{ $coop->reg_fee_payable }}</p>
                                 </div>
                             </div>
+
+
+
+
 
                         </div>
                     </div>
