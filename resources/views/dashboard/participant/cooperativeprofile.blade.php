@@ -585,7 +585,7 @@
                                                             <td id="num_participants">{{ $cooperative->participants()->count() }}</td>
                                                         </tr>
                                                         <tr>
-                                                            <td class="fw-bold">GA Remark:</td>
+                                                            <td class="fw-bold">Remark:</td>
                                                             <td>{{ $cooperative->ga_remark ?? 'N/A' }}</td>
                                                         </tr>
 

@@ -486,65 +486,6 @@ class CooperativeController extends Controller
   }
 
 
-
-    //   public function updateStatus(Request $request, $coop_id)
-    //   {
-    //       // Validate inputs
-    //       $request->validate([
-    //           'membership_status' => 'nullable|in:Non-migs,Migs',
-    //       ]);
-
-    //       // Find or create GA Registration for the Cooperative
-    //       $gaRegistration = GARegistration::firstOrCreate(
-    //           ['coop_id' => $coop_id],
-    //           ['participant_id' => null]
-    //       );
-
-    //       // Define required documents
-    //       $requiredDocuments = [
-    //           'Financial Statement',
-    //           'Resolution for Voting delegates',
-    //           'Deposit Slip for Registration Fee',
-    //           'Deposit Slip for CETF Remittance',
-    //           'CETF Undertaking',
-    //           'Certificate of Candidacy',
-    //           'CETF Utilization invoice'
-    //       ];
-
-    //       // Check approved documents
-    //       $approvedDocumentsCount = UploadedDocument::where('coop_id', $coop_id)
-    //           ->whereIn('document_type', $requiredDocuments)
-    //           ->where('status', 'Approved')
-    //           ->count();
-
-    //       $isListOfOfficersApproved = UploadedDocument::where('coop_id', $coop_id)
-    //           ->where('document_type', 'List of Officers')
-    //           ->where('status', 'Approved')
-    //           ->exists();
-
-    //       // Fetch cooperative and check payment status
-    //       $coop = Cooperative::findOrFail($coop_id);
-
-    //       $isPaymentSufficient = !is_null($coop->less_prereg_payment) &&
-    //                               $coop->less_prereg_payment >= $coop->net_required_reg_fee;
-
-    //       // Determine registration status
-    //       if (($approvedDocumentsCount === count($requiredDocuments) && $isListOfOfficersApproved) || $isPaymentSufficient) {
-    //           $gaRegistration->registration_status = 'Fully Registered';
-    //       } else {
-    //           $gaRegistration->registration_status = 'Partial Registered';
-    //       }
-
-    //       // Update membership status if provided
-    //       if ($request->filled('membership_status')) {
-    //           $gaRegistration->membership_status = $request->membership_status;
-    //       }
-
-    //       $gaRegistration->save();
-
-    //       return back()->with('success', 'GA Registration status updated successfully.');
-    //   }
-
     public function updateAllCooperatives()
     {
         (new CooperativeObserver())->updateAllCooperativesMembershipStatus();

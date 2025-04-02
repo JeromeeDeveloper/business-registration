@@ -753,7 +753,7 @@
 
                                                     <div class="form-group">
                                                         <label for="ga_remark">Remark</label>
-                                                        <textarea class="form-control" name="ga_remark" id="ga_remark" rows="4" placeholder="GA Remark">{{ $coop->ga_remark }}</textarea>
+                                                        <textarea class="form-control" name="ga_remark" id="ga_remark" rows="4" placeholder="Remark">{{ $coop->ga_remark }}</textarea>
                                                     </div>
 
 
@@ -803,6 +803,7 @@
 
 
                     </div>
+
 
                     <form action="{{ route('cooperatives.storeDocuments2', $coop->coop_id) }}" method="POST"
                         enctype="multipart/form-data" class="border p-4 rounded shadow-sm bg-light">

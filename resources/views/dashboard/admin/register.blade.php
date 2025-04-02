@@ -733,10 +733,10 @@
 
 
                                                             <div class="form-group">
-                                                                <label for="ga_remark">GA Remark</label>
+                                                                <label for="ga_remark">Remark</label>
                                                                 <input type="text" class="form-control"
                                                                     name="ga_remark" id="ga_remark"
-                                                                    placeholder="GA Remark" />
+                                                                    placeholder="Remark" />
                                                             </div>
 
 
