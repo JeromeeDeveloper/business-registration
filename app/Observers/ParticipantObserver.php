@@ -141,12 +141,14 @@ class ParticipantObserver
             $cooperative->share_capital_balance >= 25000 &&
             $cooperative->cetf_balance <= 0 &&
             !is_null($cooperative->cetf_remittance) &&
+            $cooperative->cetf_required > 0 && // Ensure CETF Required is not 0
             $allDocumentsApproved
         ) {
             $gaRegistration->membership_status = 'Migs';
         } else {
             $gaRegistration->membership_status = 'Non-migs';
         }
+
 
         // Save the updated GA Registration status
         $gaRegistration->save();
