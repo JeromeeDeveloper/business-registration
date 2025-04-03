@@ -35,9 +35,7 @@ class ParticipantController extends Controller
                 ->orWhere('last_name', 'like', '%' . $request->search . '%')
                 ->orWhere('middle_name', 'like', '%' . $request->search . '%')
                 ->orWhere('designation', 'like', '%' . $request->search . '%')
-                ->orWhereHas('user', function ($userQuery) use ($request) {
-                    $userQuery->where('name', 'like', '%' . $request->search . '%');
-                })
+                ->orWhere('delegate_type', 'like', '%' . $request->search . '%')
                 ->orWhereHas('cooperative', function ($cooperativeQuery) use ($request) {
                     $cooperativeQuery->where('name', 'like', '%' . $request->search . '%');
                 });

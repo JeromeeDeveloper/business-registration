@@ -810,170 +810,199 @@
                                     <div class="card-action">
                                         <button class="btn btn-primary btn-round me-2" type="submit">Submit
                                             Information</button>
-
                                 </form>
-
-
                             </div>
-
-
-
-
                         </div>
-
-
                     </div>
 
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <form action="{{ route('cooperatives.storeDocuments2', $coop->coop_id) }}"
+                                        method="POST" enctype="multipart/form-data">
+                                        @csrf
+                                        <input type="hidden" name="form_key" value="form1">
+                                        <h3 class="mb-4 text-center text-primary">Upload & Edit Documents for
+                                            {{ $coop->name }}</h3>
 
-                    <form action="{{ route('cooperatives.storeDocuments2', $coop->coop_id) }}" method="POST"
-                        enctype="multipart/form-data" class="border p-4 rounded shadow-sm bg-light">
-                        @csrf
-                        <input type="hidden" name="form_key" value="form1">
-                        <h3 class="mb-4 text-center text-primary">Upload & Edit Documents for {{ $coop->name }}</h3>
+                                        <div class="row">
+                                            <!-- Financial Statement (Left Column) -->
+                                            <div class="col-md-6 mb-4">
+                                                <label for="documents[Financial Statement]" class="form-label">Audited
+                                                    Financial
+                                                    Statement</label>
+                                                <input type="file" name="documents[Financial Statement]"
+                                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv"
+                                                    class="form-control mb-2">
+                                                @if ($coop->uploadedDocuments()->where('document_type', 'Financial Statement')->exists())
+                                                    <p class="text-info">Current File:
+                                                        {{ $coop->uploadedDocuments()->where('document_type', 'Financial Statement')->first()->file_name }}
+                                                    </p>
+                                                    <small class="form-text text-muted">You can upload a new file or
+                                                        keep the existing
+                                                        one.</small>
+                                                @endif
+                                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png,
+                                                    pdf (no file size
+                                                    limit).</small>
 
-                        <div class="row">
-                            <!-- Financial Statement (Left Column) -->
-                            <div class="col-md-6 mb-4">
-                                <label for="documents[Financial Statement]" class="form-label">Audited Financial
-                                    Statement</label>
-                                <input type="file" name="documents[Financial Statement]"
-                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv" class="form-control mb-2">
-                                @if ($coop->uploadedDocuments()->where('document_type', 'Financial Statement')->exists())
-                                    <p class="text-info">Current File:
-                                        {{ $coop->uploadedDocuments()->where('document_type', 'Financial Statement')->first()->file_name }}
-                                    </p>
-                                    <small class="form-text text-muted">You can upload a new file or keep the existing
-                                        one.</small>
-                                @endif
-                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (no file size
-                                    limit).</small>
+                                            </div>
 
-                            </div>
+                                            <!-- Resolution for Voting Delegates (Right Column) -->
+                                            <div class="col-md-6 mb-4">
+                                                <label for="documents[Resolution for Voting Delegates]"
+                                                    class="form-label">Resolution
+                                                    for Voting Delegates</label>
+                                                <input type="file"
+                                                    name="documents[Resolution for Voting Delegates]"
+                                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv"
+                                                    class="form-control mb-2">
+                                                @if ($coop->uploadedDocuments()->where('document_type', 'Resolution for Voting Delegates')->exists())
+                                                    <p class="text-info">Current File:
+                                                        {{ $coop->uploadedDocuments()->where('document_type', 'Resolution for Voting Delegates')->first()->file_name }}
+                                                    </p>
+                                                    <small class="form-text text-muted">You can upload a new file or
+                                                        keep the existing
+                                                        one.</small>
+                                                @endif
+                                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png,
+                                                    pdf (no file size
+                                                    limit).</small>
 
-                            <!-- Resolution for Voting Delegates (Right Column) -->
-                            <div class="col-md-6 mb-4">
-                                <label for="documents[Resolution for Voting Delegates]" class="form-label">Resolution
-                                    for Voting Delegates</label>
-                                <input type="file" name="documents[Resolution for Voting Delegates]"
-                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv" class="form-control mb-2">
-                                @if ($coop->uploadedDocuments()->where('document_type', 'Resolution for Voting Delegates')->exists())
-                                    <p class="text-info">Current File:
-                                        {{ $coop->uploadedDocuments()->where('document_type', 'Resolution for Voting Delegates')->first()->file_name }}
-                                    </p>
-                                    <small class="form-text text-muted">You can upload a new file or keep the existing
-                                        one.</small>
-                                @endif
-                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (no file size
-                                    limit).</small>
+                                            </div>
+                                        </div>
 
+                                        <div class="row">
+                                            <!-- Deposit Slip for Registration Fee (Left Column) -->
+                                            <div class="col-md-6 mb-4">
+                                                <label for="documents[Deposit Slip for Registration Fee]"
+                                                    class="form-label">Deposit
+                                                    Slip for Registration Fee</label>
+                                                <input type="file"
+                                                    name="documents[Deposit Slip for Registration Fee]"
+                                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv"
+                                                    class="form-control mb-2">
+                                                @if ($coop->uploadedDocuments()->where('document_type', 'Deposit Slip for Registration Fee')->exists())
+                                                    <p class="text-info">Current File:
+                                                        {{ $coop->uploadedDocuments()->where('document_type', 'Deposit Slip for Registration Fee')->first()->file_name }}
+                                                    </p>
+                                                    <small class="form-text text-muted">You can upload a new file or
+                                                        keep the existing
+                                                        one.</small>
+                                                @endif
+                                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png,
+                                                    pdf (no file size
+                                                    limit).</small>
+
+                                            </div>
+
+                                            <!-- Deposit Slip for CETF Remittance (Right Column) -->
+                                            <div class="col-md-6 mb-4">
+                                                <label for="documents[Deposit Slip for CETF Remittance]"
+                                                    class="form-label">Deposit
+                                                    Slip for CETF Remittance</label>
+                                                <input type="file"
+                                                    name="documents[Deposit Slip for CETF Remittance]"
+                                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv"
+                                                    class="form-control mb-2">
+                                                @if ($coop->uploadedDocuments()->where('document_type', 'Deposit Slip for CETF Remittance')->exists())
+                                                    <p class="text-info">Current File:
+                                                        {{ $coop->uploadedDocuments()->where('document_type', 'Deposit Slip for CETF Remittance')->first()->file_name }}
+                                                    </p>
+                                                    <small class="form-text text-muted">You can upload a new file or
+                                                        keep the existing
+                                                        one.</small>
+                                                @endif
+                                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png,
+                                                    pdf (no file size
+                                                    limit).</small>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <!-- CETF Undertaking (Left Column) -->
+                                            <div class="col-md-6 mb-4">
+                                                <label for="documents[CETF Undertaking]" class="form-label">CETF
+                                                    Undertaking</label>
+                                                <input type="file" name="documents[CETF Undertaking]"
+                                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv"
+                                                    class="form-control mb-2">
+                                                @if ($coop->uploadedDocuments()->where('document_type', 'CETF Undertaking')->exists())
+                                                    <p class="text-info">Current File:
+                                                        {{ $coop->uploadedDocuments()->where('document_type', 'CETF Undertaking')->first()->file_name }}
+                                                    </p>
+                                                    <small class="form-text text-muted">You can upload a new file or
+                                                        keep the existing
+                                                        one.</small>
+                                                @endif
+                                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png,
+                                                    pdf (no file size
+                                                    limit).</small>
+
+                                            </div>
+
+
+                                            <div class="col-md-6 mb-4">
+                                                <label for="documents[Certificate of Candidacy]"
+                                                    class="form-label">Certificate of
+                                                    Candidacy</label>
+                                                <input type="file" name="documents[Certificate of Candidacy]"
+                                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv"
+                                                    class="form-control mb-2">
+                                                @if ($coop->uploadedDocuments()->where('document_type', 'Certificate of Candidacy')->exists())
+                                                    <p class="text-info">Current File:
+                                                        {{ $coop->uploadedDocuments()->where('document_type', 'Certificate of Candidacy')->first()->file_name }}
+                                                    </p>
+                                                    <small class="form-text text-muted">You can upload a new file or
+                                                        keep the existing
+                                                        one.</small>
+                                                @endif
+                                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png,
+                                                    pdf (no file size
+                                                    limit).</small>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <!-- CETF Utilization Invoice (Left Column) -->
+                                            <div class="col-md-6 mb-4">
+                                                <label for="documents[CETF Utilization Invoice]"
+                                                    class="form-label">CETF Utilization
+                                                    Invoice</label>
+                                                <input type="file" name="documents[CETF Utilization Invoice]"
+                                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv"
+                                                    class="form-control mb-2">
+                                                @if ($coop->uploadedDocuments()->where('document_type', 'CETF Utilization Invoice')->exists())
+                                                    <p class="text-info">Current File:
+                                                        {{ $coop->uploadedDocuments()->where('document_type', 'CETF Utilization Invoice')->first()->file_name }}
+                                                    </p>
+                                                    <small class="form-text text-muted">You can upload a new file or
+                                                        keep the existing
+                                                        one.</small>
+                                                @endif
+                                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png,
+                                                    pdf (no file size
+                                                    limit).</small>
+
+                                            </div>
+                                        </div>
+
+                                        <!-- Submit Button -->
+
+                                         <div class="card-action">
+                                            <button type="submit" class="btn btn-primary btn-round me-2">Upload
+                                                Documents</button>
+                                        </div>
+                                    </form>
+
+                                </div>
                             </div>
                         </div>
-
-                        <div class="row">
-                            <!-- Deposit Slip for Registration Fee (Left Column) -->
-                            <div class="col-md-6 mb-4">
-                                <label for="documents[Deposit Slip for Registration Fee]" class="form-label">Deposit
-                                    Slip for Registration Fee</label>
-                                <input type="file" name="documents[Deposit Slip for Registration Fee]"
-                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv" class="form-control mb-2">
-                                @if ($coop->uploadedDocuments()->where('document_type', 'Deposit Slip for Registration Fee')->exists())
-                                    <p class="text-info">Current File:
-                                        {{ $coop->uploadedDocuments()->where('document_type', 'Deposit Slip for Registration Fee')->first()->file_name }}
-                                    </p>
-                                    <small class="form-text text-muted">You can upload a new file or keep the existing
-                                        one.</small>
-                                @endif
-                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (no file size
-                                    limit).</small>
-
-                            </div>
-
-                            <!-- Deposit Slip for CETF Remittance (Right Column) -->
-                            <div class="col-md-6 mb-4">
-                                <label for="documents[Deposit Slip for CETF Remittance]" class="form-label">Deposit
-                                    Slip for CETF Remittance</label>
-                                <input type="file" name="documents[Deposit Slip for CETF Remittance]"
-                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv" class="form-control mb-2">
-                                @if ($coop->uploadedDocuments()->where('document_type', 'Deposit Slip for CETF Remittance')->exists())
-                                    <p class="text-info">Current File:
-                                        {{ $coop->uploadedDocuments()->where('document_type', 'Deposit Slip for CETF Remittance')->first()->file_name }}
-                                    </p>
-                                    <small class="form-text text-muted">You can upload a new file or keep the existing
-                                        one.</small>
-                                @endif
-                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (no file size
-                                    limit).</small>
-
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <!-- CETF Undertaking (Left Column) -->
-                            <div class="col-md-6 mb-4">
-                                <label for="documents[CETF Undertaking]" class="form-label">CETF Undertaking</label>
-                                <input type="file" name="documents[CETF Undertaking]"
-                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv" class="form-control mb-2">
-                                @if ($coop->uploadedDocuments()->where('document_type', 'CETF Undertaking')->exists())
-                                    <p class="text-info">Current File:
-                                        {{ $coop->uploadedDocuments()->where('document_type', 'CETF Undertaking')->first()->file_name }}
-                                    </p>
-                                    <small class="form-text text-muted">You can upload a new file or keep the existing
-                                        one.</small>
-                                @endif
-                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (no file size
-                                    limit).</small>
-
-                            </div>
-
-
-                            <div class="col-md-6 mb-4">
-                                <label for="documents[Certificate of Candidacy]" class="form-label">Certificate of
-                                    Candidacy</label>
-                                <input type="file" name="documents[Certificate of Candidacy]"
-                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv" class="form-control mb-2">
-                                @if ($coop->uploadedDocuments()->where('document_type', 'Certificate of Candidacy')->exists())
-                                    <p class="text-info">Current File:
-                                        {{ $coop->uploadedDocuments()->where('document_type', 'Certificate of Candidacy')->first()->file_name }}
-                                    </p>
-                                    <small class="form-text text-muted">You can upload a new file or keep the existing
-                                        one.</small>
-                                @endif
-                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (no file size
-                                    limit).</small>
-
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <!-- CETF Utilization Invoice (Left Column) -->
-                            <div class="col-md-6 mb-4">
-                                <label for="documents[CETF Utilization Invoice]" class="form-label">CETF Utilization
-                                    Invoice</label>
-                                <input type="file" name="documents[CETF Utilization Invoice]"
-                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv" class="form-control mb-2">
-                                @if ($coop->uploadedDocuments()->where('document_type', 'CETF Utilization Invoice')->exists())
-                                    <p class="text-info">Current File:
-                                        {{ $coop->uploadedDocuments()->where('document_type', 'CETF Utilization Invoice')->first()->file_name }}
-                                    </p>
-                                    <small class="form-text text-muted">You can upload a new file or keep the existing
-                                        one.</small>
-                                @endif
-                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (no file size
-                                    limit).</small>
-
-                            </div>
-                        </div>
-
-                        <!-- Submit Button -->
-
-                        <div class="d-flex justify-content-start mt-4">
-                            <button type="submit" class="btn btn-primary btn-round me-2">Upload Documents</button>
-                        </div>
-                    </form>
-
-
+                    </div>
                 </div>
-
             </div>
 
         </div>

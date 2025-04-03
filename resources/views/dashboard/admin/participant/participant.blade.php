@@ -267,7 +267,7 @@
                                                         Assigned Cooperative
                                                     </th>
                                                     <th>
-                                                        User Account
+                                                        Delegate Status
                                                     </th>
                                                     <th>
                                                         First Name
@@ -298,7 +298,7 @@
                                                         {{-- <td>{{ $participant->registration->status ?? 'Pending' }}</td> --}}
                                                         <td>{{ optional($participant->cooperative)->name ?? 'N/A' }}
                                                         </td>
-                                                        <td>{{ optional($participant->user)->name ?? 'N/A' }}</td>
+                                                        <td>{{ $participant->delegate_type }}</td>
                                                         <td>{{ $participant->first_name }}</td>
                                                         <td>{{ $participant->last_name }}</td>
                                                         <td>{{ $participant->designation ?? 'N/A' }}</td>
