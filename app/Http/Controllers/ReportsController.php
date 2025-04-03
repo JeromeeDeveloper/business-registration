@@ -268,7 +268,7 @@ public function previewFilteredCoopStatus(Request $request)
                 case 'voting_delegates':
                     return Excel::download(new CooperativeReportExport(), 'voting_delegates.xlsx');
                 case 'summary_delegates':
-                    return Excel::download(new SummaryDelegatesExport(), 'summary_delegates.xlsx');
+                    return Excel::download(new SummaryDelegatesExport(), 'cooperative_per_region.xlsx');
                 case 'tshirt_sizes':
                     return Excel::download(new TshirtSizesExport(), 'tshirt_sizes.xlsx');
                 case 'coop_registration':
@@ -313,20 +313,18 @@ public function coopStatusList(Request $request)
 
 
 
-    public function summaryDelegates()
+public function summaryDelegates()
 {
-    $documentsByRegion2 = UploadedDocument::with('cooperative')
-    ->whereHas('cooperative') // Only fetch documents with a cooperative
-    ->get()
-    ->groupBy(function ($document) {
-        return $document->cooperative->region ?? 'Unknown'; // Group by region, default to 'Unknown'
-    })
-    ->filter(function ($documents, $region) {
-        return $region !== 'Unknown'; // Exclude "Unknown" regions
-    });
+    // Fetch cooperatives and group them by region, then count the number of cooperatives per region
+    $cooperativesByRegion = Cooperative::select('region')
+        ->groupBy('region') // Group cooperatives by region
+        ->selectRaw('region, count(*) as cooperatives_count') // Count cooperatives per region
+        ->get();
 
-    return view('dashboard.admin.reports.summary_delegates', compact('documentsByRegion2'));
+    return view('dashboard.admin.reports.summary_delegates', compact('cooperativesByRegion'));
 }
+
+
 
 public function coopRegistrationSummary(Request $request)
 {

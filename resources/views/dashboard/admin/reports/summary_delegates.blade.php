@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document Status Report</title>
+    <title>Cooperative Summary Report</title>
 
     <!-- Bootstrap CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -76,7 +76,7 @@
 
 <div class="container-fluid mt-4">
     <h2 class="mb-4 fw-bold text-primary text-center">
-        📑 Summary of Delegates Per Congress
+        📑 Cooperative Summary Per Region
     </h2>
 
     <div class="table-responsive">
@@ -84,26 +84,14 @@
             <thead class="bg-gradient bg-dark text-white">
                 <tr>
                     <th>Cooperative Region</th>
-                    <th> Financial Statement</th>
-                    <th> Resolution for Voting delegates</th>
-                    <th> Deposit Slip for Registration Fee</th>
-                    <th> Deposit Slip for CETF Remittance</th>
-                    <th> CETF Undertaking</th>
-                    <th> Certificate of Candidacy</th>
-                    <th> CETF Utilization invoice</th>
+                    <th>Number of Cooperatives</th>
                 </tr>
             </thead>
             <tbody class="bg-light">
-                @foreach($documentsByRegion2 as $region => $documents)
+                @foreach($cooperativesByRegion as $region)
                 <tr>
-                    <td class="fw-semibold text-primary">{{ $region }}</td>
-                    <td>{{ $documents->where('document_type', 'Financial Statement')->count() }}</td>
-                    <td>{{ $documents->where('document_type', 'Resolution for Voting delegates')->count() }}</td>
-                    <td>{{ $documents->where('document_type', 'Deposit Slip for Registration Fee')->count() }}</td>
-                    <td>{{ $documents->where('document_type', 'Deposit Slip for CETF Remittance')->count() }}</td>
-                    <td>{{ $documents->where('document_type', 'CETF Undertaking')->count() }}</td>
-                    <td>{{ $documents->where('document_type', 'Certificate of Candidacy')->count() }}</td>
-                    <td>{{ $documents->where('document_type', 'CETF Utilization invoice')->count() }}</td>
+                    <td class="fw-semibold text-primary">{{ $region->region }}</td>
+                    <td>{{ $region->cooperatives_count }}</td> <!-- Count of cooperatives in this region -->
                 </tr>
                 @endforeach
             </tbody>

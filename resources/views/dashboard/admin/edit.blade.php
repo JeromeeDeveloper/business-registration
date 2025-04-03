@@ -576,7 +576,7 @@
                                                         <label for="cetf_required">Required CETF</label>
                                                         <input type="number" class="form-control"
                                                             name="cetf_required" id="cetf_required"
-                                                            id="cetf_required" value="{{ $coop->cetf_required }}"
+                                                            value="{{ $coop->cetf_required }}"
                                                             placeholder="Enter Required CETF" readonly>
                                                     </div>
 
@@ -1126,41 +1126,44 @@
     </script>
 
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            let cetfRemittance = document.getElementById('cetf_remittance');
-            let additionalCetf = document.getElementById('additional_cetf');
-            let cetfUndertaking = document.getElementById('cetf_undertaking');
-            let totalRemittance = document.getElementById('total_remittance');
-            let fullCetfRemitted = document.getElementById('full_cetf_remitted');
-            let cetfRequired = document.getElementById('cetf_required');
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let cetfRemittance = document.getElementById('cetf_remittance');
+        let additionalCetf = document.getElementById('additional_cetf');
+        let cetfUndertaking = document.getElementById('cetf_undertaking');
+        let totalRemittance = document.getElementById('total_remittance');
+        let fullCetfRemitted = document.getElementById('full_cetf_remitted');
+        let cetfRequired = document.getElementById('cetf_required');
 
-            function calculateTotalRemittance() {
-                let remittance = parseFloat(cetfRemittance.value) || 0;
-                let additional = parseFloat(additionalCetf.value) || 0;
-                let undertaking = parseFloat(cetfUndertaking.value) || 0;
-                let total = (remittance + additional + undertaking).toFixed(2);
+        function calculateTotalRemittance() {
+            let remittance = parseFloat(cetfRemittance.value) || 0;
+            let additional = parseFloat(additionalCetf.value) || 0;
+            let undertaking = parseFloat(cetfUndertaking.value) || 0;
+            let total = (remittance + additional + undertaking).toFixed(2);
 
-                totalRemittance.value = total;
-                updateFullCetfRemitted(total);
+            totalRemittance.value = total;
+            updateFullCetfRemitted(parseFloat(total));
+        }
+
+        function updateFullCetfRemitted(total) {
+            let required = parseFloat(cetfRequired.value) || 0;
+
+            // Set "yes" if totalRemittance is equal to or greater than cetfRequired
+            if (total >= required) {
+                fullCetfRemitted.value = "yes";
+            } else {
+                fullCetfRemitted.value = "no";
             }
+        }
 
-            function updateFullCetfRemitted(total) {
-                let required = parseFloat(cetfRequired.value) || 0;
+        cetfRemittance.addEventListener('input', calculateTotalRemittance);
+        additionalCetf.addEventListener('input', calculateTotalRemittance);
+        cetfUndertaking.addEventListener('input', calculateTotalRemittance);
+        calculateTotalRemittance(); // Initialize on page load
+    });
+</script>
 
-                if (total == required) {
-                    fullCetfRemitted.value = "yes";
-                } else {
-                    fullCetfRemitted.value = "no";
-                }
-            }
 
-            cetfRemittance.addEventListener('input', calculateTotalRemittance);
-            additionalCetf.addEventListener('input', calculateTotalRemittance);
-            cetfUndertaking.addEventListener('input', calculateTotalRemittance);
-            calculateTotalRemittance(); // Initialize on page load
-        });
-    </script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {

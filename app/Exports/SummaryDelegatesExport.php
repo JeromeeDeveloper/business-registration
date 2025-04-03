@@ -2,8 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\GARegistration;
-use App\Models\UploadedDocument;
+use App\Models\Cooperative; // Use Cooperative model
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -12,59 +11,27 @@ class SummaryDelegatesExport implements FromCollection, WithHeadings, WithMappin
 {
     public function collection()
     {
-        // Fetch documents with their associated cooperative data
-        // Group by region but exclude 'Unknown' regions
-        return UploadedDocument::with('cooperative')
-            ->get()
-            ->groupBy(function($document) {
-                return $document->cooperative ? $document->cooperative->region : 'Unknown';
-            })
-            ->filter(function($documents, $region) {
-                return $region !== 'Unknown'; // Exclude Unknown region
-            });
+        // Fetch cooperatives and group them by region
+        return Cooperative::select('region')
+            ->groupBy('region') // Group cooperatives by region
+            ->selectRaw('region, count(*) as cooperatives_count') // Count cooperatives per region
+            ->get();
     }
 
     public function headings(): array
     {
         return [
             'Cooperative Region',
-            'Financial Statement',
-            'Resolution for Voting delegates',
-            'Deposit Slip for Registration Fee',
-
-            'Deposit Slip for CETF Remittance',
-            'CETF Undertaking',
-            'Certificate of Candidacy',
-            'CETF Utilization invoice'
+            'Number of Cooperatives',
         ];
     }
 
-    public function map($documents): array
+    public function map($cooperativeRegion): array
     {
-        // Get the cooperative region (first entry's region)
-        $coopRegion = $documents->first()->cooperative->region;
-
-        // Count the number of each document type in this region
+        // Return the region and the count of cooperatives
         return [
-            $coopRegion,
-            $this->getDocumentCount($documents, 'Financial Statement'),
-            $this->getDocumentCount($documents, 'Resolution for Voting delegates'),
-            $this->getDocumentCount($documents, 'Deposit Slip for Registration Fee'),
-
-            $this->getDocumentCount($documents, 'Deposit Slip for CETF Remittance'),
-            $this->getDocumentCount($documents, 'CETF Undertaking'),
-            $this->getDocumentCount($documents, 'Certificate of Candidacy'),
-            $this->getDocumentCount($documents, 'CETF Utilization invoice'),
+            $cooperativeRegion->region, // Region name
+            $cooperativeRegion->cooperatives_count, // Count of cooperatives in this region
         ];
-    }
-
-    /**
-     * Helper method to get the count of a specific document type in the group.
-     */
-    protected function getDocumentCount($documents, $type)
-    {
-        return $documents->filter(function($document) use ($type) {
-            return $document->document_type === $type;
-        })->count();
     }
 }

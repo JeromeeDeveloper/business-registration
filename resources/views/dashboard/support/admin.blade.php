@@ -345,11 +345,11 @@
 
 
                                                 <a href="{{ route('admin.reports.summary_delegates') }}"
-                                                    class="list-group-item list-group-item-action py-3 fw-semibold"
-                                                    data-report-type="summary_delegates">
-                                                    <i class="fas fa-user-friends me-2"></i> Summary of Delegates Per
-                                                    Congress
-                                                </a>
+                                                class="list-group-item list-group-item-action py-3 fw-semibold"
+                                                data-report-type="summary_delegates">
+                                                <i class="fas fa-user-friends me-2"></i> Summary of Cooperative Per
+                                                Region
+                                            </a>
 
 
                                                 <a href="{{ route('admin.reports.tshirt_sizes') }}"
