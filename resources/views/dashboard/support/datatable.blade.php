@@ -246,13 +246,13 @@
                                 <i class="icon-arrow-right"></i>
                             </li>
                             <li class="nav-item">
-                                <a href="#">Dashboard</a>
+                                <a href="{{route('supportDashboard')}}">Dashboard</a>
                             </li>
                             <li class="separator">
                                 <i class="icon-arrow-right"></i>
                             </li>
                             <li class="nav-item">
-                                <a href="#">Cooperative</a>
+                                <a href="{{route('supportview')}}">Cooperative</a>
                             </li>
                         </ul>
                     </div>

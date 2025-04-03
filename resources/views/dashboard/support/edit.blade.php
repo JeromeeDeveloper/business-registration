@@ -249,27 +249,30 @@
                                 <i class="icon-arrow-right"></i>
                             </li>
                             <li class="nav-item">
-                                <a href="#">Dashboard</a>
+                                <a href="{{route('supportDashboard')}}">Dashboard</a>
                             </li>
                             <li class="separator">
                                 <i class="icon-arrow-right"></i>
                             </li>
                             <li class="nav-item">
-                                <a href="#">Cooperative</a>
+                                <a href="{{route('supportview')}}">Cooperative</a>
                             </li>
                             <li class="separator">
                                 <i class="icon-arrow-right"></i>
                             </li>
-                            <li class="nav-item">
-                                <a href="#">Edit</a>
-                            </li>
+
                         </ul>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
-                                <div class="card-header">
+                                <div class="card-header d-flex justify-content-between align-items-center">
                                     <div class="card-title">Cooperative Edit Form</div>
+                                    <button type="button" class="btn btn-primary btn-round"
+                                        onclick="window.location.href='{{ route('supportview') }}'">
+                                        <i class="fas fa-arrow-left"></i> <!-- Back Icon -->
+                                    </button>
+
                                 </div>
                                 <form action="{{ route('support.cooperatives.update', $coop->coop_id) }}"
                                     method="POST">
@@ -414,7 +417,7 @@
 
                                         </div>
 
-                                        <button class="btn btn-primary btn-round me-2" type="submit">Submit</button>
+                                        <button class="btn btn-primary btn-round me-2" type="submit">Submit Information</button>
                                     </div>
                                 </form>
 

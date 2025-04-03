@@ -16,12 +16,36 @@
         <p><strong>Dear {{ $coop->name }},</strong></p>
 
         <div class="content">
-            <p>This is an automated email from MASS-SPECC. Below are your credentials for the GA Online Registration:
+
+            <p>This is an automated email from MASS-SPECC.
+                {{-- Below are your credentials for the GA Online Registration: --}}
+            </p>
+
+            <p><strong>GA Registration Status:</strong>
+                @if ($gaRegistration)
+                    @if ($gaRegistration->registration_status === 'Rejected')
+                        Not Registered
+                    @else
+                        {{ $gaRegistration->registration_status }}
+                    @endif
+                @else
+                    Not Registered
+                @endif
+            </p>
+
+
+            <p><strong>Membership Status:</strong>
+                @if ($gaRegistration)
+                    {{ $gaRegistration->membership_status }}
+                @else
+                    Not Available
+                @endif
             </p>
 
             <p><strong>Registration Link: <a href="http://eventregister.mass-specc.coop/"
                         target="_blank">http://eventregister.mass-specc.coop/</a></strong></p>
-            <p><strong>Username: {{ $coop->email }}</strong></p>
+
+            {{-- <p><strong>Username: {{ $coop->email }}</strong></p>
 
             <p><strong>Password:</strong>
                 @if ($coop->users->isNotEmpty())
@@ -36,7 +60,7 @@
                 @else
                     DefaultGA2025
                 @endif
-            </p>
+            </p> --}}
 
 
             <p>Important: Please log in and complete your registration by May 22, 2025. For security reasons, we

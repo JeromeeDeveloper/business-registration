@@ -168,7 +168,7 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
     {
         $search = $request->input('search');
         $filterNoGA = $request->input('filter_no_ga2');
-        $limit = $request->input('limit', 5);
+        $limit = $request->input('limit', 10);
 
         $cooperatives = Cooperative::query();
 

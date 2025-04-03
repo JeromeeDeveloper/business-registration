@@ -329,9 +329,16 @@
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="ga_registration_status">Registration Status</label>
-                                    <p>{{ optional($coop->gaRegistration)->registration_status ?? 'N/A' }}</p>
+                                    <p>
+                                        @if (optional($coop->gaRegistration)->registration_status === 'Rejected')
+                                            Not Registered
+                                        @else
+                                            {{ optional($coop->gaRegistration)->registration_status ?? 'N/A' }}
+                                        @endif
+                                    </p>
                                 </div>
                             </div>
+
 
                             <!-- Membership Status -->
                             <div class="col-md-6 col-lg-4">

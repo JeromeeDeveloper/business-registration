@@ -196,13 +196,13 @@
                                 <i class="icon-arrow-right"></i>
                             </li>
                             <li class="nav-item">
-                                <a href="#">Dashboard</a>
+                                <a href="{{ route('adminDashboard') }}">Dashboard</a>
                             </li>
                             <li class="separator">
                                 <i class="icon-arrow-right"></i>
                             </li>
                             <li class="nav-item">
-                                <a href="#">Cooperative</a>
+                                <a href="{{ route('adminview') }}">Cooperative</a>
                             </li>
                         </ul>
                     </div>

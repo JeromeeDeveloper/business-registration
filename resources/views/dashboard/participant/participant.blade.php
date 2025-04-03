@@ -287,6 +287,11 @@
                                 <i class="fas fa-user-plus me-2"></i> Register Participants
                             </a>
 
+                            <a class="btn btn-info btn-lg action-btn pulse-btn" data-bs-toggle="modal"
+                                data-bs-target="#documentsModal">
+                                <i class="fas fa-file me-2"></i> Upload Documents
+                            </a>
+
                             <!-- Cooperative Profile (Conditional) -->
                             @if ($coop)
                                 <a href="{{ route('cooperativeprofile', ['coop_id' => $coop->coop_id]) }}"
@@ -320,10 +325,6 @@
                                 }
                             </style>
 
-                            <a class="btn btn-info btn-lg action-btn pulse-btn" data-bs-toggle="modal"
-                                data-bs-target="#documentsModal">
-                                <i class="fas fa-file me-2"></i> Upload Documents
-                            </a>
 
 
                         </div>

@@ -196,28 +196,32 @@
                                 <i class="icon-arrow-right"></i>
                             </li>
                             <li class="nav-item">
-                                <a href="#">Dashboard</a>
+                                <a href="{{ route('adminDashboard') }}">Dashboard</a>
                             </li>
                             <li class="separator">
                                 <i class="icon-arrow-right"></i>
                             </li>
                             <li class="nav-item">
-                                <a href="#">Cooperative</a>
+                                <a href="{{ route('adminview') }}">Cooperative</a>
                             </li>
                             <li class="separator">
                                 <i class="icon-arrow-right"></i>
                             </li>
-                            <li class="nav-item">
-                                <a href="#">Edit</a>
-                            </li>
+
                         </ul>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
-                                <div class="card-header">
+                                <div class="card-header d-flex justify-content-between align-items-center">
                                     <div class="card-title">Cooperative Edit Form</div>
+                                    <button type="button" class="btn btn-primary btn-round"
+                                        onclick="window.location.href='{{ route('adminview') }}'">
+                                        <i class="fas fa-arrow-left"></i> <!-- Back Icon -->
+                                    </button>
+
                                 </div>
+
                                 <form action="{{ route('cooperatives.update', $coop->coop_id) }}" method="POST">
                                     @csrf
                                     @method('PUT')
@@ -378,7 +382,12 @@
                                                 </div>
                                             </div> --}}
 
-
+                                            <div class="col-md-6 col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="ga_remark">Remark</label>
+                                                    <textarea class="form-control" name="ga_remark" id="ga_remark" rows="4" placeholder="Remark">{{ $coop->ga_remark }}</textarea>
+                                                </div>
+                                            </div>
 
                                             <div class="col-12">
                                                 <h4 class="mt-4">Verifier</h4>
@@ -493,19 +502,21 @@
 
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="checkbox"
-                                                               name="membership_status" id="membership_status" disabled
-                                                               {{ optional($coop->gaRegistration)->membership_status == 'Migs' ? 'checked' : '' }}>
-                                                        <label class="form-check-label text-uppercase fw-bold text-dark opacity-75"
-                                                               for="membership_status">Migs</label>
+                                                            name="membership_status" id="membership_status" disabled
+                                                            {{ optional($coop->gaRegistration)->membership_status == 'Migs' ? 'checked' : '' }}>
+                                                        <label
+                                                            class="form-check-label text-uppercase fw-bold text-dark opacity-75"
+                                                            for="membership_status">Migs</label>
                                                     </div>
 
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="checkbox"
-                                                               name="membership_status_non_migs"
-                                                               id="membership_status_non_migs" disabled
-                                                               {{ optional($coop->gaRegistration)->membership_status == 'Non-migs' ? 'checked' : '' }}>
-                                                        <label class="form-check-label text-uppercase fw-bold text-danger opacity-75"
-                                                               for="membership_status_non_migs">Non-migs</label>
+                                                            name="membership_status_non_migs"
+                                                            id="membership_status_non_migs" disabled
+                                                            {{ optional($coop->gaRegistration)->membership_status == 'Non-migs' ? 'checked' : '' }}>
+                                                        <label
+                                                            class="form-check-label text-uppercase fw-bold text-danger opacity-75"
+                                                            for="membership_status_non_migs">Non-migs</label>
                                                     </div>
 
                                                 </div>
@@ -751,29 +762,40 @@
                                                             placeholder="Enter GA RegFee Payable" readonly>
                                                     </div>
 
-                                                    <div class="form-group">
-                                                        <label for="ga_remark">Remark</label>
-                                                        <textarea class="form-control" name="ga_remark" id="ga_remark" rows="4" placeholder="Remark">{{ $coop->ga_remark }}</textarea>
-                                                    </div>
 
 
                                                     <h6 class="mt-3 text-secondary">Registration Status:</h6>
 
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" name="registration_status"
-                                                               id="registration_status" disabled
-                                                               {{ optional($coop->gaRegistration)->registration_status == 'Fully Registered' ? 'checked' : '' }}>
-                                                        <label class="form-check-label fw-bold text-dark opacity-75" for="registration_status">
+                                                        <input class="form-check-input" type="checkbox"
+                                                            name="registration_status" id="registration_status"
+                                                            disabled
+                                                            {{ optional($coop->gaRegistration)->registration_status == 'Fully Registered' ? 'checked' : '' }}>
+                                                        <label class="form-check-label fw-bold text-dark opacity-75"
+                                                            for="registration_status">
                                                             Fully Registered
                                                         </label>
                                                     </div>
 
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" name="registration_status_partial"
-                                                               id="registration_status_partial" disabled
-                                                               {{ optional($coop->gaRegistration)->registration_status == 'Partial Registered' ? 'checked' : '' }}>
-                                                        <label class="form-check-label fw-bold text-danger opacity-75" for="registration_status_partial">
+                                                        <input class="form-check-input" type="checkbox"
+                                                            name="registration_status_partial"
+                                                            id="registration_status_partial" disabled
+                                                            {{ optional($coop->gaRegistration)->registration_status == 'Partial Registered' ? 'checked' : '' }}>
+                                                        <label class="form-check-label fw-bold text-warning opacity-75"
+                                                            for="registration_status_partial">
                                                             Partially Registered
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox"
+                                                            name="registration_status_rejected"
+                                                            id="registration_status_rejected" disabled
+                                                            {{ optional($coop->gaRegistration)->registration_status == 'Rejected' ? 'checked' : '' }}>
+                                                        <label class="form-check-label fw-bold text-danger opacity-75"
+                                                            for="registration_status_rejected">
+                                                            Not Registered
                                                         </label>
                                                     </div>
 
@@ -786,11 +808,9 @@
                                     </div>
 
                                     <div class="card-action">
-                                        <button class="btn btn-label-info btn-round me-2"
-                                            type="submit">Submit</button>
-                                        <button type="button" class="btn btn-primary btn-round"
-                                            onclick="window.location.href='{{ route('adminview') }}'">Back</button>
-                                    </div>
+                                        <button class="btn btn-primary btn-round me-2" type="submit">Submit
+                                            Information</button>
+
                                 </form>
 
 
@@ -947,7 +967,7 @@
                         <!-- Submit Button -->
 
                         <div class="d-flex justify-content-start mt-4">
-                            <button type="submit" class="btn btn-label-info btn-round me-2">Upload Documents</button>
+                            <button type="submit" class="btn btn-primary btn-round me-2">Upload Documents</button>
                         </div>
                     </form>
 
@@ -1126,42 +1146,42 @@
     </script>
 
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        let cetfRemittance = document.getElementById('cetf_remittance');
-        let additionalCetf = document.getElementById('additional_cetf');
-        let cetfUndertaking = document.getElementById('cetf_undertaking');
-        let totalRemittance = document.getElementById('total_remittance');
-        let fullCetfRemitted = document.getElementById('full_cetf_remitted');
-        let cetfRequired = document.getElementById('cetf_required');
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let cetfRemittance = document.getElementById('cetf_remittance');
+            let additionalCetf = document.getElementById('additional_cetf');
+            let cetfUndertaking = document.getElementById('cetf_undertaking');
+            let totalRemittance = document.getElementById('total_remittance');
+            let fullCetfRemitted = document.getElementById('full_cetf_remitted');
+            let cetfRequired = document.getElementById('cetf_required');
 
-        function calculateTotalRemittance() {
-            let remittance = parseFloat(cetfRemittance.value) || 0;
-            let additional = parseFloat(additionalCetf.value) || 0;
-            let undertaking = parseFloat(cetfUndertaking.value) || 0;
-            let total = (remittance + additional + undertaking).toFixed(2);
+            function calculateTotalRemittance() {
+                let remittance = parseFloat(cetfRemittance.value) || 0;
+                let additional = parseFloat(additionalCetf.value) || 0;
+                let undertaking = parseFloat(cetfUndertaking.value) || 0;
+                let total = (remittance + additional + undertaking).toFixed(2);
 
-            totalRemittance.value = total;
-            updateFullCetfRemitted(parseFloat(total));
-        }
-
-        function updateFullCetfRemitted(total) {
-            let required = parseFloat(cetfRequired.value) || 0;
-
-            // Set "yes" if totalRemittance is equal to or greater than cetfRequired
-            if (total >= required) {
-                fullCetfRemitted.value = "yes";
-            } else {
-                fullCetfRemitted.value = "no";
+                totalRemittance.value = total;
+                updateFullCetfRemitted(parseFloat(total));
             }
-        }
 
-        cetfRemittance.addEventListener('input', calculateTotalRemittance);
-        additionalCetf.addEventListener('input', calculateTotalRemittance);
-        cetfUndertaking.addEventListener('input', calculateTotalRemittance);
-        calculateTotalRemittance(); // Initialize on page load
-    });
-</script>
+            function updateFullCetfRemitted(total) {
+                let required = parseFloat(cetfRequired.value) || 0;
+
+                // Set "yes" if totalRemittance is equal to or greater than cetfRequired
+                if (total >= required) {
+                    fullCetfRemitted.value = "yes";
+                } else {
+                    fullCetfRemitted.value = "no";
+                }
+            }
+
+            cetfRemittance.addEventListener('input', calculateTotalRemittance);
+            additionalCetf.addEventListener('input', calculateTotalRemittance);
+            cetfUndertaking.addEventListener('input', calculateTotalRemittance);
+            calculateTotalRemittance(); // Initialize on page load
+        });
+    </script>
 
 
 

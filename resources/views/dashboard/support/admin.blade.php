@@ -459,7 +459,7 @@
                                             <option value="LUZON">LUZON</option>
                                         </select>
 
-                                        <label for="migsStatusSelect">Select MIGS Status:</label>
+                                        <label for="migsStatusSelect">Select Membership Status:</label>
                                         <select id="migsStatusSelect" class="form-select">
                                             <option value="">All</option>
                                             <option value="Migs">MIGS</option>
@@ -471,6 +471,7 @@
                                             <option value="">All</option>
                                             <option value="Fully Registered">Fully Registered</option>
                                             <option value="Partial Registered">Partial Registered</option>
+                                            <option value="Rejected">Not Registered</option>
                                         </select>
 
                                         <!-- Table to Preview Filtered Data -->
