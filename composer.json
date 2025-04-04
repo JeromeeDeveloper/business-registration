@@ -12,6 +12,7 @@
         "laravel/tinker": "^2.9",
         "maatwebsite/excel": "^3.1",
         "phpoffice/phpspreadsheet": "^1.29",
+        "setasign/fpdf": "^1.8",
         "simplesoftwareio/simple-qrcode": "^4.2"
     },
     "require-dev": {

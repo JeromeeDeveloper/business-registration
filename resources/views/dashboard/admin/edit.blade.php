@@ -724,93 +724,103 @@
                                                             <label>Checklist Manual:</label>
 
                                                             <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox" name="free_migs_pax" id="free_migs_pax"
-                                                                       value="4500" {{ old('free_migs_pax', $coop->free_migs_pax) == 4500 ? 'checked' : '' }}>
-                                                                <label class="form-check-label" for="free_migs_pax">1 Pax Free Officer</label>
+                                                                <input class="form-check-input" type="checkbox"
+                                                                    name="free_migs_pax" id="free_migs_pax"
+                                                                    value="4500"
+                                                                    {{ old('free_migs_pax', $coop->free_migs_pax) == 4500 ? 'checked' : '' }}>
+                                                                <label class="form-check-label" for="free_migs_pax">1
+                                                                    Pax Free Officer</label>
                                                             </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="net_required_regfee">Net Required
+                                                                RegFee</label>
+                                                            <input type="number" class="form-control"
+                                                                name="net_required_reg_fee" id="net_required_reg_fee"
+                                                                value="{{ $coop->net_required_reg_fee }}"
+                                                                placeholder="Enter Net Required RegFee" readonly>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="less_prereg_payment">Less: PreReg
+                                                                Payment</label>
+                                                            <input type="number" class="form-control"
+                                                                name="less_prereg_payment" id="less_prereg_payment"
+                                                                value="{{ $coop->less_prereg_payment }}"
+                                                                placeholder="Enter PreReg Payment Deduction"
+                                                                step="0.01">
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="less_cetf_balance">Less: CETF
+                                                                Utilization</label>
+                                                            <input type="number" class="form-control"
+                                                                name="less_cetf_balance" id="less_cetf_balance"
+                                                                value="{{ $coop->less_cetf_balance }}"
+                                                                placeholder="Enter CETF Balance Deduction"
+                                                                step="0.01">
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="reg_fee_payable">GA RegFee Payable</label>
+                                                            <input type="number" class="form-control"
+                                                                name="reg_fee_payable" id="reg_fee_payable"
+                                                                value="{{ $coop->reg_fee_payable }}"
+                                                                placeholder="Enter GA RegFee Payable" readonly>
+                                                        </div>
+
+
+
+                                                        <h6 class="mt-3 text-secondary">Registration Status:</h6>
+
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                name="registration_status" id="registration_status"
+                                                                disabled
+                                                                {{ optional($coop->gaRegistration)->registration_status == 'Fully Registered' ? 'checked' : '' }}>
+                                                            <label
+                                                                class="form-check-label fw-bold text-dark opacity-75"
+                                                                for="registration_status">
+                                                                Fully Registered
+                                                            </label>
+                                                        </div>
+
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                name="registration_status_partial"
+                                                                id="registration_status_partial" disabled
+                                                                {{ optional($coop->gaRegistration)->registration_status == 'Partial Registered' ? 'checked' : '' }}>
+                                                            <label
+                                                                class="form-check-label fw-bold text-warning opacity-75"
+                                                                for="registration_status_partial">
+                                                                Partially Registered
+                                                            </label>
+                                                        </div>
+
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                name="registration_status_rejected"
+                                                                id="registration_status_rejected" disabled
+                                                                {{ optional($coop->gaRegistration)->registration_status == 'Rejected' ? 'checked' : '' }}>
+                                                            <label
+                                                                class="form-check-label fw-bold text-danger opacity-75"
+                                                                for="registration_status_rejected">
+                                                                Not Registered
+                                                            </label>
+                                                        </div>
+
+
+
+
                                                     </div>
-
-                                                    <div class="form-group">
-                                                        <label for="net_required_regfee">Net Required RegFee</label>
-                                                        <input type="number" class="form-control"
-                                                            name="net_required_reg_fee" id="net_required_reg_fee"
-                                                            value="{{ $coop->net_required_reg_fee }}"
-                                                            placeholder="Enter Net Required RegFee" readonly>
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label for="less_prereg_payment">Less: PreReg Payment</label>
-                                                        <input type="number" class="form-control"
-                                                            name="less_prereg_payment" id="less_prereg_payment"
-                                                            value="{{ $coop->less_prereg_payment }}"
-                                                            placeholder="Enter PreReg Payment Deduction"
-                                                            step="0.01">
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label for="less_cetf_balance">Less: CETF Utilization</label>
-                                                        <input type="number" class="form-control"
-                                                            name="less_cetf_balance" id="less_cetf_balance"
-                                                            value="{{ $coop->less_cetf_balance }}"
-                                                            placeholder="Enter CETF Balance Deduction" step="0.01">
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label for="reg_fee_payable">GA RegFee Payable</label>
-                                                        <input type="number" class="form-control"
-                                                            name="reg_fee_payable" id="reg_fee_payable"
-                                                            value="{{ $coop->reg_fee_payable }}"
-                                                            placeholder="Enter GA RegFee Payable" readonly>
-                                                    </div>
-
-
-
-                                                    <h6 class="mt-3 text-secondary">Registration Status:</h6>
-
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox"
-                                                            name="registration_status" id="registration_status"
-                                                            disabled
-                                                            {{ optional($coop->gaRegistration)->registration_status == 'Fully Registered' ? 'checked' : '' }}>
-                                                        <label class="form-check-label fw-bold text-dark opacity-75"
-                                                            for="registration_status">
-                                                            Fully Registered
-                                                        </label>
-                                                    </div>
-
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox"
-                                                            name="registration_status_partial"
-                                                            id="registration_status_partial" disabled
-                                                            {{ optional($coop->gaRegistration)->registration_status == 'Partial Registered' ? 'checked' : '' }}>
-                                                        <label class="form-check-label fw-bold text-warning opacity-75"
-                                                            for="registration_status_partial">
-                                                            Partially Registered
-                                                        </label>
-                                                    </div>
-
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox"
-                                                            name="registration_status_rejected"
-                                                            id="registration_status_rejected" disabled
-                                                            {{ optional($coop->gaRegistration)->registration_status == 'Rejected' ? 'checked' : '' }}>
-                                                        <label class="form-check-label fw-bold text-danger opacity-75"
-                                                            for="registration_status_rejected">
-                                                            Not Registered
-                                                        </label>
-                                                    </div>
-
-
-
-
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div class="card-action">
-                                        <button class="btn btn-primary btn-round me-2" type="submit">Submit
-                                            Information</button>
+                                        <div class="card-action">
+                                            <button class="btn btn-primary btn-round me-2" type="submit">Submit
+                                                Information</button>
                                 </form>
                             </div>
                         </div>
@@ -827,39 +837,61 @@
                                         <h3 class="mb-4 text-center text-primary">Upload & Edit Documents for
                                             {{ $coop->name }}</h3>
 
-                                            <div class="row">
-                                                <!-- Financial Statement (Left Column) -->
-                                                <div class="col-md-6 mb-4">
-                                                    <label for="documents[Financial Statement]" class="form-label">Audited Financial Statement</label>
-                                                    <input type="file" name="documents[Financial Statement]" accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv" class="form-control mb-2">
-                                                    @if ($coop->uploadedDocuments()->where('document_type', 'Financial Statement')->exists())
-                                                        <p class="text-info">Current File: {{ $coop->uploadedDocuments()->where('document_type', 'Financial Statement')->first()->file_name }}</p>
-                                                        <small class="form-text text-muted">You can upload a new file or keep the existing one.</small>
-                                                    @endif
-                                                    <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (no file size limit).</small>
-
-                                                    <!-- Checklist for Marking as Done -->
-                                                    <div class="form-check mt-2">
-                                                        <input class="form-check-input" type="checkbox" id="markAsDoneFinancial" name="markAsDone[Financial Statement]">
-                                                        <label class="form-check-label" for="markAsDoneFinancial">
-                                                            Mark as Done (Upload Blank PDF)
-                                                        </label>
-                                                    </div>
-                                                </div>
-
-                                            <!-- Resolution for Voting Delegates (Right Column) -->
+                                        <div class="row">
+                                            <!-- Financial Statement (Left Column) -->
                                             <div class="col-md-6 mb-4">
-                                                <label for="documents[Resolution for Voting Delegates]" class="form-label">Resolution for Voting Delegates</label>
-                                                <input type="file" name="documents[Resolution for Voting Delegates]" accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv" class="form-control mb-2">
-                                                @if ($coop->uploadedDocuments()->where('document_type', 'Resolution for Voting Delegates')->exists())
-                                                    <p class="text-info">Current File: {{ $coop->uploadedDocuments()->where('document_type', 'Resolution for Voting Delegates')->first()->file_name }}</p>
-                                                    <small class="form-text text-muted">You can upload a new file or keep the existing one.</small>
+                                                <label for="documents[Financial Statement]" class="form-label">Audited
+                                                    Financial Statement</label>
+                                                <input type="file" name="documents[Financial Statement]"
+                                                    id="financialStatementFile"
+                                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv"
+                                                    class="form-control mb-2">
+
+                                                @if ($coop->uploadedDocuments()->where('document_type', 'Financial Statement')->exists())
+                                                    <p class="text-info">Current File:
+                                                        {{ $coop->uploadedDocuments()->where('document_type', 'Financial Statement')->first()->file_name }}
+                                                    </p>
+                                                    <small class="form-text text-muted">You can upload a new file or
+                                                        keep the existing one.</small>
                                                 @endif
-                                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (no file size limit).</small>
+                                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png,
+                                                    pdf (no file size limit).</small>
 
                                                 <!-- Checklist for Marking as Done -->
                                                 <div class="form-check mt-2">
-                                                    <input class="form-check-input" type="checkbox" id="markAsDoneResolution" name="markAsDone[Resolution for Voting Delegates]">
+                                                    <input class="form-check-input" type="checkbox"
+                                                        id="markAsDoneFinancial"
+                                                        name="markAsDone[Financial Statement]">
+                                                    <label class="form-check-label" for="markAsDoneFinancial">
+                                                        Mark as Done (Upload Blank PDF)
+                                                    </label>
+                                                </div>
+                                            </div>
+
+
+                                            <!-- Resolution for Voting Delegates (Right Column) -->
+                                            <div class="col-md-6 mb-4">
+                                                <label for="documents[Resolution for Voting Delegates]"
+                                                    class="form-label">Resolution for Voting Delegates</label>
+                                                <input type="file"
+                                                    name="documents[Resolution for Voting Delegates]"
+                                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv"
+                                                    class="form-control mb-2">
+                                                @if ($coop->uploadedDocuments()->where('document_type', 'Resolution for Voting Delegates')->exists())
+                                                    <p class="text-info">Current File:
+                                                        {{ $coop->uploadedDocuments()->where('document_type', 'Resolution for Voting Delegates')->first()->file_name }}
+                                                    </p>
+                                                    <small class="form-text text-muted">You can upload a new file or
+                                                        keep the existing one.</small>
+                                                @endif
+                                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png,
+                                                    pdf (no file size limit).</small>
+
+                                                <!-- Checklist for Marking as Done -->
+                                                <div class="form-check mt-2">
+                                                    <input class="form-check-input" type="checkbox"
+                                                        id="markAsDoneResolution"
+                                                        name="markAsDone[Resolution for Voting Delegates]">
                                                     <label class="form-check-label" for="markAsDoneResolution">
                                                         Mark as Done (Upload Blank PDF)
                                                     </label>
@@ -888,12 +920,14 @@
                                                 <small class="form-text text-muted">Accepted formats: jpg, jpeg, png,
                                                     pdf (no file size
                                                     limit).</small>
-                                                    <div class="form-check mt-2">
-                                                        <input class="form-check-input" type="checkbox" id="markAsDoneDepositSlip" name="markAsDone[Deposit Slip for Registration Fee]">
-                                                        <label class="form-check-label" for="markAsDoneDepositSlip">
-                                                            Mark as Done (Upload Blank PDF)
-                                                        </label>
-                                                    </div>
+                                                <div class="form-check mt-2">
+                                                    <input class="form-check-input" type="checkbox"
+                                                        id="markAsDoneDepositSlip"
+                                                        name="markAsDone[Deposit Slip for Registration Fee]">
+                                                    <label class="form-check-label" for="markAsDoneDepositSlip">
+                                                        Mark as Done (Upload Blank PDF)
+                                                    </label>
+                                                </div>
 
                                             </div>
 
@@ -917,12 +951,14 @@
                                                 <small class="form-text text-muted">Accepted formats: jpg, jpeg, png,
                                                     pdf (no file size
                                                     limit).</small>
-                                                    <div class="form-check mt-2">
-                                                        <input class="form-check-input" type="checkbox" id="markAsDoneCETFRemittance" name="markAsDone[Deposit Slip for CETF Remittance]">
-                                                        <label class="form-check-label" for="markAsDoneCETFRemittance">
-                                                            Mark as Done (Upload Blank PDF)
-                                                        </label>
-                                                    </div>
+                                                <div class="form-check mt-2">
+                                                    <input class="form-check-input" type="checkbox"
+                                                        id="markAsDoneCETFRemittance"
+                                                        name="markAsDone[Deposit Slip for CETF Remittance]">
+                                                    <label class="form-check-label" for="markAsDoneCETFRemittance">
+                                                        Mark as Done (Upload Blank PDF)
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -945,12 +981,14 @@
                                                 <small class="form-text text-muted">Accepted formats: jpg, jpeg, png,
                                                     pdf (no file size
                                                     limit).</small>
-                                                    <div class="form-check mt-2">
-                                                        <input class="form-check-input" type="checkbox" id="markAsDoneCETFUndertaking" name="markAsDone[CETF Undertaking]">
-                                                        <label class="form-check-label" for="markAsDoneCETFUndertaking">
-                                                            Mark as Done (Upload Blank PDF)
-                                                        </label>
-                                                    </div>
+                                                <div class="form-check mt-2">
+                                                    <input class="form-check-input" type="checkbox"
+                                                        id="markAsDoneCETFUndertaking"
+                                                        name="markAsDone[CETF Undertaking]">
+                                                    <label class="form-check-label" for="markAsDoneCETFUndertaking">
+                                                        Mark as Done (Upload Blank PDF)
+                                                    </label>
+                                                </div>
 
                                             </div>
 
@@ -973,12 +1011,14 @@
                                                 <small class="form-text text-muted">Accepted formats: jpg, jpeg, png,
                                                     pdf (no file size
                                                     limit).</small>
-                                                    <div class="form-check mt-2">
-                                                        <input class="form-check-input" type="checkbox" id="markAsDoneCandidacy" name="markAsDone[Certificate of Candidacy]">
-                                                        <label class="form-check-label" for="markAsDoneCandidacy">
-                                                            Mark as Done (Upload Blank PDF)
-                                                        </label>
-                                                    </div>
+                                                <div class="form-check mt-2">
+                                                    <input class="form-check-input" type="checkbox"
+                                                        id="markAsDoneCandidacy"
+                                                        name="markAsDone[Certificate of Candidacy]">
+                                                    <label class="form-check-label" for="markAsDoneCandidacy">
+                                                        Mark as Done (Upload Blank PDF)
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -1002,18 +1042,20 @@
                                                 <small class="form-text text-muted">Accepted formats: jpg, jpeg, png,
                                                     pdf (no file size
                                                     limit).</small>
-                                                    <div class="form-check mt-2">
-                                                        <input class="form-check-input" type="checkbox" id="markAsDoneCETFUtilization" name="markAsDone[CETF Utilization Invoice]">
-                                                        <label class="form-check-label" for="markAsDoneCETFUtilization">
-                                                            Mark as Done (Upload Blank PDF)
-                                                        </label>
-                                                    </div>
+                                                <div class="form-check mt-2">
+                                                    <input class="form-check-input" type="checkbox"
+                                                        id="markAsDoneCETFUtilization"
+                                                        name="markAsDone[CETF Utilization Invoice]">
+                                                    <label class="form-check-label" for="markAsDoneCETFUtilization">
+                                                        Mark as Done (Upload Blank PDF)
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
 
                                         <!-- Submit Button -->
 
-                                         <div class="card-action">
+                                        <div class="card-action">
                                             <button type="submit" class="btn btn-primary btn-round me-2">Upload
                                                 Documents</button>
                                         </div>
@@ -1198,42 +1240,41 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-    let cetfRemittance = document.getElementById('cetf_remittance');
-    let additionalCetf = document.getElementById('additional_cetf');
-    let cetfUndertaking = document.getElementById('cetf_undertaking');
-    let totalRemittance = document.getElementById('total_remittance');
-    let fullCetfRemitted = document.getElementById('full_cetf_remitted');
-    let cetfRequired = document.getElementById('cetf_required');
+            let cetfRemittance = document.getElementById('cetf_remittance');
+            let additionalCetf = document.getElementById('additional_cetf');
+            let cetfUndertaking = document.getElementById('cetf_undertaking');
+            let totalRemittance = document.getElementById('total_remittance');
+            let fullCetfRemitted = document.getElementById('full_cetf_remitted');
+            let cetfRequired = document.getElementById('cetf_required');
 
-    function calculateTotalRemittance() {
-        let remittance = parseFloat(cetfRemittance.value) || 0;
-        let additional = parseFloat(additionalCetf.value) || 0;
-        let undertaking = parseFloat(cetfUndertaking.value) || 0;
-        let total = (remittance + additional + undertaking).toFixed(2);
+            function calculateTotalRemittance() {
+                let remittance = parseFloat(cetfRemittance.value) || 0;
+                let additional = parseFloat(additionalCetf.value) || 0;
+                let undertaking = parseFloat(cetfUndertaking.value) || 0;
+                let total = (remittance + additional + undertaking).toFixed(2);
 
-        totalRemittance.value = total;
-        updateFullCetfRemitted(parseFloat(total));
-    }
+                totalRemittance.value = total;
+                updateFullCetfRemitted(parseFloat(total));
+            }
 
-    function updateFullCetfRemitted(total) {
-        let required = parseFloat(cetfRequired.value) || 0;
+            function updateFullCetfRemitted(total) {
+                let required = parseFloat(cetfRequired.value) || 0;
 
-        // If cetf_required is 0 or null, set fullCetfRemitted to "no"
-        if (required <= 0) {
-            fullCetfRemitted.value = "no";
-            return;
-        }
+                // If cetf_required is 0 or null, set fullCetfRemitted to "no"
+                if (required <= 0) {
+                    fullCetfRemitted.value = "no";
+                    return;
+                }
 
-        // Otherwise, check if total remittance meets or exceeds the requirement
-        fullCetfRemitted.value = total >= required ? "yes" : "no";
-    }
+                // Otherwise, check if total remittance meets or exceeds the requirement
+                fullCetfRemitted.value = total >= required ? "yes" : "no";
+            }
 
-    cetfRemittance.addEventListener('input', calculateTotalRemittance);
-    additionalCetf.addEventListener('input', calculateTotalRemittance);
-    cetfUndertaking.addEventListener('input', calculateTotalRemittance);
-    calculateTotalRemittance(); // Initialize on page load
-});
-
+            cetfRemittance.addEventListener('input', calculateTotalRemittance);
+            additionalCetf.addEventListener('input', calculateTotalRemittance);
+            cetfUndertaking.addEventListener('input', calculateTotalRemittance);
+            calculateTotalRemittance(); // Initialize on page load
+        });
     </script>
 
 
