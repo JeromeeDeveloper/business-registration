@@ -8,7 +8,7 @@
     <img src="https://i.imgur.com/gsBSpUs.jpeg" alt="Signature Image" style="max-width: 70%; height: auto;" />
 
     <p>Hello {{ $name }},</p>
-    <p>Your participant account has been successfully created. Below are your login details:</p>
+    <p>Your participant account has been successfully created from your cooperative. Below are your login details:</p>
     <p><strong>Participant Email:</strong> {{ $email }}</p>
     <p><strong>Password:</strong> {{ $password }}</p>
     <p>You can log in using the following link:</p>

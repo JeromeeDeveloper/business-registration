@@ -182,11 +182,29 @@
                                                     <button type="submit" class="btn btn-primary">
                                                         <i class="fa fa-search"></i>
                                                     </button>
-                                                    <button type="button" class="btn btn-primary text-white"
-                                                        data-bs-toggle="tooltip" title="Add Participant"
-                                                        onclick="location.href='{{ route('coopparticipantadd') }}'">
-                                                        <i class="fa fa-plus"></i>
-                                                    </button>
+                                                    @php
+                                                    $isMay22 = now()->format('m-d') === '05-22';
+                                                @endphp
+
+                                                @if ($isMay22)
+                                                    <div class="alert alert-warning d-flex align-items-center" role="alert">
+                                                        <i class="fa fa-exclamation-triangle me-2"></i>
+                                                        <div>
+                                                            Registration is closed. You cannot add participants on May 22.
+                                                        </div>
+                                                    </div>
+                                                @endif
+
+                                                <button type="button"
+                                                        class="btn btn-primary text-white {{ $isMay22 ? 'disabled' : '' }}"
+                                                        data-bs-toggle="tooltip"
+                                                        title="{{ $isMay22 ? 'Disabled on May 22' : 'Add Participant' }}"
+                                                        {{ $isMay22 ? 'aria-disabled=true' : '' }}
+                                                        onclick="{{ $isMay22 ? 'return false;' : "location.href='" . route('coopparticipantadd') . "'" }}">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
+
+
                                                     <button type="button" onclick="printAttendance()"
                                                         class="btn btn-primary w-100 d-flex align-items-center justify-content-center shadow-sm gap-2">
                                                         <i class="fa fa-print"></i>
@@ -283,11 +301,27 @@
                                                                     <i class="fa fa-eye"></i>
                                                                 </a>
 
-                                                                <a href="{{ route('coop.participants.edit', $participant->participant_id) }}"
-                                                                    class="btn btn-link btn-primary btn-lg"
-                                                                    data-bs-toggle="tooltip" title="Edit Participant">
-                                                                    <i class="fa fa-edit"></i>
-                                                                </a>
+                                                                @php
+    $isMay13 = now()->format('m-d') === '05-13';
+@endphp
+
+@if ($isMay13)
+    <div class="alert alert-warning d-flex align-items-center mb-2" role="alert">
+        <i class="fa fa-exclamation-triangle me-2"></i>
+        <div>
+            Editing participants is disabled. The edit period has ended (May 13).
+        </div>
+    </div>
+@endif
+
+<a href="{{ $isMay13 ? '#' : route('coop.participants.edit', $participant->participant_id) }}"
+   class="btn btn-link btn-primary btn-lg {{ $isMay13 ? 'disabled' : '' }}"
+   {{ $isMay13 ? 'aria-disabled=true' : '' }}
+   onclick="{{ $isMay13 ? 'return false;' : '' }}"
+   data-bs-toggle="tooltip" title="{{ $isMay13 ? 'Edit disabled on May 13' : 'Edit Participant' }}">
+   <i class="fa fa-edit"></i>
+</a>
+
 
                                                                 <form
                                                                     action="{{ route('coop.participants.destroy', $participant->participant_id) }}"

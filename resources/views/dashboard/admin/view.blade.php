@@ -348,12 +348,15 @@
                                 </div>
                             </div>
 
+
+
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
-                                    <label for="fs_status">Audited Financial Statement Status</label>
-                                    <p>{{ $coop->fs_status }}</p>
+                                    <label for="ga_remark">Remark</label>
+                                    <textarea class="form-control" name="ga_remark" id="ga_remark" rows="4" readonly>{{ $coop->ga_remark ?? 'N/A' }}</textarea>
                                 </div>
                             </div>
+
 
 
                             <div class="col-12">
@@ -364,7 +367,7 @@
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="share_capital_balance">Share Capital Balance</label>
-                                    <p>{{ $coop->share_capital_balance }}</p>
+                                    <p id="share_capital_balance">{{ $coop->share_capital_balance }}</p>
                                 </div>
                             </div>
 
@@ -385,7 +388,7 @@
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="no_of_entitled_votes">No of Entitled Votes</label>
-                                    <p>{{ $coop->no_of_entitled_votes }}</p>
+                                    <p id="no_of_entitled_votes">{{ $coop->no_of_entitled_votes }}</p>
                                 </div>
                             </div>
 
@@ -470,7 +473,7 @@
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="cetf_required">CETF Required</label>
-                                    <p>{{ $coop->cetf_required }}</p>
+                                    <p id="cetf_required" data-value="{{ $coop->cetf_required }}">{{ $coop->cetf_required }}</p>
                                 </div>
                             </div>
 
@@ -520,7 +523,7 @@
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="total_remittance">Total Remittance</label>
-                                    <p>{{ $coop->total_remittance }}</p>
+                                    <p id="total_remittance" data-value="{{ $coop->total_remittance }}">{{ $coop->total_remittance }}</p>
                                 </div>
                             </div>
 
@@ -544,7 +547,7 @@
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="full_cetf_remitted">Full CETF Remitted</label>
-                                    <p>{{ $coop->full_cetf_remitted }}</p>
+                                    <p id="full_cetf_remitted" data-value="{{ $coop->full_cetf_remitted }}">{{ $coop->full_cetf_remitted }}</p>
                                 </div>
                             </div>
 
@@ -579,6 +582,72 @@
 
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const shareCapitalElem = document.getElementById('share_capital_balance');
+            const entitledVotesElem = document.getElementById('no_of_entitled_votes');
+
+            function calculateEntitledVotes(shareCapital) {
+                let votes = 0;
+                let remaining = shareCapital;
+
+                if (remaining >= 100000) {
+                    votes += Math.floor(remaining / 100000);
+                    remaining = remaining % 100000; // Get the remaining after calculating full votes
+                }
+
+                while (remaining >= 25000) {
+                    if (remaining >= 75000) {
+                        votes += 3;
+                        remaining -= 75000;
+                    } else if (remaining >= 50000) {
+                        votes += 2;
+                        remaining -= 50000;
+                    } else if (remaining >= 25000) {
+                        votes += 1;
+                        remaining -= 25000;
+                    }
+                }
+
+                return Math.min(votes, 5); // Ensure no more than 5 votes are given
+            }
+
+            function updateEntitledVotes() {
+                const shareCapital = parseFloat(shareCapitalElem.textContent.replace(/,/g, '')) || 0;
+                const entitledVotes = calculateEntitledVotes(shareCapital);
+                entitledVotesElem.textContent = entitledVotes; // Update the text in the <p> element
+            }
+
+            updateEntitledVotes(); // Run on page load
+
+            // If these values change dynamically via AJAX, use MutationObserver
+            const observer = new MutationObserver(updateEntitledVotes);
+            observer.observe(shareCapitalElem, { childList: true, subtree: true });
+        });
+    </script>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            function updateFullCetfRemitted() {
+                let cetfRequired = parseFloat(document.getElementById('cetf_required').dataset.value) || 0;
+                let totalRemittance = parseFloat(document.getElementById('total_remittance').dataset.value) || 0;
+                let fullCetfRemitted = document.getElementById('full_cetf_remitted');
+
+                if (cetfRequired <= 0) {
+                    fullCetfRemitted.innerText = "No";
+                } else {
+                    fullCetfRemitted.innerText = totalRemittance >= cetfRequired ? "Yes" : "No";
+                }
+            }
+
+            updateFullCetfRemitted(); // Run the function on page load
+
+            // Example: If you have AJAX or live updates, call updateFullCetfRemitted() after fetching new data
+        });
+        </script>
+
 
     <script>
         // Handle the form submission using AJAX

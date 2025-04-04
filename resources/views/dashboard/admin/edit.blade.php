@@ -1177,39 +1177,42 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            let cetfRemittance = document.getElementById('cetf_remittance');
-            let additionalCetf = document.getElementById('additional_cetf');
-            let cetfUndertaking = document.getElementById('cetf_undertaking');
-            let totalRemittance = document.getElementById('total_remittance');
-            let fullCetfRemitted = document.getElementById('full_cetf_remitted');
-            let cetfRequired = document.getElementById('cetf_required');
+    let cetfRemittance = document.getElementById('cetf_remittance');
+    let additionalCetf = document.getElementById('additional_cetf');
+    let cetfUndertaking = document.getElementById('cetf_undertaking');
+    let totalRemittance = document.getElementById('total_remittance');
+    let fullCetfRemitted = document.getElementById('full_cetf_remitted');
+    let cetfRequired = document.getElementById('cetf_required');
 
-            function calculateTotalRemittance() {
-                let remittance = parseFloat(cetfRemittance.value) || 0;
-                let additional = parseFloat(additionalCetf.value) || 0;
-                let undertaking = parseFloat(cetfUndertaking.value) || 0;
-                let total = (remittance + additional + undertaking).toFixed(2);
+    function calculateTotalRemittance() {
+        let remittance = parseFloat(cetfRemittance.value) || 0;
+        let additional = parseFloat(additionalCetf.value) || 0;
+        let undertaking = parseFloat(cetfUndertaking.value) || 0;
+        let total = (remittance + additional + undertaking).toFixed(2);
 
-                totalRemittance.value = total;
-                updateFullCetfRemitted(parseFloat(total));
-            }
+        totalRemittance.value = total;
+        updateFullCetfRemitted(parseFloat(total));
+    }
 
-            function updateFullCetfRemitted(total) {
-                let required = parseFloat(cetfRequired.value) || 0;
+    function updateFullCetfRemitted(total) {
+        let required = parseFloat(cetfRequired.value) || 0;
 
-                // Set "yes" if totalRemittance is equal to or greater than cetfRequired
-                if (total >= required) {
-                    fullCetfRemitted.value = "yes";
-                } else {
-                    fullCetfRemitted.value = "no";
-                }
-            }
+        // If cetf_required is 0 or null, set fullCetfRemitted to "no"
+        if (required <= 0) {
+            fullCetfRemitted.value = "no";
+            return;
+        }
 
-            cetfRemittance.addEventListener('input', calculateTotalRemittance);
-            additionalCetf.addEventListener('input', calculateTotalRemittance);
-            cetfUndertaking.addEventListener('input', calculateTotalRemittance);
-            calculateTotalRemittance(); // Initialize on page load
-        });
+        // Otherwise, check if total remittance meets or exceeds the requirement
+        fullCetfRemitted.value = total >= required ? "yes" : "no";
+    }
+
+    cetfRemittance.addEventListener('input', calculateTotalRemittance);
+    additionalCetf.addEventListener('input', calculateTotalRemittance);
+    cetfUndertaking.addEventListener('input', calculateTotalRemittance);
+    calculateTotalRemittance(); // Initialize on page load
+});
+
     </script>
 
 

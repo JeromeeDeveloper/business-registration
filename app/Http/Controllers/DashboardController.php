@@ -30,102 +30,102 @@ class DashboardController extends Controller
 {
 
     public function sendNotification($coopId)
-{
-    try {
-        \Log::info('Notification request received for Coop ID: ' . $coopId);
+    {
+        try {
+            \Log::info('Notification request received for Coop ID: ' . $coopId);
 
-        // Find the cooperative by ID
-        $coop = Cooperative::findOrFail($coopId);
-        \Log::info('Found cooperative: ' . $coop->name . ' with email: ' . $coop->email);
+            // Find the cooperative by ID
+            $coop = Cooperative::findOrFail($coopId);
+            \Log::info('Found cooperative: ' . $coop->name . ' with email: ' . $coop->email);
 
-        // Get the latest event for the cooperative
-        $event = Event::latest()->first();
+            // Get the latest event for the cooperative
+            $event = Event::latest()->first();
 
-        // Fetch GA Registration details
-        $gaRegistration = GARegistration::where('coop_id', $coopId)->latest()->first();
+            // Fetch GA Registration details
+            $gaRegistration = GARegistration::where('coop_id', $coopId)->latest()->first();
 
-        // Fetch only users with role "cooperative" belonging to the current cooperative
-        $users = User::where('coop_id', $coop->coop_id)
-            ->where('role', 'cooperative')
-            ->get();
+            // Fetch only users with role "cooperative" belonging to the current cooperative
+            $users = User::where('coop_id', $coop->coop_id)
+                ->where('role', 'cooperative')
+                ->get();
 
-        if ($users->isNotEmpty()) {
-            foreach ($users as $user) {
-                // Extract the first letter of each word in the cooperative name
-                $acronym = strtoupper(implode('', array_map(fn($word) => $word[0], explode(' ', trim($coop->name)))));
+            if ($users->isNotEmpty()) {
+                foreach ($users as $user) {
+                    // Extract the first letter of each word in the cooperative name
+                    $acronym = strtoupper(implode('', array_map(fn($word) => $word[0], explode(' ', trim($coop->name)))));
 
-                // Generate the password using the acronym + GA2025
-                $sanitizedPassword = $acronym . 'GA2025';
+                    // Generate the password using the acronym + GA2025
+                    $sanitizedPassword = $acronym . 'GA2025';
 
-                // Update user password
-                $user->password = Hash::make($sanitizedPassword);
-                $user->save();
+                    // Update user password
+                    $user->password = Hash::make($sanitizedPassword);
+                    $user->save();
 
-                // Send email with the new password
-                Mail::to($user->email)->queue(new CooperativeNotification($coop, $event, $gaRegistration, $users, $sanitizedPassword));
+                    // Send email with the new password
+                    Mail::to($user->email)->queue(new CooperativeNotification($coop, $event, $gaRegistration, $users, $sanitizedPassword));
 
-                \Log::info("New password set for user: {$user->email} -> {$sanitizedPassword}");
+                    \Log::info("New password set for user: {$user->email} -> {$sanitizedPassword}");
+                }
+
+
+                return redirect()->route('adminview')->with('success', 'Notification sent with updated password!');
+            } else {
+                \Log::info("Skipped cooperative: {$coop->name} (No cooperative users found)");
             }
 
-
-            return redirect()->route('adminview')->with('success', 'Notification sent with updated password!');
-        } else {
-            \Log::info("Skipped cooperative: {$coop->name} (No cooperative users found)");
+            return redirect()->route('adminview')->with('success', 'Notification sent to the cooperative!');
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            \Log::error('Cooperative not found: ' . $e->getMessage());
+            return back()->with('error', 'Cooperative not found.');
+        } catch (\Exception $e) {
+            \Log::error('Error sending notification: ' . $e->getMessage());
+            return back()->with('error', 'Error sending notification: ' . $e->getMessage());
         }
-
-        return redirect()->route('adminview')->with('success', 'Notification sent to the cooperative!');
-    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-        \Log::error('Cooperative not found: ' . $e->getMessage());
-        return back()->with('error', 'Cooperative not found.');
-    } catch (\Exception $e) {
-        \Log::error('Error sending notification: ' . $e->getMessage());
-        return back()->with('error', 'Error sending notification: ' . $e->getMessage());
     }
-}
 
 
 
 
     public function sendNotificationToAll()
-{
-    try {
-        \Log::info('Notification request received for all cooperatives.');
+    {
+        try {
+            \Log::info('Notification request received for all cooperatives.');
 
-        // Retrieve all cooperatives
-        $cooperatives = Cooperative::all();
+            // Retrieve all cooperatives
+            $cooperatives = Cooperative::all();
 
-        if ($cooperatives->isEmpty()) {
-            return back()->with('error', 'No cooperatives found.');
+            if ($cooperatives->isEmpty()) {
+                return back()->with('error', 'No cooperatives found.');
+            }
+
+            // Get the latest event
+            $event = Event::oldest()->first();
+
+            if (!$event) {
+                return back()->with('error', 'No event found to notify.');
+            }
+
+            // Send email to each cooperative
+            foreach ($cooperatives as $coop) {
+                // Retrieve GA Registration for the current cooperative
+                $gaRegistration = GARegistration::where('coop_id', $coop->coop_id)->latest()->first();
+
+                // Retrieve users related to the cooperative (Adjust as needed)
+                $users = User::where('coop_id', $coop->coop_id)->get(); // Assuming User has a `coop_id`
+
+                // Send email with the correct number of arguments
+                Mail::to($coop->email)->queue(new CooperativeNotification($coop, $event, $gaRegistration, $users));
+
+                \Log::info('Notification sent to: ' . $coop->email);
+            }
+
+            return redirect()->route('adminview')->with('success', 'Notification sent to all cooperatives!');
+        } catch (\Exception $e) {
+            \Log::error('Error sending notifications: ' . $e->getMessage());
+
+            return back()->with('error', 'Error sending notifications. Please try again.');
         }
-
-        // Get the latest event
-        $event = Event::oldest()->first();
-
-        if (!$event) {
-            return back()->with('error', 'No event found to notify.');
-        }
-
-        // Send email to each cooperative
-        foreach ($cooperatives as $coop) {
-            // Retrieve GA Registration for the current cooperative
-            $gaRegistration = GARegistration::where('coop_id', $coop->coop_id)->latest()->first();
-
-            // Retrieve users related to the cooperative (Adjust as needed)
-            $users = User::where('coop_id', $coop->coop_id)->get(); // Assuming User has a `coop_id`
-
-            // Send email with the correct number of arguments
-            Mail::to($coop->email)->queue(new CooperativeNotification($coop, $event, $gaRegistration, $users));
-
-            \Log::info('Notification sent to: ' . $coop->email);
-        }
-
-        return redirect()->route('adminview')->with('success', 'Notification sent to all cooperatives!');
-    } catch (\Exception $e) {
-        \Log::error('Error sending notifications: ' . $e->getMessage());
-
-        return back()->with('error', 'Error sending notifications. Please try again.');
     }
-}
 
 
     public function sendCredentialsToAll()
@@ -189,13 +189,6 @@ class DashboardController extends Controller
         $latestEvent = Event::with('speakers')->orderBy('start_date', 'desc')->first();
         $latestEvents = Event::with('speakers')->orderBy('start_date', 'desc')->take(5)->get();
 
-        // $totalMigsAttended = EventParticipant::whereNotNull('attendance_datetime')
-        //     ->whereHas('participant.cooperative.gaRegistration', function ($query) {
-        //         $query->where('membership_status', 'Migs');
-        //     })
-        //     ->distinct('participant_id')
-        //     ->count('participant_id');
-
         $totalMigsParticipants = Participant::whereHas('cooperative.gaRegistration', function ($query) {
             $query->where('membership_status', 'Migs');
         })->count();
@@ -228,60 +221,64 @@ class DashboardController extends Controller
             ->distinct()
             ->count('coop_id');
 
-             // Count registered MIGS Coops
-    // Count registered MIGS Coops with Participant connection
-$registeredMigsCoops = GARegistration::where('membership_status', 'Migs')
-->whereHas('cooperative.participants')
-->distinct()->count('coop_id');
+        // Count registered MIGS Coops
+        // Count registered MIGS Coops with Participant connection
+        $registeredMigsCoops = GARegistration::where('membership_status', 'Migs')
+            ->whereHas('cooperative.participants')
+            ->distinct()->count('coop_id');
 
-// Count registered NON-MIGS Coops with Participant connection
-$registeredNonMigsCoops = GARegistration::where('membership_status', 'Non-migs')
-->whereHas('cooperative.participants')
-->distinct()->count('coop_id');
+        // Count registered NON-MIGS Coops with Participant connection
+        $registeredNonMigsCoops = GARegistration::where('membership_status', 'Non-migs')
+            ->whereHas('cooperative.participants')
+            ->distinct()->count('coop_id');
 
-$totalCoopAttended = DB::table('participants')
-    ->join('event_participant', 'participants.participant_id', '=', 'event_participant.participant_id')
-    ->whereNotNull('event_participant.attendance_datetime') // Ensures the participant attended
-    ->distinct('participants.coop_id') // Counts each coop only once
-    ->count('participants.coop_id');
+        $totalCoopAttended = DB::table('participants')
+            ->join('event_participant', 'participants.participant_id', '=', 'event_participant.participant_id')
+            ->whereNotNull('event_participant.attendance_datetime') // Ensures the participant attended
+            ->distinct('participants.coop_id') // Counts each coop only once
+            ->count('participants.coop_id');
 
-$totalMigsAttended = DB::table('participants')
-    ->join('event_participant', 'participants.participant_id', '=', 'event_participant.participant_id')
-    ->whereNotNull('event_participant.attendance_datetime') // Ensures the participant attended
-    ->whereIn('participants.coop_id', function ($query) {
-        $query->select('coop_id')
-              ->from('ga_registrations')
-              ->where('membership_status', 'Migs');
-    })
-    ->distinct('participants.coop_id') // Counts MIGS coop only once
-    ->count('participants.coop_id');
+        $totalMigsAttended = DB::table('participants')
+            ->join('event_participant', 'participants.participant_id', '=', 'event_participant.participant_id')
+            ->whereNotNull('event_participant.attendance_datetime')
+            ->whereIn('participants.coop_id', function ($query) {
+                $query->select('coop_id')
+                    ->from('ga_registrations')
+                    ->where('membership_status', 'Migs');
+            })
+            ->distinct('participants.coop_id')
+            ->count('participants.coop_id');
 
-$totalNonMigsAttended = DB::table('participants')
-    ->join('event_participant', 'participants.participant_id', '=', 'event_participant.participant_id')
-    ->whereNotNull('event_participant.attendance_datetime') // Ensures the participant attended
-    ->whereIn('participants.coop_id', function ($query) {
-        $query->select('coop_id')
-              ->from('ga_registrations')
-              ->where('membership_status', 'Non-migs');
-    })
-    ->distinct('participants.coop_id') // Counts Non-MIGS coop only once
-    ->count('participants.coop_id');
+        $totalNonMigsAttended = DB::table('participants')
+            ->join('event_participant', 'participants.participant_id', '=', 'event_participant.participant_id')
+            ->whereNotNull('event_participant.attendance_datetime')
+            ->whereIn('participants.coop_id', function ($query) {
+                $query->select('coop_id')
+                    ->from('ga_registrations')
+                    ->where('membership_status', 'Non-migs');
+            })
+            ->distinct('participants.coop_id')
+            ->count('participants.coop_id');
 
-    $totalVoting = Participant::where('delegate_type', 'Voting')->count();
+            $totalVoting = Participant::where('delegate_type', 'Voting')
+            ->whereHas('cooperative.gaRegistration', function ($query) {
+                $query->where('membership_status', 'Migs')
+                      ->where('registration_status', 'Fully Registered');
+            })
+            ->count();
 
-// Attended Participants with Voting Delegate Type
-$totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
-    ->whereHas('participant', function ($query) {
-        $query->where('delegate_type', 'Voting');  // Only participants with 'voting' delegate type
-    })
-    ->distinct('participant_id')  // Ensures each participant is counted only once
-    ->count('participant_id');
+        $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
+            ->whereHas('participant', function ($query) {
+                $query->where('delegate_type', 'Voting');
+            })
+            ->distinct('participant_id')
+            ->count('participant_id');
 
-    $events = Event::withCount(['participants' => function ($query) {
-        $query->whereNotNull('event_participant.attendance_datetime'); // Specify the table
-    }])->get();
+        $events = Event::withCount(['participants' => function ($query) {
+            $query->whereNotNull('event_participant.attendance_datetime');
+        }])->get();
 
-        // Registered Participants: Those with non-null coop_id
+
         $registeredParticipants = Participant::whereNotNull('coop_id')->count();
 
         return view('dashboard.admin.admin', compact(
@@ -391,28 +388,28 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
             ->where('delegate_type', 'Voting')
             ->count();
 
-            $requiredDocuments = [
-                'Financial Statement',
-                'Resolution for Voting delegates',
-                'Deposit Slip for Registration Fee',
-                'Deposit Slip for CETF Remittance',
-                'CETF Undertaking',
-                'Certificate of Candidacy',
-                'CETF Utilization invoice'
-            ];
+        $requiredDocuments = [
+            'Financial Statement',
+            'Resolution for Voting delegates',
+            'Deposit Slip for Registration Fee',
+            'Deposit Slip for CETF Remittance',
+            'CETF Undertaking',
+            'Certificate of Candidacy',
+            'CETF Utilization invoice'
+        ];
 
-            // Get uploaded documents
-            $uploadedDocuments = UploadedDocument::where('coop_id', $user->coop_id)
-                ->pluck('document_type')
-                ->toArray();
+        // Get uploaded documents
+        $uploadedDocuments = UploadedDocument::where('coop_id', $user->coop_id)
+            ->pluck('document_type')
+            ->toArray();
 
-            // Find missing documents
-            $missingDocuments = array_diff($requiredDocuments, $uploadedDocuments);
+        // Find missing documents
+        $missingDocuments = array_diff($requiredDocuments, $uploadedDocuments);
 
-            $declinedDocuments = UploadedDocument::where('coop_id', $user->coop_id)
-    ->where('status', 'Rejected')
-    ->pluck('document_type')
-    ->toArray();
+        $declinedDocuments = UploadedDocument::where('coop_id', $user->coop_id)
+            ->where('status', 'Rejected')
+            ->pluck('document_type')
+            ->toArray();
 
         return view('dashboard.participant.participant', [
             'participant' => $participant,
@@ -442,12 +439,12 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
 
         // Check if cooperative has MIGS membership
         $hasMigsRegistration = GARegistration::where('coop_id', $cooperative->coop_id)
-        ->where('membership_status', 'MIGS')
-        ->exists();
+            ->where('membership_status', 'MIGS')
+            ->exists();
 
-           $hasMspOfficer = Participant::where('coop_id', $cooperative->coop_id)
-        ->where('is_msp_officer', true)
-        ->exists();
+        $hasMspOfficer = Participant::where('coop_id', $cooperative->coop_id)
+            ->where('is_msp_officer', true)
+            ->exists();
 
         // Check the total remittance
         $totalRemittance = $cooperative->total_remittance ?? 0;
@@ -486,7 +483,13 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
         $regFeePayable = max(0, $netRequiredRegFee - ($lessPreregPayment + $lessCetfBalance));
 
         return view('dashboard.participant.cooperativeprofile', compact(
-            'cooperative', 'totalRegFee', 'regFeePayable', 'hasMigsRegistration', 'hasMspOfficer', 'free100kCETF', 'halfBasedCETF'
+            'cooperative',
+            'totalRegFee',
+            'regFeePayable',
+            'hasMigsRegistration',
+            'hasMspOfficer',
+            'free100kCETF',
+            'halfBasedCETF'
         ));
     }
 
@@ -674,10 +677,10 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
                     ->orWhereHas('gaRegistration', function ($query) use ($search) {
                         if (strtoupper($search) === 'NO REGISTRATION') {
                             $query->whereNull('registration_status')
-                                  ->orWhere('registration_status', 'Rejected');
+                                ->orWhere('registration_status', 'Rejected');
                         } else {
                             $query->where('registration_status', 'LIKE', "%{$search}%")
-                                  ->orWhere('membership_status', 'LIKE', "%{$search}%");
+                                ->orWhere('membership_status', 'LIKE', "%{$search}%");
                         }
                     });
             });
@@ -783,7 +786,7 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
         }
 
         // Store the selected services as JSON
-      $servicesAvailed = json_encode($request->services_availed ?? []);
+        $servicesAvailed = json_encode($request->services_availed ?? []);
 
 
         // $cetfBalance = ($request->cetf_required ?? 0) - ($request->total_remittance ?? 0);
@@ -880,9 +883,9 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
         $coop = Cooperative::findOrFail($coop_id);
 
         $hasFinancialStatement = UploadedDocument::where('coop_id', $coop->coop_id)
-        ->where('document_type', 'Financial Statement')
-        ->where('status', 'Approved')
-        ->exists();
+            ->where('document_type', 'Financial Statement')
+            ->where('status', 'Approved')
+            ->exists();
 
         // Check if cooperative has MIGS membership
         $hasMigsRegistration = GARegistration::where('coop_id', $coop->coop_id)
@@ -936,36 +939,41 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
         $coop->reg_fee_payable = $regFeePayable;
 
         return view('dashboard.admin.edit', compact(
-            'coop', 'hasMigsRegistration', 'hasMspOfficer', 'free100kCETF', 'halfBasedCETF', 'hasFinancialStatement'
+            'coop',
+            'hasMigsRegistration',
+            'hasMspOfficer',
+            'free100kCETF',
+            'halfBasedCETF',
+            'hasFinancialStatement'
         ));
     }
 
     public function updateStatus(Request $request, $coop_id)
-  {
-      // Validate inputs
-      $request->validate([
-          'registration_status' => 'nullable|in:Partial Registered,Fully Registered,Rejected',
-          'membership_status' => 'nullable|in:Non-migs,Migs',
-      ]);
+    {
+        // Validate inputs
+        $request->validate([
+            'registration_status' => 'nullable|in:Partial Registered,Fully Registered,Rejected',
+            'membership_status' => 'nullable|in:Non-migs,Migs',
+        ]);
 
-      // Find or create GA Registration for the Cooperative
-      $gaRegistration = GARegistration::firstOrCreate(
-          ['coop_id' => $coop_id],
-          ['participant_id' => null] // Ensure participant_id is handled
-      );
+        // Find or create GA Registration for the Cooperative
+        $gaRegistration = GARegistration::firstOrCreate(
+            ['coop_id' => $coop_id],
+            ['participant_id' => null] // Ensure participant_id is handled
+        );
 
-      // Update only if values are provided
-      if ($request->filled('registration_status')) {
-          $gaRegistration->registration_status = $request->registration_status;
-      }
-      if ($request->filled('membership_status')) {
-          $gaRegistration->membership_status = $request->membership_status;
-      }
+        // Update only if values are provided
+        if ($request->filled('registration_status')) {
+            $gaRegistration->registration_status = $request->registration_status;
+        }
+        if ($request->filled('membership_status')) {
+            $gaRegistration->membership_status = $request->membership_status;
+        }
 
-      $gaRegistration->save();
+        $gaRegistration->save();
 
-      return back()->with('success', 'GA Registration status updated successfully.');
-  }
+        return back()->with('success', 'GA Registration status updated successfully.');
+    }
 
     public function update(Request $request, $coop_id)
     {
@@ -979,9 +987,25 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
             'region' => [
                 'required',
                 Rule::in([
-                    'Region I', 'Region II', 'Region III', 'Region IV-A', 'Region IV-B', 'Region V',
-                    'Region VI', 'Region VII', 'Region VIII', 'Region IX', 'Region X', 'Region XI',
-                    'Region XII', 'Region XIII', 'NCR', 'CAR', 'BARMM', 'ZBST', 'LUZON'
+                    'Region I',
+                    'Region II',
+                    'Region III',
+                    'Region IV-A',
+                    'Region IV-B',
+                    'Region V',
+                    'Region VI',
+                    'Region VII',
+                    'Region VIII',
+                    'Region IX',
+                    'Region X',
+                    'Region XI',
+                    'Region XII',
+                    'Region XIII',
+                    'NCR',
+                    'CAR',
+                    'BARMM',
+                    'ZBST',
+                    'LUZON'
                 ]),
             ],
             'phone_number' => 'required|string|max:20',
@@ -1030,12 +1054,27 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
 
         // Convert numeric values (remove commas)
         $numericFields = [
-            'total_asset', 'loan_balance', 'total_overdue', 'time_deposit',
-            'accounts_receivable', 'savings', 'net_surplus', 'cetf_due_to_apex',
-            'additional_cetf', 'cetf_undertaking', 'total_income', 'cetf_remittance',
-            'cetf_required', 'cetf_balance', 'total_remittance', 'net_required_reg_fee',
-            'total_reg_fee', 'share_capital_balance', 'registration_fee',
-            'less_prereg_payment', 'less_cetf_balance'
+            'total_asset',
+            'loan_balance',
+            'total_overdue',
+            'time_deposit',
+            'accounts_receivable',
+            'savings',
+            'net_surplus',
+            'cetf_due_to_apex',
+            'additional_cetf',
+            'cetf_undertaking',
+            'total_income',
+            'cetf_remittance',
+            'cetf_required',
+            'cetf_balance',
+            'total_remittance',
+            'net_required_reg_fee',
+            'total_reg_fee',
+            'share_capital_balance',
+            'registration_fee',
+            'less_prereg_payment',
+            'less_cetf_balance'
         ];
 
         foreach ($numericFields as $field) {

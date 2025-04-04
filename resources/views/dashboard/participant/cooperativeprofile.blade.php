@@ -300,7 +300,7 @@
                             <label for="share_capital_balance" class="form-label">Share Capital Balance</label>
                             <input type="text" class="form-control" id="share_capital_balance" name="share_capital_balance" value="{{ $cooperative->share_capital_balance }}" readonly>
                         </div> --}}
-                                                            <div class="col-md-4 mb-3">
+                                                            {{-- <div class="col-md-4 mb-3">
                                                                 <label for="no_of_entitled_votes"
                                                                     class="form-label">No of Entitled Votes</label>
                                                                 <input type="text" class="form-control"
@@ -308,7 +308,7 @@
                                                                     name="no_of_entitled_votes"
                                                                     value="{{ $cooperative->no_of_entitled_votes }}"
                                                                     readonly>
-                                                            </div>
+                                                            </div> --}}
                                                             {{-- <div class="col-md-12 mb-3">
                                                                 <div class="form-group">
                                                                     <label for="services_availed">Services
@@ -472,7 +472,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td class="fw-bold">Full CETF Remitted:</td>
-                                                            <td>{{ $cooperative->full_cetf_remitted ?? 'N/A' }}</td>
+                                                            <td id="full_cetf_remitted" data-value="{{ $cooperative->full_cetf_remitted }}">{{ $cooperative->full_cetf_remitted ?? 'N/A' }}</td>
                                                         </tr>
                                                         <tr>
                                                             <td class="fw-bold">Registration Date Paid:</td>
@@ -491,7 +491,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td class="fw-bold">CETF Required:</td>
-                                                            <td>{{ number_format($cooperative->cetf_required, 2) ?? 'N/A' }}
+                                                            <td id="cetf_required" data-value="{{ $cooperative->cetf_required }}">{{ number_format($cooperative->cetf_required, 2) ?? 'N/A' }}
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -501,12 +501,12 @@
                                                         </tr>
                                                         <tr>
                                                             <td class="fw-bold">Share Capital Balance:</td>
-                                                            <td>{{ number_format($cooperative->share_capital_balance, 2) ?? 'N/A' }}
+                                                            <td id="share_capital_balance">{{ number_format($cooperative->share_capital_balance, 2) ?? 'N/A' }}
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td class="fw-bold">Total Remittance:</td>
-                                                            <td>{{ number_format($cooperative->total_remittance, 2) ?? 'N/A' }}
+                                                            <td id="total_remittance" data-value="{{ $cooperative->total_remittance }}">{{ number_format($cooperative->total_remittance, 2) ?? 'N/A' }}
                                                             </td>
                                                         </tr>
 
@@ -549,7 +549,7 @@
 
                                                         <tr>
                                                             <td class="fw-bold">Number of Entitled Votes:</td>
-                                                            <td>{{ $cooperative->no_of_entitled_votes ?? 'N/A' }}</td>
+                                                            <td id="no_of_entitled_votes">{{ $cooperative->no_of_entitled_votes ?? 'N/A' }}</td>
                                                         </tr>
                                                         <tr>
                                                             <td class="fw-bold">Membership Status:</td>
@@ -590,28 +590,28 @@
                                                         </tr>
 
                                                         <tr>
-                                                            <td class="fw-bold">Free 2 Pax for MIGS</td>
+                                                            <td class="fw-bold">2 Pax free for MIGS Membership Status</td>
                                                             <td>
                                                                 <input class="form-check-input" type="checkbox" name="free_2pax_migs" id="free_2pax_migs" value="1" {{ $hasMigsRegistration ? 'checked' : '' }} disabled />
                                                             </td>
                                                         </tr>
 
                                                         <tr>
-                                                            <td class="fw-bold">1 Pax Free Officer</td>
+                                                            <td class="fw-bold">1 Pax Free for MASS-SPECC Officer</td>
                                                             <td>
                                                                 <input class="form-check-input" type="checkbox" name="free_migs_pax" id="free_migs_pax" value="1" {{ $hasMspOfficer ? 'checked' : '' }} disabled />
                                                             </td>
                                                         </tr>
 
                                                         <tr>
-                                                            <td class="fw-bold">1 Pax Free 100K CETF</td>
+                                                            <td class="fw-bold">1 Pax free Based on CETF(100k)</td>
                                                             <td>
                                                                 <input class="form-check-input" type="checkbox" name="free_100k_cetf" id="free_100k_cetf" value="1" {{ $free100kCETF ? 'checked' : '' }} disabled />
                                                             </td>
                                                         </tr>
 
                                                         <tr>
-                                                            <td class="fw-bold">1/2 Based on CETF</td>
+                                                            <td class="fw-bold">1/2 free Based on CETF(50k)</td>
                                                             <td>
                                                                 <input class="form-check-input" type="checkbox" name="half_based_cetf" id="half_based_cetf" value="1" {{ $halfBasedCETF ? 'checked' : '' }} disabled />
                                                             </td>
@@ -645,6 +645,25 @@
 
     </div>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            function updateFullCetfRemitted() {
+                let cetfRequired = parseFloat(document.getElementById('cetf_required').dataset.value) || 0;
+                let totalRemittance = parseFloat(document.getElementById('total_remittance').dataset.value) || 0;
+                let fullCetfRemitted = document.getElementById('full_cetf_remitted');
+
+                if (cetfRequired <= 0) {
+                    fullCetfRemitted.innerText = "No";
+                } else {
+                    fullCetfRemitted.innerText = totalRemittance >= cetfRequired ? "Yes" : "No";
+                }
+            }
+
+            updateFullCetfRemitted(); // Run the function on page load
+
+            // Example: If you have AJAX or live updates, call updateFullCetfRemitted() after fetching new data
+        });
+        </script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -740,6 +759,51 @@
             updateDropdownText();
         });
     </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const shareCapitalElem = document.getElementById('share_capital_balance'); // <td> element
+        const entitledVotesElem = document.getElementById('no_of_entitled_votes'); // <td> element
+
+        function calculateEntitledVotes(shareCapital) {
+            let votes = 0;
+            let remaining = shareCapital;
+
+            if (remaining >= 100000) {
+                votes += Math.floor(remaining / 100000);
+                remaining = remaining % 100000; // Get the remaining after calculating full votes
+            }
+
+            while (remaining >= 25000) {
+                if (remaining >= 75000) {
+                    votes += 3;
+                    remaining -= 75000;
+                } else if (remaining >= 50000) {
+                    votes += 2;
+                    remaining -= 50000;
+                } else if (remaining >= 25000) {
+                    votes += 1;
+                    remaining -= 25000;
+                }
+            }
+
+            return Math.min(votes, 5); // Ensure no more than 5 votes are given
+        }
+
+        function updateEntitledVotes() {
+            const shareCapital = parseFloat(shareCapitalElem.textContent.replace(/,/g, '')) || 0;
+            const entitledVotes = calculateEntitledVotes(shareCapital);
+            entitledVotesElem.textContent = entitledVotes; // Update the <td> element
+        }
+
+        updateEntitledVotes(); // Run on page load
+
+        // If these values change dynamically via AJAX, use MutationObserver
+        const observer = new MutationObserver(updateEntitledVotes);
+        observer.observe(shareCapitalElem, { childList: true, subtree: true });
+    });
+</script>
+
     <!-- SweetAlert CDN -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {

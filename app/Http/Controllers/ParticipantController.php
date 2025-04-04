@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Models\GARegistration;
 use Illuminate\Validation\Rule;
 use App\Mail\ParticipantCreated;
+use App\Models\EventParticipant;
 use App\Models\UploadedDocument;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -105,15 +106,23 @@ class ParticipantController extends Controller
 
 
     public function participantadd()
-    {
-        $events = Event::all();
-        $cooperatives = Cooperative::all();
-        $users = User::whereDoesntHave('participant')
-                    ->where('role', 'participant') // Filter by role
-                    ->get();
+{
+    $events = Event::all();
+    $cooperatives = Cooperative::all();
+    $users = User::whereDoesntHave('participant')
+                ->where('role', 'participant') // Filter by role
+                ->get();
 
-        return view('dashboard.admin.participant.add', compact('cooperatives', 'users' ,'events'));
-    }
+    // Get participant count for Youth Congress (event_id = 15)
+    $youthCongressParticipantCount = EventParticipant::where('event_id', 15)->count();
+    $youthCongressFull = $youthCongressParticipantCount >= 150;
+
+    // Calculate the remaining slots for Youth Congress
+    $remainingSlots = 150 - $youthCongressParticipantCount;
+
+    return view('dashboard.admin.participant.add', compact('cooperatives', 'users', 'events', 'youthCongressFull', 'remainingSlots'));
+}
+
 
 public function generateId($id)
 {
@@ -206,13 +215,21 @@ public function store(Request $request)
 
    // Show the form for editing a participant
    public function edit($participant_id)
-   {
-       $participant = Participant::where('participant_id', $participant_id)->firstOrFail();
-       $cooperatives = Cooperative::all();
-       $events = Event::all(); // ✅ Add this
+{
+    $participant = Participant::where('participant_id', $participant_id)->firstOrFail();
+    $cooperatives = Cooperative::all();
+    $events = Event::all(); // ✅ Add this
 
-       return view('dashboard.admin.participant.edit', compact('participant', 'cooperatives', 'events'));
-   }
+    // Get participant count for Youth Congress (event_id = 15)
+    $youthCongressParticipantCount = EventParticipant::where('event_id', 15)->count();
+    $youthCongressFull = $youthCongressParticipantCount >= 150;
+
+    // Calculate the remaining slots for Youth Congress
+    $remainingSlots = 150 - $youthCongressParticipantCount;
+
+    return view('dashboard.admin.participant.edit', compact('participant', 'cooperatives', 'events', 'youthCongressFull', 'remainingSlots'));
+}
+
 
 
     // Update the specified participant

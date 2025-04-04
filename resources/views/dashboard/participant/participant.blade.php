@@ -79,6 +79,56 @@
             /* Adjust position if needed */
         }
     </style>
+    <style>
+        <style>
+    /* Red dot indicator */
+    .notice-icon {
+        position: relative;
+    }
+
+    .notice-icon::after {
+        content: '';
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        width: 10px;
+        height: 10px;
+        background-color: red;
+        border: 2px solid white;
+        border-radius: 50%;
+        z-index: 1000;
+    }
+
+    /* Animated bounce effect on icon */
+    @keyframes bounce {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-3px);
+        }
+    }
+
+    .attention {
+        animation: bounce 1s infinite;
+    }
+
+    /* Styled notice box */
+    #noticeBox .card {
+        background-color: #fff7e6;
+        border-left: 5px solid #ff9900;
+    }
+
+    button#noticeToggle {
+    border: none;
+}
+
+    .info-grouped{
+        position: relative;
+        top: 10px;
+    }
+</style>
+    </style>
     <div class="wrapper">
         <!-- Sidebar -->
         <div class="sidebar" data-background-color="dark">
@@ -205,7 +255,18 @@
                         <nav
                             class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
 
+                            <p
+                            class="text-muted text-nowrap d-flex flex-column flex-md-row align-items-center justify-content-center info-grouped">
+                            <span>Logged in as: <strong>{{ Auth::user()->name }}</strong></span>
 
+                            @if ($coop)
+                                <span class="mx-2 d-none d-md-inline">|</span>
+                                <span>Cooperative: <strong>{{ $coop->name }}</strong></span>
+                            @else
+                                <span class="mx-2 d-none d-md-inline">|</span>
+                                <span>No Cooperative Assigned</span>
+                            @endif
+                        </p>
 
                         </nav>
 
@@ -247,6 +308,8 @@
                                         </li>
                                     </div>
                                 </ul>
+
+
                             </li>
                         </ul>
                     </div>
@@ -260,32 +323,66 @@
 
                     <div class="d-flex flex-column flex-md-row align-items-center text-center text-md-start pt-2 pb-4">
                         <div>
-                            <div>
-                                <h3 class="fw-bold mb-3 text-nowrap">Cooperative Dashboard</h3>
-                            </div>
-                            <p
-                                class="text-muted text-nowrap d-flex flex-column flex-md-row align-items-center justify-content-center">
-                                <span>Logged in as: <strong>{{ Auth::user()->name }}</strong></span>
 
-                                @if ($coop)
-                                    <span class="mx-2 d-none d-md-inline">|</span>
-                                    <span>Cooperative: <strong>{{ $coop->name }}</strong></span>
-                                @else
-                                    <span class="mx-2 d-none d-md-inline">|</span>
-                                    <span>No Cooperative Assigned</span>
-                                @endif
-                            </p>
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <h3 class="fw-bold mb-0 text-nowrap me-2">Cooperative Dashboard</h3>
+
+                                <div class="position-relative d-inline-block">
+                                    <button class="btn rounded-circle notice-icon attention" type="button"
+                                            id="noticeToggle"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#noticeBox"
+                                            aria-expanded="false"
+                                            aria-controls="noticeBox"
+                                            title="View Notice">
+                                        <i class="fa fa-info-circle text-primary fs-5"></i>
+                                    </button>
+
+                                    <!-- Notice Box -->
+                                    <div class="collapse position-absolute mt-2 end-0" id="noticeBox"
+                                         style="z-index: 999; min-width: 300px;">
+                                        <div class="card shadow-sm">
+                                            <div class="card-body p-3">
+                                                <h6 class="text-danger fw-bold mb-2">
+                                                    <i class="fa fa-exclamation-triangle me-1"></i>Important Notice
+                                                </h6>
+                                                <p class="mb-0 text-dark">
+                                                    Participant registration will be <strong>disabled on May 22</strong>, and editing will be <strong>disabled on May 13</strong>.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
 
                         </div>
-
                         <!-- Action Buttons Container -->
                         <div
                             class="d-flex flex-column flex-sm-row gap-3 w-100 justify-content-center justify-content-md-end py-3">
 
                             <!-- Register Participants -->
-                            <a href="{{ route('coopparticipantadd') }}" class="btn btn-primary btn-lg action-btn">
-                                <i class="fas fa-user-plus me-2"></i> Register Participants
-                            </a>
+                            @php
+                            $isMay22 = now()->format('m-d') === '05-22';
+                        @endphp
+
+                        @if ($isMay22)
+                            <div class="alert alert-warning d-flex align-items-center mb-3" role="alert">
+                                <i class="fa fa-exclamation-triangle me-2"></i>
+                                <div>
+                                    Registration is closed. You cannot add participants on May 22.
+                                </div>
+                            </div>
+                        @endif
+
+                        <a href="{{ $isMay22 ? '#' : route('coopparticipantadd') }}"
+                           class="btn btn-primary btn-lg action-btn {{ $isMay22 ? 'disabled' : '' }}"
+                           {{ $isMay22 ? 'aria-disabled=true' : '' }}
+                           onclick="{{ $isMay22 ? 'return false;' : '' }}">
+                           <i class="fas fa-user-plus me-2"></i> Register Participants
+                        </a>
+
+
 
                             <a class="btn btn-info btn-lg action-btn pulse-btn" data-bs-toggle="modal"
                                 data-bs-target="#documentsModal">

@@ -228,8 +228,18 @@
                         @csrf
                         <div class="card-body">
                             <div class="row">
+                                @if ($youthCongressFull)
+                                <div class="alert alert-danger" role="alert">
+                                    <strong>The Youth Congress is full.</strong> Please select a different congress.
+                                </div>
+                            @else
+                                <div class="alert alert-info" role="alert">
+                                    <strong>{{ $remainingSlots }} slots remaining</strong> for the Youth Congress.
+                                </div>
+                            @endif
                                 <!-- Coop Selection -->
                                 <div class="col-md-6 col-lg-4">
+
                                     <div class="form-group">
                                         <label for="coop_id">Cooperative</label>
                                         <select class="form-control @error('coop_id') is-invalid @enderror" name="coop_id" id="coop_id" required>
@@ -342,20 +352,15 @@
                                     </div>
                                 </div>
 
-                                <!-- Congress Type -->
-                                {{-- <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="congress_type">Congress Type</label>
-                                        <input type="text" class="form-control @error('congress_type') is-invalid @enderror" name="congress_type" id="congress_type" placeholder="Enter Congress Type" value="{{ old('congress_type') }}" required/>
-                                        @error('congress_type')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div> --}}
+
 
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label for="event_ids">Congres</label>
+                                        <label for="event_ids">Congress</label>
+
+
+
+
                                         <div class="dropdown">
                                             <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                 Select Congresses
@@ -375,6 +380,7 @@
                                         </div>
                                     </div>
                                 </div>
+
 
                                 <!-- Religious Affiliation -->
                                 {{-- <div class="col-md-6 col-lg-4">

@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Models\GARegistration;
 use Illuminate\Validation\Rule;
 use App\Mail\ParticipantCreated;
+use App\Models\EventParticipant;
 use App\Models\UploadedDocument;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -66,51 +67,60 @@ class CooperativeController extends Controller
 
 
     public function coopparticipantadd()
-    {
-        $events = Event::all();
-        $cooperatives = Cooperative::all();
-        $users = User::whereDoesntHave('cooperative')
-                    ->where('role', 'cooperative')
-                    ->get();
+{
+    $events = Event::all();
+    $cooperatives = Cooperative::all();
+    $users = User::whereDoesntHave('cooperative')
+                 ->where('role', 'cooperative')
+                 ->get();
 
-        $user = Auth::user();
-        $cooperative = Cooperative::find($user->coop_id);
-        $shareCapital = $cooperative->share_capital_balance ?? 0;
+    $user = Auth::user();
+    $cooperative = Cooperative::find($user->coop_id);
+    $shareCapital = $cooperative->share_capital_balance ?? 0;
 
-        // Calculate max votes based on share capital
-        $votes = 0;
-        $remaining = $shareCapital;
+    // Get participant count for Youth Congress (event_id = 15)
+    $youthCongressParticipantCount = EventParticipant::where('event_id', 15)->count();
+    $totalCapacity = 150; // Assuming Youth Congress has 150 slots
+    $remainingSlots = $totalCapacity - $youthCongressParticipantCount;
 
-        if ($remaining >= 100000) {
-            $votes += floor($remaining / 100000);
-            $remaining %= 100000;
-        }
+    // Remove Youth Congress if participant count is 150 or more
+    $events = $events->filter(function ($event) use ($youthCongressParticipantCount) {
+        return !($event->event_id == 15 && $youthCongressParticipantCount >= 150);
+    });
 
-        while ($remaining >= 25000) {
-            if ($remaining >= 75000) {
-                $votes += 3;
-                $remaining -= 75000;
-            } else if ($remaining >= 50000) {
-                $votes += 2;
-                $remaining -= 50000;
-            } else if ($remaining >= 25000) {
-                $votes += 1;
-                $remaining -= 25000;
-            }
-        }
+    $youthCongressFull = $youthCongressParticipantCount >= $totalCapacity;
 
-        $votes = min($votes, 5);
-
-        // Count existing voting participants
-        $existingVotingParticipants = Participant::where('coop_id', $user->coop_id)
-            ->where('delegate_type', 'Voting')
-            ->count();
-
-        // Determine if voting is allowed
-        $canAddVoting = $existingVotingParticipants < $votes;
-
-        return view('dashboard.participant.manage_participant.add', compact('cooperatives', 'users', 'events', 'shareCapital', 'votes', 'canAddVoting'));
+    $votes = 0;
+    $remaining = $shareCapital;
+    if ($remaining >= 100000) {
+        $votes += floor($remaining / 100000);
+        $remaining %= 100000;
     }
+
+    while ($remaining >= 25000) {
+        if ($remaining >= 75000) {
+            $votes += 3;
+            $remaining -= 75000;
+        } elseif ($remaining >= 50000) {
+            $votes += 2;
+            $remaining -= 50000;
+        } elseif ($remaining >= 25000) {
+            $votes += 1;
+            $remaining -= 25000;
+        }
+    }
+
+    $votes = min($votes, 5);
+    $existingVotingParticipants = Participant::where('coop_id', $user->coop_id)
+        ->where('delegate_type', 'Voting')
+        ->count();
+    $canAddVoting = $existingVotingParticipants < $votes;
+
+    return view('dashboard.participant.manage_participant.add', compact(
+        'cooperatives', 'users', 'events', 'shareCapital', 'votes', 'canAddVoting', 'youthCongressFull', 'remainingSlots'
+    ));
+}
+
 
 
 
@@ -251,49 +261,65 @@ class CooperativeController extends Controller
  }
 
  public function edit($participant_id)
-{
-    $participant = Participant::where('participant_id', $participant_id)->firstOrFail();
-    $cooperatives = Cooperative::all();
+ {
+     $participant = Participant::where('participant_id', $participant_id)->firstOrFail();
+     $cooperatives = Cooperative::all();
+     $events = Event::all();
 
-    // Calculate votes based on share capital
-    $shareCapital = $participant->cooperative->share_capital_balance ?? 0;
-    $votes = 0;
-    $remaining = $shareCapital;
+     // ✅ Get participant count for Youth Congress (event_id = 15)
+     $youthCongressParticipantCount = EventParticipant::where('event_id', 15)->count();
+     $youthCongressCapacity = 150; // Set the capacity for Youth Congress
 
-    if ($remaining >= 100000) {
-        $votes += floor($remaining / 100000);
-        $remaining %= 100000;
-    }
+     // ✅ Calculate remaining slots for Youth Congress
+     $remainingSlots = $youthCongressCapacity - $youthCongressParticipantCount;
 
-    while ($remaining >= 25000) {
-        if ($remaining >= 75000) {
-            $votes += 3;
-            $remaining -= 75000;
-        } elseif ($remaining >= 50000) {
-            $votes += 2;
-            $remaining -= 50000;
-        } elseif ($remaining >= 25000) {
-            $votes += 1;
-            $remaining -= 25000;
-        }
-    }
+     // ✅ Remove Youth Congress if participant count is 150 or more
+     $events = $events->filter(function ($event) use ($youthCongressParticipantCount) {
+         if ($event->event_id == 15 && $youthCongressParticipantCount >= 150) {
+             return false;
+         }
+         return true;
+     });
 
-    $votes = min($votes, 5); // Max 5 votes
+     // ✅ Optional: use this in Blade to show a message if Youth Congress is full
+     $youthCongressFull = $youthCongressParticipantCount >= 150;
 
-    // Check current Voting participants excluding the current one
-    $currentVotingCount = Participant::where('coop_id', $participant->coop_id)
-        ->where('delegate_type', 'Voting')
-        ->where('participant_id', '!=', $participant->participant_id)
-        ->count();
+     // Voting logic
+     $shareCapital = $participant->cooperative->share_capital_balance ?? 0;
+     $votes = 0;
+     $remaining = $shareCapital;
 
-    // Allow Voting only if within limit or if participant is already Voting
-    $canAddVoting = $currentVotingCount < $votes || $participant->delegate_type === 'Voting';
+     if ($remaining >= 100000) {
+         $votes += floor($remaining / 100000);
+         $remaining %= 100000;
+     }
 
-    return view('dashboard.participant.manage_participant.edit', compact('participant', 'cooperatives', 'votes', 'canAddVoting', 'shareCapital', 'currentVotingCount'));
-}
+     while ($remaining >= 25000) {
+         if ($remaining >= 75000) {
+             $votes += 3;
+             $remaining -= 75000;
+         } elseif ($remaining >= 50000) {
+             $votes += 2;
+             $remaining -= 50000;
+         } elseif ($remaining >= 25000) {
+             $votes += 1;
+             $remaining -= 25000;
+         }
+     }
 
+     $votes = min($votes, 5);
 
+     $currentVotingCount = Participant::where('coop_id', $participant->coop_id)
+         ->where('delegate_type', 'Voting')
+         ->where('participant_id', '!=', $participant->participant_id)
+         ->count();
 
+     $canAddVoting = $currentVotingCount < $votes || $participant->delegate_type === 'Voting';
+
+     return view('dashboard.participant.manage_participant.edit', compact(
+         'participant', 'cooperatives', 'votes', 'canAddVoting', 'shareCapital', 'currentVotingCount', 'events', 'youthCongressFull', 'remainingSlots'
+     ));
+ }
 
  public function update(Request $request, $participant_id)
  {
@@ -322,6 +348,8 @@ class CooperativeController extends Controller
          'is_msp_officer' => 'required|string|max:3',
          'msp_officer_position' => 'nullable|string|max:255',
          'delegate_type' => 'required|string|max:10',
+         'event_ids' => 'nullable|array',
+         'event_ids.*' => 'exists:events,event_id',
      ]);
 
      // ✅ Check if the email has changed
@@ -329,6 +357,7 @@ class CooperativeController extends Controller
 
      // Update the participant
      $participant->update($validatedData);
+     $participant->events()->sync($request->input('event_ids', []));
 
      // ✅ If the email has changed, update the linked user's email
      if ($emailChanged && $participant->user_id) {

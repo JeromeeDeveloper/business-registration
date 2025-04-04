@@ -223,7 +223,15 @@
                     </div>
                   </div>
                   <div class="card-body">
-                    <!-- Modal -->
+                    @if ($youthCongressFull)
+                    <div class="alert alert-danger" role="alert">
+                        <strong>The Youth Congress is full.</strong> Please select a different congress.
+                    </div>
+                @else
+                    <div class="alert alert-info" role="alert">
+                        <strong>{{ $remainingSlots }} slots remaining</strong> for the Youth Congress. Hurry up and secure your spot!
+                    </div>
+                @endif
                     <form id="participantForm" action="{{ route('participants.update', $participant->participant_id) }}" method="POST">
                         @csrf
                         @method('PUT')
@@ -335,48 +343,34 @@
                                     </div>
                                 </div>
 
-                                <!-- Congress Type -->
-                                {{-- <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="congress_type">Congress Type</label>
-                                        <input type="text" class="form-control" name="congress_type" value="{{ old('congress_type', $participant->congress_type) }}">
-                                    </div>
-                                </div> --}}
-
                                 @php
-                                    $participantEventIds = $participant->events->pluck('event_id')->toArray();
-                                @endphp
+                                $participantEventIds = $participant->events->pluck('event_id')->toArray();
+                            @endphp
 
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="event_ids">Congress</label>
-                                        <div class="dropdown">
-                                            <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                Select Congresses
-                                            </button>
-                                            <ul class="dropdown-menu p-3" style="width: 100%; max-height: 300px; overflow-y: auto;">
-                                                @foreach ($events as $event)
-                                                    <li>
-                                                        <div class="form-check">
-                                                            <input
-                                                                class="form-check-input"
-                                                                type="checkbox"
-                                                                name="event_ids[]"
-                                                                value="{{ $event->event_id }}"
-                                                                id="event_{{ $event->event_id }}"
-                                                                {{ in_array($event->event_id, $participantEventIds) ? 'checked' : '' }}
-                                                            >
-                                                            <label class="form-check-label" for="event_{{ $event->event_id }}">
-                                                                {{ $event->title }}
-                                                            </label>
-                                                        </div>
-                                                    </li>
-                                                @endforeach
-                                            </ul>
+                            <div class="col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="event_ids">Congress</label>
+
+                                    <div class="dropdown">
+                                        <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Select Congresses
+                                        </button>
+                                        <ul class="dropdown-menu p-3" style="width: 100%; max-height: 300px; overflow-y: auto;">
+                                            @foreach ($events as $event)
+                                                <li>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" name="event_ids[]" value="{{ $event->event_id }}" id="event_{{ $event->event_id }}"
+                                                        {{ in_array($event->event_id, $participantEventIds) ? 'checked' : '' }}>
+                                                        <label class="form-check-label" for="event_{{ $event->event_id }}">
+                                                            {{ $event->title }}
+                                                        </label>
+                                                    </div>
+                                                </li>
+                                            @endforeach
+
                                         </div>
                                     </div>
                                 </div>
-
                                 <!-- Is MSP Officer -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
