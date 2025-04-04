@@ -57,8 +57,6 @@
 </style>
 <body>
 
-{{-- <div class="container">
-    <h2 class="fw-bold mb-3"><i class="fas fa-clipboard-list me-2"></i> Cooperative Registration Status</h2> --}}
     <div class="container-fluid mt-4">
         <h2 class="mb-4 fw-bold text-primary text-center">
             📑 Cooperative Registration Status
@@ -73,11 +71,9 @@
 
                 <th>No. of Participants</th>
 
-                {{-- New Columns for Registration and Membership Status --}}
                 <th>GA Registration Status</th>
                 <th>GA Membership Status</th>
 
-                {{-- Document Status Headers --}}
                 <th>Financial Statement</th>
                 <th>Resolution for Voting Delegates</th>
                 <th>Deposit Slip for Registration Fee</th>
@@ -114,8 +110,6 @@
                         @endif
                     </td>
 
-
-                    {{-- GA Membership Status --}}
                     <td>
                         @if ($coop->gaRegistration)
                             <span class="badge
@@ -129,7 +123,6 @@
                         @endif
                     </td>
 
-                    {{-- Document Status Columns --}}
                     @php
                         $documents = [
                             'Financial Statement',

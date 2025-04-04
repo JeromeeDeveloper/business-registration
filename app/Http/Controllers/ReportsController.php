@@ -181,12 +181,12 @@ public function previewFilteredCoopStatus(Request $request)
 
         $documents = [
             'Financial Statement',
-            'Resolution for Voting Delegates',
+            'Resolution for Voting delegates',
             'Deposit Slip for Registration Fee',
             'Deposit Slip for CETF Remittance',
             'CETF Undertaking',
             'Certificate of Candidacy',
-            'CETF Utilization Invoice',
+            'CETF Utilization invoice',
         ];
 
         $documentStatuses = [];
@@ -214,11 +214,6 @@ public function previewFilteredCoopStatus(Request $request)
 
     return response()->json($cooperatives);
 }
-
-
-
-
-
 
     public function generatePDF(Request $request)
     {

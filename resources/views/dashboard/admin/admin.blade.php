@@ -472,6 +472,15 @@
                                             <option value="Rejected">Not Registered</option>
                                         </select>
 
+                                        <label for="documentStatusSelect">Select Document Status:</label>
+                                        <select id="documentStatusSelect" class="form-select">
+                                            <option value="">All</option>
+                                            <option value="Pending">Pending</option>
+                                            {{-- <option value="Checked">Checked</option> --}}
+                                            <option value="Approved">Accepted</option>
+                                            <option value="Rejected">Declined</option>
+                                        </select>
+
                                         <!-- Table to Preview Filtered Data -->
                                         <h5 class="mt-3">Preview</h5>
                                         <div class="table-responsive">
@@ -1310,86 +1319,91 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const previewDataBtn = document.getElementById("previewData");
-        const applyRegionFilter = document.getElementById("applyRegionFilter");
-        const previewTableBody = document.getElementById("previewTableBody");
+    const previewDataBtn = document.getElementById("previewData");
+    const applyRegionFilter = document.getElementById("applyRegionFilter");
+    const previewTableBody = document.getElementById("previewTableBody");
 
-        previewDataBtn.addEventListener("click", function () {
-            let selectedRegion = document.getElementById("regionSelect").value.trim();
-            let migsStatus = document.getElementById("migsStatusSelect").value.trim();
-            let registrationStatus = document.getElementById("registrationStatusSelect").value.trim();
+    previewDataBtn.addEventListener("click", function () {
+        let selectedRegion = document.getElementById("regionSelect").value.trim();
+        let migsStatus = document.getElementById("migsStatusSelect").value.trim();
+        let registrationStatus = document.getElementById("registrationStatusSelect").value.trim();
+        let documentStatus = document.getElementById("documentStatusSelect").value.trim(); // New filter
 
-            fetch("{{ route('reports.preview.filtered_coop_status') }}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                },
-                body: JSON.stringify({
-                    region: selectedRegion || "All",
-                    migs_status: migsStatus || "All",
-                    registration_status: registrationStatus || "All"
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                previewTableBody.innerHTML = ""; // Clear previous data
-
-                if (data.length === 0) {
-                    previewTableBody.innerHTML = `<tr><td colspan="13" class="text-center">No data found</td></tr>`;
-                    applyRegionFilter.disabled = true;
-                    return;
-                }
-
-                applyRegionFilter.disabled = false; // Enable Generate Excel button
-
-                data.forEach(coop => {
-    let registrationStatus = coop.registration_status === "Rejected" ? "Unregistered" : coop.registration_status;
-
-    let row = `
-        <tr>
-            <td>${coop.name}</td>
-            <td>${coop.coop_identification_no}</td>
-            <td>${coop.region}</td>
-            <td>${coop.participants_count}</td>
-            <td>${registrationStatus}</td>
-            <td>${coop.membership_status}</td>
-            <td>${coop.documents?.['Financial Statement'] ?? 'Not Uploaded'}</td>
-            <td>${coop.documents?.['Resolution for Voting Delegates'] ?? 'Not Uploaded'}</td>
-            <td>${coop.documents?.['Deposit Slip for Registration Fee'] ?? 'Not Uploaded'}</td>
-            <td>${coop.documents?.['Deposit Slip for CETF Remittance'] ?? 'Not Uploaded'}</td>
-            <td>${coop.documents?.['CETF Undertaking'] ?? 'Not Uploaded'}</td>
-            <td>${coop.documents?.['Certificate of Candidacy'] ?? 'Not Uploaded'}</td>
-            <td>${coop.documents?.['CETF Utilization Invoice'] ?? 'Not Uploaded'}</td>
-        </tr>
-    `;
-    previewTableBody.innerHTML += row;
-});
-            })
-            .catch(error => {
-                console.error("Error fetching preview data:", error);
-                previewTableBody.innerHTML = `<tr><td colspan="13" class="text-center text-danger">Error loading data</td></tr>`;
-            });
-        });
-
-        applyRegionFilter.addEventListener("click", function () {
-            let selectedRegion = document.getElementById("regionSelect").value.trim();
-            let migsStatus = document.getElementById("migsStatusSelect").value.trim();
-            let registrationStatus = document.getElementById("registrationStatusSelect").value.trim();
-
-            let exportUrl = "{{ route('reports.export.filtered_coop_status') }}";
-
-            let params = new URLSearchParams({
+        fetch("{{ route('reports.preview.filtered_coop_status') }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+            },
+            body: JSON.stringify({
                 region: selectedRegion || "All",
                 migs_status: migsStatus || "All",
-                registration_status: registrationStatus || "All"
-            });
+                registration_status: registrationStatus || "All",
+                document_status: documentStatus || "All" // Pass the new document status filter
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            previewTableBody.innerHTML = ""; // Clear previous data
 
-            window.location.href = exportUrl + "?" + params.toString();
+            if (data.length === 0) {
+                previewTableBody.innerHTML = `<tr><td colspan="13" class="text-center">No data found</td></tr>`;
+                applyRegionFilter.disabled = true;
+                return;
+            }
+
+            applyRegionFilter.disabled = false; // Enable Generate Excel button
+
+            data.forEach(coop => {
+                let registrationStatus = coop.registration_status === "Rejected" ? "Unregistered" : coop.registration_status;
+
+                let row = `
+                    <tr>
+                        <td>${coop.name}</td>
+                        <td>${coop.coop_identification_no}</td>
+                        <td>${coop.region}</td>
+                        <td>${coop.participants_count}</td>
+                        <td>${registrationStatus}</td>
+                        <td>${coop.membership_status}</td>
+                        <td>${coop.documents?.['Financial Statement'] ?? 'Not Uploaded'}</td>
+                        <td>${coop.documents?.['Resolution for Voting delegates'] ?? 'Not Uploaded'}</td>
+                        <td>${coop.documents?.['Deposit Slip for Registration Fee'] ?? 'Not Uploaded'}</td>
+                        <td>${coop.documents?.['Deposit Slip for CETF Remittance'] ?? 'Not Uploaded'}</td>
+                        <td>${coop.documents?.['CETF Undertaking'] ?? 'Not Uploaded'}</td>
+                        <td>${coop.documents?.['Certificate of Candidacy'] ?? 'Not Uploaded'}</td>
+                        <td>${coop.documents?.['CETF Utilization invoice'] ?? 'Not Uploaded'}</td>
+                    </tr>
+                `;
+                previewTableBody.innerHTML += row;
+            });
+        })
+        .catch(error => {
+            console.error("Error fetching preview data:", error);
+            previewTableBody.innerHTML = `<tr><td colspan="13" class="text-center text-danger">Error loading data</td></tr>`;
         });
     });
-    </script>
 
+    applyRegionFilter.addEventListener("click", function () {
+        let selectedRegion = document.getElementById("regionSelect").value.trim();
+        let migsStatus = document.getElementById("migsStatusSelect").value.trim();
+        let registrationStatus = document.getElementById("registrationStatusSelect").value.trim();
+        let documentStatus = document.getElementById("documentStatusSelect").value.trim(); // New filter
+
+        let exportUrl = "{{ route('reports.export.filtered_coop_status') }}";
+
+        let params = new URLSearchParams({
+            region: selectedRegion || "All",
+            migs_status: migsStatus || "All",
+            registration_status: registrationStatus || "All",
+            document_status: documentStatus || "All" // Pass the new document status filter
+        });
+
+        window.location.href = exportUrl + "?" + params.toString();
+    });
+});
+
+
+        </script>
 
 
 

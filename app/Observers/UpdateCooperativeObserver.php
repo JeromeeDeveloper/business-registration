@@ -33,10 +33,8 @@ class UpdateCooperativeObserver
             'Financial Statement',
             'Resolution for Voting delegates',
             'Deposit Slip for Registration Fee',
-            'Deposit Slip for CETF Remittance',
-            'CETF Undertaking',
-            'Certificate of Candidacy',
-            'CETF Utilization invoice'
+            'Deposit Slip for CETF Remittance'
+
         ];
 
         $approvedDocumentsCount = UploadedDocument::where('coop_id', $coop_id)
@@ -49,12 +47,11 @@ class UpdateCooperativeObserver
             ->where('status', 'Rejected')
             ->exists();
 
-        $isPaymentSufficient = !is_null($coop->less_prereg_payment) &&
-            $coop->less_prereg_payment >= $coop->net_required_reg_fee;
 
         $hasParticipant = Participant::where('coop_id', $coop_id)->exists();
 
-      
+        $isPaymentSufficient = !is_null($coop->reg_fee_payable) && $coop->reg_fee_payable <= 0;
+
         if (!$hasRejectedDocument && $approvedDocumentsCount === count($requiredDocuments) && $isPaymentSufficient) {
             $gaRegistration->registration_status = 'Fully Registered';
         } elseif ($hasParticipant) {

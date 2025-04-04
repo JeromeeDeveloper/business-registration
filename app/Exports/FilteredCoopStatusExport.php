@@ -11,12 +11,14 @@ class FilteredCoopStatusExport implements FromCollection, WithHeadings
     protected $region;
     protected $migsStatus;
     protected $registrationStatus;
+    protected $documentStatus; // New parameter for document status
 
-    public function __construct($region = null, $migsStatus = null, $registrationStatus = null)
+    public function __construct($region = null, $migsStatus = null, $registrationStatus = null, $documentStatus = null)
     {
         $this->region = $region;
         $this->migsStatus = $migsStatus;
         $this->registrationStatus = $registrationStatus;
+        $this->documentStatus = $documentStatus; // Set the document status filter
     }
 
     public function collection()
@@ -42,6 +44,13 @@ class FilteredCoopStatusExport implements FromCollection, WithHeadings
             });
         }
 
+        // ✅ Apply **Document Status Filter**
+        if ($this->documentStatus && $this->documentStatus !== 'All') {
+            $query->whereHas('uploadedDocuments', function ($query) {
+                $query->where('status', $this->documentStatus);
+            });
+        }
+
         $cooperatives = $query->get();
 
         return $cooperatives->map(function ($coop) {
@@ -50,12 +59,12 @@ class FilteredCoopStatusExport implements FromCollection, WithHeadings
 
             $documents = [
                 'Financial Statement',
-                'Resolution for Voting Delegates',
+                'Resolution for Voting delegates',
                 'Deposit Slip for Registration Fee',
                 'Deposit Slip for CETF Remittance',
                 'CETF Undertaking',
                 'Certificate of Candidacy',
-                'CETF Utilization Invoice',
+                'CETF Utilization invoice',
             ];
 
             $documentStatuses = array_map(function ($doc) use ($coop) {

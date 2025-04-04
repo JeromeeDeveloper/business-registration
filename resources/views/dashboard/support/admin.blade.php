@@ -479,9 +479,9 @@
 <select id="documentStatusSelect" class="form-select">
     <option value="">All</option>
     <option value="Pending">Pending</option>
-    <option value="Checked">Checked</option>
-    <option value="Approved">Approved</option>
-    <option value="Rejected">Rejected</option>
+    {{-- <option value="Checked">Checked</option> --}}
+    <option value="Approved">Accepted</option>
+    <option value="Rejected">Declined</option>
 </select>
 
 
@@ -1257,12 +1257,12 @@
                         <td>${registrationStatus}</td>
                         <td>${coop.membership_status}</td>
                         <td>${coop.documents?.['Financial Statement'] ?? 'Not Uploaded'}</td>
-                        <td>${coop.documents?.['Resolution for Voting Delegates'] ?? 'Not Uploaded'}</td>
+                        <td>${coop.documents?.['Resolution for Voting delegates'] ?? 'Not Uploaded'}</td>
                         <td>${coop.documents?.['Deposit Slip for Registration Fee'] ?? 'Not Uploaded'}</td>
                         <td>${coop.documents?.['Deposit Slip for CETF Remittance'] ?? 'Not Uploaded'}</td>
                         <td>${coop.documents?.['CETF Undertaking'] ?? 'Not Uploaded'}</td>
                         <td>${coop.documents?.['Certificate of Candidacy'] ?? 'Not Uploaded'}</td>
-                        <td>${coop.documents?.['CETF Utilization Invoice'] ?? 'Not Uploaded'}</td>
+                        <td>${coop.documents?.['CETF Utilization invoice'] ?? 'Not Uploaded'}</td>
                     </tr>
                 `;
                 previewTableBody.innerHTML += row;
