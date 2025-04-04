@@ -690,31 +690,22 @@
                                                     </div>
 
                                                     <div class="form-group">
-                                                        <label>Checklist:</label>
+                                                        <label>Checklist Automate:</label>
 
                                                         <div class="form-check">
                                                             <input class="form-check-input" type="checkbox"
                                                                 name="free_2pax_migs" id="free_2pax_migs"
                                                                 value="1"
-                                                                {{ $hasMigsRegistration ? 'checked' : '' }}>
+                                                                {{ $hasMigsRegistration ? 'checked' : '' }} disabled>
                                                             <label class="form-check-label" for="free_2pax_migs">Free
                                                                 2 Pax for MIGS</label>
                                                         </div>
 
                                                         <div class="form-check">
                                                             <input class="form-check-input" type="checkbox"
-                                                                name="free_migs_pax" id="free_migs_pax"
-                                                                value="1" {{ $hasMspOfficer ? 'checked' : '' }}
-                                                                readonly>
-                                                            <label class="form-check-label" for="free_migs_pax">1 Pax
-                                                                Free Officer</label>
-                                                        </div>
-
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox"
                                                                 name="free_100k_cetf" id="free_100k_cetf"
                                                                 value="1" {{ $free100kCETF ? 'checked' : '' }}
-                                                                readonly>
+                                                                disabled>
                                                             <label class="form-check-label" for="free_100k_cetf">1 Pax
                                                                 Free 100K CETF</label>
                                                         </div>
@@ -723,10 +714,20 @@
                                                             <input class="form-check-input" type="checkbox"
                                                                 name="half_based_cetf" id="half_based_cetf"
                                                                 value="1" {{ $halfBasedCETF ? 'checked' : '' }}
-                                                                readonly>
+                                                                disabled>
                                                             <label class="form-check-label" for="half_based_cetf">1/2
                                                                 Based on CETF</label>
                                                         </div>
+
+
+                                                        <div class="form-group">
+                                                            <label>Checklist Manual:</label>
+
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" name="free_migs_pax" id="free_migs_pax"
+                                                                       value="4500" {{ old('free_migs_pax', $coop->free_migs_pax) == 4500 ? 'checked' : '' }}>
+                                                                <label class="form-check-label" for="free_migs_pax">1 Pax Free Officer</label>
+                                                            </div>
                                                     </div>
 
                                                     <div class="form-group">
@@ -826,50 +827,43 @@
                                         <h3 class="mb-4 text-center text-primary">Upload & Edit Documents for
                                             {{ $coop->name }}</h3>
 
-                                        <div class="row">
-                                            <!-- Financial Statement (Left Column) -->
-                                            <div class="col-md-6 mb-4">
-                                                <label for="documents[Financial Statement]" class="form-label">Audited
-                                                    Financial
-                                                    Statement</label>
-                                                <input type="file" name="documents[Financial Statement]"
-                                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv"
-                                                    class="form-control mb-2">
-                                                @if ($coop->uploadedDocuments()->where('document_type', 'Financial Statement')->exists())
-                                                    <p class="text-info">Current File:
-                                                        {{ $coop->uploadedDocuments()->where('document_type', 'Financial Statement')->first()->file_name }}
-                                                    </p>
-                                                    <small class="form-text text-muted">You can upload a new file or
-                                                        keep the existing
-                                                        one.</small>
-                                                @endif
-                                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png,
-                                                    pdf (no file size
-                                                    limit).</small>
+                                            <div class="row">
+                                                <!-- Financial Statement (Left Column) -->
+                                                <div class="col-md-6 mb-4">
+                                                    <label for="documents[Financial Statement]" class="form-label">Audited Financial Statement</label>
+                                                    <input type="file" name="documents[Financial Statement]" accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv" class="form-control mb-2">
+                                                    @if ($coop->uploadedDocuments()->where('document_type', 'Financial Statement')->exists())
+                                                        <p class="text-info">Current File: {{ $coop->uploadedDocuments()->where('document_type', 'Financial Statement')->first()->file_name }}</p>
+                                                        <small class="form-text text-muted">You can upload a new file or keep the existing one.</small>
+                                                    @endif
+                                                    <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (no file size limit).</small>
 
-                                            </div>
+                                                    <!-- Checklist for Marking as Done -->
+                                                    <div class="form-check mt-2">
+                                                        <input class="form-check-input" type="checkbox" id="markAsDoneFinancial" name="markAsDone[Financial Statement]">
+                                                        <label class="form-check-label" for="markAsDoneFinancial">
+                                                            Mark as Done (Upload Blank PDF)
+                                                        </label>
+                                                    </div>
+                                                </div>
 
                                             <!-- Resolution for Voting Delegates (Right Column) -->
                                             <div class="col-md-6 mb-4">
-                                                <label for="documents[Resolution for Voting Delegates]"
-                                                    class="form-label">Resolution
-                                                    for Voting Delegates</label>
-                                                <input type="file"
-                                                    name="documents[Resolution for Voting Delegates]"
-                                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv"
-                                                    class="form-control mb-2">
+                                                <label for="documents[Resolution for Voting Delegates]" class="form-label">Resolution for Voting Delegates</label>
+                                                <input type="file" name="documents[Resolution for Voting Delegates]" accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv" class="form-control mb-2">
                                                 @if ($coop->uploadedDocuments()->where('document_type', 'Resolution for Voting Delegates')->exists())
-                                                    <p class="text-info">Current File:
-                                                        {{ $coop->uploadedDocuments()->where('document_type', 'Resolution for Voting Delegates')->first()->file_name }}
-                                                    </p>
-                                                    <small class="form-text text-muted">You can upload a new file or
-                                                        keep the existing
-                                                        one.</small>
+                                                    <p class="text-info">Current File: {{ $coop->uploadedDocuments()->where('document_type', 'Resolution for Voting Delegates')->first()->file_name }}</p>
+                                                    <small class="form-text text-muted">You can upload a new file or keep the existing one.</small>
                                                 @endif
-                                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png,
-                                                    pdf (no file size
-                                                    limit).</small>
+                                                <small class="form-text text-muted">Accepted formats: jpg, jpeg, png, pdf (no file size limit).</small>
 
+                                                <!-- Checklist for Marking as Done -->
+                                                <div class="form-check mt-2">
+                                                    <input class="form-check-input" type="checkbox" id="markAsDoneResolution" name="markAsDone[Resolution for Voting Delegates]">
+                                                    <label class="form-check-label" for="markAsDoneResolution">
+                                                        Mark as Done (Upload Blank PDF)
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -894,6 +888,12 @@
                                                 <small class="form-text text-muted">Accepted formats: jpg, jpeg, png,
                                                     pdf (no file size
                                                     limit).</small>
+                                                    <div class="form-check mt-2">
+                                                        <input class="form-check-input" type="checkbox" id="markAsDoneDepositSlip" name="markAsDone[Deposit Slip for Registration Fee]">
+                                                        <label class="form-check-label" for="markAsDoneDepositSlip">
+                                                            Mark as Done (Upload Blank PDF)
+                                                        </label>
+                                                    </div>
 
                                             </div>
 
@@ -917,7 +917,12 @@
                                                 <small class="form-text text-muted">Accepted formats: jpg, jpeg, png,
                                                     pdf (no file size
                                                     limit).</small>
-
+                                                    <div class="form-check mt-2">
+                                                        <input class="form-check-input" type="checkbox" id="markAsDoneCETFRemittance" name="markAsDone[Deposit Slip for CETF Remittance]">
+                                                        <label class="form-check-label" for="markAsDoneCETFRemittance">
+                                                            Mark as Done (Upload Blank PDF)
+                                                        </label>
+                                                    </div>
                                             </div>
                                         </div>
 
@@ -940,6 +945,12 @@
                                                 <small class="form-text text-muted">Accepted formats: jpg, jpeg, png,
                                                     pdf (no file size
                                                     limit).</small>
+                                                    <div class="form-check mt-2">
+                                                        <input class="form-check-input" type="checkbox" id="markAsDoneCETFUndertaking" name="markAsDone[CETF Undertaking]">
+                                                        <label class="form-check-label" for="markAsDoneCETFUndertaking">
+                                                            Mark as Done (Upload Blank PDF)
+                                                        </label>
+                                                    </div>
 
                                             </div>
 
@@ -962,7 +973,12 @@
                                                 <small class="form-text text-muted">Accepted formats: jpg, jpeg, png,
                                                     pdf (no file size
                                                     limit).</small>
-
+                                                    <div class="form-check mt-2">
+                                                        <input class="form-check-input" type="checkbox" id="markAsDoneCandidacy" name="markAsDone[Certificate of Candidacy]">
+                                                        <label class="form-check-label" for="markAsDoneCandidacy">
+                                                            Mark as Done (Upload Blank PDF)
+                                                        </label>
+                                                    </div>
                                             </div>
                                         </div>
 
@@ -986,7 +1002,12 @@
                                                 <small class="form-text text-muted">Accepted formats: jpg, jpeg, png,
                                                     pdf (no file size
                                                     limit).</small>
-
+                                                    <div class="form-check mt-2">
+                                                        <input class="form-check-input" type="checkbox" id="markAsDoneCETFUtilization" name="markAsDone[CETF Utilization Invoice]">
+                                                        <label class="form-check-label" for="markAsDoneCETFUtilization">
+                                                            Mark as Done (Upload Blank PDF)
+                                                        </label>
+                                                    </div>
                                             </div>
                                         </div>
 

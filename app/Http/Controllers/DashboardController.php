@@ -1041,6 +1041,7 @@ class DashboardController extends Controller
             'share_capital_balance' => 'nullable|numeric|min:0',
             'less_prereg_payment' => 'nullable|numeric|min:0',
             'less_cetf_balance' => 'nullable|numeric|min:0',
+            'free_migs_pax' => 'nullable|numeric|min:0',
 
             // Other Fields
             'full_cetf_remitted' => ['nullable', Rule::in(['yes', 'no'])],
@@ -1074,6 +1075,7 @@ class DashboardController extends Controller
             'share_capital_balance',
             'registration_fee',
             'less_prereg_payment',
+            'free_migs_pax',
             'less_cetf_balance'
         ];
 

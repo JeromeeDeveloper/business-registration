@@ -47,8 +47,8 @@ class CoopRegistrationExport implements FromCollection, WithHeadings, WithMappin
         $participantCount = $coop->participants()->count() ?? 0;
 
         // Check for MSP Officer Fee
-        $hasMspOfficer = $coop->participants()->where('is_msp_officer', 1)->exists();
-        $mspOfficerFee = $hasMspOfficer ? 4500 : 0;
+        $hasMspOfficer = $coop->free_migs_pax == 4500;
+        $mspOfficerFee = $hasMspOfficer ? $coop->free_migs_pax : 0;
 
         // Calculate half CETF
         $halfCetf = ($coop->cetf_remittance >= 50000) ? 4500 / 2 : 0;

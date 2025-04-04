@@ -44,6 +44,8 @@
                 $table->decimal('cetf_required', 15, 2)->nullable();
                 $table->decimal('cetf_balance', 15, 2)->nullable();
 
+                $table->decimal('free_migs_pax', 10, 2)->nullable();
+
                 $table->enum('fs_status', ['yes', 'no'])->default('no');
                 $table->enum('delinquent', ['yes', 'no'])->default('no');
 

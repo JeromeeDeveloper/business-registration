@@ -358,9 +358,10 @@ public function coopRegistrationSummary(Request $request)
         'less_prereg_payment',
         'reg_fee_payable',
         'ga_remark',
+        'free_migs_pax',
         'delinquent',
         'cetf_balance',
-        'no_of_entitled_votes' // Add this field
+        'no_of_entitled_votes'
     )->get()->map(function ($coop) {
         $participantCount = $coop->participants()->count() ?? 0;
         $hasMspOfficer = $coop->participants()->where('is_msp_officer', 1)->exists();

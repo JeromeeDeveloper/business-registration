@@ -54,7 +54,8 @@ class Cooperative extends Model
         'less_cetf_balance',
         'less_prereg_payment',
         'fs_status',
-        'delinquent'
+        'delinquent',
+        'free_migs_pax'
     ];
 
     public function participants()

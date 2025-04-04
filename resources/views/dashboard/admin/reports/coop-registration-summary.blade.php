@@ -88,7 +88,7 @@
                         <td>{{ $data->region }}</td>
                         <td>{{ number_format($data->share_capital_balance, 2) }}</td>
                         <td id="votes-{{ $data->share_capital_balance }}"></td> <!-- This is where the votes will be displayed -->
-                        <td>{{ number_format($data->msp_officer_fee, 2) }}</td>
+                        <td>{{ number_format($data->free_migs_pax, 2) }}</td>
                         <td>{{ number_format($data->half_cetf, 2) }}</td>
                         <td>{{ number_format($data->free_4500, 2) }}</td>
                         <td>{{ number_format($data->less_cetf_balance, 2) }}</td>

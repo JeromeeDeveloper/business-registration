@@ -218,8 +218,9 @@
                         @php
                             $participantCount = $participants->where('coop_id', $registration->cooperative->coop_id)->count();
                             $registrationFee = $participantCount * 4500;
-                            $hasMspOfficer = $participants->where('coop_id', $registration->cooperative->coop_id)
-                                                          ->where('is_msp_officer', 'Yes')->isNotEmpty();
+
+                            $hasMspOfficer = $registration->cooperative->free_migs_pax == 4500;
+                            
                             $mspOfficerFee = $hasMspOfficer ? 4500 : 0;
                             $halfCetf = $registration->cooperative->cetf_remittance >= 50000 ? 4500 / 2 : 0;
                             $free4500 = $registration->cooperative->cetf_remittance >= 100000 ? 4500 : 0;

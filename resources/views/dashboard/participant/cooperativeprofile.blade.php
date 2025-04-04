@@ -599,9 +599,12 @@
                                                         <tr>
                                                             <td class="fw-bold">1 Pax Free for MASS-SPECC Officer</td>
                                                             <td>
-                                                                <input class="form-check-input" type="checkbox" name="free_migs_pax" id="free_migs_pax" value="1" {{ $hasMspOfficer ? 'checked' : '' }} disabled />
+                                                                <input class="form-check-input" type="checkbox" name="free_migs_pax" id="free_migs_pax" value="1"
+                                                                       {{ $cooperative->free_migs_pax == 4500 ? 'checked' : '' }}
+                                                                       {{ $cooperative->free_migs_pax == 4500 ? 'disabled' : '' }} disabled/>
                                                             </td>
                                                         </tr>
+
 
                                                         <tr>
                                                             <td class="fw-bold">1 Pax free Based on CETF(100k)</td>
