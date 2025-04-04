@@ -80,56 +80,56 @@ class SupportController extends Controller
             ->whereNotNull('coop_id')
             ->distinct()
             ->count('coop_id');
-$registeredMigsCoops = GARegistration::where('membership_status', 'Migs')
-->whereHas('cooperative.participants')
-->distinct()->count('coop_id');
+        $registeredMigsCoops = GARegistration::where('membership_status', 'Migs')
+            ->whereHas('cooperative.participants')
+            ->distinct()->count('coop_id');
 
-// Count registered NON-MIGS Coops with Participant connection
-$registeredNonMigsCoops = GARegistration::where('membership_status', 'Non-migs')
-->whereHas('cooperative.participants')
-->distinct()->count('coop_id');
+        // Count registered NON-MIGS Coops with Participant connection
+        $registeredNonMigsCoops = GARegistration::where('membership_status', 'Non-migs')
+            ->whereHas('cooperative.participants')
+            ->distinct()->count('coop_id');
 
-$totalCoopAttended = DB::table('participants')
-    ->join('event_participant', 'participants.participant_id', '=', 'event_participant.participant_id')
-    ->whereNotNull('event_participant.attendance_datetime') // Ensures the participant attended
-    ->distinct('participants.coop_id') // Counts each coop only once
-    ->count('participants.coop_id');
+        $totalCoopAttended = DB::table('participants')
+            ->join('event_participant', 'participants.participant_id', '=', 'event_participant.participant_id')
+            ->whereNotNull('event_participant.attendance_datetime') // Ensures the participant attended
+            ->distinct('participants.coop_id') // Counts each coop only once
+            ->count('participants.coop_id');
 
-$totalMigsAttended = DB::table('participants')
-    ->join('event_participant', 'participants.participant_id', '=', 'event_participant.participant_id')
-    ->whereNotNull('event_participant.attendance_datetime') // Ensures the participant attended
-    ->whereIn('participants.coop_id', function ($query) {
-        $query->select('coop_id')
-              ->from('ga_registrations')
-              ->where('membership_status', 'Migs');
-    })
-    ->distinct('participants.coop_id') // Counts MIGS coop only once
-    ->count('participants.coop_id');
+        $totalMigsAttended = DB::table('participants')
+            ->join('event_participant', 'participants.participant_id', '=', 'event_participant.participant_id')
+            ->whereNotNull('event_participant.attendance_datetime') // Ensures the participant attended
+            ->whereIn('participants.coop_id', function ($query) {
+                $query->select('coop_id')
+                    ->from('ga_registrations')
+                    ->where('membership_status', 'Migs');
+            })
+            ->distinct('participants.coop_id') // Counts MIGS coop only once
+            ->count('participants.coop_id');
 
-$totalNonMigsAttended = DB::table('participants')
-    ->join('event_participant', 'participants.participant_id', '=', 'event_participant.participant_id')
-    ->whereNotNull('event_participant.attendance_datetime') // Ensures the participant attended
-    ->whereIn('participants.coop_id', function ($query) {
-        $query->select('coop_id')
-              ->from('ga_registrations')
-              ->where('membership_status', 'Non-migs');
-    })
-    ->distinct('participants.coop_id') // Counts Non-MIGS coop only once
-    ->count('participants.coop_id');
+        $totalNonMigsAttended = DB::table('participants')
+            ->join('event_participant', 'participants.participant_id', '=', 'event_participant.participant_id')
+            ->whereNotNull('event_participant.attendance_datetime') // Ensures the participant attended
+            ->whereIn('participants.coop_id', function ($query) {
+                $query->select('coop_id')
+                    ->from('ga_registrations')
+                    ->where('membership_status', 'Non-migs');
+            })
+            ->distinct('participants.coop_id') // Counts Non-MIGS coop only once
+            ->count('participants.coop_id');
 
-    $totalVoting = Participant::where('delegate_type', 'Voting')->count();
+        $totalVoting = Participant::where('delegate_type', 'Voting')->count();
 
-// Attended Participants with Voting Delegate Type
-$totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
-    ->whereHas('participant', function ($query) {
-        $query->where('delegate_type', 'Voting');  // Only participants with 'voting' delegate type
-    })
-    ->distinct('participant_id')  // Ensures each participant is counted only once
-    ->count('participant_id');
+        // Attended Participants with Voting Delegate Type
+        $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
+            ->whereHas('participant', function ($query) {
+                $query->where('delegate_type', 'Voting');  // Only participants with 'voting' delegate type
+            })
+            ->distinct('participant_id')  // Ensures each participant is counted only once
+            ->count('participant_id');
 
-    $events = Event::withCount(['participants' => function ($query) {
-        $query->whereNotNull('event_participant.attendance_datetime'); // Specify the table
-    }])->get();
+        $events = Event::withCount(['participants' => function ($query) {
+            $query->whereNotNull('event_participant.attendance_datetime'); // Specify the table
+        }])->get();
 
         // Registered Participants: Those with non-null coop_id
         $registeredParticipants = Participant::whereNotNull('coop_id')->count();
@@ -188,10 +188,10 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
                         // Check for "No Registration" search
                         if (strtoupper($search) === 'NO REGISTRATION') {
                             $query->whereNull('registration_status')
-                                  ->orWhere('registration_status', 'Rejected');
+                                ->orWhere('registration_status', 'Rejected');
                         } else {
                             $query->where('registration_status', 'LIKE', "%{$search}%")
-                                  ->orWhere('membership_status', 'LIKE', "%{$search}%");
+                                ->orWhere('membership_status', 'LIKE', "%{$search}%");
                         }
                     });
             });
@@ -283,8 +283,8 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
         $coop = Cooperative::findOrFail($coop_id);
 
         $hasFinancialStatement = UploadedDocument::where('coop_id', $coop->coop_id)
-        ->where('document_type', 'Financial Statement')
-        ->exists();
+            ->where('document_type', 'Financial Statement')
+            ->exists();
         // Check if cooperative has MIGS membership
         $hasMigsRegistration = GARegistration::where('coop_id', $coop->coop_id)
             ->where('membership_status', 'MIGS')
@@ -337,7 +337,12 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
         $coop->reg_fee_payable = $regFeePayable;
 
         return view('dashboard.support.edit', compact(
-            'coop', 'hasMigsRegistration', 'hasMspOfficer', 'free100kCETF', 'halfBasedCETF', 'hasFinancialStatement'
+            'coop',
+            'hasMigsRegistration',
+            'hasMspOfficer',
+            'free100kCETF',
+            'halfBasedCETF',
+            'hasFinancialStatement'
         ));
     }
 
@@ -355,9 +360,25 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
             'region' => [
                 'required',
                 Rule::in([
-                    'Region I', 'Region II', 'Region III', 'Region IV-A', 'Region IV-B', 'Region V',
-                    'Region VI', 'Region VII', 'Region VIII', 'Region IX', 'Region X', 'Region XI',
-                    'Region XII', 'Region XIII', 'NCR', 'CAR', 'BARMM', 'ZBST','LUZON'
+                    'Region I',
+                    'Region II',
+                    'Region III',
+                    'Region IV-A',
+                    'Region IV-B',
+                    'Region V',
+                    'Region VI',
+                    'Region VII',
+                    'Region VIII',
+                    'Region IX',
+                    'Region X',
+                    'Region XI',
+                    'Region XII',
+                    'Region XIII',
+                    'NCR',
+                    'CAR',
+                    'BARMM',
+                    'ZBST',
+                    'LUZON'
                 ]),
             ],
             'phone_number' => 'required|string|max:20',
@@ -492,298 +513,297 @@ $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
     }
 
     public function storeDocuments3(Request $request, $id)
-  {
-    $request->validate([
-       'documents.Financial Statement' => 'nullable|mimes:jpg,jpeg,png,pdf,xls,xlsx,csv',
-'documents.Resolution for Voting Delegates' => 'nullable|mimes:jpg,jpeg,png,pdf,xls,xlsx,csv',
-'documents.Deposit Slip for Registration Fee' => 'nullable|mimes:jpg,jpeg,png,pdf,xls,xlsx,csv',
-'documents.Deposit Slip for CETF Remittance' => 'nullable|mimes:jpg,jpeg,png,pdf,xls,xlsx,csv',
-'documents.CETF Undertaking' => 'nullable|mimes:jpg,jpeg,png,pdf,xls,xlsx,csv',
-'documents.Certificate of Candidacy' => 'nullable|mimes:jpg,jpeg,png,pdf,xls,xlsx,csv',
-'documents.CETF Utilization Invoice' => 'nullable|mimes:jpg,jpeg,png,pdf,xls,xlsx,csv',
+    {
+        $request->validate([
+            'documents.Financial Statement' => 'nullable|mimes:jpg,jpeg,png,pdf,xls,xlsx,csv',
+            'documents.Resolution for Voting Delegates' => 'nullable|mimes:jpg,jpeg,png,pdf,xls,xlsx,csv',
+            'documents.Deposit Slip for Registration Fee' => 'nullable|mimes:jpg,jpeg,png,pdf,xls,xlsx,csv',
+            'documents.Deposit Slip for CETF Remittance' => 'nullable|mimes:jpg,jpeg,png,pdf,xls,xlsx,csv',
+            'documents.CETF Undertaking' => 'nullable|mimes:jpg,jpeg,png,pdf,xls,xlsx,csv',
+            'documents.Certificate of Candidacy' => 'nullable|mimes:jpg,jpeg,png,pdf,xls,xlsx,csv',
+            'documents.CETF Utilization Invoice' => 'nullable|mimes:jpg,jpeg,png,pdf,xls,xlsx,csv',
 
-    ]);
+        ]);
 
-      // Find the cooperative by its ID
-      $cooperative = Cooperative::findOrFail($id);
+        // Find the cooperative by its ID
+        $cooperative = Cooperative::findOrFail($id);
 
-      $successMessages = [];
-      $uploadedFiles = $request->file('documents', []); // Default to empty array if no files
+        $successMessages = [];
+        $uploadedFiles = $request->file('documents', []); // Default to empty array if no files
 
-      if (empty($uploadedFiles)) {
-          return redirect()->route('support.cooperatives.edit', $cooperative->coop_id)
-              ->with('error', 'No files were uploaded.');
-      }
-
-      foreach ($uploadedFiles as $documentType => $file) {
-          if (!$file) {
-              continue; // Skip if file is null
-          }
-
-          // Check if the document already exists
-          $existingDocument = UploadedDocument::where('coop_id', $cooperative->coop_id)
-              ->where('document_type', $documentType)
-              ->first();
-
-          if ($existingDocument) {
-              // Delete the existing document
-              Storage::disk('public')->delete($existingDocument->file_path);
-              $existingDocument->delete();
-              $successMessages[] = "$documentType replaced successfully.";
-          }
-
-          // Store the new file
-          $fileName = time() . '_' . $file->getClientOriginalName();
-          $filePath = $file->storeAs('documents', $fileName, 'public');
-
-          // Create a new document record
-          UploadedDocument::create([
-              'coop_id' => $cooperative->coop_id,
-              'document_type' => $documentType,
-              'file_name' => $file->getClientOriginalName(),
-              'file_path' => $filePath,
-          ]);
-
-          $successMessages[] = "$documentType uploaded successfully.";
-      }
-
-      // Set a unique session key based on the form submitted
-      $formKey = $request->input('form_key', 'default_form');
-      session()->flash("{$formKey}_success", implode('<br>', $successMessages));
-
-      return redirect()->route('support.cooperatives.edit', $cooperative->coop_id);
-  }
-
-  public function resendEmail3($userId)
-  {
-      $user = User::where('user_id', $userId)->firstOrFail();
-
-      // Generate a temporary password
-      $temporaryPassword = Str::random(6);
-
-      // Update the user's password in the database
-      $user->password = Hash::make($temporaryPassword);
-      $user->save();
-
-      // Send email with the new password
-      Mail::to($user->email)->queue(new ParticipantCreated($user, $temporaryPassword));
-
-      return response()->json([
-          'success' => true,
-          'message' => 'A new password has been generated and sent to the user.'
-      ]);
-  }
-
-  public function sendNotificationsupport($coopId)
-{
-    try {
-        \Log::info('Notification request received for Coop ID: ' . $coopId);
-
-        // Find the cooperative by ID
-        $coop = Cooperative::findOrFail($coopId);
-        \Log::info('Found cooperative: ' . $coop->name . ' with email: ' . $coop->email);
-
-        // Get the latest event for the cooperative
-        $event = Event::latest()->first();
-
-        // Fetch GA Registration details
-        $gaRegistration = GARegistration::where('coop_id', $coopId)->latest()->first();
-
-        // Fetch only users with role "cooperative" belonging to the current cooperative
-        $users = User::where('coop_id', $coop->coop_id)
-            ->where('role', 'cooperative')
-            ->get();
-
-        if ($users->isNotEmpty()) {
-            foreach ($users as $user) {
-                // Generate password using the first letter of each word in the cooperative name
-                $acronym = strtoupper(implode('', array_map(fn($word) => $word[0], explode(' ', trim($coop->name)))));
-                $sanitizedPassword = $acronym . 'GA2025';
-
-                // Update user password
-                $user->password = Hash::make($sanitizedPassword);
-                $user->save();
-
-                \Log::info("New password set for user: {$user->email} -> {$sanitizedPassword}");
-            }
-
-            // Send notification email
-            Mail::to($coop->email)->queue(new CooperativeNotification($coop, $event, $gaRegistration, $users, $sanitizedPassword));
-            \Log::info("Notification sent to: {$coop->email}");
-
-            return redirect()->route('supportview')->with('success', 'Notification sent with updated password!');
-        } else {
-            \Log::info("Skipped cooperative: {$coop->name} (No cooperative users found)");
+        if (empty($uploadedFiles)) {
+            return redirect()->route('support.cooperatives.edit', $cooperative->coop_id)
+                ->with('error', 'No files were uploaded.');
         }
 
-        return redirect()->route('supportview')->with('success', 'Notification sent to the cooperative!');
-    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-        \Log::error('Cooperative not found: ' . $e->getMessage());
-        return back()->with('error', 'Cooperative not found.');
-    } catch (\Exception $e) {
-        \Log::error('Error sending notification: ' . $e->getMessage());
-        return back()->with('error', 'Error sending notification: ' . $e->getMessage());
+        foreach ($uploadedFiles as $documentType => $file) {
+            if (!$file) {
+                continue; // Skip if file is null
+            }
+
+            // Check if the document already exists
+            $existingDocument = UploadedDocument::where('coop_id', $cooperative->coop_id)
+                ->where('document_type', $documentType)
+                ->first();
+
+            if ($existingDocument) {
+                // Delete the existing document
+                Storage::disk('public')->delete($existingDocument->file_path);
+                $existingDocument->delete();
+                $successMessages[] = "$documentType replaced successfully.";
+            }
+
+            // Store the new file
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $filePath = $file->storeAs('documents', $fileName, 'public');
+
+            // Create a new document record
+            UploadedDocument::create([
+                'coop_id' => $cooperative->coop_id,
+                'document_type' => $documentType,
+                'file_name' => $file->getClientOriginalName(),
+                'file_path' => $filePath,
+            ]);
+
+            $successMessages[] = "$documentType uploaded successfully.";
+        }
+
+        // Set a unique session key based on the form submitted
+        $formKey = $request->input('form_key', 'default_form');
+        session()->flash("{$formKey}_success", implode('<br>', $successMessages));
+
+        return redirect()->route('support.cooperatives.edit', $cooperative->coop_id);
     }
-}
+
+    public function resendEmail3($userId)
+    {
+        $user = User::where('user_id', $userId)->firstOrFail();
+
+        // Generate a temporary password
+        $temporaryPassword = Str::random(6);
+
+        // Update the user's password in the database
+        $user->password = Hash::make($temporaryPassword);
+        $user->save();
+
+        // Send email with the new password
+        Mail::to($user->email)->queue(new ParticipantCreated($user, $temporaryPassword));
+
+        return response()->json([
+            'success' => true,
+            'message' => 'A new password has been generated and sent to the user.'
+        ]);
+    }
+
+    public function sendNotificationsupport($coopId)
+    {
+        try {
+            \Log::info('Notification request received for Coop ID: ' . $coopId);
+
+            // Find the cooperative by ID
+            $coop = Cooperative::findOrFail($coopId);
+            \Log::info('Found cooperative: ' . $coop->name . ' with email: ' . $coop->email);
+
+            // Get the latest event for the cooperative
+            $event = Event::latest()->first();
+
+            // Fetch GA Registration details
+            $gaRegistration = GARegistration::where('coop_id', $coopId)->latest()->first();
+
+            // Fetch only users with role "cooperative" belonging to the current cooperative
+            $users = User::where('coop_id', $coop->coop_id)
+                ->where('role', 'cooperative')
+                ->get();
+
+            if ($users->isNotEmpty()) {
+                foreach ($users as $user) {
+                    // Generate password using the first letter of each word in the cooperative name
+                    $acronym = strtoupper(implode('', array_map(fn($word) => $word[0], explode(' ', trim($coop->name)))));
+                    $sanitizedPassword = $acronym . 'GA2025';
+
+                    // Update user password
+                    $user->password = Hash::make($sanitizedPassword);
+                    $user->save();
+
+                    \Log::info("New password set for user: {$user->email} -> {$sanitizedPassword}");
+                }
+
+                // Send notification email
+                Mail::to($coop->email)->queue(new CooperativeNotification($coop, $event, $gaRegistration, $users, $sanitizedPassword));
+                \Log::info("Notification sent to: {$coop->email}");
+
+                return redirect()->route('supportview')->with('success', 'Notification sent with updated password!');
+            } else {
+                \Log::info("Skipped cooperative: {$coop->name} (No cooperative users found)");
+            }
+
+            return redirect()->route('supportview')->with('success', 'Notification sent to the cooperative!');
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            \Log::error('Cooperative not found: ' . $e->getMessage());
+            return back()->with('error', 'Cooperative not found.');
+        } catch (\Exception $e) {
+            \Log::error('Error sending notification: ' . $e->getMessage());
+            return back()->with('error', 'Error sending notification: ' . $e->getMessage());
+        }
+    }
 
 
-  public function supportregister()
-  {
-      return view('dashboard.support.add');
-  }
+    public function supportregister()
+    {
+        return view('dashboard.support.add');
+    }
 
-  public function supportstoreCooperative(Request $request)
-  {
-      // Validate the incoming data
-      $request->validate([
-          'name' => 'required|string|max:255',
-          'contact_person' => 'required|string|max:255',
-          'type' => 'required|string|max:255',
-          'address' => 'required|string|max:255',
-          'region' => 'required|string|max:255|in:Region I,Region II,Region III,Region IV-A,Region IV-B,Region V,Region VI,Region VII,Region VIII,Region IX,Region X,Region XI,Region XII,Region XIII,NCR,CAR,BARMM,ZBST,LUZON',
-          'phone_number' => 'required|string|max:20',
-          'email' => 'required|email|unique:cooperatives,email',
-          'tin' => 'required|string|max:255',
-          'coop_identification_no' => 'nullable|string|max:255',
-          'bod_chairperson' => 'nullable|string|max:255',
-          'general_manager_ceo' => 'nullable|string|max:255',
+    public function supportstoreCooperative(Request $request)
+    {
+        // Validate the incoming data
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'contact_person' => 'required|string|max:255',
+            'type' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'region' => 'required|string|max:255|in:Region I,Region II,Region III,Region IV-A,Region IV-B,Region V,Region VI,Region VII,Region VIII,Region IX,Region X,Region XI,Region XII,Region XIII,NCR,CAR,BARMM,ZBST,LUZON',
+            'phone_number' => 'required|string|max:20',
+            'email' => 'required|email|unique:cooperatives,email',
+            'tin' => 'required|string|max:255',
+            'coop_identification_no' => 'nullable|string|max:255',
+            'bod_chairperson' => 'nullable|string|max:255',
+            'general_manager_ceo' => 'nullable|string|max:255',
 
-      ]);
-
-
-
-      $cooperative = Cooperative::create([
-          'name' => $request->name,
-          'contact_person' => $request->contact_person,
-          'type' => $request->type,
-          'address' => $request->address,
-          'region' => $request->region,
-          'phone_number' => $request->phone_number,
-          'email' => $request->email,
-          'tin' => $request->tin,
-      ]);
+        ]);
 
 
-      $words = preg_split('/\s+/', trim($cooperative->name));
-      $acronym = '';
-      foreach ($words as $word) {
-          $acronym .= strtoupper($word[0]);
-      }
 
-      $sanitizedPassword = $acronym . 'GA2025';
+        $cooperative = Cooperative::create([
+            'name' => $request->name,
+            'contact_person' => $request->contact_person,
+            'type' => $request->type,
+            'address' => $request->address,
+            'region' => $request->region,
+            'phone_number' => $request->phone_number,
+            'email' => $request->email,
+            'tin' => $request->tin,
+        ]);
 
-      // Create the user account
-      User::create([
-          'name' => $cooperative->contact_person,
-          'coop_id' => $cooperative->coop_id,
-          'email' => $cooperative->email,
-          'password' => Hash::make($sanitizedPassword),
-          'role' => 'cooperative',
-      ]);
 
-      return response()->json([
-          'success' => 'Cooperative and User registered successfully!',
-          'generated_password' => $sanitizedPassword,
-      ]);
-  }
+        $words = preg_split('/\s+/', trim($cooperative->name));
+        $acronym = '';
+        foreach ($words as $word) {
+            $acronym .= strtoupper($word[0]);
+        }
 
-  public function participant_list(Request $request)
-  {
-      $perPage = $request->input('limit', 5);
+        $sanitizedPassword = $acronym . 'GA2025';
 
-      $query = Participant::with(['registration', 'cooperative', 'user']);
+        // Create the user account
+        User::create([
+            'name' => $cooperative->contact_person,
+            'coop_id' => $cooperative->coop_id,
+            'email' => $cooperative->email,
+            'password' => Hash::make($sanitizedPassword),
+            'role' => 'cooperative',
+        ]);
 
-      if ($request->search) {
-          $query->where('first_name', 'like', '%' . $request->search . '%')
-              ->orWhere('last_name', 'like', '%' . $request->search . '%')
-              ->orWhere('middle_name', 'like', '%' . $request->search . '%')
-              ->orWhere('designation', 'like', '%' . $request->search . '%')
-              ->orWhere('delegate_type', 'like', '%' . $request->search . '%')
-              ->orWhereHas('cooperative', function ($cooperativeQuery) use ($request) {
-                  $cooperativeQuery->where('name', 'like', '%' . $request->search . '%');
-              });
-      }
+        return response()->json([
+            'success' => 'Cooperative and User registered successfully!',
+            'generated_password' => $sanitizedPassword,
+        ]);
+    }
 
-      if ($request->has('sort_by')) {
-          $sortBy = $request->sort_by;
-          $sortOrder = $request->sort_order === 'desc' ? 'desc' : 'asc';
+    public function participant_list(Request $request)
+    {
+        $perPage = $request->input('limit', 5);
 
-          if (in_array($sortBy, ['first_name', 'last_name', 'middle_name', 'designation'])) {
-              $query->orderBy($sortBy, $sortOrder);
-          } elseif ($sortBy === 'cooperative') {
-              $query->join('cooperatives', 'participants.cooperative_id', '=', 'cooperatives.id')
-                  ->orderBy('cooperatives.name', $sortOrder);
-          } elseif ($sortBy === 'user') {
-              $query->join('users', 'participants.user_id', '=', 'users.id')
-                  ->orderBy('users.name', $sortOrder);
-          }
-      }
+        $query = Participant::with(['registration', 'cooperative', 'user']);
 
-      $participants = $query->paginate($perPage);
+        if ($request->search) {
+            $query->where('first_name', 'like', '%' . $request->search . '%')
+                ->orWhere('last_name', 'like', '%' . $request->search . '%')
+                ->orWhere('middle_name', 'like', '%' . $request->search . '%')
+                ->orWhere('designation', 'like', '%' . $request->search . '%')
+                ->orWhere('delegate_type', 'like', '%' . $request->search . '%')
+                ->orWhereHas('cooperative', function ($cooperativeQuery) use ($request) {
+                    $cooperativeQuery->where('name', 'like', '%' . $request->search . '%');
+                });
+        }
 
-      return view('dashboard.support.participant', compact('participants'));
-  }
+        if ($request->has('sort_by')) {
+            $sortBy = $request->sort_by;
+            $sortOrder = $request->sort_order === 'desc' ? 'desc' : 'asc';
 
-  public function show($participant_id)
-  {
-      $participant = Participant::with('events')->where('participant_id', $participant_id)->firstOrFail();
-      $events = Event::all();
+            if (in_array($sortBy, ['first_name', 'last_name', 'middle_name', 'designation'])) {
+                $query->orderBy($sortBy, $sortOrder);
+            } elseif ($sortBy === 'cooperative') {
+                $query->join('cooperatives', 'participants.cooperative_id', '=', 'cooperatives.id')
+                    ->orderBy('cooperatives.name', $sortOrder);
+            } elseif ($sortBy === 'user') {
+                $query->join('users', 'participants.user_id', '=', 'users.id')
+                    ->orderBy('users.name', $sortOrder);
+            }
+        }
 
-      return view('dashboard.support.viewparticipant', compact('participant', 'events'));
-  }
+        $participants = $query->paginate($perPage);
 
-  public function scanQR(Request $request)
-  {
-      $participantId = $request->query('participant_id');
-      $eventId = $request->query('event_id');
+        return view('dashboard.support.participant', compact('participants'));
+    }
 
-      $participant = Participant::find($participantId);
-      if (!$participant) {
-          return response()->json(['error' => 'Participant not found.'], 404);
-      }
+    public function show($participant_id)
+    {
+        $participant = Participant::with('events')->where('participant_id', $participant_id)->firstOrFail();
+        $events = Event::all();
 
-      $event = Event::find($eventId);
-      if (!$event) {
-          return response()->json(['error' => 'Event not found.'], 404);
-      }
+        return view('dashboard.support.viewparticipant', compact('participant', 'events'));
+    }
 
-      $gaRegistration = GARegistration::where('coop_id', $participant->coop_id)->first();
+    public function scanQR(Request $request)
+    {
+        $participantId = $request->query('participant_id');
+        $eventId = $request->query('event_id');
 
-      if (!$gaRegistration || $gaRegistration->registration_status === 'Partial Registered' || $gaRegistration->registration_status === null) {
-          return response()->json(['error' => 'Participant cannot be scanned. GA registration is incomplete.'], 403);
-      }
+        $participant = Participant::find($participantId);
+        if (!$participant) {
+            return response()->json(['error' => 'Participant not found.'], 404);
+        }
 
-      // Check if participant is registered in this congress (event)
-      $isRegisteredInEvent = $participant->events()
-          ->where('event_participant.event_id', $eventId) // Explicitly use event_participant.event_id
-          ->exists();
+        $event = Event::find($eventId);
+        if (!$event) {
+            return response()->json(['error' => 'Event not found.'], 404);
+        }
 
-      if (!$isRegisteredInEvent) {
-          return response()->json(['error' => 'Participant is not added in this congress.'], 403);
-      }
+        $gaRegistration = GARegistration::where('coop_id', $participant->coop_id)->first();
 
-      // Check if attendance is already recorded
-      $existingAttendance = EventParticipant::where('event_id', $eventId)
-          ->where('participant_id', $participantId)
-          ->whereNotNull('attendance_datetime')
-          ->first();
+        if (!$gaRegistration || $gaRegistration->registration_status === 'Partial Registered' || $gaRegistration->registration_status === null) {
+            return response()->json(['error' => 'Participant cannot be scanned. GA registration is incomplete.'], 403);
+        }
 
-      if ($existingAttendance) {
-          return response()->json(['error' => 'Attendance already recorded for this participant.'], 409);
-      }
+        // Check if participant is registered in this congress (event)
+        $isRegisteredInEvent = $participant->events()
+            ->where('event_participant.event_id', $eventId) // Explicitly use event_participant.event_id
+            ->exists();
 
-      // Record attendance
-      $attendance = EventParticipant::updateOrCreate(
-          [
-              'event_id' => $eventId,
-              'participant_id' => $participantId,
-          ],
-          [
-              'attendance_datetime' => now(),
-          ]
-      );
+        if (!$isRegisteredInEvent) {
+            return response()->json(['error' => 'Participant is not added in this congress.'], 403);
+        }
 
-      return response()->json(['success' => 'Attendance recorded successfully!', 'participant' => $participant]);
-  }
+        // Check if attendance is already recorded
+        $existingAttendance = EventParticipant::where('event_id', $eventId)
+            ->where('participant_id', $participantId)
+            ->whereNotNull('attendance_datetime')
+            ->first();
 
+        if ($existingAttendance) {
+            return response()->json(['error' => 'Attendance already recorded for this participant.'], 409);
+        }
+
+        // Record attendance
+        $attendance = EventParticipant::updateOrCreate(
+            [
+                'event_id' => $eventId,
+                'participant_id' => $participantId,
+            ],
+            [
+                'attendance_datetime' => now(),
+            ]
+        );
+
+        return response()->json(['success' => 'Attendance recorded successfully!', 'participant' => $participant]);
+    }
 }

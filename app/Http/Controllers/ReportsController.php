@@ -138,15 +138,18 @@ public function exportFilteredCoopStatus(Request $request)
     $region = $request->input('region');
     $migsStatus = $request->input('migs_status');
     $registrationStatus = $request->input('registration_status');
+    $documentStatus = $request->input('document_status'); // New parameter for document status
 
-    return Excel::download(new FilteredCoopStatusExport($region, $migsStatus, $registrationStatus), 'Filtered_Coop_Status_Report.xlsx');
+    return Excel::download(new FilteredCoopStatusExport($region, $migsStatus, $registrationStatus, $documentStatus), 'Filtered_Coop_Status_Report.xlsx');
 }
+
 
 public function previewFilteredCoopStatus(Request $request)
 {
     $region = $request->input('region');
     $migsStatus = $request->input('migs_status');
     $registrationStatus = $request->input('registration_status');
+    $documentStatus = $request->input('document_status'); // New parameter for document status
 
     $query = Cooperative::with(['participants', 'uploadedDocuments', 'gaRegistration']);
 
@@ -163,6 +166,12 @@ public function previewFilteredCoopStatus(Request $request)
     if ($registrationStatus && $registrationStatus !== 'All') {
         $query->whereHas('gaRegistration', function ($query) use ($registrationStatus) {
             $query->where('registration_status', $registrationStatus);
+        });
+    }
+
+    if ($documentStatus && $documentStatus !== 'All') {
+        $query->whereHas('uploadedDocuments', function ($query) use ($documentStatus) {
+            $query->where('status', $documentStatus);
         });
     }
 
@@ -205,6 +214,7 @@ public function previewFilteredCoopStatus(Request $request)
 
     return response()->json($cooperatives);
 }
+
 
 
 
