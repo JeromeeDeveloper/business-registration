@@ -97,7 +97,7 @@
                                 </ul>
                             </div>
                         </li>
-                        
+
 
                         {{-- <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#user">
@@ -360,28 +360,9 @@
                                     </div>
                                 </div>
 
-                                <!-- Congress Type -->
-                                {{-- <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="congress_type">Congress Type</label>
-                                        <div>{{ $participant->congress_type ?? 'N/A' }}</div>
-                                    </div>
-                                </div> --}}
 
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label>Congress</label>
-                                        <div class="border p-2 rounded" style="min-height: 45px; background-color: #f8f9fa;">
-                                            @if ($participant->events->isNotEmpty())
-                                                @foreach ($participant->events as $event)
-                                                    <span class="badge bg-primary">{{ $event->title }}</span>
-                                                @endforeach
-                                            @else
-                                                <span class="text-muted">No congress types selected.</span>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
+
+
 
 
 
@@ -419,6 +400,17 @@
 
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
+                                        <label for="gender">Attendance</label>
+                                        <div>
+                                            {{ $participant->attendance_datetime
+                                                ? \Carbon\Carbon::parse($participant->attendance_datetime)->format('F j, Y g:i A')
+                                                : 'N/A' }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="form-group">
                                         <label for="qr_code">QR Code</label>
                                         <div class="Qr">
                                             <!-- QR Code Image -->
@@ -434,14 +426,20 @@
 
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label for="gender">Attendance</label>
-                                        <div>
-                                            {{ $participant->attendance_datetime
-                                                ? \Carbon\Carbon::parse($participant->attendance_datetime)->format('F j, Y g:i A')
-                                                : 'N/A' }}
+                                        <label>Congress</label>
+                                        <div class="border p-2 rounded" style="min-height: 45px; background-color: #f8f9fa;">
+                                            @if ($participant->events->isNotEmpty())
+                                                @foreach ($participant->events as $event)
+                                                    <span class="badge bg-primary">{{ $event->title }}</span>
+                                                @endforeach
+                                            @else
+                                                <span class="text-muted">No congress types selected.</span>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
+
+
 
 
 

@@ -251,29 +251,10 @@
                                     </div>
                                 </div>
 
-                                <!-- Congress Type -->
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label>Congress</label>
-                                        <div class="border p-2 rounded" style="min-height: 45px; background-color: #f8f9fa;">
-                                            @if ($participant->events->isNotEmpty())
-                                                @foreach ($participant->events as $event)
-                                                    <span class="badge bg-primary">{{ $event->title }}</span>
-                                                @endforeach
-                                            @else
-                                                <span class="text-muted">No congress types selected.</span>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <!-- Religious Affiliation -->
-                                {{-- <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="religious_affiliation">Religious Affiliation</label>
-                                        <div>{{ $participant->religious_affiliation ?? 'N/A' }}</div>
-                                    </div>
-                                </div> --}}
+
+
+
 
                                 <!-- T-shirt Size -->
                                 <div class="col-md-6 col-lg-4">
@@ -291,6 +272,7 @@
                                     </div>
                                 </div>
 
+
                                 <!-- MSP Officer Position -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
@@ -299,7 +281,20 @@
                                     </div>
                                 </div>
 
-
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="form-group">
+                                        <label>Congress</label>
+                                        <div class="border p-2 rounded" style="min-height: 45px; background-color: #f8f9fa;">
+                                            @if ($participant->events->isNotEmpty())
+                                                @foreach ($participant->events as $event)
+                                                    <span class="badge bg-primary">{{ $event->title }}</span>
+                                                @endforeach
+                                            @else
+                                                <span class="text-muted">No congress types selected.</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
                                  <!-- Delegate Type -->
                                  <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
@@ -307,6 +302,15 @@
                                         <div>{{ $participant->delegate_type ?? 'N/A' }}</div>
                                     </div>
                                 </div>
+
+
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="reference_number">Access Key</label>
+                                        <div>{{ $participant->reference_number ?? 'N/A' }}</div>
+                                    </div>
+                                </div>
+
 
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
@@ -323,19 +327,6 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="reference_number">Access Key</label>
-                                        <div>{{ $participant->reference_number ?? 'N/A' }}</div>
-                                    </div>
-                                </div>
-
-                                {{-- <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="attendance_datetime">GA Attendance</label>
-                                        <div>{{ $participant->attendance_datetime ?? 'N/A' }}</div>
-                                    </div>
-                                </div> --}}
 
 
 
