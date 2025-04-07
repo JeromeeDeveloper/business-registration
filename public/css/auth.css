@@ -34,29 +34,53 @@
     z-index: 1;
   }
 
-  .nav-logo {
+  /* Default (Desktop) */
+.nav-logo {
     height: 120px;
     width: auto;
   }
 
-  /* Tablet and Mobile */
-  @media (max-width: 768px) {
+  /* Tablet */
+  @media (max-width: 992px) {
     .navbar {
-      min-height: 70px;
-      padding: 10px;
+      min-height: 80px;
+      padding: 10px 20px;
     }
     .nav-logo {
-      height: 80px;
+      height: 75px;
     }
   }
 
-  /* Smaller Mobile (Portrait) */
-  @media (max-width: 480px) {
+  /* Mobile Landscape */
+  @media (max-width: 768px) {
+    .navbar {
+      min-height: 70px;
+      padding: 8px 16px;
+    }
+    .nav-logo {
+      height: 75px;
+    }
+  }
+
+  /* Mobile Portrait */
+  @media (max-width: 576px) {
     .navbar {
       min-height: 60px;
+      padding: 6px 12px;
     }
     .nav-logo {
       height: 60px;
+    }
+  }
+
+  /* Extra small devices (very narrow phones) */
+  @media (max-width: 400px) {
+    .navbar {
+      min-height: 55px;
+      padding: 4px 8px;
+    }
+    .nav-logo {
+      height: 50px;
     }
   }
 
@@ -338,3 +362,81 @@
         top: 16px;
 
     }
+
+    .help-bubble {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #002855;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        z-index: 1050;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .help-bubble:hover {
+        background-color: #004080;
+    }
+
+/* Carousel control buttons */
+.carousel-control-prev, .carousel-control-next {
+    background-color: rgb(255, 255, 255);  /* Semi-transparent dark background */
+    color: #ffffff;  /* White icon color */
+    border: none;  /* Remove any borders */
+    border-radius: 50%;  /* Circular shape */
+    display: flex;  /* Flexbox layout to center the icon */
+    justify-content: center;  /* Center the icon horizontally */
+    align-items: center;  /* Center the icon vertically */
+    width: 3rem;  /* Button width */
+    height: 3rem;  /* Button height */
+    position: absolute;  /* Position relative to the carousel */
+    top: 50%;  /* Center vertically */
+    transform: translateY(-50%);  /* Align the button perfectly */
+    z-index: 1050;  /* Ensure buttons are on top of the carousel */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);  /* Slight shadow for depth */
+    transition: all 0.3s ease;  /* Smooth transition for hover effect */
+}
+
+/* Previous button positioning */
+.carousel-control-prev {
+    left: 10px;  /* Position to the left of the carousel */
+}
+
+/* Next button positioning */
+.carousel-control-next {
+    right: 10px;  /* Position to the right of the carousel */
+}
+
+/* Carousel control icon size */
+.carousel-control-prev-icon, .carousel-control-next-icon {
+    width: 1.5rem;  /* Icon size */
+    height: 1.5rem;  /* Icon size */
+    background: none;  /* Remove any background */
+    color: #09205f;  /* Set icon color to white */
+    font-size: 1.5rem;  /* Font size for the icon */
+    text-align: center;  /* Center the icon inside the span */
+    line-height: 1.5rem;  /* Align the text vertically */
+}
+
+/* Hover effect for buttons */
+.carousel-control-prev:hover, .carousel-control-next:hover {
+    background-color: #ffffff;  /* White background on hover */
+    color: #ffffff;  /* Black icon color */
+    transform: scale(1.1) translateY(-50%);  /* Slightly enlarge without vertical shift */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);  /* Stronger shadow on hover */
+}
+
+/* Active state for buttons */
+.carousel-control-prev:active, .carousel-control-next:active {
+    transform: scale(0.95) translateY(-50%);  /* Scale down on active */
+    background-color: #ffffff;  /* White background on hover */
+    color: #ffffff;  /* Black icon color */
+}
+
+

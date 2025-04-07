@@ -208,8 +208,7 @@
                                                                     class="form-label">Address</label>
                                                                 <input type="text" class="form-control"
                                                                     id="address" name="address"
-                                                                    value="{{ $cooperative->address }}"
-                                                                    >
+                                                                    value="{{ $cooperative->address }}">
                                                             </div>
                                                             <div class="col-md-4 mb-3">
                                                                 <div class="form-group">
@@ -400,7 +399,8 @@
                                                         </tr>
                                                         <tr>
                                                             <td class="fw-bold">Phone Number:</td>
-<td>{{ $cooperative->phone_number === '0' ? 'N/A' : ($cooperative->phone_number ?? 'N/A') }}</td>
+                                                            <td>{{ $cooperative->phone_number === '0' ? 'N/A' : $cooperative->phone_number ?? 'N/A' }}
+                                                            </td>
 
                                                         </tr>
                                                         <tr>
@@ -418,6 +418,41 @@
                                                         <tr>
                                                             <td class="fw-bold">General Manager/CEO:</td>
                                                             <td>{{ $cooperative->general_manager_ceo ?? 'N/A' }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="fw-bold">Audtied Financial Statement Status:
+                                                            </td>
+                                                            <td>{{ $cooperative->fs_status ?? 'N/A' }}</td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td class="fw-bold">Delinquent:</td>
+                                                            <td>{{ $cooperative->delinquent ?? 'N/A' }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="fw-bold">Number of Participants:</td>
+                                                            <td id="num_participants">
+                                                                {{ $cooperative->participants()->count() }}</td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td class="fw-bold">Membership Status:</td>
+                                                            <td>{{ strtoupper(optional($cooperative->gaRegistration)->membership_status ?? 'N/A') }}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="fw-bold">GA Registration Status:</td>
+                                                            <td>{{ optional($cooperative->gaRegistration)->registration_status == 'Rejected' ? 'Not Available' : optional($cooperative->gaRegistration)->registration_status ?? 'N/A' }}
+                                                            </td>
+
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="fw-bold">Services Availed:</td>
+                                                            <td>
+                                                                {{ is_array($services = json_decode($cooperative->services_availed, true)) ? implode(', ', $services) : 'N/A' }}
+                                                            </td>
+
+                                                            {{-- <p>{{ implode(', ', json_decode($cooperative->services_availed, true)) }}</p> --}}
                                                         </tr>
 
                                                         <tr>
@@ -451,6 +486,12 @@
                                                             </td>
                                                         </tr>
                                                         <tr>
+                                                            <td class="fw-bold">Registration Fee:</td>
+                                                            <td id="registration_fee">
+                                                                {{ number_format($cooperative->registration_fee, 2) ?? 'N/A' }}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
                                                             <td class="fw-bold">Net Surplus:</td>
                                                             <td>{{ number_format($cooperative->net_surplus, 2) ?? 'N/A' }}
                                                             </td>
@@ -470,20 +511,9 @@
                                                             <td>{{ number_format($cooperative->cetf_undertaking, 2) ?? 'N/A' }}
                                                             </td>
                                                         </tr>
-                                                        <tr>
-                                                            <td class="fw-bold">Full CETF Remitted:</td>
-                                                            <td id="full_cetf_remitted" data-value="{{ $cooperative->full_cetf_remitted }}">{{ $cooperative->full_cetf_remitted ?? 'N/A' }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="fw-bold">Registration Date Paid:</td>
-                                                            <td>{{ $cooperative->registration_date_paid ?? 'N/A' }}
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="fw-bold">Registration Fee:</td>
-                                                            <td id="registration_fee">{{ number_format($cooperative->registration_fee, 2) ?? 'N/A' }}
-                                                            </td>
-                                                        </tr>
+
+
+                                                        =
                                                         <tr>
                                                             <td class="fw-bold">CETF Remittance:</td>
                                                             <td>{{ number_format($cooperative->cetf_remittance, 2) ?? 'N/A' }}
@@ -491,7 +521,9 @@
                                                         </tr>
                                                         <tr>
                                                             <td class="fw-bold">CETF Required:</td>
-                                                            <td id="cetf_required" data-value="{{ $cooperative->cetf_required }}">{{ number_format($cooperative->cetf_required, 2) ?? 'N/A' }}
+                                                            <td id="cetf_required"
+                                                                data-value="{{ $cooperative->cetf_required }}">
+                                                                {{ number_format($cooperative->cetf_required, 2) ?? 'N/A' }}
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -501,31 +533,31 @@
                                                         </tr>
                                                         <tr>
                                                             <td class="fw-bold">Share Capital Balance:</td>
-                                                            <td id="share_capital_balance">{{ number_format($cooperative->share_capital_balance, 2) ?? 'N/A' }}
+                                                            <td id="share_capital_balance">
+                                                                {{ number_format($cooperative->share_capital_balance, 2) ?? 'N/A' }}
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td class="fw-bold">Total Remittance:</td>
-                                                            <td id="total_remittance" data-value="{{ $cooperative->total_remittance }}">{{ number_format($cooperative->total_remittance, 2) ?? 'N/A' }}
+                                                            <td id="total_remittance"
+                                                                data-value="{{ $cooperative->total_remittance }}">
+                                                                {{ number_format($cooperative->total_remittance, 2) ?? 'N/A' }}
                                                             </td>
                                                         </tr>
 
                                                         <tr>
                                                             <td class="fw-bold">Net Required Registration Fee:</td>
-                                                            <td id="net_required_reg_fee">{{ number_format($cooperative->net_required_reg_fee, 2) ?? 'N/A' }}
+                                                            <td id="net_required_reg_fee">
+                                                                {{ number_format($cooperative->net_required_reg_fee, 2) ?? 'N/A' }}
                                                             </td>
                                                         </tr>
-                                                        <tr>
-                                                            <td class="fw-bold">Total Registration Fee:</td>
-                                                            <td id="total_reg_fee">
-                                                                {{ number_format($cooperative->registration_fee * $cooperative->participants->count(), 2) ?? 'N/A' }}
-                                                            </td>
-                                                        </tr>
+
 
                                                         <tr>
                                                             <td class="fw-bold">Less Pre-Registration Fee:</td>
                                                             <td id="less_prereg_payment">
-                                                                <span data-value="{{ $cooperative->less_prereg_payment ?? 0 }}">
+                                                                <span
+                                                                    data-value="{{ $cooperative->less_prereg_payment ?? 0 }}">
                                                                     {{ number_format($cooperative->less_prereg_payment, 2) ?? 'N/A' }}
                                                                 </span>
                                                             </td>
@@ -534,55 +566,42 @@
                                                         <tr>
                                                             <td class="fw-bold">Less CETF Balance:</td>
                                                             <td id="less_cetf_balance">
-                                                                <span data-value="{{ $cooperative->less_cetf_balance ?? 0 }}">
+                                                                <span
+                                                                    data-value="{{ $cooperative->less_cetf_balance ?? 0 }}">
                                                                     {{ number_format($cooperative->less_cetf_balance, 2) ?? 'N/A' }}
                                                                 </span>
                                                             </td>
                                                         </tr>
 
+
+
+                                                        <tr>
+                                                            <td class="fw-bold">Number of Entitled Votes:</td>
+                                                            <td id="no_of_entitled_votes">
+                                                                {{ $cooperative->no_of_entitled_votes ?? 'N/A' }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="fw-bold">Registration Date Paid:</td>
+                                                            <td>{{ $cooperative->registration_date_paid ?? 'N/A' }}
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="fw-bold">Total Registration Fee:</td>
+                                                            <td id="total_reg_fee">
+                                                                {{ number_format($cooperative->registration_fee * $cooperative->participants->count(), 2) ?? 'N/A' }}
+                                                            </td>
+                                                        </tr>
                                                         <tr>
                                                             <td class="fw-bold">Registration Fee Payable:</td>
                                                             <td id="reg_fee_payable">
                                                                 {{ number_format($cooperative->reg_fee_payable, 2) ?? 'N/A' }}
                                                             </td>
                                                         </tr>
-
                                                         <tr>
-                                                            <td class="fw-bold">Number of Entitled Votes:</td>
-                                                            <td id="no_of_entitled_votes">{{ $cooperative->no_of_entitled_votes ?? 'N/A' }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="fw-bold">Membership Status:</td>
-                                                            <td>{{ strtoupper(optional($cooperative->gaRegistration)->membership_status ?? 'N/A') }}
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td class="fw-bold">Services Availed:</td>
-                                                            <td>
-                                                                {{ is_array($services = json_decode($cooperative->services_availed, true)) ? implode(', ', $services) : 'N/A' }}
-                                                            </td>
-
-                                                            {{-- <p>{{ implode(', ', json_decode($cooperative->services_availed, true)) }}</p> --}}
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="fw-bold">GA Registration Status:</td>
-                                                            <td>{{ optional($cooperative->gaRegistration)->registration_status == 'Rejected' ? 'Not Available' : (optional($cooperative->gaRegistration)->registration_status ?? 'N/A') }}</td>
-
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="fw-bold">Audtied Financial Statement Status:
-                                                            </td>
-                                                            <td>{{ $cooperative->fs_status ?? 'N/A' }}</td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td class="fw-bold">Delinquent:</td>
-                                                            <td>{{ $cooperative->delinquent ?? 'N/A' }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="fw-bold">Number of Participants:</td>
-                                                            <td id="num_participants">{{ $cooperative->participants()->count() }}</td>
+                                                            <td class="fw-bold">Full CETF Remitted:</td>
+                                                            <td id="full_cetf_remitted"
+                                                                data-value="{{ $cooperative->full_cetf_remitted }}">
+                                                                {{ $cooperative->full_cetf_remitted ?? 'N/A' }}</td>
                                                         </tr>
                                                         <tr>
                                                             <td class="fw-bold">Remark:</td>
@@ -590,18 +609,26 @@
                                                         </tr>
 
                                                         <tr>
-                                                            <td class="fw-bold">2 Pax free for MIGS Membership Status</td>
+                                                            <td class="fw-bold">2 Pax free for MIGS Membership Status
+                                                            </td>
                                                             <td>
-                                                                <input class="form-check-input" type="checkbox" name="free_2pax_migs" id="free_2pax_migs" value="1" {{ $hasMigsRegistration ? 'checked' : '' }} disabled />
+                                                                <input class="form-check-input" type="checkbox"
+                                                                    name="free_2pax_migs" id="free_2pax_migs"
+                                                                    value="1"
+                                                                    {{ $hasMigsRegistration ? 'checked' : '' }}
+                                                                    disabled />
                                                             </td>
                                                         </tr>
 
                                                         <tr>
                                                             <td class="fw-bold">1 Pax Free for MASS-SPECC Officer</td>
                                                             <td>
-                                                                <input class="form-check-input" type="checkbox" name="free_migs_pax" id="free_migs_pax" value="1"
-                                                                       {{ $cooperative->free_migs_pax == 4500 ? 'checked' : '' }}
-                                                                       {{ $cooperative->free_migs_pax == 4500 ? 'disabled' : '' }} disabled/>
+                                                                <input class="form-check-input" type="checkbox"
+                                                                    name="free_migs_pax" id="free_migs_pax"
+                                                                    value="1"
+                                                                    {{ $cooperative->free_migs_pax == 4500 ? 'checked' : '' }}
+                                                                    {{ $cooperative->free_migs_pax == 4500 ? 'disabled' : '' }}
+                                                                    disabled />
                                                             </td>
                                                         </tr>
 
@@ -609,14 +636,20 @@
                                                         <tr>
                                                             <td class="fw-bold">1 Pax free Based on CETF(100k)</td>
                                                             <td>
-                                                                <input class="form-check-input" type="checkbox" name="free_100k_cetf" id="free_100k_cetf" value="1" {{ $free100kCETF ? 'checked' : '' }} disabled />
+                                                                <input class="form-check-input" type="checkbox"
+                                                                    name="free_100k_cetf" id="free_100k_cetf"
+                                                                    value="1"
+                                                                    {{ $free100kCETF ? 'checked' : '' }} disabled />
                                                             </td>
                                                         </tr>
 
                                                         <tr>
                                                             <td class="fw-bold">1/2 free Based on CETF(50k)</td>
                                                             <td>
-                                                                <input class="form-check-input" type="checkbox" name="half_based_cetf" id="half_based_cetf" value="1" {{ $halfBasedCETF ? 'checked' : '' }} disabled />
+                                                                <input class="form-check-input" type="checkbox"
+                                                                    name="half_based_cetf" id="half_based_cetf"
+                                                                    value="1"
+                                                                    {{ $halfBasedCETF ? 'checked' : '' }} disabled />
                                                             </td>
                                                         </tr>
 
@@ -649,7 +682,7 @@
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             function updateFullCetfRemitted() {
                 let cetfRequired = parseFloat(document.getElementById('cetf_required').dataset.value) || 0;
                 let totalRemittance = parseFloat(document.getElementById('total_remittance').dataset.value) || 0;
@@ -666,16 +699,19 @@
 
             // Example: If you have AJAX or live updates, call updateFullCetfRemitted() after fetching new data
         });
-        </script>
+    </script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             function calculateFees() {
                 // Fetch the text content and remove any commas before converting to float
-                let regFee = parseFloat(document.getElementById('registration_fee').textContent.replace(/,/g, '')) || 0;
+                let regFee = parseFloat(document.getElementById('registration_fee').textContent.replace(/,/g,
+                    '')) || 0;
                 let numParticipants = parseInt(document.getElementById('num_participants').textContent) || 0;
-                let preregPayment = parseFloat(document.getElementById('less_prereg_payment').textContent.replace(/,/g, '')) || 0;
-                let cetfBalance = parseFloat(document.getElementById('less_cetf_balance').textContent.replace(/,/g, '')) || 0;
+                let preregPayment = parseFloat(document.getElementById('less_prereg_payment').textContent.replace(
+                    /,/g, '')) || 0;
+                let cetfBalance = parseFloat(document.getElementById('less_cetf_balance').textContent.replace(/,/g,
+                    '')) || 0;
 
                 // Calculate Total Registration Fee: (ALL participants counted, NO DEDUCTIONS)
                 let totalRegFee = numParticipants * regFee;
@@ -763,49 +799,52 @@
         });
     </script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const shareCapitalElem = document.getElementById('share_capital_balance'); // <td> element
-        const entitledVotesElem = document.getElementById('no_of_entitled_votes'); // <td> element
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const shareCapitalElem = document.getElementById('share_capital_balance'); // <td> element
+            const entitledVotesElem = document.getElementById('no_of_entitled_votes'); // <td> element
 
-        function calculateEntitledVotes(shareCapital) {
-            let votes = 0;
-            let remaining = shareCapital;
+            function calculateEntitledVotes(shareCapital) {
+                let votes = 0;
+                let remaining = shareCapital;
 
-            if (remaining >= 100000) {
-                votes += Math.floor(remaining / 100000);
-                remaining = remaining % 100000; // Get the remaining after calculating full votes
-            }
-
-            while (remaining >= 25000) {
-                if (remaining >= 75000) {
-                    votes += 3;
-                    remaining -= 75000;
-                } else if (remaining >= 50000) {
-                    votes += 2;
-                    remaining -= 50000;
-                } else if (remaining >= 25000) {
-                    votes += 1;
-                    remaining -= 25000;
+                if (remaining >= 100000) {
+                    votes += Math.floor(remaining / 100000);
+                    remaining = remaining % 100000; // Get the remaining after calculating full votes
                 }
+
+                while (remaining >= 25000) {
+                    if (remaining >= 75000) {
+                        votes += 3;
+                        remaining -= 75000;
+                    } else if (remaining >= 50000) {
+                        votes += 2;
+                        remaining -= 50000;
+                    } else if (remaining >= 25000) {
+                        votes += 1;
+                        remaining -= 25000;
+                    }
+                }
+
+                return Math.min(votes, 5); // Ensure no more than 5 votes are given
             }
 
-            return Math.min(votes, 5); // Ensure no more than 5 votes are given
-        }
+            function updateEntitledVotes() {
+                const shareCapital = parseFloat(shareCapitalElem.textContent.replace(/,/g, '')) || 0;
+                const entitledVotes = calculateEntitledVotes(shareCapital);
+                entitledVotesElem.textContent = entitledVotes; // Update the <td> element
+            }
 
-        function updateEntitledVotes() {
-            const shareCapital = parseFloat(shareCapitalElem.textContent.replace(/,/g, '')) || 0;
-            const entitledVotes = calculateEntitledVotes(shareCapital);
-            entitledVotesElem.textContent = entitledVotes; // Update the <td> element
-        }
+            updateEntitledVotes(); // Run on page load
 
-        updateEntitledVotes(); // Run on page load
-
-        // If these values change dynamically via AJAX, use MutationObserver
-        const observer = new MutationObserver(updateEntitledVotes);
-        observer.observe(shareCapitalElem, { childList: true, subtree: true });
-    });
-</script>
+            // If these values change dynamically via AJAX, use MutationObserver
+            const observer = new MutationObserver(updateEntitledVotes);
+            observer.observe(shareCapitalElem, {
+                childList: true,
+                subtree: true
+            });
+        });
+    </script>
 
     <!-- SweetAlert CDN -->
     <script>

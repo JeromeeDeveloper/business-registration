@@ -83,9 +83,84 @@
 
         </div>
 
+
+
       </div>
       </div>
+
     </div>
+    <button id="helpBubble" class="help-bubble" data-bs-toggle="modal" data-bs-target="#guideModal" title="Need help?">
+        <i class="fas fa-question"></i>
+    </button>
+
+
+    <div class="modal fade" id="guideModal" tabindex="-1" aria-labelledby="guideModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header" style="background-color: #002855;">
+                <h5 class="modal-title" id="privacyPolicyModalLabel"><img class="logo_modal" src="{{asset('img/GA-LOGO.png')}}" alt=""></h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0">
+              <div id="loginGuideCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+
+                  <div class="carousel-item active text-center p-4">
+                    <h5>Step 1: Check Your Email</h5>
+                    <img src="{{ asset('images/step-email.png') }}" class="img-fluid mb-3" alt="Step 1">
+                    <p>First, check your email for the credentials sent to you for logging into the system.</p>
+                  </div>
+
+                  <div class="carousel-item text-center p-4">
+                    <h5>Step 2: Enter Your Credentials</h5>
+                    <img src="{{ asset('images/step-password.png') }}" class="img-fluid mb-3" alt="Step 2">
+                    <p>Enter the username and password you received in the email. Click the eye icon to reveal the password.</p>
+                  </div>
+
+                  <div class="carousel-item text-center p-4">
+                    <h5>Step 3: Click Login</h5>
+                    <img src="{{ asset('images/step-login.png') }}" class="img-fluid mb-3" alt="Step 3">
+                    <p>Once your credentials are entered, click the "Login" button to access the portal.</p>
+                  </div>
+
+                  <div class="carousel-item text-center p-4">
+                    <h5>Step 4: Register Participants</h5>
+                    <img src="{{ asset('images/step-register.png') }}" class="img-fluid mb-3" alt="Step 4">
+                    <p>After logging in, click on "Register Participants" to begin filling out the participant details.</p>
+                  </div>
+
+                  <div class="carousel-item text-center p-4">
+                    <h5>Step 5: Fill and Submit</h5>
+                    <img src="{{ asset('images/step-submit.png') }}" class="img-fluid mb-3" alt="Step 5">
+                    <p>Complete the participant details and submit the form to finalize the registration process.</p>
+                  </div>
+
+                  <div class="carousel-item text-center p-4">
+                    <h5>Need Help?</h5>
+                    <p>For assistance, email <a href="mailto:support@mass-specc.coop">support@mass-specc.coop</a></p>
+                  </div>
+
+                </div>
+
+                <!-- Custom Next and Previous buttons with black color -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#loginGuideCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon">
+                      <i class="fas fa-chevron-left"></i>  <!-- Font Awesome left arrow -->
+                    </span>
+                  </button>
+
+                  <button class="carousel-control-next" type="button" data-bs-target="#loginGuideCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon">
+                      <i class="fas fa-chevron-right"></i>  <!-- Font Awesome right arrow -->
+                    </span>
+                  </button>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
 
 </section>
 
@@ -149,8 +224,12 @@
     </div>
 </div>
 
-<script src="js/main.js"></script>
-
+{{-- <script src="js/main.js"></script> --}}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    [...tooltipTriggerList].map(el => new bootstrap.Tooltip(el));
+  </script>
 <script>
     document.getElementById("togglePassword").addEventListener("click", function () {
         let passwordInput = document.getElementById("password");
@@ -187,7 +266,7 @@ function showAgreement() {
 
 
 function openPrivacyPolicyModal() {
-    let modal = document.getElementById("privacy-policy-modal");
+    let modal = document.getElementById("privacyPolicyModal");
     if (modal) {
         modal.style.display = "block";
     }
