@@ -14,14 +14,6 @@ class UploadedDocument extends Model
     protected $primaryKey = 'document_id';
     protected $fillable = ['coop_id', 'document_type', 'file_name', 'file_path', 'status', 'remarks'];
 
-    /**
-     * Get the participant that owns the document.
-     */
-    // public function participant()
-    // {
-    //     return $this->belongsTo(Participant::class, 'participant_id');
-    // }
-
     public function cooperative()
     {
         return $this->belongsTo(Cooperative::class, 'coop_id');

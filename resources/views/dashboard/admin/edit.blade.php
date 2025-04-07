@@ -861,9 +861,10 @@
                                                 <div class="form-check mt-2">
                                                     <input class="form-check-input" type="checkbox"
                                                         id="markAsDoneFinancial"
-                                                        name="markAsDone[Financial Statement]">
+                                                        name="markAsDone[Financial Statement]"
+                                                        @if(session('documentsWithHardcopy.Financial Statement', false)) checked @endif>
                                                     <label class="form-check-label" for="markAsDoneFinancial">
-                                                        Mark as Done (Upload Blank PDF)
+                                                      Hardcopy Document Submitted
                                                     </label>
                                                 </div>
                                             </div>
@@ -890,12 +891,16 @@
                                                 <!-- Checklist for Marking as Done -->
                                                 <div class="form-check mt-2">
                                                     <input class="form-check-input" type="checkbox"
-                                                        id="markAsDoneResolution"
-                                                        name="markAsDone[Resolution for Voting Delegates]">
+                                                           id="markAsDoneResolution"
+                                                           name="markAsDone[Resolution for Voting delegates]"
+                                                           @if(session('documentsWithHardcopy.Resolution for Voting delegates', false)) checked @endif>
                                                     <label class="form-check-label" for="markAsDoneResolution">
-                                                        Mark as Done (Upload Blank PDF)
+                                                        Hardcopy Document Submitted
                                                     </label>
                                                 </div>
+
+
+
                                             </div>
                                         </div>
 
@@ -920,14 +925,16 @@
                                                 <small class="form-text text-muted">Accepted formats: jpg, jpeg, png,
                                                     pdf (no file size
                                                     limit).</small>
-                                                <div class="form-check mt-2">
-                                                    <input class="form-check-input" type="checkbox"
-                                                        id="markAsDoneDepositSlip"
-                                                        name="markAsDone[Deposit Slip for Registration Fee]">
-                                                    <label class="form-check-label" for="markAsDoneDepositSlip">
-                                                        Mark as Done (Upload Blank PDF)
-                                                    </label>
-                                                </div>
+                                                    <div class="form-check mt-2">
+                                                        <input class="form-check-input" type="checkbox"
+                                                               id="markAsDoneDepositSlip"
+                                                               name="markAsDone[Deposit Slip for Registration Fee]"
+                                                               @if(session('documentsWithHardcopy.Deposit Slip for Registration Fee', false)) checked @endif>
+                                                        <label class="form-check-label" for="markAsDoneDepositSlip">
+                                                            Hardcopy Document Submitted
+                                                        </label>
+                                                    </div>
+
 
                                             </div>
 
@@ -951,14 +958,16 @@
                                                 <small class="form-text text-muted">Accepted formats: jpg, jpeg, png,
                                                     pdf (no file size
                                                     limit).</small>
-                                                <div class="form-check mt-2">
-                                                    <input class="form-check-input" type="checkbox"
-                                                        id="markAsDoneCETFRemittance"
-                                                        name="markAsDone[Deposit Slip for CETF Remittance]">
-                                                    <label class="form-check-label" for="markAsDoneCETFRemittance">
-                                                        Mark as Done (Upload Blank PDF)
-                                                    </label>
-                                                </div>
+                                                    <div class="form-check mt-2">
+                                                        <input class="form-check-input" type="checkbox"
+                                                               id="markAsDoneCETFRemittance"
+                                                               name="markAsDone[Deposit Slip for CETF Remittance]"
+                                                               @if(session('documentsWithHardcopy.Deposit Slip for CETF Remittance', false)) checked @endif>
+                                                        <label class="form-check-label" for="markAsDoneCETFRemittance">
+                                                            Hardcopy Document Submitted
+                                                        </label>
+                                                    </div>
+
                                             </div>
                                         </div>
 
@@ -981,14 +990,16 @@
                                                 <small class="form-text text-muted">Accepted formats: jpg, jpeg, png,
                                                     pdf (no file size
                                                     limit).</small>
-                                                <div class="form-check mt-2">
-                                                    <input class="form-check-input" type="checkbox"
-                                                        id="markAsDoneCETFUndertaking"
-                                                        name="markAsDone[CETF Undertaking]">
-                                                    <label class="form-check-label" for="markAsDoneCETFUndertaking">
-                                                        Mark as Done (Upload Blank PDF)
-                                                    </label>
-                                                </div>
+                                                    <div class="form-check mt-2">
+                                                        <input class="form-check-input" type="checkbox"
+                                                               id="markAsDoneCETFUndertaking"
+                                                               name="markAsDone[CETF Undertaking]"
+                                                               @if(session('documentsWithHardcopy.CETF Undertaking', false)) checked @endif>
+                                                        <label class="form-check-label" for="markAsDoneCETFUndertaking">
+                                                            Hardcopy Document Submitted
+                                                        </label>
+                                                    </div>
+
 
                                             </div>
 
@@ -1011,29 +1022,31 @@
                                                 <small class="form-text text-muted">Accepted formats: jpg, jpeg, png,
                                                     pdf (no file size
                                                     limit).</small>
-                                                <div class="form-check mt-2">
-                                                    <input class="form-check-input" type="checkbox"
-                                                        id="markAsDoneCandidacy"
-                                                        name="markAsDone[Certificate of Candidacy]">
-                                                    <label class="form-check-label" for="markAsDoneCandidacy">
-                                                        Mark as Done (Upload Blank PDF)
-                                                    </label>
-                                                </div>
+                                                    <div class="form-check mt-2">
+                                                        <input class="form-check-input" type="checkbox"
+                                                               id="markAsDoneCandidacy"
+                                                               name="markAsDone[Certificate of Candidacy]"
+                                                               @if(session('documentsWithHardcopy.Certificate of Candidacy', false)) checked @endif>
+                                                        <label class="form-check-label" for="markAsDoneCandidacy">
+                                                            Hardcopy Document Submitted
+                                                        </label>
+                                                    </div>
+
                                             </div>
                                         </div>
 
                                         <div class="row">
                                             <!-- CETF Utilization Invoice (Left Column) -->
                                             <div class="col-md-6 mb-4">
-                                                <label for="documents[CETF Utilization Invoice]"
+                                                <label for="documents[CETF Utilization invoice]"
                                                     class="form-label">CETF Utilization
                                                     Invoice</label>
-                                                <input type="file" name="documents[CETF Utilization Invoice]"
+                                                <input type="file" name="documents[CETF Utilization invoice]"
                                                     accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv"
                                                     class="form-control mb-2">
-                                                @if ($coop->uploadedDocuments()->where('document_type', 'CETF Utilization Invoice')->exists())
+                                                @if ($coop->uploadedDocuments()->where('document_type', 'CETF Utilization invoice')->exists())
                                                     <p class="text-info">Current File:
-                                                        {{ $coop->uploadedDocuments()->where('document_type', 'CETF Utilization Invoice')->first()->file_name }}
+                                                        {{ $coop->uploadedDocuments()->where('document_type', 'CETF Utilization invoice')->first()->file_name }}
                                                     </p>
                                                     <small class="form-text text-muted">You can upload a new file or
                                                         keep the existing
@@ -1042,14 +1055,16 @@
                                                 <small class="form-text text-muted">Accepted formats: jpg, jpeg, png,
                                                     pdf (no file size
                                                     limit).</small>
-                                                <div class="form-check mt-2">
-                                                    <input class="form-check-input" type="checkbox"
-                                                        id="markAsDoneCETFUtilization"
-                                                        name="markAsDone[CETF Utilization Invoice]">
-                                                    <label class="form-check-label" for="markAsDoneCETFUtilization">
-                                                        Mark as Done (Upload Blank PDF)
-                                                    </label>
-                                                </div>
+                                                    <div class="form-check mt-2">
+                                                        <input class="form-check-input" type="checkbox"
+                                                               id="markAsDoneCETFUtilization"
+                                                               name="markAsDone[CETF Utilization invoice]"
+                                                               @if(session('documentsWithHardcopy.CETF Utilization invoice', false)) checked @endif>
+                                                        <label class="form-check-label" for="markAsDoneCETFUtilization">
+                                                            Hardcopy Document Submitted
+                                                        </label>
+                                                    </div>
+
                                             </div>
                                         </div>
 
@@ -1339,48 +1354,17 @@
         });
     </script>
 
-
-
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <script>
-        // Handle the form submission using AJAX
-        document.getElementById('coopForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // Prevent the default form submission
-
-            let formData = new FormData(this);
-
-            // Send AJAX request to submit the form
-            fetch("{{ route('admin.storeCooperative') }}", {
-                    method: 'POST',
-                    body: formData,
-                })
-                .then(response => response.json())
-                .then(data => {
-                    // Check if the response contains a success message
-                    if (data.success) {
-                        // Display the success message using SweetAlert
-                        Swal.fire({
-                            title: 'Success!',
-                            text: data.success,
-                            icon: 'success',
-                            confirmButtonText: 'Okay'
-                        });
-
-                        // Optionally, you can reset the form here
-                        document.getElementById('coopForm').reset();
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    Swal.fire({
-                        title: 'Error!',
-                        text: 'An error occurred while submitting the form.',
-                        icon: 'error',
-                        confirmButtonText: 'Try Again'
-                    });
-                });
-        });
+        @if (session('markAsDone_success'))
+        <script>
+            Swal.fire({
+                title: 'Success!',
+                text: '{{ session('markAsDone_success') }}',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+        </script>
+    @endif
     </script>
     @include('layouts.links')
 </body>
