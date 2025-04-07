@@ -277,8 +277,10 @@
                                         </td>
                                         <td>
                                             <input type="text" name="remarks" class="form-control form-control-sm"
-                                                   placeholder="Enter remarks (optional)" value="{{ $document->remarks ?? '' }}">
+                                                   placeholder="Enter remarks (optional)" value="{{ $document->remarks ?? '' }}"
+                                                   @if($document->remarks === 'Hardcopy') readonly @endif>
                                         </td>
+
                                         <td>
                                             <button type="submit" class="btn btn-sm btn-outline-secondary">Update</button>
                                             </form>

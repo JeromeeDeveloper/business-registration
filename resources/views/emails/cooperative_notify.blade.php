@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2025 CO-OPvention Online Registration Credentials</title>
+    <title>2025 MASS-SPECC CO-OPVENTION REGISTRATION NOTICE</title>
 </head>
 
 <body>
@@ -18,14 +18,16 @@
 
             <hr>
 
-            <p><strong>Dear {{ $coop->name }},</strong></p>
+            <p><strong>2025 MASS-SPECC CO-OPVENTION REGISTRATION  NOTICE(Edcom Forum, Sectoral Congress, 55th Co-op Leaders' Congress, and 51st General Assembly)</strong></p>
 
-            <h3><strong>Registration Notice!</strong></h3>
+            <p>Co-operative greetings from MASS-SPECC!</p>
 
-            <p><strong>STATUS:</strong></p>
+            <p>Thank you for taking the time to register for our upcoming CO-OPvention. We're excited to have you with us. Please see below the latest update on your registration.</p>
+
+            <p><strong>REGISTRATION STATUS</strong></p>
+
             <p><strong>Cooperative Name:</strong> {{ $coop->name }}</p>
-
-            <p><strong>Registration Status:</strong>
+            <p><strong>GA Registration Status:</strong>
                 @if ($gaRegistration)
                     @if ($gaRegistration->registration_status === 'Rejected')
                         {{ strtoupper('Not Registered') }}
@@ -55,8 +57,8 @@
                 {{ \App\Models\Participant::where('coop_id', $coop->coop_id)->where('delegate_type', 'Voting')->count() }}
             </p>
 
-            <!-- Login Credentials -->
-            <h3>Login Credentials:</h3>
+
+            {{-- <h3>Login Credentials:</h3>
             <p><strong>Username:</strong> {{ $coop->email }}</p>
 
             <p><strong>Password:</strong>
@@ -72,32 +74,33 @@
                 @else
                     DefaultGA2025
                 @endif
-            </p>
+            </p> --}}
 
-            <h3>Steps to Register:</h3>
+            <h3>Need to register more participants? Here's how:</h3>
             <ol>
-                <li>Go to the Registration Link:
+                <li>Click the Registration Link:
                     <a href="http://eventregister.mass-specc.coop/" target="_blank">
-                        http://eventregister.mass-specc.coop/
+                        https://eventregister.mass-specc.coop/
                     </a>
                 </li>
-                <li>Enter your username and password to log in.</li>
-                <li>CLICK "REGISTER PARTICIPANTS" to register a participant.</li>
-                <li>Input the participant’s details.</li>
-                <li>UPLOAD the required valid documents.</li>
-                <li>CLICK "Submit" to complete the registration.</li>
+                <li>Log in using your co-op's username and password</li>
+                <li>Click "REGISTER PARTICIPANTS"</li>
+                <li>Fill in the participant details</li>
+                <li>Click "SUBMIT" to confirm</li>
 
             </ol>
 
-            <p>✅ To view the list of participants, CLICK Participant → Participants on the left side of the screen.</p>
-            <p>✅ To edit or delete a participant’s profile, CLICK the Edit/Delete button in the action list under the identified participant.</p>
+            <p>Helpful Reminders:</p>
+
+            <p>✅ To view your co-op's list of participants, click <strong>Participant → Participants</strong> on the left side of the screen.</p>
+            <p>✅ To edit or remove a participant’s profile, simply click the <strong>Edit/Delete</strong> button in the action list under the identified participant. Kindly take note that editing of participant details is only allowed until May 17, 2025.</p>
 
 
-            <p><strong>Important:</strong> Please log in and complete your registration by <strong>May 22, 2025</strong></p>
 
-            <p>If you need assistance, please contact us at <strong>0917-133-5218</strong>.</p>
 
-            <p>Thank you.</p>
+            <p>If you need any assistance, feel free to reach out to our Member Support Unit at <strong>0917-133-5218.</strong> We're here to help!</p>
+
+            <p>We look forward to your presence at the upcoming CO-OPvention!</p>
 
             <p><em>This is a system-generated email. Please do not reply.</em></p>
         </div>

@@ -8,7 +8,8 @@
     <img src="https://i.imgur.com/gsBSpUs.jpeg" alt="Signature Image" style="max-width: 70%; height: auto;" />
 
     <p>Hello {{ $name }},</p>
-    <p>Your participant account has been successfully created from your cooperative. Below are your login details:</p>
+    <p>You have been initially registered to 2025 MASS-SPECC General Assembly, completion depends on compliance of your coop to the other requirements.</p>
+    <p>With your initial registration,your participant account has been successfully created.</p>
     <p><strong>Participant Email:</strong> {{ $email }}</p>
     <p><strong>Password:</strong> {{ $password }}</p>
     <p>You can log in using the following link:</p>
@@ -17,6 +18,13 @@
           Login for the Event
         </a>
       </p>
+
+    <p>You can use your login credentials to:</p>
+    <ol>
+        <li>View your details,registration status and view of important details of the event</li>
+        <li>Access key - to be use during voting if participant has a voting status</li>
+        <li>QRcode - to be scanned for attendance to the events or congress</li>
+    </ol>
 
       <style>
         .styled-button {
@@ -36,9 +44,9 @@
         }
       </style>
 
-<p>If you need assistance, please contact us at 0917-133-5218</a></p>
+<p>If you need assistance, please contact <strong>Member Support at 0917-133-5218</strong></a></p>
 
-<p>Thank you.</p>
+<p>We look forward to your presence at the 2025 General Assembly.</p>
 
 <hr>
 <div>
