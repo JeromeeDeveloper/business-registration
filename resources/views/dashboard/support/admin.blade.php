@@ -345,11 +345,11 @@
 
 
                                                 <a href="{{ route('admin.reports.summary_delegates') }}"
-                                                class="list-group-item list-group-item-action py-3 fw-semibold"
-                                                data-report-type="summary_delegates">
-                                                <i class="fas fa-user-friends me-2"></i> Summary of Cooperative Per
-                                                Region
-                                            </a>
+                                                    class="list-group-item list-group-item-action py-3 fw-semibold"
+                                                    data-report-type="summary_delegates">
+                                                    <i class="fas fa-user-friends me-2"></i> Summary of Cooperative Per
+                                                    Region
+                                                </a>
 
 
                                                 <a href="{{ route('admin.reports.tshirt_sizes') }}"
@@ -361,29 +361,37 @@
 
 
                                                 <a href="{{ route('admin.reports.coop_registration_summary') }}"
-                                                class="list-group-item list-group-item-action py-3 fw-semibold"
-                                                data-report-type="coop_registration">
-                                                <i class="fas fa-building me-2"></i> Coop Registration Summary with Breakdown
-                                            </a>
+                                                    class="list-group-item list-group-item-action py-3 fw-semibold"
+                                                    data-report-type="coop_registration">
+                                                    <i class="fas fa-building me-2"></i> Coop Registration Summary with
+                                                    Breakdown
+                                                </a>
 
 
 
-                                        <a href="{{ route('admin.reports.participants_list') }}"
-                                        class="list-group-item list-group-item-action py-3 fw-semibold"
-                                        data-report-type="participants_list">
-                                        <i class="fas fa-users me-2"></i> List of Voting Delegates
-                                    </a>
+                                                <a href="{{ route('admin.reports.participants_list') }}"
+                                                    class="list-group-item list-group-item-action py-3 fw-semibold"
+                                                    data-report-type="participants_list">
+                                                    <i class="fas fa-users me-2"></i> List of Voting Delegates
+                                                </a>
 
-                                    <div class="d-flex gap-3">
-                                        <a href="{{ route('admin.reports.coop_status_list') }}" class="list-group-item list-group-item-action py-3 fw-semibold" data-report-type="coop_status">
-                                            <i class="fas fa-clipboard-list me-2"></i> List of Coop Registration Status
-                                        </a>
+                                                <div class="d-flex gap-3">
+                                                    <a href="{{ route('admin.reports.coop_status_list') }}"
+                                                        class="list-group-item list-group-item-action py-3 fw-semibold"
+                                                        data-report-type="coop_status">
+                                                        <i class="fas fa-clipboard-list me-2"></i> List of Coop
+                                                        Registration Status
+                                                    </a>
 
-                                        <button type="button" class="list-group-item list-group-item-action py-3 fw-semibold" id="filterRegionBtn" data-bs-toggle="modal" data-bs-target="#regionFilterModal">
-                                            <i class="fas fa-filter me-2"></i> Filter List of Coop Registration Status
-                                        </button>
+                                                    <button type="button"
+                                                        class="list-group-item list-group-item-action py-3 fw-semibold"
+                                                        id="filterRegionBtn" data-bs-toggle="modal"
+                                                        data-bs-target="#regionFilterModal">
+                                                        <i class="fas fa-filter me-2"></i> Filter List of Coop
+                                                        Registration Status
+                                                    </button>
 
-                                    </div>
+                                                </div>
 
                                             </div>
 
@@ -427,12 +435,14 @@
 
                         </div>
 
-                        <div class="modal fade" id="regionFilterModal" tabindex="-1" aria-labelledby="regionFilterLabel" aria-hidden="true">
+                        <div class="modal fade" id="regionFilterModal" tabindex="-1"
+                            aria-labelledby="regionFilterLabel" aria-hidden="true">
                             <div class="modal-dialog modal-lg"> <!-- Increased size for better preview -->
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="regionFilterLabel">Filter Cooperatives</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
                                         <label for="regionSelect">Select Region:</label>
@@ -476,13 +486,13 @@
 
                                         <!-- New Document Status Filter -->
                                         <label for="documentStatusSelect">Select Document Status:</label>
-<select id="documentStatusSelect" class="form-select">
-    <option value="">All</option>
-    <option value="Pending">Pending</option>
-    {{-- <option value="Checked">Checked</option> --}}
-    <option value="Approved">Accepted</option>
-    <option value="Rejected">Declined</option>
-</select>
+                                        <select id="documentStatusSelect" class="form-select">
+                                            <option value="">All</option>
+                                            <option value="Pending">Pending</option>
+                                            {{-- <option value="Checked">Checked</option> --}}
+                                            <option value="Approved">Accepted</option>
+                                            <option value="Rejected">Declined</option>
+                                        </select>
 
 
                                         <!-- Table to Preview Filtered Data -->
@@ -516,9 +526,12 @@
                                     </div>
 
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        <button type="button" id="previewData" class="btn btn-info">Preview Data</button>
-                                        <button type="button" id="applyRegionFilter" class="btn btn-primary">Generate Excel</button>
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <button type="button" id="previewData" class="btn btn-info">Preview
+                                            Data</button>
+                                        <button type="button" id="applyRegionFilter"
+                                            class="btn btn-primary">Generate Excel</button>
                                     </div>
                                 </div>
                             </div>
@@ -707,22 +720,27 @@
 
 
                             <div class="card card-round shadow-lg">
-                                <h3 class="p-4 text-center text-white bg-primary rounded-top">Attendance Status</h3> <!-- Title -->
+                                <h3 class="p-4 text-center text-white bg-primary rounded-top">Attendance Status</h3>
+                                <!-- Title -->
 
                                 <div class="card-body p-4">
                                     <div class="row">
                                         <!-- Total Coop Attended -->
                                         <div class="col-md-3 mb-4">
                                             <div class="card card-stats card-round shadow-sm h-100">
-                                                <div class="card-body d-flex flex-column align-items-center text-center p-3">
+                                                <div
+                                                    class="card-body d-flex flex-column align-items-center text-center p-3">
                                                     <div class="col-icon me-3">
-                                                        <div class="icon-big text-info text-center rounded-circle bg-light p-3">
+                                                        <div
+                                                            class="icon-big text-info text-center rounded-circle bg-light p-3">
                                                             <i class="fas fa-users fa-lg"></i> <!-- Total Coop Icon -->
                                                         </div>
                                                     </div>
                                                     <div>
-                                                        <p class="card-category mb-1 text-muted">Total Coop Attended</p>
-                                                        <h4 class="card-title mb-0 text-dark">{{ number_format($totalCoopAttended) }}</h4>
+                                                        <p class="card-category mb-1 text-muted">Total Coop Attended
+                                                        </p>
+                                                        <h4 class="card-title mb-0 text-dark">
+                                                            {{ number_format($totalCoopAttended) }}</h4>
                                                     </div>
                                                 </div>
                                             </div>
@@ -731,15 +749,19 @@
                                         <!-- Total MIGS Coop Attended -->
                                         <div class="col-md-3 mb-4">
                                             <div class="card card-stats card-round shadow-sm h-100">
-                                                <div class="card-body d-flex flex-column align-items-center text-center p-3">
+                                                <div
+                                                    class="card-body d-flex flex-column align-items-center text-center p-3">
                                                     <div class="col-icon me-3">
-                                                        <div class="icon-big text-success text-center rounded-circle bg-light p-3">
-                                                            <i class="fas fa-user-friends fa-lg"></i> <!-- MIGS Coop Icon -->
+                                                        <div
+                                                            class="icon-big text-success text-center rounded-circle bg-light p-3">
+                                                            <i class="fas fa-user-friends fa-lg"></i>
+                                                            <!-- MIGS Coop Icon -->
                                                         </div>
                                                     </div>
                                                     <div>
                                                         <p class="card-category mb-1 text-muted">Attended MIGS</p>
-                                                        <h4 class="card-title mb-0 text-dark">{{ number_format($totalMigsAttended) }}</h4>
+                                                        <h4 class="card-title mb-0 text-dark">
+                                                            {{ number_format($totalMigsAttended) }}</h4>
                                                     </div>
                                                 </div>
                                             </div>
@@ -748,15 +770,19 @@
                                         <!-- Total NON-MIGS Coop Attended -->
                                         <div class="col-md-3 mb-4">
                                             <div class="card card-stats card-round shadow-sm h-100">
-                                                <div class="card-body d-flex flex-column align-items-center text-center p-3">
+                                                <div
+                                                    class="card-body d-flex flex-column align-items-center text-center p-3">
                                                     <div class="col-icon me-3">
-                                                        <div class="icon-big text-danger text-center rounded-circle bg-light p-3">
-                                                            <i class="fas fa-user-times fa-lg"></i> <!-- NON-MIGS Coop Icon -->
+                                                        <div
+                                                            class="icon-big text-danger text-center rounded-circle bg-light p-3">
+                                                            <i class="fas fa-user-times fa-lg"></i>
+                                                            <!-- NON-MIGS Coop Icon -->
                                                         </div>
                                                     </div>
                                                     <div>
                                                         <p class="card-category mb-1 text-muted">Attended NON-MIGS</p>
-                                                        <h4 class="card-title mb-0 text-dark">{{ number_format($totalNonMigsAttended) }}</h4>
+                                                        <h4 class="card-title mb-0 text-dark">
+                                                            {{ number_format($totalNonMigsAttended) }}</h4>
                                                     </div>
                                                 </div>
                                             </div>
@@ -765,15 +791,20 @@
                                         <!-- Total Attended Voting Participants -->
                                         <div class="col-md-3 mb-4">
                                             <div class="card card-stats card-round shadow-sm h-100">
-                                                <div class="card-body d-flex flex-column align-items-center text-center p-3">
+                                                <div
+                                                    class="card-body d-flex flex-column align-items-center text-center p-3">
                                                     <div class="col-icon me-3">
-                                                        <div class="icon-big text-primary text-center rounded-circle bg-light p-3">
-                                                            <i class="fas fa-check-circle fa-lg"></i> <!-- Voting Icon -->
+                                                        <div
+                                                            class="icon-big text-primary text-center rounded-circle bg-light p-3">
+                                                            <i class="fas fa-check-circle fa-lg"></i>
+                                                            <!-- Voting Icon -->
                                                         </div>
                                                     </div>
                                                     <div>
-                                                        <p class="card-category mb-1 text-muted">Total Participants Attended</p>
-                                                        <h4 class="card-title mb-0 text-dark">{{ number_format($totalVotingParticipants) }}</h4>
+                                                        <p class="card-category mb-1 text-muted">Total Participants
+                                                            Attended</p>
+                                                        <h4 class="card-title mb-0 text-dark">
+                                                            {{ number_format($totalVotingParticipants) }}</h4>
                                                     </div>
                                                 </div>
                                             </div>
@@ -784,22 +815,27 @@
 
 
                             <div class="card card-round shadow-lg">
-                                <h3 class="p-4 text-center text-white bg-primary rounded-top">Event Attendance Status</h3> <!-- Title -->
+                                <h3 class="p-4 text-center text-white bg-primary rounded-top">Event Attendance Status
+                                </h3> <!-- Title -->
 
 
                                 <div class="card-body p-4">
                                     <div class="row">
-                                        @foreach($events as $event)
+                                        @foreach ($events as $event)
                                             <div class="col-md-4 mb-4">
                                                 <div class="card card-stats card-round shadow-sm h-100">
-                                                    <div class="card-body d-flex flex-column align-items-center text-center p-3">
+                                                    <div
+                                                        class="card-body d-flex flex-column align-items-center text-center p-3">
                                                         <div class="col-icon me-3">
-                                                            <div class="icon-big text-primary text-center rounded-circle bg-light p-3">
-                                                                <i class="fas fa-calendar-check fa-lg"></i> <!-- Event Icon -->
+                                                            <div
+                                                                class="icon-big text-primary text-center rounded-circle bg-light p-3">
+                                                                <i class="fas fa-calendar-check fa-lg"></i>
+                                                                <!-- Event Icon -->
                                                             </div>
                                                         </div>
                                                         <div>
-                                                            <p class="card-category mb-1 text-muted">{{ $event->title }}</p>
+                                                            <p class="card-category mb-1 text-muted">
+                                                                {{ $event->title }}</p>
                                                             <h4 class="card-title mb-0 text-dark">
                                                                 {{ number_format($event->participants_count) }}
                                                             </h4>
@@ -808,10 +844,34 @@
                                                 </div>
                                             </div>
                                         @endforeach
+
+                                        <div class="col-md-4 mb-4">
+                                            <div class="card card-stats card-round shadow-sm h-100">
+                                                <div
+                                                    class="card-body d-flex flex-column align-items-center text-center p-3">
+                                                    <div class="col-icon me-3">
+                                                        <div
+                                                            class="icon-big text-primary text-center rounded-circle bg-light p-3">
+                                                            <i class="fas fa-calendar-check fa-lg"></i>
+                                                            <!-- Event Icon -->
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <p class="card-category mb-1 text-muted">
+                                                            Voted Delegates
+                                                        <h4 class="card-title mb-0 text-dark">
+                                                            0
+                                                        </h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
                         </div>
+
 
                         <div class="modal" tabindex="-1" id="overviewModal">
                             <div class="modal-dialog modal-lg">
@@ -933,7 +993,7 @@
                             <style>
                                 .event-card {
                                     transition: 0.3s;
-                                    max-width: 550px;
+
                                     margin: auto;
                                     border-radius: 15px;
                                     overflow: hidden;
@@ -1030,11 +1090,13 @@
                                     </div>
                                     <div class="event-item">
                                         <span class="badge bg-info">May 22</span>
-                                        <span class="text-start flex-grow-1 ms-3">End of Registration for Non-Voting</span>
+                                        <span class="text-start flex-grow-1 ms-3">End of Registration for
+                                            Non-Voting</span>
                                     </div>
                                     <div class="event-item">
                                         <span class="badge bg-secondary">May 23</span>
-                                        <span class="text-start flex-grow-1 ms-3">Sectoral Congress 55th Co-op Leaders</span>
+                                        <span class="text-start flex-grow-1 ms-3">Sectoral Congress 55th Co-op
+                                            Leaders</span>
                                     </div>
                                     <div class="event-item">
                                         <span class="badge bg-primary">May 24</span>
@@ -1185,70 +1247,74 @@
         }
     </script>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const applyRegionFilter = document.getElementById("applyRegionFilter");
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const applyRegionFilter = document.getElementById("applyRegionFilter");
 
-        applyRegionFilter.addEventListener("click", function () {
-            let selectedRegion = document.getElementById("regionSelect").value.trim();
-            let migsStatus = document.getElementById("migsStatusSelect").value.trim();
-            let registrationStatus = document.getElementById("registrationStatusSelect").value.trim();
+            applyRegionFilter.addEventListener("click", function() {
+                let selectedRegion = document.getElementById("regionSelect").value.trim();
+                let migsStatus = document.getElementById("migsStatusSelect").value.trim();
+                let registrationStatus = document.getElementById("registrationStatusSelect").value.trim();
 
-            let exportUrl = "{{ route('reports.export.filtered_coop_status') }}"; // Laravel route
+                let exportUrl = "{{ route('reports.export.filtered_coop_status') }}"; // Laravel route
 
-            let params = new URLSearchParams({
-                region: selectedRegion || "All",
-                migs_status: migsStatus || "All",
-                registration_status: registrationStatus || "All"
+                let params = new URLSearchParams({
+                    region: selectedRegion || "All",
+                    migs_status: migsStatus || "All",
+                    registration_status: registrationStatus || "All"
+                });
+
+                // Redirect to export URL with filters
+                window.location.href = exportUrl + "?" + params.toString();
             });
-
-            // Redirect to export URL with filters
-            window.location.href = exportUrl + "?" + params.toString();
         });
-    });
     </script>
 
     <script>
-    document.addEventListener("DOMContentLoaded", function () {
-    const previewDataBtn = document.getElementById("previewData");
-    const applyRegionFilter = document.getElementById("applyRegionFilter");
-    const previewTableBody = document.getElementById("previewTableBody");
+        document.addEventListener("DOMContentLoaded", function() {
+            const previewDataBtn = document.getElementById("previewData");
+            const applyRegionFilter = document.getElementById("applyRegionFilter");
+            const previewTableBody = document.getElementById("previewTableBody");
 
-    previewDataBtn.addEventListener("click", function () {
-        let selectedRegion = document.getElementById("regionSelect").value.trim();
-        let migsStatus = document.getElementById("migsStatusSelect").value.trim();
-        let registrationStatus = document.getElementById("registrationStatusSelect").value.trim();
-        let documentStatus = document.getElementById("documentStatusSelect").value.trim(); // New filter
+            previewDataBtn.addEventListener("click", function() {
+                let selectedRegion = document.getElementById("regionSelect").value.trim();
+                let migsStatus = document.getElementById("migsStatusSelect").value.trim();
+                let registrationStatus = document.getElementById("registrationStatusSelect").value.trim();
+                let documentStatus = document.getElementById("documentStatusSelect").value
+            .trim(); // New filter
 
-        fetch("{{ route('reports.preview.filtered_coop_status') }}", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": "{{ csrf_token() }}"
-            },
-            body: JSON.stringify({
-                region: selectedRegion || "All",
-                migs_status: migsStatus || "All",
-                registration_status: registrationStatus || "All",
-                document_status: documentStatus || "All" // Pass the new document status filter
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            previewTableBody.innerHTML = ""; // Clear previous data
+                fetch("{{ route('reports.preview.filtered_coop_status') }}", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                        },
+                        body: JSON.stringify({
+                            region: selectedRegion || "All",
+                            migs_status: migsStatus || "All",
+                            registration_status: registrationStatus || "All",
+                            document_status: documentStatus ||
+                                "All" // Pass the new document status filter
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        previewTableBody.innerHTML = ""; // Clear previous data
 
-            if (data.length === 0) {
-                previewTableBody.innerHTML = `<tr><td colspan="13" class="text-center">No data found</td></tr>`;
-                applyRegionFilter.disabled = true;
-                return;
-            }
+                        if (data.length === 0) {
+                            previewTableBody.innerHTML =
+                                `<tr><td colspan="13" class="text-center">No data found</td></tr>`;
+                            applyRegionFilter.disabled = true;
+                            return;
+                        }
 
-            applyRegionFilter.disabled = false; // Enable Generate Excel button
+                        applyRegionFilter.disabled = false; // Enable Generate Excel button
 
-            data.forEach(coop => {
-                let registrationStatus = coop.registration_status === "Rejected" ? "Unregistered" : coop.registration_status;
+                        data.forEach(coop => {
+                            let registrationStatus = coop.registration_status === "Rejected" ?
+                                "Unregistered" : coop.registration_status;
 
-                let row = `
+                            let row = `
                     <tr>
                         <td>${coop.name}</td>
                         <td>${coop.coop_identification_no}</td>
@@ -1265,36 +1331,36 @@
                         <td>${coop.documents?.['CETF Utilization invoice'] ?? 'Not Uploaded'}</td>
                     </tr>
                 `;
-                previewTableBody.innerHTML += row;
+                            previewTableBody.innerHTML += row;
+                        });
+                    })
+                    .catch(error => {
+                        console.error("Error fetching preview data:", error);
+                        previewTableBody.innerHTML =
+                            `<tr><td colspan="13" class="text-center text-danger">Error loading data</td></tr>`;
+                    });
             });
-        })
-        .catch(error => {
-            console.error("Error fetching preview data:", error);
-            previewTableBody.innerHTML = `<tr><td colspan="13" class="text-center text-danger">Error loading data</td></tr>`;
+
+            applyRegionFilter.addEventListener("click", function() {
+                let selectedRegion = document.getElementById("regionSelect").value.trim();
+                let migsStatus = document.getElementById("migsStatusSelect").value.trim();
+                let registrationStatus = document.getElementById("registrationStatusSelect").value.trim();
+                let documentStatus = document.getElementById("documentStatusSelect").value
+            .trim(); // New filter
+
+                let exportUrl = "{{ route('reports.export.filtered_coop_status') }}";
+
+                let params = new URLSearchParams({
+                    region: selectedRegion || "All",
+                    migs_status: migsStatus || "All",
+                    registration_status: registrationStatus || "All",
+                    document_status: documentStatus || "All" // Pass the new document status filter
+                });
+
+                window.location.href = exportUrl + "?" + params.toString();
+            });
         });
-    });
-
-    applyRegionFilter.addEventListener("click", function () {
-        let selectedRegion = document.getElementById("regionSelect").value.trim();
-        let migsStatus = document.getElementById("migsStatusSelect").value.trim();
-        let registrationStatus = document.getElementById("registrationStatusSelect").value.trim();
-        let documentStatus = document.getElementById("documentStatusSelect").value.trim(); // New filter
-
-        let exportUrl = "{{ route('reports.export.filtered_coop_status') }}";
-
-        let params = new URLSearchParams({
-            region: selectedRegion || "All",
-            migs_status: migsStatus || "All",
-            registration_status: registrationStatus || "All",
-            document_status: documentStatus || "All" // Pass the new document status filter
-        });
-
-        window.location.href = exportUrl + "?" + params.toString();
-    });
-});
-
-
-        </script>
+    </script>
 
     @include('layouts.links')
 </body>

@@ -1012,7 +1012,7 @@
                             <style>
                                 .event-card {
                                     transition: 0.3s;
-                                    max-width: 550px;
+                                  
                                     margin: auto;
                                     border-radius: 15px;
                                     overflow: hidden;
