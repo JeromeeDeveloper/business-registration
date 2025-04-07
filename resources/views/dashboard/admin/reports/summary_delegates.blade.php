@@ -74,30 +74,38 @@
 </head>
 <body>
 
-<div class="container-fluid mt-4">
-    <h2 class="mb-4 fw-bold text-primary text-center">
-        📑 Cooperative Summary Per Region
-    </h2>
+    <div class="container-fluid mt-4">
+        <h2 class="mb-4 fw-bold text-primary text-center">
+            📑 Cooperative Summary Per Region
+        </h2>
 
-    <div class="table-responsive">
-        <table class="table table-hover align-middle border">
-            <thead class="bg-gradient bg-dark text-white">
-                <tr>
-                    <th>Cooperative Region</th>
-                    <th>Number of Cooperatives</th>
-                </tr>
-            </thead>
-            <tbody class="bg-light">
-                @foreach($cooperativesByRegion as $region)
-                <tr>
-                    <td class="fw-semibold text-primary">{{ $region->region }}</td>
-                    <td>{{ $region->cooperatives_count }}</td> <!-- Count of cooperatives in this region -->
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle border">
+                <thead class="bg-gradient bg-dark text-white">
+                    <tr>
+                        <th>Cooperative Region</th>
+                        <th>Number of Cooperatives</th>
+                        <th>Registered Cooperatives</th> <!-- New column for registered cooperatives -->
+                    </tr>
+                </thead>
+                <tbody class="bg-light">
+                    @foreach($cooperativesByRegion as $region)
+                    <tr>
+                        <td class="fw-semibold text-primary">{{ $region->region }}</td>
+                        <td>{{ $region->cooperatives_count }}</td> <!-- Count of cooperatives in this region -->
+                        <td>
+                            @php
+                                $partialRegisteredCount = $cooperativesWithStatusCount[$region->region]['partial_registered_count'];
+                                $fullyRegisteredCount = $cooperativesWithStatusCount[$region->region]['fully_registered_count'];
+                            @endphp
+                            {{ $partialRegisteredCount + $fullyRegisteredCount }} 
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
 
-</body>
-</html>
+    </body>
+    </html>

@@ -314,20 +314,46 @@ public function coopStatusList(Request $request)
     return view('dashboard.admin.reports.coop_status_list', compact('cooperatives'));
 }
 
-
-
-
-
 public function summaryDelegates()
 {
-    // Fetch cooperatives and group them by region, then count the number of cooperatives per region
+    // Fetch cooperatives and group them by region
     $cooperativesByRegion = Cooperative::select('region')
         ->groupBy('region') // Group cooperatives by region
         ->selectRaw('region, count(*) as cooperatives_count') // Count cooperatives per region
         ->get();
 
-    return view('dashboard.admin.reports.summary_delegates', compact('cooperativesByRegion'));
+    // Prepare an array to store the counts of registered cooperatives per region
+    $cooperativesWithStatusCount = [];
+
+    foreach ($cooperativesByRegion as $region) {
+        $cooperativesWithStatusCount[$region->region] = [
+            'partial_registered_count' => 0,
+            'fully_registered_count' => 0,
+        ];
+
+        // Count cooperatives with 'Partial Registered' or 'Fully Registered' statuses per region
+        $cooperatives = Cooperative::where('region', $region->region)
+            ->with('gaRegistration') // Load related GARegistration for each cooperative
+            ->get();
+
+        foreach ($cooperatives as $cooperative) {
+            $registration = $cooperative->gaRegistration;
+
+            if ($registration) {
+                if ($registration->registration_status === 'Partial Registered') {
+                    $cooperativesWithStatusCount[$region->region]['partial_registered_count']++;
+                } elseif ($registration->registration_status === 'Fully Registered') {
+                    $cooperativesWithStatusCount[$region->region]['fully_registered_count']++;
+                }
+            }
+        }
+    }
+
+    return view('dashboard.admin.reports.summary_delegates', compact('cooperativesByRegion', 'cooperativesWithStatusCount'));
 }
+
+
+
 
 
 
