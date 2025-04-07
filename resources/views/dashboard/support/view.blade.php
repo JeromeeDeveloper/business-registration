@@ -356,7 +356,7 @@
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="share_capital_balance">Share Capital Balance</label>
-                                    <p id="share_capital_balance">{{ $coop->share_capital_balance }}</p>
+                                    <p id="share_capital_balance">{{ number_format($coop->share_capital_balance, 2) }}</p>
                                 </div>
                             </div>
 
@@ -398,16 +398,17 @@
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="loan_balance">Loan Balance</label>
-                                    <p>{{ $coop->loan_balance }}</p>
+                                    <p>{{ number_format($coop->loan_balance, 2) }}</p>
                                 </div>
                             </div>
 
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="total_asset">Total Assets</label>
-                                    <p>{{ $coop->total_asset }}</p>
+                                    <p>{{ number_format($coop->total_asset, 2) }}</p>
                                 </div>
                             </div>
+
 
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
@@ -419,14 +420,14 @@
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="total_overdue">Loan Overdue</label>
-                                    <p>{{ $coop->total_overdue }}</p>
+                                    <p>{{ number_format($coop->total_overdue, 2) }}</p>
                                 </div>
                             </div>
 
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="net_surplus">Net Surplus</label>
-                                    <p>{{ $coop->net_surplus }}</p>
+                                    <p>{{ number_format($coop->net_surplus, 2) }}</p>
                                 </div>
                             </div>
 
@@ -440,95 +441,116 @@
 
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
+                                    <label for="total_overdue">Loan Overdue</label>
+                                    <p>{{ number_format($coop->total_overdue, 2) }}</p>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="net_surplus">Net Surplus</label>
+                                    <p>{{ number_format($coop->net_surplus, 2) }}</p>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-lg-4">
+                                <div class="form-group">
+                                    <label for="registration_fee">Total Registration Fee</label>
+                                    <p>{{ number_format($coop->registration_fee * $coop->participants->count(), 2) ?? 'N/A' }}</p>
+                                </div>
+                            </div>
+
+
+
+                            <div class="col-md-6 col-lg-4">
+                                <div class="form-group">
                                     <label for="time_deposit">Time Deposit</label>
-                                    <p>{{ $coop->time_deposit }}</p>
+                                    <p>{{ number_format($coop->time_deposit, 2) }}</p>
                                 </div>
                             </div>
 
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="cetf_due_to_apex">CETF Due to Apex</label>
-                                    <p>{{ $coop->cetf_due_to_apex }}</p>
+                                    <p>{{ number_format($coop->cetf_due_to_apex, 2) }}</p>
                                 </div>
                             </div>
 
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="accounts_receivable">Accounts Receivable</label>
-                                    <p>{{ $coop->accounts_receivable }}</p>
+                                    <p>{{ number_format($coop->accounts_receivable, 2) }}</p>
                                 </div>
                             </div>
 
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="cetf_required">CETF Required</label>
-                                    <p id="cetf_required" data-value="{{ $coop->cetf_required }}">{{ $coop->cetf_required }}</p>
+                                    <p id="cetf_required" data-value="{{ $coop->cetf_required }}">{{ number_format($coop->cetf_required, 2) }}</p>
                                 </div>
                             </div>
 
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="additional_cetf">Additional CETF</label>
-                                    <p>{{ $coop->additional_cetf }}</p>
+                                    <p>{{ number_format($coop->additional_cetf, 2) }}</p>
                                 </div>
                             </div>
-
 
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="net_required_reg_fee">Net Required Registration Fee</label>
-                                    <p>{{ $coop->net_required_reg_fee }}</p>
+                                    <p>{{ number_format($coop->net_required_reg_fee, 2) }}</p>
                                 </div>
                             </div>
 
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="savings">Savings</label>
-                                    <p>{{ $coop->savings }}</p>
+                                    <p>{{ number_format($coop->savings, 2) }}</p>
                                 </div>
                             </div>
 
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="cetf_remittance">CETF Remittance</label>
-                                    <p>{{ $coop->cetf_remittance }}</p>
+                                    <p>{{ number_format($coop->cetf_remittance, 2) }}</p>
                                 </div>
                             </div>
 
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="less_prereg_payment">Less: PreReg Payment</label>
-                                    <p>{{ $coop->less_prereg_payment }}</p>
+                                    <p>{{ number_format($coop->less_prereg_payment, 2) }}</p>
                                 </div>
                             </div>
+
 
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="cetf_undertaking">CETF Undertaking</label>
-                                    <p>{{ $coop->cetf_undertaking }}</p>
+                                    <p>{{ number_format($coop->cetf_undertaking, 2) }}</p>
                                 </div>
                             </div>
 
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="total_remittance">Total Remittance</label>
-                                    <p id="total_remittance" data-value="{{ $coop->total_remittance }}">{{ $coop->total_remittance }}</p>
+                                    <p id="total_remittance" data-value="{{ $coop->total_remittance }}">{{ number_format($coop->total_remittance, 2) }}</p>
                                 </div>
                             </div>
 
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="less_cetf_balance">Less: CETF Utilization</label>
-                                    <p>{{ $coop->less_cetf_balance }}</p>
+                                    <p>{{ number_format($coop->less_cetf_balance, 2) }}</p>
                                 </div>
                             </div>
-
-
 
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="cetf_balance">CETF Balance</label>
-                                    <p>{{ $coop->cetf_balance }}</p>
+                                    <p>{{ number_format($coop->cetf_balance, 2) }}</p>
                                 </div>
                             </div>
 
@@ -543,7 +565,7 @@
                             <div class="col-md-6 col-lg-4">
                                 <div class="form-group">
                                     <label for="reg_fee_payable">Registration Fee Payable</label>
-                                    <p>{{ $coop->reg_fee_payable }}</p>
+                                    <p>{{ number_format($coop->reg_fee_payable, 2) }}</p>
                                 </div>
                             </div>
 

@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Mail\CooperativeNotification;
 use Illuminate\Support\Facades\Storage;
+use App\Mail\CooperativeNotificationsingle;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Exports\ReportsExport; // If using Excel
 use App\Mail\CooperativeNotificationCredentials;
@@ -62,7 +63,7 @@ class DashboardController extends Controller
                     $user->save();
 
                     // Send email with the new password
-                    Mail::to($user->email)->queue(new CooperativeNotification($coop, $event, $gaRegistration, $users, $sanitizedPassword));
+                    Mail::to($user->email)->queue(new CooperativeNotificationsingle($coop, $event, $gaRegistration, $sanitizedPassword));
 
                     \Log::info("New password set for user: {$user->email} -> {$sanitizedPassword}");
                 }

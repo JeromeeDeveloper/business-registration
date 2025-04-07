@@ -838,7 +838,7 @@
 
                                         <div class="col-md-4 mb-4">
                                             <div class="card card-stats card-round shadow-sm h-100">
-                                                <div class="card-body d-flex align-items-center p-3">
+                                                <div class="card-body d-flex flex-column text-center align-items-center p-3">
                                                     <div class="col-icon me-3">
                                                         <div
                                                             class="icon-big text-primary text-center rounded-circle bg-light p-3">

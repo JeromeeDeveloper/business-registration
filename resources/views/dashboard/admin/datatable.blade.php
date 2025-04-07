@@ -442,7 +442,7 @@
                                                         <td>{{ $coop->participants_count }}</td>
                                                         <td>{{ $coop->registered_voting_participants }}</td>
                                                         <td>{{ $coop->votes ?? 0 }}</td>
-                                                     
+
                                                         <!-- Registration Status Dropdown -->
                                                         <td class="p-2 align-middle text-center">
                                                             <div class="form-control text-center fw-semibold text-primary fs-6" style="min-width: 200px;">

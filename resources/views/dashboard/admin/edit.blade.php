@@ -393,9 +393,6 @@
                                                 <h4 class="mt-4">Verifier</h4>
                                                 <hr>
                                             </div>
-
-
-
                                             <!-- First Column: MIGS/ Voting Delegate Requirements -->
                                             <div class="col-lg-4">
                                                 <div class="card shadow-sm p-3">
@@ -407,7 +404,8 @@
                                                         <input type="number" class="form-control"
                                                             name="share_capital_balance" id="share_capital_balance"
                                                             value="{{ $coop->share_capital_balance }}"
-                                                            placeholder="Enter Share Capital" step="0.01">
+                                                            placeholder="0" step="0.01">
+                                                            <span class="formatted-number" id="formatted-value"></span>
                                                     </div>
 
 
@@ -889,13 +887,7 @@
                                                     <input class="form-check-input" type="checkbox"
                                                         id="markAsDoneResolution"
                                                         name="markAsDone[Resolution for Voting delegates]"
-                                                        @if (\App\Models\UploadedDocument::where('coop_id', $coop->coop_id)
-                                                        ->where('document_type', 'Resolution for Voting delegates')
-                                                        ->where('remarks', 'Hardcopy')
-                                                        ->where('status', 'Approved')
-                                                        ->exists())
-                                                        checked
-                                                    @endif>
+                                                        @if (\App\Models\UploadedDocument::where('coop_id', $coop->coop_id)->where('document_type', 'Resolution for Voting delegates')->where('remarks', 'Hardcopy')->where('status', 'Approved')->exists()) checked @endif>
 
                                                     <label class="form-check-label" for="markAsDoneResolution">
                                                         Hardcopy Document Submitted
@@ -932,13 +924,7 @@
                                                     <input class="form-check-input" type="checkbox"
                                                         id="markAsDoneDepositSlip"
                                                         name="markAsDone[Deposit Slip for Registration Fee]"
-                                                        @if (\App\Models\UploadedDocument::where('coop_id', $coop->coop_id)
-                                                        ->where('document_type', 'Deposit Slip for Registration Fee')
-                                                        ->where('remarks', 'Hardcopy')
-                                                        ->where('status', 'Approved')
-                                                        ->exists())
-                                                        checked
-                                                    @endif>
+                                                        @if (\App\Models\UploadedDocument::where('coop_id', $coop->coop_id)->where('document_type', 'Deposit Slip for Registration Fee')->where('remarks', 'Hardcopy')->where('status', 'Approved')->exists()) checked @endif>
 
                                                     <label class="form-check-label" for="markAsDoneDepositSlip">
                                                         Hardcopy Document Submitted
@@ -972,14 +958,7 @@
                                                     <input class="form-check-input" type="checkbox"
                                                         id="markAsDoneCETFRemittance"
                                                         name="markAsDone[Deposit Slip for CETF Remittance]"
-
-                                                        @if (\App\Models\UploadedDocument::where('coop_id', $coop->coop_id)
-                                                        ->where('document_type', 'Deposit Slip for CETF Remittance')
-                                                        ->where('remarks', 'Hardcopy')
-                                                        ->where('status', 'Approved')
-                                                        ->exists())
-                                                        checked
-                                                    @endif>
+                                                        @if (\App\Models\UploadedDocument::where('coop_id', $coop->coop_id)->where('document_type', 'Deposit Slip for CETF Remittance')->where('remarks', 'Hardcopy')->where('status', 'Approved')->exists()) checked @endif>
                                                     <label class="form-check-label" for="markAsDoneCETFRemittance">
                                                         Hardcopy Document Submitted
                                                     </label>
@@ -1011,14 +990,7 @@
                                                     <input class="form-check-input" type="checkbox"
                                                         id="markAsDoneCETFUndertaking"
                                                         name="markAsDone[CETF Undertaking]"
-
-                                                        @if (\App\Models\UploadedDocument::where('coop_id', $coop->coop_id)
-                                                        ->where('document_type', 'CETF Undertaking')
-                                                        ->where('remarks', 'Hardcopy')
-                                                        ->where('status', 'Approved')
-                                                        ->exists())
-                                                        checked
-                                                    @endif>
+                                                        @if (\App\Models\UploadedDocument::where('coop_id', $coop->coop_id)->where('document_type', 'CETF Undertaking')->where('remarks', 'Hardcopy')->where('status', 'Approved')->exists()) checked @endif>
                                                     <label class="form-check-label" for="markAsDoneCETFUndertaking">
                                                         Hardcopy Document Submitted
                                                     </label>
@@ -1050,14 +1022,7 @@
                                                     <input class="form-check-input" type="checkbox"
                                                         id="markAsDoneCandidacy"
                                                         name="markAsDone[Certificate of Candidacy]"
-
-                                                        @if (\App\Models\UploadedDocument::where('coop_id', $coop->coop_id)
-                                                        ->where('document_type', 'Certificate of Candidacy')
-                                                        ->where('remarks', 'Hardcopy')
-                                                        ->where('status', 'Approved')
-                                                        ->exists())
-                                                        checked
-                                                    @endif>
+                                                        @if (\App\Models\UploadedDocument::where('coop_id', $coop->coop_id)->where('document_type', 'Certificate of Candidacy')->where('remarks', 'Hardcopy')->where('status', 'Approved')->exists()) checked @endif>
                                                     <label class="form-check-label" for="markAsDoneCandidacy">
                                                         Hardcopy Document Submitted
                                                     </label>
@@ -1090,14 +1055,7 @@
                                                     <input class="form-check-input" type="checkbox"
                                                         id="markAsDoneCETFUtilization"
                                                         name="markAsDone[CETF Utilization invoice]"
-
-                                                        @if (\App\Models\UploadedDocument::where('coop_id', $coop->coop_id)
-                                                        ->where('document_type', 'CETF Utilization invoice')
-                                                        ->where('remarks', 'Hardcopy')
-                                                        ->where('status', 'Approved')
-                                                        ->exists())
-                                                        checked
-                                                    @endif>
+                                                        @if (\App\Models\UploadedDocument::where('coop_id', $coop->coop_id)->where('document_type', 'CETF Utilization invoice')->where('remarks', 'Hardcopy')->where('status', 'Approved')->exists()) checked @endif>
                                                     <label class="form-check-label" for="markAsDoneCETFUtilization">
                                                         Hardcopy Document Submitted
                                                     </label>
