@@ -515,14 +515,7 @@ class SupportController extends Controller
     public function storeDocuments3(Request $request, $id)
     {
         $request->validate([
-            'documents.Financial Statement' => 'nullable|mimes:jpg,jpeg,png,pdf,xls,xlsx,csv',
-            'documents.Resolution for Voting Delegates' => 'nullable|mimes:jpg,jpeg,png,pdf,xls,xlsx,csv',
-            'documents.Deposit Slip for Registration Fee' => 'nullable|mimes:jpg,jpeg,png,pdf,xls,xlsx,csv',
-            'documents.Deposit Slip for CETF Remittance' => 'nullable|mimes:jpg,jpeg,png,pdf,xls,xlsx,csv',
-            'documents.CETF Undertaking' => 'nullable|mimes:jpg,jpeg,png,pdf,xls,xlsx,csv',
-            'documents.Certificate of Candidacy' => 'nullable|mimes:jpg,jpeg,png,pdf,xls,xlsx,csv',
-            'documents.CETF Utilization Invoice' => 'nullable|mimes:jpg,jpeg,png,pdf,xls,xlsx,csv',
-
+            // validation rules
         ]);
 
         // Find the cooperative by its ID
@@ -531,11 +524,92 @@ class SupportController extends Controller
         $successMessages = [];
         $uploadedFiles = $request->file('documents', []); // Default to empty array if no files
 
-        if (empty($uploadedFiles)) {
-            return redirect()->route('support.cooperatives.edit', $cooperative->coop_id)
-                ->with('error', 'No files were uploaded.');
+        $markAsDone = $request->input('markAsDone', []);
+        foreach ($markAsDone as $documentType => $checked) {
+            // Skip if a file was already uploaded for this documentType
+            if (isset($uploadedFiles[$documentType])) {
+                continue;
+            }
+
+            // Check if the document already exists and delete it
+            $existingDocument = UploadedDocument::where('coop_id', $cooperative->coop_id)
+                ->where('document_type', $documentType)
+                ->first();
+
+            if ($existingDocument) {
+                Storage::disk('public')->delete($existingDocument->file_path);
+                $existingDocument->delete();
+                $successMessages[] = "$documentType marked as done and replaced with a blank PDF.";
+            }
+
+            // Create a blank PDF (you can customize it more if you want)
+            $blankPdfContent = file_get_contents(public_path('blank.pdf')); // Place a template blank.pdf in public/
+            $fileName = time() . "_blank_$documentType.pdf";
+            $filePath = "documents/$fileName";
+
+            Storage::disk('public')->put($filePath, $blankPdfContent);
+
+            // Save to DB
+            UploadedDocument::create([
+                'coop_id' => $cooperative->coop_id,
+                'document_type' => $documentType,
+                'file_name' => "hardcopy_$documentType.pdf",
+                'file_path' => $filePath,
+                'status' => 'Approved',
+                'remarks' => 'Hardcopy',
+            ]);
+
+            $successMessages[] = "$documentType marked as done (blank PDF uploaded).";
         }
 
+        $submittedMarkAsDone = array_keys($markAsDone);
+
+        $allDocumentTypes = [
+            'Financial Statement',
+            'Resolution for Voting delegates',
+            'Deposit Slip for Registration Fee',
+            'Deposit Slip for CETF Remittance',
+            'CETF Undertaking',
+            'Certificate of Candidacy',
+            'CETF Utilization invoice',
+        ];
+
+        foreach ($allDocumentTypes as $documentType) {
+            if (!in_array($documentType, $submittedMarkAsDone)) {
+                $existingDocument = UploadedDocument::where('coop_id', $cooperative->coop_id)
+                    ->where('document_type', $documentType)
+                    ->where('remarks', 'Hardcopy')
+                    ->where('status', 'Approved')
+                    ->first();
+
+                if ($existingDocument) {
+                    // Change status to Pending or Rejected and update remarks
+                    $existingDocument->remarks = null;
+                    $existingDocument->status = 'Pending'; // or 'Rejected'
+                    $existingDocument->save();
+
+                    $successMessages[] = "$documentType hardcopy remark removed.";
+                }
+            }
+        }
+
+        // Fetch documents and update session after changing status
+        $documents = UploadedDocument::where('coop_id', $cooperative->coop_id)->get();
+        $documentsWithHardcopy = [];
+
+        foreach ($documents as $document) {
+            // Check for hardcopy and approved status to mark checkbox as checked
+            if ($document->remarks === 'Hardcopy' && $document->status === 'Approved') {
+                $documentsWithHardcopy[$document->document_type] = true;
+            } else {
+                $documentsWithHardcopy[$document->document_type] = false;
+            }
+        }
+
+        // Store the updated data in session immediately after status update
+        session()->put('documentsWithHardcopy', $documentsWithHardcopy);
+
+        // Handle uploaded files
         foreach ($uploadedFiles as $documentType => $file) {
             if (!$file) {
                 continue; // Skip if file is null
@@ -574,6 +648,7 @@ class SupportController extends Controller
 
         return redirect()->route('support.cooperatives.edit', $cooperative->coop_id);
     }
+
 
     public function resendEmail3($userId)
     {

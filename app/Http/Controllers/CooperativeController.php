@@ -540,15 +540,7 @@ class CooperativeController extends Controller
     public function storeDocuments2(Request $request, $id)
     {
         $request->validate([
-            'documents.Financial Statement' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv',
-            'documents.Resolution for Voting Delegates' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv',
-            'documents.Deposit Slip for Registration Fee' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv',
-            'documents.Deposit Slip for CETF Remittance' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv',
-            'documents.CETF Undertaking' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv',
-            'documents.Certificate of Candidacy' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv',
-            'documents.CETF Utilization Invoice' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv',
-
-
+            // validation rules
         ]);
 
         // Find the cooperative by its ID
@@ -616,32 +608,33 @@ class CooperativeController extends Controller
                     ->first();
 
                 if ($existingDocument) {
+                    // Change status to Pending or Rejected and update remarks
                     $existingDocument->remarks = null;
-                    $existingDocument->status = 'Pending';
+                    $existingDocument->status = 'Pending'; // or 'Rejected'
                     $existingDocument->save();
 
                     $successMessages[] = "$documentType hardcopy remark removed.";
                 }
             }
         }
-
+        
+        // Fetch documents and update session after changing status
         $documents = UploadedDocument::where('coop_id', $cooperative->coop_id)->get();
         $documentsWithHardcopy = [];
 
         foreach ($documents as $document) {
+            // Check for hardcopy and approved status to mark checkbox as checked
             if ($document->remarks === 'Hardcopy' && $document->status === 'Approved') {
-                $documentsWithHardcopy[$document->document_type] = true; // Only mark as true if BOTH conditions are met
+                $documentsWithHardcopy[$document->document_type] = true;
             } else {
                 $documentsWithHardcopy[$document->document_type] = false;
             }
         }
 
+        // Store the updated data in session immediately after status update
         session()->put('documentsWithHardcopy', $documentsWithHardcopy);
 
-
-
-
-
+        // Handle uploaded files
         foreach ($uploadedFiles as $documentType => $file) {
             if (!$file) {
                 continue; // Skip if file is null
@@ -680,4 +673,6 @@ class CooperativeController extends Controller
 
         return redirect()->route('cooperatives.edit', $cooperative->coop_id);
     }
+
+
 }

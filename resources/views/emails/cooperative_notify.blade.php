@@ -21,7 +21,6 @@
             <p><strong>2025 MASS-SPECC CO-OPVENTION REGISTRATION  NOTICE(Edcom Forum, Sectoral Congress, 55th Co-op Leaders' Congress, and 51st General Assembly)</strong></p>
 
             <p>Co-operative greetings from MASS-SPECC!</p>
-
             <p>Thank you for taking the time to register for our upcoming CO-OPvention. We're excited to have you with us. Please see below the latest update on your registration.</p>
 
             <p><strong>REGISTRATION STATUS</strong></p>
@@ -38,7 +37,6 @@
                     {{ strtoupper('Not Registered') }}
                 @endif
             </p>
-
             <p><strong>Membership Status:</strong>
                 @if ($gaRegistration)
                     {{ strtoupper($gaRegistration->membership_status) }}
@@ -46,13 +44,10 @@
                     {{ strtoupper('Not Available') }}
                 @endif
             </p>
-
             <p><strong>No. of Allowed Voting Delegates:</strong> {{ $coop->no_of_entitled_votes }}</p>
-
             <p><strong>No. of Registered Participants:</strong>
                 {{ \App\Models\Participant::where('coop_id', $coop->coop_id)->count() }}
             </p>
-
             <p><strong>No. of Registered Voting Delegates:</strong>
                 {{ \App\Models\Participant::where('coop_id', $coop->coop_id)->where('delegate_type', 'Voting')->count() }}
             </p>
@@ -91,12 +86,8 @@
             </ol>
 
             <p>Helpful Reminders:</p>
-
             <p>✅ To view your co-op's list of participants, click <strong>Participant → Participants</strong> on the left side of the screen.</p>
             <p>✅ To edit or remove a participant’s profile, simply click the <strong>Edit/Delete</strong> button in the action list under the identified participant. Kindly take note that editing of participant details is only allowed until May 17, 2025.</p>
-
-
-
 
             <p>If you need any assistance, feel free to reach out to our Member Support Unit at <strong>0917-133-5218.</strong> We're here to help!</p>
 

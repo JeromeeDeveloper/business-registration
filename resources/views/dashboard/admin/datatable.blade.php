@@ -427,9 +427,9 @@
                                             <thead>
                                                 <tr>
                                                     <th>Cooperative Name</th>
-                                                    <th>Cooperative Address</th>
-                                                    <th>Cooperative Region</th>
-                                                    <th>Cooperative Email</th>
+                                                    <th>Registered Participant</th>
+                                                    <th>Registered Voting Particpants</th>
+                                                    <th>Total Allowable Votes</th>
                                                     <th>Registration Status</th>
                                                     <th>Membership Status</th>
                                                     <th style="width: 10%">Action</th>
@@ -439,11 +439,10 @@
                                                 @forelse ($cooperatives as $coop)
                                                     <tr>
                                                         <td>{{ $coop->name }}</td>
-                                                        <td>{{ $coop->address }}</td>
-                                                        <td>{{ $coop->region }}</td>
+                                                        <td>{{ $coop->participants_count }}</td>
+                                                        <td>{{ $coop->registered_voting_participants }}</td>
+                                                        <td>{{ $coop->votes ?? 0 }}</td>
                                                         <td>{{ $coop->email }}</td>
-
-
                                                         <!-- Registration Status Dropdown -->
                                                         <td class="p-2 align-middle text-center">
                                                             <div class="form-control text-center fw-semibold text-primary fs-6" style="min-width: 200px;">

@@ -425,39 +425,49 @@
                             <div class="col-md-12">
                                 <div class="card doc">
                                     <form action="{{ route('cooperatives.storeDocuments3', $coop->coop_id) }}"
-                                        method="POST" enctype="multipart/form-data" class=" p-1">
+                                        method="POST" enctype="multipart/form-data">
                                         @csrf
                                         <input type="hidden" name="form_key" value="form1">
-                                        <h3 class="mb-4 text-center text-primary">Upload Documents for
+                                        <h3 class="mb-4 text-center text-primary">Upload & Edit Documents for
                                             {{ $coop->name }}</h3>
+
                                         <div class="row">
                                             <!-- Financial Statement (Left Column) -->
                                             <div class="col-md-6 mb-4">
                                                 <label for="documents[Financial Statement]" class="form-label">Audited
-                                                    Financial
-                                                    Statement</label>
+                                                    Financial Statement</label>
                                                 <input type="file" name="documents[Financial Statement]"
+                                                    id="financialStatementFile"
                                                     accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv"
                                                     class="form-control mb-2">
+
                                                 @if ($coop->uploadedDocuments()->where('document_type', 'Financial Statement')->exists())
                                                     <p class="text-info">Current File:
                                                         {{ $coop->uploadedDocuments()->where('document_type', 'Financial Statement')->first()->file_name }}
                                                     </p>
                                                     <small class="form-text text-muted">You can upload a new file or
-                                                        keep the existing
-                                                        one.</small>
+                                                        keep the existing one.</small>
                                                 @endif
                                                 <small class="form-text text-muted">Accepted formats: jpg, jpeg, png,
-                                                    pdf, xls, xlsx, csv (no file size limit).</small>
+                                                    pdf (no file size limit).</small>
 
-
+                                                <!-- Checklist for Marking as Done -->
+                                                <div class="form-check mt-2">
+                                                    <input class="form-check-input" type="checkbox"
+                                                        id="markAsDoneFinancial"
+                                                        name="markAsDone[Financial Statement]"
+                                                        @if (\App\Models\UploadedDocument::where('coop_id', $coop->coop_id)->where('document_type', 'Financial Statement')->where('remarks', 'Hardcopy')->where('status', 'Approved')->exists()) checked @endif>
+                                                    <label class="form-check-label" for="markAsDoneFinancial">
+                                                        Hardcopy Document Submitted
+                                                    </label>
+                                                </div>
                                             </div>
+
 
                                             <!-- Resolution for Voting Delegates (Right Column) -->
                                             <div class="col-md-6 mb-4">
                                                 <label for="documents[Resolution for Voting Delegates]"
-                                                    class="form-label">Resolution
-                                                    for Voting Delegates</label>
+                                                    class="form-label">Resolution for Voting Delegates</label>
                                                 <input type="file"
                                                     name="documents[Resolution for Voting Delegates]"
                                                     accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv"
@@ -467,11 +477,29 @@
                                                         {{ $coop->uploadedDocuments()->where('document_type', 'Resolution for Voting Delegates')->first()->file_name }}
                                                     </p>
                                                     <small class="form-text text-muted">You can upload a new file or
-                                                        keep the existing
-                                                        one.</small>
+                                                        keep the existing one.</small>
                                                 @endif
                                                 <small class="form-text text-muted">Accepted formats: jpg, jpeg, png,
-                                                    pdf, xls, xlsx, csv (no file size limit).</small>
+                                                    pdf (no file size limit).</small>
+
+                                                <!-- Checklist for Marking as Done -->
+                                                <div class="form-check mt-2">
+                                                    <input class="form-check-input" type="checkbox"
+                                                        id="markAsDoneResolution"
+                                                        name="markAsDone[Resolution for Voting delegates]"
+                                                        @if (\App\Models\UploadedDocument::where('coop_id', $coop->coop_id)
+                                                        ->where('document_type', 'Resolution for Voting delegates')
+                                                        ->where('remarks', 'Hardcopy')
+                                                        ->where('status', 'Approved')
+                                                        ->exists())
+                                                        checked
+                                                    @endif>
+
+                                                    <label class="form-check-label" for="markAsDoneResolution">
+                                                        Hardcopy Document Submitted
+                                                    </label>
+                                                </div>
+
 
 
                                             </div>
@@ -496,7 +524,24 @@
                                                         one.</small>
                                                 @endif
                                                 <small class="form-text text-muted">Accepted formats: jpg, jpeg, png,
-                                                    pdf, xls, xlsx, csv (no file size limit).</small>
+                                                    pdf (no file size
+                                                    limit).</small>
+                                                <div class="form-check mt-2">
+                                                    <input class="form-check-input" type="checkbox"
+                                                        id="markAsDoneDepositSlip"
+                                                        name="markAsDone[Deposit Slip for Registration Fee]"
+                                                        @if (\App\Models\UploadedDocument::where('coop_id', $coop->coop_id)
+                                                        ->where('document_type', 'Deposit Slip for Registration Fee')
+                                                        ->where('remarks', 'Hardcopy')
+                                                        ->where('status', 'Approved')
+                                                        ->exists())
+                                                        checked
+                                                    @endif>
+
+                                                    <label class="form-check-label" for="markAsDoneDepositSlip">
+                                                        Hardcopy Document Submitted
+                                                    </label>
+                                                </div>
 
 
                                             </div>
@@ -519,8 +564,24 @@
                                                         one.</small>
                                                 @endif
                                                 <small class="form-text text-muted">Accepted formats: jpg, jpeg, png,
-                                                    pdf, xls, xlsx, csv (no file size limit).</small>
+                                                    pdf (no file size
+                                                    limit).</small>
+                                                <div class="form-check mt-2">
+                                                    <input class="form-check-input" type="checkbox"
+                                                        id="markAsDoneCETFRemittance"
+                                                        name="markAsDone[Deposit Slip for CETF Remittance]"
 
+                                                        @if (\App\Models\UploadedDocument::where('coop_id', $coop->coop_id)
+                                                        ->where('document_type', 'Deposit Slip for CETF Remittance')
+                                                        ->where('remarks', 'Hardcopy')
+                                                        ->where('status', 'Approved')
+                                                        ->exists())
+                                                        checked
+                                                    @endif>
+                                                    <label class="form-check-label" for="markAsDoneCETFRemittance">
+                                                        Hardcopy Document Submitted
+                                                    </label>
+                                                </div>
 
                                             </div>
                                         </div>
@@ -542,7 +603,24 @@
                                                         one.</small>
                                                 @endif
                                                 <small class="form-text text-muted">Accepted formats: jpg, jpeg, png,
-                                                    pdf, xls, xlsx, csv (no file size limit).</small>
+                                                    pdf (no file size
+                                                    limit).</small>
+                                                <div class="form-check mt-2">
+                                                    <input class="form-check-input" type="checkbox"
+                                                        id="markAsDoneCETFUndertaking"
+                                                        name="markAsDone[CETF Undertaking]"
+
+                                                        @if (\App\Models\UploadedDocument::where('coop_id', $coop->coop_id)
+                                                        ->where('document_type', 'CETF Undertaking')
+                                                        ->where('remarks', 'Hardcopy')
+                                                        ->where('status', 'Approved')
+                                                        ->exists())
+                                                        checked
+                                                    @endif>
+                                                    <label class="form-check-label" for="markAsDoneCETFUndertaking">
+                                                        Hardcopy Document Submitted
+                                                    </label>
+                                                </div>
 
 
                                             </div>
@@ -564,8 +642,24 @@
                                                         one.</small>
                                                 @endif
                                                 <small class="form-text text-muted">Accepted formats: jpg, jpeg, png,
-                                                    pdf, xls, xlsx, csv (no file size limit).</small>
+                                                    pdf (no file size
+                                                    limit).</small>
+                                                <div class="form-check mt-2">
+                                                    <input class="form-check-input" type="checkbox"
+                                                        id="markAsDoneCandidacy"
+                                                        name="markAsDone[Certificate of Candidacy]"
 
+                                                        @if (\App\Models\UploadedDocument::where('coop_id', $coop->coop_id)
+                                                        ->where('document_type', 'Certificate of Candidacy')
+                                                        ->where('remarks', 'Hardcopy')
+                                                        ->where('status', 'Approved')
+                                                        ->exists())
+                                                        checked
+                                                    @endif>
+                                                    <label class="form-check-label" for="markAsDoneCandidacy">
+                                                        Hardcopy Document Submitted
+                                                    </label>
+                                                </div>
 
                                             </div>
                                         </div>
@@ -573,30 +667,46 @@
                                         <div class="row">
                                             <!-- CETF Utilization Invoice (Left Column) -->
                                             <div class="col-md-6 mb-4">
-                                                <label for="documents[CETF Utilization Invoice]"
+                                                <label for="documents[CETF Utilization invoice]"
                                                     class="form-label">CETF Utilization
                                                     Invoice</label>
-                                                <input type="file" name="documents[CETF Utilization Invoice]"
+                                                <input type="file" name="documents[CETF Utilization invoice]"
                                                     accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv"
                                                     class="form-control mb-2">
-                                                @if ($coop->uploadedDocuments()->where('document_type', 'CETF Utilization Invoice')->exists())
+                                                @if ($coop->uploadedDocuments()->where('document_type', 'CETF Utilization invoice')->exists())
                                                     <p class="text-info">Current File:
-                                                        {{ $coop->uploadedDocuments()->where('document_type', 'CETF Utilization Invoice')->first()->file_name }}
+                                                        {{ $coop->uploadedDocuments()->where('document_type', 'CETF Utilization invoice')->first()->file_name }}
                                                     </p>
                                                     <small class="form-text text-muted">You can upload a new file or
                                                         keep the existing
                                                         one.</small>
                                                 @endif
                                                 <small class="form-text text-muted">Accepted formats: jpg, jpeg, png,
-                                                    pdf, xls, xlsx, csv (no file size limit).</small>
+                                                    pdf (no file size
+                                                    limit).</small>
+                                                <div class="form-check mt-2">
+                                                    <input class="form-check-input" type="checkbox"
+                                                        id="markAsDoneCETFUtilization"
+                                                        name="markAsDone[CETF Utilization invoice]"
 
+                                                        @if (\App\Models\UploadedDocument::where('coop_id', $coop->coop_id)
+                                                        ->where('document_type', 'CETF Utilization invoice')
+                                                        ->where('remarks', 'Hardcopy')
+                                                        ->where('status', 'Approved')
+                                                        ->exists())
+                                                        checked
+                                                    @endif>
+                                                    <label class="form-check-label" for="markAsDoneCETFUtilization">
+                                                        Hardcopy Document Submitted
+                                                    </label>
+                                                </div>
 
                                             </div>
                                         </div>
 
                                         <!-- Submit Button -->
 
-                                        <div class="d-flex justify-content-start mt-4">
+                                        <div class="card-action">
                                             <button type="submit" class="btn btn-primary btn-round me-2">Upload
                                                 Documents</button>
                                         </div>

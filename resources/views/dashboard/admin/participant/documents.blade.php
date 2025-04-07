@@ -278,7 +278,7 @@
                                         <td>
                                             <input type="text" name="remarks" class="form-control form-control-sm"
                                                    placeholder="Enter remarks (optional)" value="{{ $document->remarks ?? '' }}"
-                                                   @if($document->remarks === 'Hardcopy') readonly @endif>
+                                                   @if($document->status === 'Approved' && $document->remarks === 'Hardcopy') readonly @endif>
                                         </td>
 
                                         <td>

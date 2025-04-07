@@ -657,7 +657,7 @@ class DashboardController extends Controller
     {
         $search = $request->input('search');
         $filterNoGA = $request->input('filter_no_ga');
-        $limit = $request->input('limit', 10); // Default to 5 if no 'limit' is provided
+        $limit = $request->input('limit', 5); // Default to 5 if no 'limit' is provided
 
         $emailsall = Cooperative::pluck('email')->toArray();
         $cooperatives = Cooperative::query();
@@ -687,13 +687,51 @@ class DashboardController extends Controller
         }
 
         // Apply pagination with the dynamic limit
-        $cooperatives = $cooperatives->orderBy('created_at', 'desc')
-            ->paginate($limit)
-            ->appends($request->query()); // Append all query parameters
+        $cooperatives = $cooperatives->withCount(['participants',
+        'participants as registered_voting_participants' => function ($query) {
+            $query->where('delegate_type', 'Voting');
+        }])
+->orderBy('created_at', 'desc')
+->paginate($limit)
+->appends($request->query());
 
-        $emails = $cooperatives->pluck('email')->filter()->implode(',');
+foreach ($cooperatives as $coop) {
+    $shareCapital = $coop->share_capital_balance; // Assuming 'share_capital_balance' is an attribute
+    $votes = 0;
+    $remaining = $shareCapital;
 
-        return view('dashboard.admin.datatable', compact('cooperatives', 'search', 'emails', 'emailsall', 'filterNoGA'));
+    if (is_numeric($shareCapital) && $shareCapital > 0) {
+        // Calculate based on ₱100,000 blocks
+        if ($remaining >= 100000) {
+            $votes += floor($remaining / 100000); // Every ₱100,000 gives 1 vote
+        }
+
+        $remaining = $remaining % 100000; // Remaining after full ₱100,000 blocks
+
+        // Handle ₱75,000, ₱50,000, and ₱25,000 blocks for additional votes
+        while ($remaining >= 25000) {
+            if ($remaining >= 75000) {
+                $votes += 3; // ₱75,000 → +3 votes
+                $remaining -= 75000;
+            } elseif ($remaining >= 50000) {
+                $votes += 2; // ₱50,000 → +2 votes
+                $remaining -= 50000;
+            } elseif ($remaining >= 25000) {
+                $votes += 1; // ₱25,000 → +1 vote
+                $remaining -= 25000;
+            }
+        }
+
+        // Max votes = 5
+        $votes = min($votes, 5);
+    }
+
+    $coop->votes = $votes; // Store the calculated votes in the cooperative object
+}
+
+    $emails = $cooperatives->pluck('email')->filter()->implode(',');
+
+    return view('dashboard.admin.datatable', compact('cooperatives', 'search', 'emails', 'emailsall', 'filterNoGA'));
     }
 
 
