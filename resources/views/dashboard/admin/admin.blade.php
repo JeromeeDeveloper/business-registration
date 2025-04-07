@@ -483,33 +483,33 @@
 
                                         <!-- Table to Preview Filtered Data -->
                                         <h5 class="mt-3">Preview</h5>
-                                        <div class="table-responsive">
-                                            <table class="table table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Cooperative Name</th>
-                                                        <th>Coop ID</th>
-                                                        <th>Region</th>
-                                                        <th>No. of Participants</th>
-                                                        <th>GA Registration Status</th>
-                                                        <th>GA Membership Status</th>
-                                                        <th>Financial Statement</th>
-                                                        <th>Resolution for Voting Delegates</th>
-                                                        <th>Deposit Slip for Registration Fee</th>
-                                                        <th>Deposit Slip for CETF Remittance</th>
-                                                        <th>CETF Undertaking</th>
-                                                        <th>Certificate of Candidacy</th>
-                                                        <th>CETF Utilization Invoice</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="previewTableBody">
-                                                    <tr>
-                                                        <td colspan="13" class="text-center">No data available</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+<div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Cooperative Name</th>
+                <th>Coop ID</th>
+                <th>Region</th>
+                <th>No. of Participants</th>
+                <th>GA Registration Status</th>
+                <th>GA Membership Status</th>
+                <th>Financial Statement</th>
+                <th>Resolution for Voting Delegates</th>
+                <th>Deposit Slip for Registration Fee</th>
+                <th>Deposit Slip for CETF Remittance</th>
+                <th>CETF Undertaking</th>
+                <th>Certificate of Candidacy</th>
+                <th>CETF Utilization Invoice</th>
+            </tr>
+        </thead>
+        <tbody id="previewTableBody">
+            <tr>
+                <td colspan="13" class="text-center">No data available</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
-                                        </div>
                                     </div>
 
                                     <div class="modal-footer">
