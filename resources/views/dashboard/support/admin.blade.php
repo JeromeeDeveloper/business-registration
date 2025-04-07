@@ -533,13 +533,13 @@
                         <!-- Cooperative -->
                         <div class="col">
                             <div class="card card-stats card-round shadow-sm h-100">
-                                <div class="card-body d-flex align-items-center">
+                                <div class="card-body d-flex flex-column align-items-center">
                                     <div class="col-icon me-3">
                                         <div class="icon-big text-primary text-center">
                                             <i class="fas fa-building"></i>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div class="text-center">
                                         <p class="card-category mb-1">Cooperatives</p>
                                         <h4 class="card-title mb-0">{{ number_format($totalCooperative) }}</h4>
                                     </div>
@@ -549,13 +549,13 @@
 
                         <div class="col-md-2">
                             <div class="card card-stats card-round shadow-sm h-100">
-                                <div class="card-body d-flex align-items-center">
+                                <div class="card-body d-flex flex-column align-items-center">
                                     <div class="col-icon me-3">
                                         <div class="icon-big text-primary text-center">
                                             <i class="fas fa-building"></i>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div class="text-center">
                                         <p class="card-category mb-1">Registered Coops</p>
                                         <h4 class="card-title mb-0">{{ number_format($registeredCoops) }}</h4>
                                     </div>
@@ -565,13 +565,13 @@
 
                         <div class="col-md-2">
                             <div class="card card-stats card-round shadow-sm h-100">
-                                <div class="card-body d-flex align-items-center">
+                                <div class="card-body d-flex flex-column align-items-center">
                                     <div class="col-icon me-3">
                                         <div class="icon-big text-success text-center">
                                             <i class="fas fa-building"></i>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div class="text-center">
                                         <p class="card-category mb-1">Registered MIGS Coops</p>
                                         <h4 class="card-title mb-0">{{ number_format($registeredMigsCoops) }}</h4>
                                     </div>
@@ -582,13 +582,13 @@
                         <!-- Registered Non-Migs Coops -->
                         <div class="col-md-2">
                             <div class="card card-stats card-round shadow-sm h-100">
-                                <div class="card-body d-flex align-items-center">
+                                <div class="card-body d-flex flex-column align-items-center">
                                     <div class="col-icon me-3">
                                         <div class="icon-big text-danger text-center">
                                             <i class="fas fa-building"></i>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div class="text-center">
                                         <p class="card-category mb-1">Registered NON-MIGS Coops</p>
                                         <h4 class="card-title mb-0">{{ number_format($registeredNonMigsCoops) }}</h4>
                                     </div>
@@ -599,13 +599,13 @@
                         <!-- Fully Registered Participants -->
                         <div class="col-md-2">
                             <div class="card card-stats card-round shadow-sm h-100">
-                                <div class="card-body d-flex align-items-center">
+                                <div class="card-body d-flex flex-column align-items-center">
                                     <div class="col-icon me-3">
                                         <div class="icon-big text-success text-center">
                                             <i class="fas fa-check-circle"></i>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div class="text-center">
                                         <p class="card-category mb-1">Fully Registered Coops</p>
                                         <h4 class="card-title mb-0">{{ number_format($fullyRegisteredCoops) }}</h4>
                                     </div>
@@ -616,13 +616,13 @@
                         <!-- Partially Registered Coops -->
                         <div class="col">
                             <div class="card card-stats card-round shadow-sm h-100">
-                                <div class="card-body d-flex align-items-center">
+                                <div class="card-body d-flex flex-column align-items-center">
                                     <div class="col-icon me-3">
                                         <div class="icon-big text-warning text-center">
                                             <i class="fas fa-exclamation-circle"></i>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div class="text-center">
                                         <p class="card-category mb-1">Partially Registered Coops</p>
                                         <h4 class="card-title mb-0">{{ number_format($partiallyRegisteredCoops) }}
                                         </h4>
@@ -633,13 +633,13 @@
 
                         <div class="col-md-2">
                             <div class="card card-stats card-round shadow-sm h-100">
-                                <div class="card-body d-flex align-items-center">
+                                <div class="card-body d-flex flex-column align-items-center">
                                     <div class="col-icon me-3">
                                         <div class="icon-big text-secondary text-center">
                                             <i class="fas fa-users"></i>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div class="text-center">
                                         <p class="card-category mb-1">Registered Participants</p>
                                         <h4 class="card-title mb-0">{{ number_format($registeredParticipants) }}</h4>
                                     </div>
@@ -650,13 +650,13 @@
                         <!-- Total Migs Participants -->
                         <div class="col">
                             <div class="card card-stats card-round shadow-sm h-100">
-                                <div class="card-body d-flex align-items-center">
+                                <div class="card-body d-flex flex-column align-items-center">
                                     <div class="col-icon me-3">
                                         <div class="icon-big text-danger text-center">
                                             <i class="fas fa-id-card"></i>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div class="text-center">
                                         <p class="card-category mb-1">Registered MIGS Participants</p>
                                         <h4 class="card-title mb-0">{{ number_format($totalMigsParticipants ?? 0) }}
                                         </h4>
@@ -668,13 +668,13 @@
                         <!-- Total Non-Migs Participants -->
                         <div class="col">
                             <div class="card card-stats card-round shadow-sm h-100">
-                                <div class="card-body d-flex align-items-center">
+                                <div class="card-body d-flex flex-column align-items-center">
                                     <div class="col-icon me-3">
                                         <div class="icon-big text-secondary text-center">
                                             <i class="fas fa-user-times"></i>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div class="text-center">
                                         <p class="card-category mb-1">Registered NON-MIGS Participants</p>
                                         <h4 class="card-title mb-0">
                                             {{ number_format($totalNonMigsParticipants ?? 0) }}</h4>
@@ -686,13 +686,13 @@
                         <!-- Participants -->
                         <div class="col">
                             <div class="card card-stats card-round shadow-sm h-100">
-                                <div class="card-body d-flex align-items-center">
+                                <div class="card-body d-flex flex-column align-items-center">
                                     <div class="col-icon me-3">
                                         <div class="icon-big text-success text-center">
                                             <i class="fas fa-hand-paper"></i>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div class="text-center">
                                         <p class="card-category mb-1">Total Voting Delegates</p>
                                         <h4 class="card-title mb-0">{{ number_format($totalVoting) }}</h4>
                                     </div>
@@ -714,7 +714,7 @@
                                         <!-- Total Coop Attended -->
                                         <div class="col-md-3 mb-4">
                                             <div class="card card-stats card-round shadow-sm h-100">
-                                                <div class="card-body d-flex align-items-center p-3">
+                                                <div class="card-body d-flex flex-column align-items-center text-center p-3">
                                                     <div class="col-icon me-3">
                                                         <div class="icon-big text-info text-center rounded-circle bg-light p-3">
                                                             <i class="fas fa-users fa-lg"></i> <!-- Total Coop Icon -->
@@ -731,7 +731,7 @@
                                         <!-- Total MIGS Coop Attended -->
                                         <div class="col-md-3 mb-4">
                                             <div class="card card-stats card-round shadow-sm h-100">
-                                                <div class="card-body d-flex align-items-center p-3">
+                                                <div class="card-body d-flex flex-column align-items-center text-center p-3">
                                                     <div class="col-icon me-3">
                                                         <div class="icon-big text-success text-center rounded-circle bg-light p-3">
                                                             <i class="fas fa-user-friends fa-lg"></i> <!-- MIGS Coop Icon -->
@@ -748,7 +748,7 @@
                                         <!-- Total NON-MIGS Coop Attended -->
                                         <div class="col-md-3 mb-4">
                                             <div class="card card-stats card-round shadow-sm h-100">
-                                                <div class="card-body d-flex align-items-center p-3">
+                                                <div class="card-body d-flex flex-column align-items-center text-center p-3">
                                                     <div class="col-icon me-3">
                                                         <div class="icon-big text-danger text-center rounded-circle bg-light p-3">
                                                             <i class="fas fa-user-times fa-lg"></i> <!-- NON-MIGS Coop Icon -->
@@ -765,7 +765,7 @@
                                         <!-- Total Attended Voting Participants -->
                                         <div class="col-md-3 mb-4">
                                             <div class="card card-stats card-round shadow-sm h-100">
-                                                <div class="card-body d-flex align-items-center p-3">
+                                                <div class="card-body d-flex flex-column align-items-center text-center p-3">
                                                     <div class="col-icon me-3">
                                                         <div class="icon-big text-primary text-center rounded-circle bg-light p-3">
                                                             <i class="fas fa-check-circle fa-lg"></i> <!-- Voting Icon -->
@@ -792,7 +792,7 @@
                                         @foreach($events as $event)
                                             <div class="col-md-4 mb-4">
                                                 <div class="card card-stats card-round shadow-sm h-100">
-                                                    <div class="card-body d-flex align-items-center p-3">
+                                                    <div class="card-body d-flex flex-column align-items-center text-center p-3">
                                                         <div class="col-icon me-3">
                                                             <div class="icon-big text-primary text-center rounded-circle bg-light p-3">
                                                                 <i class="fas fa-calendar-check fa-lg"></i> <!-- Event Icon -->

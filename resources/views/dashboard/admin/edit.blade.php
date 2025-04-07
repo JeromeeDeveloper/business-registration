@@ -809,10 +809,6 @@
                                                                 Not Registered
                                                             </label>
                                                         </div>
-
-
-
-
                                                     </div>
                                                 </div>
                                             </div>

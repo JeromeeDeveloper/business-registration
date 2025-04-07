@@ -374,12 +374,19 @@
                                                 </a>
 
                                                 <div class="d-flex gap-3">
-                                                    <a href="{{ route('admin.reports.coop_status_list') }}" class="list-group-item list-group-item-action py-3 fw-semibold" data-report-type="coop_status">
-                                                        <i class="fas fa-clipboard-list me-2"></i> List of Coop Registration Status
+                                                    <a href="{{ route('admin.reports.coop_status_list') }}"
+                                                        class="list-group-item list-group-item-action py-3 fw-semibold"
+                                                        data-report-type="coop_status">
+                                                        <i class="fas fa-clipboard-list me-2"></i> List of Coop
+                                                        Registration Status
                                                     </a>
 
-                                                    <button type="button" class="list-group-item list-group-item-action py-3 fw-semibold" id="filterRegionBtn" data-bs-toggle="modal" data-bs-target="#regionFilterModal">
-                                                        <i class="fas fa-filter me-2"></i> Filter List of Coop Registration Status
+                                                    <button type="button"
+                                                        class="list-group-item list-group-item-action py-3 fw-semibold"
+                                                        id="filterRegionBtn" data-bs-toggle="modal"
+                                                        data-bs-target="#regionFilterModal">
+                                                        <i class="fas fa-filter me-2"></i> Filter List of Coop
+                                                        Registration Status
                                                     </button>
 
                                                 </div>
@@ -425,12 +432,14 @@
 
                         </div>
 
-                        <div class="modal fade" id="regionFilterModal" tabindex="-1" aria-labelledby="regionFilterLabel" aria-hidden="true">
+                        <div class="modal fade" id="regionFilterModal" tabindex="-1"
+                            aria-labelledby="regionFilterLabel" aria-hidden="true">
                             <div class="modal-dialog modal-lg"> <!-- Increased size for better preview -->
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="regionFilterLabel">Filter Cooperatives</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
                                         <label for="regionSelect">Select Region:</label>
@@ -483,39 +492,42 @@
 
                                         <!-- Table to Preview Filtered Data -->
                                         <h5 class="mt-3">Preview</h5>
-<div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Cooperative Name</th>
-                <th>Coop ID</th>
-                <th>Region</th>
-                <th>No. of Participants</th>
-                <th>GA Registration Status</th>
-                <th>GA Membership Status</th>
-                <th>Financial Statement</th>
-                <th>Resolution for Voting Delegates</th>
-                <th>Deposit Slip for Registration Fee</th>
-                <th>Deposit Slip for CETF Remittance</th>
-                <th>CETF Undertaking</th>
-                <th>Certificate of Candidacy</th>
-                <th>CETF Utilization Invoice</th>
-            </tr>
-        </thead>
-        <tbody id="previewTableBody">
-            <tr>
-                <td colspan="13" class="text-center">No data available</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+                                        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Cooperative Name</th>
+                                                        <th>Coop ID</th>
+                                                        <th>Region</th>
+                                                        <th>No. of Participants</th>
+                                                        <th>GA Registration Status</th>
+                                                        <th>GA Membership Status</th>
+                                                        <th>Financial Statement</th>
+                                                        <th>Resolution for Voting Delegates</th>
+                                                        <th>Deposit Slip for Registration Fee</th>
+                                                        <th>Deposit Slip for CETF Remittance</th>
+                                                        <th>CETF Undertaking</th>
+                                                        <th>Certificate of Candidacy</th>
+                                                        <th>CETF Utilization Invoice</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="previewTableBody">
+                                                    <tr>
+                                                        <td colspan="13" class="text-center">No data available</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
 
                                     </div>
 
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        <button type="button" id="previewData" class="btn btn-info">Preview Data</button>
-                                        <button type="button" id="applyRegionFilter" class="btn btn-primary">Generate Excel</button>
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <button type="button" id="previewData" class="btn btn-info">Preview
+                                            Data</button>
+                                        <button type="button" id="applyRegionFilter"
+                                            class="btn btn-primary">Generate Excel</button>
                                     </div>
                                 </div>
                             </div>
@@ -528,13 +540,13 @@
                         <!-- Cooperative -->
                         <div class="col">
                             <div class="card card-stats card-round shadow-sm h-100">
-                                <div class="card-body d-flex align-items-center">
+                                 <div class="card-body d-flex flex-column align-items-center">
                                     <div class="col-icon me-3">
                                         <div class="icon-big text-primary text-center">
                                             <i class="fas fa-building"></i>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div class="text-center">
                                         <p class="card-category mb-1">Cooperatives</p>
                                         <h4 class="card-title mb-0">{{ number_format($totalCooperative) }}</h4>
                                     </div>
@@ -544,13 +556,13 @@
 
                         <div class="col-md-2">
                             <div class="card card-stats card-round shadow-sm h-100">
-                                <div class="card-body d-flex align-items-center">
+                                 <div class="card-body d-flex flex-column align-items-center">
                                     <div class="col-icon me-3">
                                         <div class="icon-big text-primary text-center">
                                             <i class="fas fa-building"></i>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div class="text-center">
                                         <p class="card-category mb-1">Registered Coops</p>
                                         <h4 class="card-title mb-0">{{ number_format($registeredCoops) }}</h4>
                                     </div>
@@ -560,13 +572,13 @@
 
                         <div class="col-md-2">
                             <div class="card card-stats card-round shadow-sm h-100">
-                                <div class="card-body d-flex align-items-center">
+                                 <div class="card-body d-flex flex-column align-items-center">
                                     <div class="col-icon me-3">
                                         <div class="icon-big text-success text-center">
                                             <i class="fas fa-building"></i>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div class="text-center">
                                         <p class="card-category mb-1">Registered MIGS Coops</p>
                                         <h4 class="card-title mb-0">{{ number_format($registeredMigsCoops) }}</h4>
                                     </div>
@@ -577,13 +589,13 @@
                         <!-- Registered Non-Migs Coops -->
                         <div class="col-md-2">
                             <div class="card card-stats card-round shadow-sm h-100">
-                                <div class="card-body d-flex align-items-center">
+                                 <div class="card-body d-flex flex-column align-items-center">
                                     <div class="col-icon me-3">
                                         <div class="icon-big text-danger text-center">
                                             <i class="fas fa-building"></i>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div class="text-center">
                                         <p class="card-category mb-1">Registered NON-MIGS Coops</p>
                                         <h4 class="card-title mb-0">{{ number_format($registeredNonMigsCoops) }}</h4>
                                     </div>
@@ -594,13 +606,13 @@
                         <!-- Fully Registered Participants -->
                         <div class="col-md-2">
                             <div class="card card-stats card-round shadow-sm h-100">
-                                <div class="card-body d-flex align-items-center">
+                                <div class="card-body d-flex flex-column align-items-center">
                                     <div class="col-icon me-3">
                                         <div class="icon-big text-success text-center">
                                             <i class="fas fa-check-circle"></i>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div class="text-center">
                                         <p class="card-category mb-1">Fully Registered Coops</p>
                                         <h4 class="card-title mb-0">{{ number_format($fullyRegisteredCoops) }}</h4>
                                     </div>
@@ -611,13 +623,13 @@
                         <!-- Partially Registered Coops -->
                         <div class="col-md-2">
                             <div class="card card-stats card-round shadow-sm h-100">
-                                <div class="card-body d-flex align-items-center">
+                                 <div class="card-body d-flex flex-column align-items-center">
                                     <div class="col-icon me-3">
                                         <div class="icon-big text-warning text-center">
                                             <i class="fas fa-exclamation-circle"></i>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div class="text-center">
                                         <p class="card-category mb-1">Partially Registered Coops</p>
                                         <h4 class="card-title mb-0">{{ number_format($partiallyRegisteredCoops) }}
                                         </h4>
@@ -628,13 +640,13 @@
 
                         <div class="col-md-2">
                             <div class="card card-stats card-round shadow-sm h-100">
-                                <div class="card-body d-flex align-items-center">
+                                 <div class="card-body d-flex flex-column align-items-center">
                                     <div class="col-icon me-3">
                                         <div class="icon-big text-secondary text-center">
                                             <i class="fas fa-users"></i>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div class="text-center">
                                         <p class="card-category mb-1">Registered Participants</p>
                                         <h4 class="card-title mb-0">{{ number_format($registeredParticipants) }}</h4>
                                     </div>
@@ -645,13 +657,13 @@
                         <!-- Total Migs Participants -->
                         <div class="col">
                             <div class="card card-stats card-round shadow-sm h-100">
-                                <div class="card-body d-flex align-items-center">
+                                 <div class="card-body d-flex flex-column align-items-center">
                                     <div class="col-icon me-3">
                                         <div class="icon-big text-danger text-center">
                                             <i class="fas fa-id-card"></i>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div class="text-center">
                                         <p class="card-category mb-1">Registered MIGS Participants</p>
                                         <h4 class="card-title mb-0">{{ number_format($totalMigsParticipants ?? 0) }}
                                         </h4>
@@ -663,13 +675,13 @@
                         <!-- Total Non-Migs Participants -->
                         <div class="col">
                             <div class="card card-stats card-round shadow-sm h-100">
-                                <div class="card-body d-flex align-items-center">
+                                 <div class="card-body d-flex flex-column align-items-center">
                                     <div class="col-icon me-3">
                                         <div class="icon-big text-secondary text-center">
                                             <i class="fas fa-user-times"></i>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div class="text-center">
                                         <p class="card-category mb-1">Registered NON-MIGS Participants</p>
                                         <h4 class="card-title mb-0">
                                             {{ number_format($totalNonMigsParticipants ?? 0) }}</h4>
@@ -681,13 +693,13 @@
                         <!-- Participants -->
                         <div class="col">
                             <div class="card card-stats card-round shadow-sm h-100">
-                                <div class="card-body d-flex align-items-center">
+                                 <div class="card-body d-flex flex-column align-items-center">
                                     <div class="col-icon me-3">
                                         <div class="icon-big text-success text-center">
                                             <i class="fas fa-hand-paper"></i>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div class="text-center">
                                         <p class="card-category mb-1">Total Voting Delegates</p>
                                         <h4 class="card-title mb-0">{{ number_format($totalVoting) }}</h4>
                                     </div>
@@ -710,7 +722,7 @@
                                         <!-- Total Coop Attended -->
                                         <div class="col-md-3 mb-4">
                                             <div class="card card-stats card-round shadow-sm h-100">
-                                                <div class="card-body d-flex align-items-center p-3">
+                                                <div class="card-body d-flex flex-column align-items-center text-center p-3">
                                                     <div class="col-icon me-3">
                                                         <div
                                                             class="icon-big text-info text-center rounded-circle bg-light p-3">
@@ -730,7 +742,7 @@
                                         <!-- Total MIGS Coop Attended -->
                                         <div class="col-md-3 mb-4">
                                             <div class="card card-stats card-round shadow-sm h-100">
-                                                <div class="card-body d-flex align-items-center p-3">
+                                                <div class="card-body d-flex flex-column align-items-center text-center p-3">
                                                     <div class="col-icon me-3">
                                                         <div
                                                             class="icon-big text-success text-center rounded-circle bg-light p-3">
@@ -751,7 +763,7 @@
                                         <!-- Total NON-MIGS Coop Attended -->
                                         <div class="col-md-3 mb-4">
                                             <div class="card card-stats card-round shadow-sm h-100">
-                                                <div class="card-body d-flex align-items-center p-3">
+                                                <div class="card-body d-flex flex-column align-items-center text-center p-3">
                                                     <div class="col-icon me-3">
                                                         <div
                                                             class="icon-big text-danger text-center rounded-circle bg-light p-3">
@@ -772,7 +784,7 @@
                                         <!-- Total Attended Voting Participants -->
                                         <div class="col-md-3 mb-4">
                                             <div class="card card-stats card-round shadow-sm h-100">
-                                                <div class="card-body d-flex align-items-center p-3">
+                                                <div class="card-body d-flex flex-column align-items-center text-center p-3">
                                                     <div class="col-icon me-3">
                                                         <div
                                                             class="icon-big text-primary text-center rounded-circle bg-light p-3">
@@ -804,7 +816,7 @@
                                         @foreach ($events as $event)
                                             <div class="col-md-4 mb-4">
                                                 <div class="card card-stats card-round shadow-sm h-100">
-                                                    <div class="card-body d-flex align-items-center p-3">
+                                                    <div class="card-body d-flex flex-column align-items-center text-center p-3">
                                                         <div class="col-icon me-3">
                                                             <div
                                                                 class="icon-big text-primary text-center rounded-circle bg-light p-3">
@@ -912,10 +924,14 @@
 
                                     <style>
                                         .card-title {
-                                            white-space: nowrap;  /* Prevents text from wrapping */
-                                            overflow: hidden;     /* Hides overflowing text */
-                                            text-overflow: ellipsis; /* Adds '...' when text is too long */
-                                            max-width: 80%;  /* Adjust based on your layout */
+                                            white-space: nowrap;
+                                            /* Prevents text from wrapping */
+                                            overflow: hidden;
+                                            /* Hides overflowing text */
+                                            text-overflow: ellipsis;
+                                            /* Adds '...' when text is too long */
+                                            max-width: 80%;
+                                            /* Adjust based on your layout */
                                             display: inline-block;
                                             vertical-align: middle;
                                         }
@@ -928,7 +944,8 @@
                                                     <div class="card card-primary card-round mb-3">
                                                         <div class="card-header">
                                                             <div class="card-head-row">
-                                                                <div class="card-title" title="{{ $event->title }}">{{ $event->title }}</div> <!-- Tooltip added -->
+                                                                <div class="card-title" title="{{ $event->title }}">
+                                                                    {{ $event->title }}</div> <!-- Tooltip added -->
                                                                 <div class="card-tools">
                                                                     <div class="dropdown">
                                                                         <button
@@ -940,8 +957,11 @@
                                                                             aria-expanded="false">
                                                                             More Options
                                                                         </button>
-                                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $event->event_id }}">
-                                                                            <a class="dropdown-item" href="{{ route('events.index') }}">View Details</a>
+                                                                        <div class="dropdown-menu"
+                                                                            aria-labelledby="dropdownMenuButton{{ $event->event_id }}">
+                                                                            <a class="dropdown-item"
+                                                                                href="{{ route('events.index') }}">View
+                                                                                Details</a>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -952,7 +972,8 @@
                                                         </div>
                                                         <div class="card-body">
                                                             <ul>
-                                                                <li><strong>📍 Venue:</strong> {{ $event->location }}</li>
+                                                                <li><strong>📍 Venue:</strong> {{ $event->location }}
+                                                                </li>
                                                                 <li><strong>🎤 Guest Speakers:</strong>
                                                                     @if ($event->speakers->count() > 0)
                                                                         {{ $event->speakers->pluck('name')->implode(', ') }}
@@ -1088,11 +1109,13 @@
                                     </div>
                                     <div class="event-item">
                                         <span class="badge bg-info">May 22</span>
-                                        <span class="text-start flex-grow-1 ms-3">End of Registration for Non-Voting</span>
+                                        <span class="text-start flex-grow-1 ms-3">End of Registration for
+                                            Non-Voting</span>
                                     </div>
                                     <div class="event-item">
                                         <span class="badge bg-secondary">May 23</span>
-                                        <span class="text-start flex-grow-1 ms-3">Sectoral Congress 55th Co-op Leaders</span>
+                                        <span class="text-start flex-grow-1 ms-3">Sectoral Congress 55th Co-op
+                                            Leaders</span>
                                     </div>
                                     <div class="event-item">
                                         <span class="badge bg-primary">May 24</span>
@@ -1294,70 +1317,74 @@
         }
     </script>
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const applyRegionFilter = document.getElementById("applyRegionFilter");
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const applyRegionFilter = document.getElementById("applyRegionFilter");
 
-    applyRegionFilter.addEventListener("click", function () {
-        let selectedRegion = document.getElementById("regionSelect").value.trim();
-        let migsStatus = document.getElementById("migsStatusSelect").value.trim();
-        let registrationStatus = document.getElementById("registrationStatusSelect").value.trim();
+            applyRegionFilter.addEventListener("click", function() {
+                let selectedRegion = document.getElementById("regionSelect").value.trim();
+                let migsStatus = document.getElementById("migsStatusSelect").value.trim();
+                let registrationStatus = document.getElementById("registrationStatusSelect").value.trim();
 
-        let exportUrl = "{{ route('reports.export.filtered_coop_status') }}"; // Laravel route
+                let exportUrl = "{{ route('reports.export.filtered_coop_status') }}"; // Laravel route
 
-        let params = new URLSearchParams({
-            region: selectedRegion || "All",
-            migs_status: migsStatus || "All",
-            registration_status: registrationStatus || "All"
+                let params = new URLSearchParams({
+                    region: selectedRegion || "All",
+                    migs_status: migsStatus || "All",
+                    registration_status: registrationStatus || "All"
+                });
+
+                // Redirect to export URL with filters
+                window.location.href = exportUrl + "?" + params.toString();
+            });
         });
+    </script>
 
-        // Redirect to export URL with filters
-        window.location.href = exportUrl + "?" + params.toString();
-    });
-});
-</script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const previewDataBtn = document.getElementById("previewData");
+            const applyRegionFilter = document.getElementById("applyRegionFilter");
+            const previewTableBody = document.getElementById("previewTableBody");
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-    const previewDataBtn = document.getElementById("previewData");
-    const applyRegionFilter = document.getElementById("applyRegionFilter");
-    const previewTableBody = document.getElementById("previewTableBody");
+            previewDataBtn.addEventListener("click", function() {
+                let selectedRegion = document.getElementById("regionSelect").value.trim();
+                let migsStatus = document.getElementById("migsStatusSelect").value.trim();
+                let registrationStatus = document.getElementById("registrationStatusSelect").value.trim();
+                let documentStatus = document.getElementById("documentStatusSelect").value
+            .trim(); // New filter
 
-    previewDataBtn.addEventListener("click", function () {
-        let selectedRegion = document.getElementById("regionSelect").value.trim();
-        let migsStatus = document.getElementById("migsStatusSelect").value.trim();
-        let registrationStatus = document.getElementById("registrationStatusSelect").value.trim();
-        let documentStatus = document.getElementById("documentStatusSelect").value.trim(); // New filter
+                fetch("{{ route('reports.preview.filtered_coop_status') }}", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                        },
+                        body: JSON.stringify({
+                            region: selectedRegion || "All",
+                            migs_status: migsStatus || "All",
+                            registration_status: registrationStatus || "All",
+                            document_status: documentStatus ||
+                                "All" // Pass the new document status filter
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        previewTableBody.innerHTML = ""; // Clear previous data
 
-        fetch("{{ route('reports.preview.filtered_coop_status') }}", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": "{{ csrf_token() }}"
-            },
-            body: JSON.stringify({
-                region: selectedRegion || "All",
-                migs_status: migsStatus || "All",
-                registration_status: registrationStatus || "All",
-                document_status: documentStatus || "All" // Pass the new document status filter
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            previewTableBody.innerHTML = ""; // Clear previous data
+                        if (data.length === 0) {
+                            previewTableBody.innerHTML =
+                                `<tr><td colspan="13" class="text-center">No data found</td></tr>`;
+                            applyRegionFilter.disabled = true;
+                            return;
+                        }
 
-            if (data.length === 0) {
-                previewTableBody.innerHTML = `<tr><td colspan="13" class="text-center">No data found</td></tr>`;
-                applyRegionFilter.disabled = true;
-                return;
-            }
+                        applyRegionFilter.disabled = false; // Enable Generate Excel button
 
-            applyRegionFilter.disabled = false; // Enable Generate Excel button
+                        data.forEach(coop => {
+                            let registrationStatus = coop.registration_status === "Rejected" ?
+                                "Unregistered" : coop.registration_status;
 
-            data.forEach(coop => {
-                let registrationStatus = coop.registration_status === "Rejected" ? "Unregistered" : coop.registration_status;
-
-                let row = `
+                            let row = `
                     <tr>
                         <td>${coop.name}</td>
                         <td>${coop.coop_identification_no}</td>
@@ -1374,36 +1401,36 @@ document.addEventListener("DOMContentLoaded", function () {
                         <td>${coop.documents?.['CETF Utilization invoice'] ?? 'Not Uploaded'}</td>
                     </tr>
                 `;
-                previewTableBody.innerHTML += row;
+                            previewTableBody.innerHTML += row;
+                        });
+                    })
+                    .catch(error => {
+                        console.error("Error fetching preview data:", error);
+                        previewTableBody.innerHTML =
+                            `<tr><td colspan="13" class="text-center text-danger">Error loading data</td></tr>`;
+                    });
             });
-        })
-        .catch(error => {
-            console.error("Error fetching preview data:", error);
-            previewTableBody.innerHTML = `<tr><td colspan="13" class="text-center text-danger">Error loading data</td></tr>`;
+
+            applyRegionFilter.addEventListener("click", function() {
+                let selectedRegion = document.getElementById("regionSelect").value.trim();
+                let migsStatus = document.getElementById("migsStatusSelect").value.trim();
+                let registrationStatus = document.getElementById("registrationStatusSelect").value.trim();
+                let documentStatus = document.getElementById("documentStatusSelect").value
+            .trim(); // New filter
+
+                let exportUrl = "{{ route('reports.export.filtered_coop_status') }}";
+
+                let params = new URLSearchParams({
+                    region: selectedRegion || "All",
+                    migs_status: migsStatus || "All",
+                    registration_status: registrationStatus || "All",
+                    document_status: documentStatus || "All" // Pass the new document status filter
+                });
+
+                window.location.href = exportUrl + "?" + params.toString();
+            });
         });
-    });
-
-    applyRegionFilter.addEventListener("click", function () {
-        let selectedRegion = document.getElementById("regionSelect").value.trim();
-        let migsStatus = document.getElementById("migsStatusSelect").value.trim();
-        let registrationStatus = document.getElementById("registrationStatusSelect").value.trim();
-        let documentStatus = document.getElementById("documentStatusSelect").value.trim(); // New filter
-
-        let exportUrl = "{{ route('reports.export.filtered_coop_status') }}";
-
-        let params = new URLSearchParams({
-            region: selectedRegion || "All",
-            migs_status: migsStatus || "All",
-            registration_status: registrationStatus || "All",
-            document_status: documentStatus || "All" // Pass the new document status filter
-        });
-
-        window.location.href = exportUrl + "?" + params.toString();
-    });
-});
-
-
-        </script>
+    </script>
 
 
 
