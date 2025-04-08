@@ -81,53 +81,57 @@
     </style>
     <style>
         <style>
-    /* Red dot indicator */
-    .notice-icon {
-        position: relative;
-    }
 
-    .notice-icon::after {
-        content: '';
-        position: absolute;
-        top: 2px;
-        right: 2px;
-        width: 10px;
-        height: 10px;
-        background-color: red;
-        border: 2px solid white;
-        border-radius: 50%;
-        z-index: 1000;
-    }
-
-    /* Animated bounce effect on icon */
-    @keyframes bounce {
-        0%, 100% {
-            transform: translateY(0);
+        /* Red dot indicator */
+        .notice-icon {
+            position: relative;
         }
-        50% {
-            transform: translateY(-3px);
+
+        .notice-icon::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 10px;
+            height: 10px;
+            background-color: red;
+            border: 2px solid white;
+            border-radius: 50%;
+            z-index: 1000;
         }
-    }
 
-    .attention {
-        animation: bounce 1s infinite;
-    }
+        /* Animated bounce effect on icon */
+        @keyframes bounce {
 
-    /* Styled notice box */
-    #noticeBox .card {
-        background-color: #fff7e6;
-        border-left: 5px solid #ff9900;
-    }
+            0%,
+            100% {
+                transform: translateY(0);
+            }
 
-    button#noticeToggle {
-    border: none;
-}
+            50% {
+                transform: translateY(-3px);
+            }
+        }
 
-    .info-grouped{
-        position: relative;
-        top: 10px;
-    }
-</style>
+        .attention {
+            animation: bounce 1s infinite;
+        }
+
+        /* Styled notice box */
+        #noticeBox .card {
+            background-color: #fff7e6;
+            border-left: 5px solid #ff9900;
+        }
+
+        button#noticeToggle {
+            border: none;
+        }
+
+        .info-grouped {
+            position: relative;
+            top: 10px;
+        }
+    </style>
     </style>
     <div class="wrapper">
         <!-- Sidebar -->
@@ -256,17 +260,17 @@
                             class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
 
                             <p
-                            class="text-muted text-nowrap d-flex flex-column flex-md-row align-items-center justify-content-center info-grouped">
-                            <span>Logged in as: <strong>{{ Auth::user()->name }}</strong></span>
+                                class="text-muted text-nowrap d-flex flex-column flex-md-row align-items-center justify-content-center info-grouped">
+                                <span>Logged in as: <strong>{{ Auth::user()->name }}</strong></span>
 
-                            @if ($coop)
-                                <span class="mx-2 d-none d-md-inline">|</span>
-                                <span>Cooperative: <strong>{{ $coop->name }}</strong></span>
-                            @else
-                                <span class="mx-2 d-none d-md-inline">|</span>
-                                <span>No Cooperative Assigned</span>
-                            @endif
-                        </p>
+                                @if ($coop)
+                                    <span class="mx-2 d-none d-md-inline">|</span>
+                                    <span>Cooperative: <strong>{{ $coop->name }}</strong></span>
+                                @else
+                                    <span class="mx-2 d-none d-md-inline">|</span>
+                                    <span>No Cooperative Assigned</span>
+                                @endif
+                            </p>
 
                         </nav>
 
@@ -296,7 +300,8 @@
                                         </li>
                                         <li>
                                             <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="{{ route('participant.profile.edit') }}">My
+                                            <a class="dropdown-item"
+                                                href="{{ route('participant.profile.edit') }}">My
                                                 Profile</a>
                                             <div class="dropdown-divider"></div>
                                             <form action="{{ route('logout') }}" method="POST" id="logout-form"
@@ -329,25 +334,23 @@
 
                                 <div class="position-relative d-inline-block">
                                     <button class="btn rounded-circle notice-icon attention" type="button"
-                                            id="noticeToggle"
-                                            data-bs-toggle="collapse"
-                                            data-bs-target="#noticeBox"
-                                            aria-expanded="false"
-                                            aria-controls="noticeBox"
-                                            title="View Notice">
+                                        id="noticeToggle" data-bs-toggle="collapse" data-bs-target="#noticeBox"
+                                        aria-expanded="false" aria-controls="noticeBox" title="View Notice">
                                         <i class="fa fa-info-circle text-primary fs-5"></i>
                                     </button>
 
                                     <!-- Notice Box -->
                                     <div class="collapse position-absolute mt-2 end-0" id="noticeBox"
-                                         style="z-index: 999; min-width: 300px;">
+                                        style="z-index: 999; min-width: 300px;">
                                         <div class="card shadow-sm">
                                             <div class="card-body p-3">
                                                 <h6 class="text-danger fw-bold mb-2">
                                                     <i class="fa fa-exclamation-triangle me-1"></i>Important Notice
                                                 </h6>
                                                 <p class="mb-0 text-dark">
-                                                    Participant registration will be <strong>disabled on May 22</strong>, and editing will be <strong>disabled on May 13</strong>.
+                                                    Participant registration will be <strong>disabled on May
+                                                        22</strong>, and editing will be <strong>disabled on May
+                                                        13</strong>.
                                                 </p>
                                             </div>
                                         </div>
@@ -363,24 +366,24 @@
 
                             <!-- Register Participants -->
                             @php
-                            $isMay22 = now()->format('m-d') === '05-22';
-                        @endphp
+                                $isMay22 = now()->format('m-d') === '05-22';
+                            @endphp
 
-                        @if ($isMay22)
-                            <div class="alert alert-warning d-flex align-items-center mb-3" role="alert">
-                                <i class="fa fa-exclamation-triangle me-2"></i>
-                                <div>
-                                    Registration is closed. You cannot add participants on May 22.
+                            @if ($isMay22)
+                                <div class="alert alert-warning d-flex align-items-center mb-3" role="alert">
+                                    <i class="fa fa-exclamation-triangle me-2"></i>
+                                    <div>
+                                        Registration is closed. You cannot add participants on May 22.
+                                    </div>
                                 </div>
-                            </div>
-                        @endif
+                            @endif
 
-                        <a href="{{ $isMay22 ? '#' : route('coopparticipantadd') }}"
-                           class="btn btn-primary btn-lg action-btn {{ $isMay22 ? 'disabled' : '' }}"
-                           {{ $isMay22 ? 'aria-disabled=true' : '' }}
-                           onclick="{{ $isMay22 ? 'return false;' : '' }}">
-                           <i class="fas fa-user-plus me-2"></i> Register Participants
-                        </a>
+                            <a href="{{ $isMay22 ? '#' : route('coopparticipantadd') }}"
+                                class="btn btn-primary btn-lg action-btn {{ $isMay22 ? 'disabled' : '' }}"
+                                {{ $isMay22 ? 'aria-disabled=true' : '' }}
+                                onclick="{{ $isMay22 ? 'return false;' : '' }}">
+                                <i class="fas fa-user-plus me-2"></i> Register Participants
+                            </a>
 
 
 
@@ -669,7 +672,7 @@
 
                     <div class="row">
                         <div class="col-md-8">
-                            <div class="card card-round shadow-lg h-100 border-0 rounded-4">
+                            <div class="card card-round shadow-lg border-0 rounded-4">
                                 <!-- Card Header -->
                                 <div class="card-header bg-primary text-white rounded-top-4">
                                     <div class="card-head-row">
@@ -686,14 +689,12 @@
 
                                     <!-- Form -->
                                     <form id="cetfForm" class="d-flex flex-column gap-3">
-                                        <div class="form-group position-relative">
-                                            <label for="totalAsset" class="fw-semibold">Total Asset (Latest
-                                                Audited FS)</label>
-                                            <div class="input-group">
-                                                <span class="input-group-text"><i class="fas fa-coins"></i></span>
-                                                <input type="number" class="form-control" id="totalAsset"
-                                                    required />
-                                            </div>
+                                        <!-- Formula Display Section -->
+                                        <div class="mt-4 p-3 border rounded shadow-sm bg-light">
+                                            <p class="fw-semibold fs-5 mb-0">
+                                                CETF Required = <span class="fw-bold text-primary">(Total Income *
+                                                    0.05) * 0.30 - CETF Remittance to MSP</span>
+                                            </p>
                                         </div>
 
                                         <div class="form-group position-relative">
@@ -713,8 +714,7 @@
                                             <div class="input-group">
                                                 <span class="input-group-text"><i
                                                         class="fas fa-hand-holding-usd"></i></span>
-                                                <input type="number" class="form-control" id="cetfRemittance"
-                                                    readonly />
+                                                <input type="number" class="form-control" id="cetfRemittance" readonly/>
                                             </div>
                                         </div>
 
@@ -895,7 +895,7 @@
                             <style>
                                 .event-card {
                                     transition: 0.3s;
-                                  
+
                                     margin: auto;
                                     border-radius: 15px;
                                     overflow: hidden;
@@ -989,11 +989,13 @@
                                     </div>
                                     <div class="event-item">
                                         <span class="badge bg-info">May 22</span>
-                                        <span class="text-start flex-grow-1 ms-3">End of Registration for Non-Voting</span>
+                                        <span class="text-start flex-grow-1 ms-3">End of Registration for
+                                            Non-Voting</span>
                                     </div>
                                     <div class="event-item">
                                         <span class="badge bg-secondary">May 23</span>
-                                        <span class="text-start flex-grow-1 ms-3">Sectoral Congress 55th Co-op Leaders</span>
+                                        <span class="text-start flex-grow-1 ms-3">Sectoral Congress 55th Co-op
+                                            Leaders</span>
                                     </div>
                                     <div class="event-item">
                                         <span class="badge bg-primary">May 24</span>
@@ -1032,36 +1034,36 @@
     </script>
 
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        @if(!empty($missingDocuments) || !empty($declinedDocuments))
-            let issues = [];
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            @if (!empty($missingDocuments) || !empty($declinedDocuments))
+                let issues = [];
 
-            @if(!empty($missingDocuments))
-                issues.push({
-                    title: '📌 Missing Documents',
-                    list: [
-                        @foreach($missingDocuments as $doc)
-                            "{{ $doc }}",
-                        @endforeach
-                    ],
-                    message: "These are required for your submission. Please upload them as soon as possible."
-                });
-            @endif
+                @if (!empty($missingDocuments))
+                    issues.push({
+                        title: '📌 Missing Documents',
+                        list: [
+                            @foreach ($missingDocuments as $doc)
+                                "{{ $doc }}",
+                            @endforeach
+                        ],
+                        message: "These are required for your submission. Please upload them as soon as possible."
+                    });
+                @endif
 
-            @if(!empty($declinedDocuments))
-                issues.push({
-                    title: '⚠️ Declined Documents',
-                    list: [
-                        @foreach($declinedDocuments as $doc)
-                            "{{ $doc }}",
-                        @endforeach
-                    ],
-                    message: "These documents were declined and need to be re-uploaded."
-                });
-            @endif
+                @if (!empty($declinedDocuments))
+                    issues.push({
+                        title: '⚠️ Declined Documents',
+                        list: [
+                            @foreach ($declinedDocuments as $doc)
+                                "{{ $doc }}",
+                            @endforeach
+                        ],
+                        message: "These documents were declined and need to be re-uploaded."
+                    });
+                @endif
 
-            let message = issues.map(issue => `
+                let message = issues.map(issue => `
                 <h3 style="margin-bottom: 5px;">${issue.title}</h3>
                 <ul style="text-align: left; margin-bottom: 10px;">
                     ${issue.list.map(doc => `<li>📄 ${doc}</li>`).join('')}
@@ -1069,23 +1071,24 @@
                 <p>${issue.message}</p>
             `).join('<hr>');
 
-            Swal.fire({
-                icon: 'warning',
-                // title: '🔔 Important Notice!',
-                html: message,
-                timer: 15000, // Auto-closes after 10 seconds
-                timerProgressBar: true,
-                showConfirmButton: true,
-                confirmButtonText: '📤 Upload Now',
-                showCloseButton: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = "{{ route('documents') }}"; // Update with actual upload route
-                }
-            });
-        @endif
-    });
-</script>
+                Swal.fire({
+                    icon: 'warning',
+                    // title: '🔔 Important Notice!',
+                    html: message,
+                    timer: 15000, // Auto-closes after 10 seconds
+                    timerProgressBar: true,
+                    showConfirmButton: true,
+                    confirmButtonText: '📤 Upload Now',
+                    showCloseButton: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href =
+                        "{{ route('documents') }}"; // Update with actual upload route
+                    }
+                });
+            @endif
+        });
+    </script>
 
 
 

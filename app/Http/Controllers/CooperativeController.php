@@ -267,73 +267,68 @@ class CooperativeController extends Controller
     }
 
     public function edit($participant_id)
-    {
-        $participant = Participant::where('participant_id', $participant_id)->firstOrFail();
-        $cooperatives = Cooperative::all();
-        $events = Event::all();
+{
+    $participant = Participant::where('participant_id', $participant_id)->firstOrFail();
+    $cooperatives = Cooperative::all();
+    $events = Event::all();
 
-        // ✅ Get participant count for Youth Congress (event_id = 15)
-        $youthCongressParticipantCount = EventParticipant::where('event_id', 15)->count();
-        $youthCongressCapacity = 150; // Set the capacity for Youth Congress
+    // ✅ Get participant count for Youth Congress (event_id = 15)
+    $youthCongressParticipantCount = EventParticipant::where('event_id', 15)->count();
+    $youthCongressCapacity = 150; // Set the capacity for Youth Congress
 
-        // ✅ Calculate remaining slots for Youth Congress
-        $remainingSlots = $youthCongressCapacity - $youthCongressParticipantCount;
+    // ✅ Calculate remaining slots for Youth Congress
+    $remainingSlots = $youthCongressCapacity - $youthCongressParticipantCount;
 
-        // ✅ Remove Youth Congress if participant count is 150 or more
-        $events = $events->filter(function ($event) use ($youthCongressParticipantCount) {
-            if ($event->event_id == 15 && $youthCongressParticipantCount >= 150) {
-                return false;
-            }
-            return true;
-        });
+    // ✅ Remove Youth Congress if participant count is 150 or more
+    $events = $events->filter(function ($event) use ($youthCongressParticipantCount) {
+        if ($event->event_id == 15 && $youthCongressParticipantCount >= 150) {
+            return false;
+        }
+        return true;
+    });
 
-        // ✅ Optional: use this in Blade to show a message if Youth Congress is full
-        $youthCongressFull = $youthCongressParticipantCount >= 150;
+    // ✅ Optional: use this in Blade to show a message if Youth Congress is full
+    $youthCongressFull = $youthCongressParticipantCount >= 150;
 
-        // Voting logic
-        // $shareCapital = $participant->cooperative->share_capital_balance ?? 0;
-        // $votes = 0;
-        // $remaining = $shareCapital;
+    // ✅ Voting logic
+    $shareCapital = $participant->cooperative->share_capital_balance ?? 0;
+    $votes = 0;
 
-        // if ($remaining >= 100000) {
-        //     $votes += floor($remaining / 100000);
-        //     $remaining %= 100000;
-        // }
-
-        // while ($remaining >= 25000) {
-        //     if ($remaining >= 75000) {
-        //         $votes += 3;
-        //         $remaining -= 75000;
-        //     } elseif ($remaining >= 50000) {
-        //         $votes += 2;
-        //         $remaining -= 50000;
-        //     } elseif ($remaining >= 25000) {
-        //         $votes += 1;
-        //         $remaining -= 25000;
-        //     }
-        // }
-
-        // $votes = min($votes, 5);
-
-        $currentVotingCount = Participant::where('coop_id', $participant->coop_id)
-            ->where('delegate_type', 'Voting')
-            ->where('participant_id', '!=', $participant->participant_id)
-            ->count();
-
-        $canAddVoting = $currentVotingCount < $votes || $participant->delegate_type === 'Voting';
-
-        return view('dashboard.participant.manage_participant.edit', compact(
-            'participant',
-            'cooperatives',
-            'votes',
-            'canAddVoting',
-            'shareCapital',
-            'currentVotingCount',
-            'events',
-            'youthCongressFull',
-            'remainingSlots'
-        ));
+    // Calculate votes based on share capital
+    if ($shareCapital >= 25000) {
+        $votes = 1; // ₱25,000 = 1 vote
     }
+
+    if ($shareCapital >= 100000) {
+        $votes += floor(($shareCapital - 25000) / 100000); // For every ₱100,000 after the first ₱25,000
+    }
+
+    // Max votes = 5
+    $votes = min($votes, 5);
+
+    // ✅ Current Voting Count Logic
+    $currentVotingCount = Participant::where('coop_id', $participant->coop_id)
+        ->where('delegate_type', 'Voting')
+        ->where('participant_id', '!=', $participant->participant_id)
+        ->count();
+
+    // Check if additional voting delegate can be added
+    $canAddVoting = $currentVotingCount < $votes || $participant->delegate_type === 'Voting';
+
+    // ✅ Pass the calculated `votes` to the view
+    return view('dashboard.participant.manage_participant.edit', compact(
+        'participant',
+        'cooperatives',
+        'votes',
+        'canAddVoting',
+        'shareCapital',
+        'currentVotingCount',
+        'events',
+        'youthCongressFull',
+        'remainingSlots'
+    ));
+}
+
 
     public function update(Request $request, $participant_id)
     {

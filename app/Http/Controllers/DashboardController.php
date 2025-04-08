@@ -130,51 +130,51 @@ class DashboardController extends Controller
     }
 
     public function sendNotificationToAllunregistered()
-{
-    try {
-        \Log::info('Notification request received for all cooperatives.');
+    {
+        try {
+            \Log::info('Notification request received for all cooperatives.');
 
-        // Retrieve all cooperatives
-        $cooperatives = Cooperative::all();
+            // Retrieve all cooperatives
+            $cooperatives = Cooperative::all();
 
-        if ($cooperatives->isEmpty()) {
-            return back()->with('error', 'No cooperatives found.');
-        }
-
-        // Get the latest event
-        $event = Event::oldest()->first();
-
-        if (!$event) {
-            return back()->with('error', 'No event found to notify.');
-        }
-
-        // Send email to cooperatives with GARegistration status 'Rejected'
-        foreach ($cooperatives as $coop) {
-            // Retrieve GA Registration for the current cooperative with 'Rejected' status
-            $gaRegistration = GARegistration::where('coop_id', $coop->coop_id)
-                                              ->where('registration_status', 'Rejected') // Only 'Rejected' status
-                                              ->latest()
-                                              ->first();
-
-            // Check if GA Registration exists and status is 'Rejected'
-            if ($gaRegistration) {
-                // Retrieve users related to the cooperative (Adjust as needed)
-                $users = User::where('coop_id', $coop->coop_id)->get(); // Assuming User has a `coop_id`
-
-                // Send email with the correct number of arguments
-                Mail::to($coop->email)->queue(new CooperativeNotificationunregistered($coop, $event, $gaRegistration, $users));
-
-                \Log::info('Notification sent to: ' . $coop->email);
+            if ($cooperatives->isEmpty()) {
+                return back()->with('error', 'No cooperatives found.');
             }
+
+            // Get the latest event
+            $event = Event::oldest()->first();
+
+            if (!$event) {
+                return back()->with('error', 'No event found to notify.');
+            }
+
+            // Send email to cooperatives with GARegistration status 'Rejected'
+            foreach ($cooperatives as $coop) {
+                // Retrieve GA Registration for the current cooperative with 'Rejected' status
+                $gaRegistration = GARegistration::where('coop_id', $coop->coop_id)
+                    ->where('registration_status', 'Rejected') // Only 'Rejected' status
+                    ->latest()
+                    ->first();
+
+                // Check if GA Registration exists and status is 'Rejected'
+                if ($gaRegistration) {
+                    // Retrieve users related to the cooperative (Adjust as needed)
+                    $users = User::where('coop_id', $coop->coop_id)->get(); // Assuming User has a `coop_id`
+
+                    // Send email with the correct number of arguments
+                    Mail::to($coop->email)->queue(new CooperativeNotificationunregistered($coop, $event, $gaRegistration, $users));
+
+                    \Log::info('Notification sent to: ' . $coop->email);
+                }
+            }
+
+            return redirect()->route('adminview')->with('success', 'Notification sent to all cooperatives with rejected registrations!');
+        } catch (\Exception $e) {
+            \Log::error('Error sending notifications: ' . $e->getMessage());
+
+            return back()->with('error', 'Error sending notifications. Please try again.');
         }
-
-        return redirect()->route('adminview')->with('success', 'Notification sent to all cooperatives with rejected registrations!');
-    } catch (\Exception $e) {
-        \Log::error('Error sending notifications: ' . $e->getMessage());
-
-        return back()->with('error', 'Error sending notifications. Please try again.');
     }
-}
 
 
 
@@ -310,10 +310,10 @@ class DashboardController extends Controller
             ->distinct('participants.coop_id')
             ->count('participants.coop_id');
 
-            $totalVoting = Participant::where('delegate_type', 'Voting')
+        $totalVoting = Participant::where('delegate_type', 'Voting')
             ->whereHas('cooperative.gaRegistration', function ($query) {
                 $query->where('membership_status', 'Migs')
-                      ->where('registration_status', 'Fully Registered');
+                    ->where('registration_status', 'Fully Registered');
             })
             ->count();
 
@@ -736,43 +736,45 @@ class DashboardController extends Controller
         }
 
         // Apply pagination with the dynamic limit
-        $cooperatives = $cooperatives->withCount(['participants',
-        'participants as registered_voting_participants' => function ($query) {
-            $query->where('delegate_type', 'Voting');
-        }])
-->orderBy('created_at', 'desc')
-->paginate($limit)
-->appends($request->query());
-
-foreach ($cooperatives as $coop) {
-    $shareCapital = $coop->share_capital_balance;
-    $votes = 0;
-
-    if (is_numeric($shareCapital) && $shareCapital >= 25000) {
-        if ($shareCapital >= 100000) {
-            $votes = floor($shareCapital / 100000); // Each 100k = 1 vote
-            $remaining = $shareCapital % 100000;
-
-            // Add 1 vote if at least 25k remaining
-            if ($remaining >= 25000) {
-                $votes += 1;
+        $cooperatives = $cooperatives->withCount([
+            'participants',
+            'participants as registered_voting_participants' => function ($query) {
+                $query->where('delegate_type', 'Voting');
             }
-        } else {
-            // 25k to 99,999 = 1 vote
-            $votes = 1;
+        ])
+            ->orderBy('created_at', 'desc')
+            ->paginate($limit)
+            ->appends($request->query());
+
+        foreach ($cooperatives as $coop) {
+            $shareCapital = $coop->share_capital_balance;
+            $votes = 0;
+
+            if (is_numeric($shareCapital) && $shareCapital >= 25000) {
+                if ($shareCapital >= 100000) {
+                    $votes = floor($shareCapital / 100000); // Each 100k = 1 vote
+                    $remaining = $shareCapital % 100000;
+
+                    // Add 1 vote if at least 25k remaining
+                    if ($remaining >= 25000) {
+                        $votes += 1;
+                    }
+                } else {
+                    // 25k to 99,999 = 1 vote
+                    $votes = 1;
+                }
+
+                // Cap votes at 5
+                $votes = min($votes, 5);
+            }
+
+            $coop->votes = $votes; // Store in object
         }
 
-        // Cap votes at 5
-        $votes = min($votes, 5);
-    }
 
-    $coop->votes = $votes; // Store in object
-}
+        $emails = $cooperatives->pluck('email')->filter()->implode(',');
 
-
-    $emails = $cooperatives->pluck('email')->filter()->implode(',');
-
-    return view('dashboard.admin.datatable', compact('cooperatives', 'search', 'emails', 'emailsall', 'filterNoGA'));
+        return view('dashboard.admin.datatable', compact('cooperatives', 'search', 'emails', 'emailsall', 'filterNoGA'));
     }
 
 
@@ -846,23 +848,16 @@ foreach ($cooperatives as $coop) {
 
             $remaining = $remaining % 100000; // Remaining after full ₱100,000 blocks
 
-            // Handle ₱75,000, ₱50,000, and ₱25,000 blocks for additional votes
+            // Handle ₱25,000 blocks for additional votes
             while ($remaining >= 25000) {
-                if ($remaining >= 75000) {
-                    $votes += 3; // ₱75,000 → +3 votes
-                    $remaining -= 75000;
-                } elseif ($remaining >= 50000) {
-                    $votes += 2; // ₱50,000 → +2 votes
-                    $remaining -= 50000;
-                } elseif ($remaining >= 25000) {
-                    $votes += 1; // ₱25,000 → +1 vote
-                    $remaining -= 25000;
-                }
+                $votes += 1; // Every ₱25,000 gives 1 vote
+                $remaining -= 25000;
             }
 
             // Max votes = 5
             $votes = min($votes, 5);
         }
+
 
         // Store the selected services as JSON
         $servicesAvailed = json_encode($request->services_availed ?? []);
@@ -1100,34 +1095,34 @@ foreach ($cooperatives as $coop) {
             'delinquent' => ['nullable', Rule::in(['yes', 'no'])],
 
             // Numeric Fields
-            'total_asset' => 'nullable|numeric|min:0',
-            'loan_balance' => 'nullable|numeric|min:0',
-            'total_overdue' => 'nullable|numeric|min:0',
-            'time_deposit' => 'nullable|numeric|min:0',
-            'accounts_receivable' => 'nullable|numeric|min:0',
-            'savings' => 'nullable|numeric|min:0',
-            'net_surplus' => 'nullable|numeric|min:0',
-            'cetf_due_to_apex' => 'nullable|numeric|min:0',
-            'additional_cetf' => 'nullable|numeric|min:0',
-            'cetf_undertaking' => 'nullable|numeric|min:0',
-            'total_income' => 'nullable|numeric|min:0',
-            'cetf_remittance' => 'nullable|numeric|min:0',
-            'cetf_required' => 'nullable|numeric|min:0',
+            'total_asset' => 'nullable|numeric',
+            'loan_balance' => 'nullable|numeric',
+            'total_overdue' => 'nullable|numeric',
+            'time_deposit' => 'nullable|numeric',
+            'accounts_receivable' => 'nullable|numeric',
+            'savings' => 'nullable|numeric',
+            'net_surplus' => 'nullable|numeric',
+            'cetf_due_to_apex' => 'nullable|numeric',
+            'additional_cetf' => 'nullable|numeric',
+            'cetf_undertaking' => 'nullable|numeric',
+            'total_income' => 'nullable|numeric',
+            'cetf_remittance' => 'nullable|numeric',
+            'cetf_required' => 'nullable|numeric',
             'cetf_balance' => 'nullable|numeric',
-            'total_remittance' => 'nullable|numeric|min:0',
+            'total_remittance' => 'nullable|numeric',
             'net_required_reg_fee' => 'nullable|numeric',
-            'total_reg_fee' => 'nullable|numeric|min:0',
-            'share_capital_balance' => 'nullable|numeric|min:0',
-            'less_prereg_payment' => 'nullable|numeric|min:0',
-            'less_cetf_balance' => 'nullable|numeric|min:0',
-            'free_migs_pax' => 'nullable|numeric|min:0',
+            'total_reg_fee' => 'nullable|numeric',
+            'share_capital_balance' => 'nullable|numeric',
+            'less_prereg_payment' => 'nullable|numeric',
+            'less_cetf_balance' => 'nullable|numeric',
+            'free_migs_pax' => 'nullable|numeric',
 
             // Other Fields
             'full_cetf_remitted' => ['nullable', Rule::in(['yes', 'no'])],
             'registration_date_paid' => 'nullable|date',
-            'registration_fee' => 'nullable|numeric|min:0',
+            'registration_fee' => 'nullable|numeric',
             'ga_remark' => 'nullable|string|max:255',
-            'no_of_entitled_votes' => 'nullable|integer|min:0',
+            'no_of_entitled_votes' => 'nullable|integer',
             'services_availed' => 'nullable|array',
             'services_availed.*' => 'string|max:255',
         ]);
@@ -1173,29 +1168,24 @@ foreach ($cooperatives as $coop) {
         $share_capital = $validated['share_capital_balance'] ?? 0;
         $votes = 0;
 
-        if ($share_capital >= 100000) {
-            $votes += floor($share_capital / 100000);
+        // Handle the ₱25,000 block (1 vote for the first ₱25,000)
+        if ($share_capital >= 25000) {
+            $votes = 1; // ₱25,000 = 1 vote
         }
 
+        // Add 1 vote for every ₱100,000 block beyond the first ₱25,000
+        if ($share_capital >= 100000) {
+            $votes += floor(($share_capital - 25000) / 100000); // For each ₱100,000 after the first ₱25,000
+        }
+
+        // Max votes = 5 (ensuring votes never exceed 5)
+        $validated['no_of_entitled_votes'] = min($votes, 5);
+
+
+        // Update other fields as necessary
         $validated['cetf_balance'] = ($validated['cetf_required'] ?? 0) - ($validated['total_remittance'] ?? 0);
         $validated['delinquent'] = $request->input('delinquent');
 
-        $remaining = $share_capital % 100000;
-
-        while ($remaining >= 25000) {
-            if ($remaining >= 75000) {
-                $votes += 3;
-                $remaining -= 75000;
-            } elseif ($remaining >= 50000) {
-                $votes += 2;
-                $remaining -= 50000;
-            } elseif ($remaining >= 25000) {
-                $votes += 1;
-                $remaining -= 25000;
-            }
-        }
-
-        $validated['no_of_entitled_votes'] = min($votes, 5);
 
         // Convert services_availed array to JSON
         $validated['services_availed'] = isset($request->services_availed)

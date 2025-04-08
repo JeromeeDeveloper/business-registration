@@ -50,26 +50,27 @@ class CoopRegistrationExport implements FromCollection, WithHeadings, WithMappin
         $hasMspOfficer = $coop->free_migs_pax == 4500;
         $mspOfficerFee = $hasMspOfficer ? $coop->free_migs_pax : 0;
 
-        // Calculate half CETF
-        $halfCetf = ($coop->cetf_remittance >= 50000) ? 4500 / 2 : 0;
+        // Calculate half CETF, but only if CETF remittance is less than 100,000
+        $halfCetf = ($coop->cetf_remittance < 100000 && $coop->cetf_remittance >= 50000) ? 4500 / 2 : 0;
 
         // Calculate Free 4500
         $free4500 = ($coop->cetf_remittance >= 100000) ? 4500 : 0;
 
-        // Calculate No. of Entitled Votes based on Share Capital Balance
         $shareCapitalBalance = $coop->share_capital_balance;
 
-        // Each ₱100,000 gives 1 vote
+        // Start by calculating votes for each ₱100,000 block
         $votes = floor($shareCapitalBalance / 100000);
 
-        // But if there's any amount above ₱25,000, they get at least 1 vote
-        if ($votes === 0 && $shareCapitalBalance >= 25000) {
-            $votes = 1;
+        // Handle any remaining amount after full ₱100,000 blocks
+        $remaining = $shareCapitalBalance % 100000;
+
+        // If there's any remaining amount greater than or equal to ₱25,000, add 1 vote
+        if ($remaining >= 25000) {
+            $votes += 1;
         }
 
         // Cap the votes at 5
         $entitledVotes = min($votes, 5);
-
 
         // Return mapped data
         return [
@@ -86,7 +87,7 @@ class CoopRegistrationExport implements FromCollection, WithHeadings, WithMappin
             $coop->cetf_remittance,
             $coop->cetf_required,
             $coop->share_capital_balance,
-            $entitledVotes, // Calculated No. of Entitled Votes
+            $entitledVotes,
             $mspOfficerFee,
             $halfCetf,
             $free4500,
@@ -96,5 +97,4 @@ class CoopRegistrationExport implements FromCollection, WithHeadings, WithMappin
             $coop->ga_remark
         ];
     }
-
 }

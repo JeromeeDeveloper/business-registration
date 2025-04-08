@@ -216,20 +216,30 @@
                         <td>[LESS] Free Registration:</td>
 
                         @php
-                            $participantCount = $participants->where('coop_id', $registration->cooperative->coop_id)->count();
-                            $registrationFee = $participantCount * 4500;
+                        $participantCount = $participants->where('coop_id', $registration->cooperative->coop_id)->count();
+                        $registrationFee = $participantCount * 4500;
 
-                            $hasMspOfficer = $registration->cooperative->free_migs_pax == 4500;
-                            
-                            $mspOfficerFee = $hasMspOfficer ? 4500 : 0;
+                        $hasMspOfficer = $registration->cooperative->free_migs_pax == 4500;
+                        $mspOfficerFee = $hasMspOfficer ? 4500 : 0;
+
+                        // Check if cetf_remittance is 100k or more, if so, don't add both halfCetf and free4500
+                        if ($registration->cooperative->cetf_remittance >= 100000) {
+                            $halfCetf = 0;
+                            $free4500 = 4500;
+                        } else {
+                            // Only add halfCetf if cetf_remittance is 50k or more but less than 100k
                             $halfCetf = $registration->cooperative->cetf_remittance >= 50000 ? 4500 / 2 : 0;
-                            $free4500 = $registration->cooperative->cetf_remittance >= 100000 ? 4500 : 0;
-                            $migsFree = $registration->membership_status === 'Migs' ? 9000 : 0;
-                            $totalFreeRegistration = $mspOfficerFee + $halfCetf + $free4500 + $migsFree;
-                            $regPayable = $registrationFee - ($totalFreeRegistration +
-                                          $registration->cooperative->less_prereg_payment +
-                                          $registration->cooperative->less_cetf_balance);
-                        @endphp
+                            $free4500 = 0;
+                        }
+
+                        $migsFree = $registration->membership_status === 'Migs' ? 9000 : 0;
+                        $totalFreeRegistration = $mspOfficerFee + $halfCetf + $free4500 + $migsFree;
+
+                        $regPayable = $registrationFee - ($totalFreeRegistration +
+                                                          $registration->cooperative->less_prereg_payment +
+                                                          $registration->cooperative->less_cetf_balance);
+                    @endphp
+
 
                         <td class="text-right highlight underline-box-med">
                             {{ number_format($totalFreeRegistration, 2) }}

@@ -107,24 +107,24 @@
     <script>
         // Function to calculate the entitled votes
         function calculateVotes(shareCapitalBalance) {
-            let remaining = shareCapitalBalance;
-            let votes = 0;
+    let remaining = shareCapitalBalance;
+    let votes = 0;
 
-            while (remaining >= 25000) {
-                if (remaining >= 75000) {
-                    votes += 3;
-                    remaining -= 75000;
-                } else if (remaining >= 50000) {
-                    votes += 2;
-                    remaining -= 50000;
-                } else if (remaining >= 25000) {
-                    votes += 1;
-                    remaining -= 25000;
-                }
-            }
+    // If the share capital is 25,000 or more, it grants 1 vote
+    if (remaining >= 25000) {
+        votes = 1; // 1 vote for the first 25k
+        remaining -= 25000; // Subtract the first 25k
+    }
 
-            return Math.min(votes, 5); // Cap the votes at 5
-        }
+    // For every 100,000, add 1 vote
+    if (remaining >= 100000) {
+        votes += Math.floor(remaining / 100000); // Add 1 vote for every 100k
+    }
+
+    // Cap the votes at 5
+    return Math.min(votes, 5);
+}
+
 
         // Pass the financialData array to JavaScript
         const financialData = @json($financialData);

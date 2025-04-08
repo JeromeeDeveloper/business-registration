@@ -1286,24 +1286,31 @@
         });
     </script>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let cetfDueToApexInput = document.getElementById('cetf_due_to_apex');
+        let cetfRequiredInput = document.getElementById('cetf_required');
+        let netSurplusInput = document.getElementById('net_surplus');
 
+        function updateCetfRequired() {
+            let dueToApex = parseFloat(cetfDueToApexInput.value) || 0;
+            let netSurplus = parseFloat(netSurplusInput.value) || 0;
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            let cetfDueToApexInput = document.getElementById('cetf_due_to_apex');
-            let cetfRequiredInput = document.getElementById('cetf_required');
-
-            function updateCetfRequired() {
-                let dueToApex = parseFloat(cetfDueToApexInput.value) || 0;
-                let cetfRequired = (dueToApex * 0.30).toFixed(2);
-
+            // Check if net_surplus is negative, if so, override cetf_required to 3000
+            if (netSurplus < 0) {
+                cetfRequiredInput.value = "3000.00"; // Override to 3000
+            } else {
+                let cetfRequired = (dueToApex * 0.30).toFixed(2); // Normal calculation
                 cetfRequiredInput.value = cetfRequired;
             }
+        }
 
-            cetfDueToApexInput.addEventListener('input', updateCetfRequired);
-            updateCetfRequired(); // Initialize on page load
-        });
-    </script>
+        cetfDueToApexInput.addEventListener('input', updateCetfRequired);
+        netSurplusInput.addEventListener('input', updateCetfRequired); // Recalculate when net_surplus changes
+        updateCetfRequired(); // Initialize on page load
+    });
+</script>
+
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
