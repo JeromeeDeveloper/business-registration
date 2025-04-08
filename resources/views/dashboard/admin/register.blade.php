@@ -839,29 +839,24 @@
 
             // Function to calculate the number of entitled votes
             function calculateEntitledVotes(shareCapital) {
-                let votes = 0;
-                let remaining = shareCapital;
+    let votes = 0;
 
-                if (remaining >= 100000) {
-                    votes += Math.floor(remaining / 100000);
-                    remaining = remaining % 100000; // Remaining capital
-                }
+    if (shareCapital >= 25000) {
+        if (shareCapital >= 100000) {
+            votes = Math.floor(shareCapital / 100000); // Each ₱100,000 = 1 vote
+            const remaining = shareCapital % 100000;
 
-                while (remaining >= 25000) {
-                    if (remaining >= 75000) {
-                        votes += 3;
-                        remaining -= 75000;
-                    } else if (remaining >= 50000) {
-                        votes += 2;
-                        remaining -= 50000;
-                    } else if (remaining >= 25000) {
-                        votes += 1;
-                        remaining -= 25000;
-                    }
-                }
-
-                return Math.min(votes, 5); // Max of 5 votes
+            if (remaining >= 25000) {
+                votes += 1; // Additional vote for ₱25k+ remainder
             }
+        } else {
+            votes = 1; // ₱25,000 to ₱99,999 = 1 vote
+        }
+    }
+
+    return Math.min(votes, 5); // Cap votes at 5
+}
+
 
             // Update entitled votes
             function updateEntitledVotes() {

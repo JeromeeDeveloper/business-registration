@@ -92,25 +92,25 @@ class CooperativeController extends Controller
 
         $votes = 0;
         $remaining = $shareCapital;
-        if ($remaining >= 100000) {
-            $votes += floor($remaining / 100000);
-            $remaining %= 100000;
-        }
 
-        while ($remaining >= 25000) {
-            if ($remaining >= 75000) {
-                $votes += 3;
-                $remaining -= 75000;
-            } elseif ($remaining >= 50000) {
-                $votes += 2;
-                $remaining -= 50000;
-            } elseif ($remaining >= 25000) {
-                $votes += 1;
-                $remaining -= 25000;
+        if ($remaining >= 25000) {
+            if ($remaining >= 100000) {
+                $votes = floor($remaining / 100000);
+                $remaining %= 100000;
+
+                // Add 1 vote if remaining is at least ₱25,000
+                if ($remaining >= 25000) {
+                    $votes += 1;
+                }
+            } else {
+                // Between ₱25,000 and ₱99,999 → 1 vote
+                $votes = 1;
             }
         }
 
+        // Cap the votes at 5
         $votes = min($votes, 5);
+
         $existingVotingParticipants = Participant::where('coop_id', $user->coop_id)
             ->where('delegate_type', 'Voting')
             ->count();
@@ -291,29 +291,29 @@ class CooperativeController extends Controller
         $youthCongressFull = $youthCongressParticipantCount >= 150;
 
         // Voting logic
-        $shareCapital = $participant->cooperative->share_capital_balance ?? 0;
-        $votes = 0;
-        $remaining = $shareCapital;
+        // $shareCapital = $participant->cooperative->share_capital_balance ?? 0;
+        // $votes = 0;
+        // $remaining = $shareCapital;
 
-        if ($remaining >= 100000) {
-            $votes += floor($remaining / 100000);
-            $remaining %= 100000;
-        }
+        // if ($remaining >= 100000) {
+        //     $votes += floor($remaining / 100000);
+        //     $remaining %= 100000;
+        // }
 
-        while ($remaining >= 25000) {
-            if ($remaining >= 75000) {
-                $votes += 3;
-                $remaining -= 75000;
-            } elseif ($remaining >= 50000) {
-                $votes += 2;
-                $remaining -= 50000;
-            } elseif ($remaining >= 25000) {
-                $votes += 1;
-                $remaining -= 25000;
-            }
-        }
+        // while ($remaining >= 25000) {
+        //     if ($remaining >= 75000) {
+        //         $votes += 3;
+        //         $remaining -= 75000;
+        //     } elseif ($remaining >= 50000) {
+        //         $votes += 2;
+        //         $remaining -= 50000;
+        //     } elseif ($remaining >= 25000) {
+        //         $votes += 1;
+        //         $remaining -= 25000;
+        //     }
+        // }
 
-        $votes = min($votes, 5);
+        // $votes = min($votes, 5);
 
         $currentVotingCount = Participant::where('coop_id', $participant->coop_id)
             ->where('delegate_type', 'Voting')
@@ -617,7 +617,7 @@ class CooperativeController extends Controller
                 }
             }
         }
-        
+
         // Fetch documents and update session after changing status
         $documents = UploadedDocument::where('coop_id', $cooperative->coop_id)->get();
         $documentsWithHardcopy = [];

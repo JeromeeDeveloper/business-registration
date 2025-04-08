@@ -602,29 +602,24 @@
             const entitledVotesElem = document.getElementById('no_of_entitled_votes');
 
             function calculateEntitledVotes(shareCapital) {
-                let votes = 0;
-                let remaining = shareCapital;
+    let votes = 0;
 
-                if (remaining >= 100000) {
-                    votes += Math.floor(remaining / 100000);
-                    remaining = remaining % 100000; // Get the remaining after calculating full votes
-                }
+    if (shareCapital >= 25000) {
+        if (shareCapital >= 100000) {
+            votes = Math.floor(shareCapital / 100000);
+            const remaining = shareCapital % 100000;
 
-                while (remaining >= 25000) {
-                    if (remaining >= 75000) {
-                        votes += 3;
-                        remaining -= 75000;
-                    } else if (remaining >= 50000) {
-                        votes += 2;
-                        remaining -= 50000;
-                    } else if (remaining >= 25000) {
-                        votes += 1;
-                        remaining -= 25000;
-                    }
-                }
-
-                return Math.min(votes, 5); // Ensure no more than 5 votes are given
+            if (remaining >= 25000) {
+                votes += 1;
             }
+        } else {
+            votes = 1; // If between 25k and 99,999
+        }
+    }
+
+    return Math.min(votes, 5); // Max of 5 votes
+}
+
 
             function updateEntitledVotes() {
                 const shareCapital = parseFloat(shareCapitalElem.textContent.replace(/,/g, '')) || 0;

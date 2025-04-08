@@ -804,30 +804,25 @@
             const shareCapitalElem = document.getElementById('share_capital_balance'); // <td> element
             const entitledVotesElem = document.getElementById('no_of_entitled_votes'); // <td> element
 
-            function calculateEntitledVotes(shareCapital) {
-                let votes = 0;
-                let remaining = shareCapital;
+                function calculateEntitledVotes(shareCapital) {
+    let votes = 0;
 
-                if (remaining >= 100000) {
-                    votes += Math.floor(remaining / 100000);
-                    remaining = remaining % 100000; // Get the remaining after calculating full votes
-                }
+    if (shareCapital >= 25000) {
+        if (shareCapital >= 100000) {
+            votes = Math.floor(shareCapital / 100000); // 1 vote per 100k
+            let remaining = shareCapital % 100000;
 
-                while (remaining >= 25000) {
-                    if (remaining >= 75000) {
-                        votes += 3;
-                        remaining -= 75000;
-                    } else if (remaining >= 50000) {
-                        votes += 2;
-                        remaining -= 50000;
-                    } else if (remaining >= 25000) {
-                        votes += 1;
-                        remaining -= 25000;
-                    }
-                }
-
-                return Math.min(votes, 5); // Ensure no more than 5 votes are given
+            if (remaining >= 25000) {
+                votes += 1; // Add 1 more if remaining is at least 25k
             }
+        } else {
+            votes = 1; // If at least 25k but below 100k, give 1 vote
+        }
+    }
+
+    return Math.min(votes, 5); // Max of 5 votes
+}
+
 
             function updateEntitledVotes() {
                 const shareCapital = parseFloat(shareCapitalElem.textContent.replace(/,/g, '')) || 0;

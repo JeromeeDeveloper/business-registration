@@ -58,24 +58,18 @@ class CoopRegistrationExport implements FromCollection, WithHeadings, WithMappin
 
         // Calculate No. of Entitled Votes based on Share Capital Balance
         $shareCapitalBalance = $coop->share_capital_balance;
-        $votes = 0;
-        $remaining = $shareCapitalBalance;
 
-        while ($remaining >= 25000) {
-            if ($remaining >= 75000) {
-                $votes += 3;
-                $remaining -= 75000;
-            } elseif ($remaining >= 50000) {
-                $votes += 2;
-                $remaining -= 50000;
-            } elseif ($remaining >= 25000) {
-                $votes += 1;
-                $remaining -= 25000;
-            }
+        // Each ₱100,000 gives 1 vote
+        $votes = floor($shareCapitalBalance / 100000);
+
+        // But if there's any amount above ₱25,000, they get at least 1 vote
+        if ($votes === 0 && $shareCapitalBalance >= 25000) {
+            $votes = 1;
         }
 
         // Cap the votes at 5
         $entitledVotes = min($votes, 5);
+
 
         // Return mapped data
         return [

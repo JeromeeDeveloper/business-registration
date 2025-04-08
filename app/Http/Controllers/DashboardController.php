@@ -364,25 +364,24 @@ class DashboardController extends Controller
         $votes = 0;
         $remaining = $shareCapital;
 
-        if ($remaining >= 100000) {
-            $votes += floor($remaining / 100000);
-            $remaining %= 100000;
-        }
+        if ($remaining >= 25000) {
+            if ($remaining >= 100000) {
+                $votes = floor($remaining / 100000);
+                $remaining %= 100000;
 
-        while ($remaining >= 25000) {
-            if ($remaining >= 75000) {
-                $votes += 3;
-                $remaining -= 75000;
-            } elseif ($remaining >= 50000) {
-                $votes += 2;
-                $remaining -= 50000;
-            } elseif ($remaining >= 25000) {
-                $votes += 1;
-                $remaining -= 25000;
+                // Add 1 extra vote if at least ₱25k left
+                if ($remaining >= 25000) {
+                    $votes += 1;
+                }
+            } else {
+                // ₱25k up to ₱99,999 gives 1 vote
+                $votes = 1;
             }
         }
 
-        $votes = min($votes, 5); // Max 5 votes
+        // Cap votes at 5 max
+        $votes = min($votes, 5);
+
 
         // ✅ Count current Voting participants
         $currentVotingCount = Participant::where('coop_id', $user->coop_id)
@@ -697,38 +696,30 @@ class DashboardController extends Controller
 ->appends($request->query());
 
 foreach ($cooperatives as $coop) {
-    $shareCapital = $coop->share_capital_balance; // Assuming 'share_capital_balance' is an attribute
+    $shareCapital = $coop->share_capital_balance;
     $votes = 0;
-    $remaining = $shareCapital;
 
-    if (is_numeric($shareCapital) && $shareCapital > 0) {
-        // Calculate based on ₱100,000 blocks
-        if ($remaining >= 100000) {
-            $votes += floor($remaining / 100000); // Every ₱100,000 gives 1 vote
-        }
+    if (is_numeric($shareCapital) && $shareCapital >= 25000) {
+        if ($shareCapital >= 100000) {
+            $votes = floor($shareCapital / 100000); // Each 100k = 1 vote
+            $remaining = $shareCapital % 100000;
 
-        $remaining = $remaining % 100000; // Remaining after full ₱100,000 blocks
-
-        // Handle ₱75,000, ₱50,000, and ₱25,000 blocks for additional votes
-        while ($remaining >= 25000) {
-            if ($remaining >= 75000) {
-                $votes += 3; // ₱75,000 → +3 votes
-                $remaining -= 75000;
-            } elseif ($remaining >= 50000) {
-                $votes += 2; // ₱50,000 → +2 votes
-                $remaining -= 50000;
-            } elseif ($remaining >= 25000) {
-                $votes += 1; // ₱25,000 → +1 vote
-                $remaining -= 25000;
+            // Add 1 vote if at least 25k remaining
+            if ($remaining >= 25000) {
+                $votes += 1;
             }
+        } else {
+            // 25k to 99,999 = 1 vote
+            $votes = 1;
         }
 
-        // Max votes = 5
+        // Cap votes at 5
         $votes = min($votes, 5);
     }
 
-    $coop->votes = $votes; // Store the calculated votes in the cooperative object
+    $coop->votes = $votes; // Store in object
 }
+
 
     $emails = $cooperatives->pluck('email')->filter()->implode(',');
 
