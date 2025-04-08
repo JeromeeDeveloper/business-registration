@@ -188,7 +188,7 @@ class CooperativeController extends Controller
             $attempt = 0;
             do {
                 try {
-                    $response = Http::timeout(30)->get('https://api.qrserver.com/v1/create-qr-code/', [
+                    $response = Http::timeout(60)->get('https://api.qrserver.com/v1/create-qr-code/', [
                         'data' => $qrData,
                         'size' => '200x200'
                     ]);

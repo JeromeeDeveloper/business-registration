@@ -533,9 +533,7 @@
 
                                         </div>
                                     </form>
-                                    <link
-                                        href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
-                                        rel="stylesheet" />
+                                  
                                     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
                                     {{-- <script>
@@ -587,8 +585,9 @@
                                                 }
                                             });
 
-                                            // Submit the form via AJAX
+                                            // Prepare the form data to send via AJAX
                                             let formData = new FormData(this);
+
                                             fetch("{{ route('coopparticipantadd') }}", {
                                                     method: "POST",
                                                     body: formData,
@@ -604,25 +603,41 @@
                                                             text: "Participant registered and email sent successfully!",
                                                             icon: "success"
                                                         }).then(() => {
-                                                            window.location.href = "{{ route('coop.index') }}"; // Redirect if needed
+                                                            window.location.href =
+                                                            "{{ route('coop.index') }}"; // Redirect after success
                                                         });
                                                     } else {
                                                         Swal.fire({
                                                             title: "Error!",
-                                                            text: data.message || "Something went wrong!",
+                                                            text: data.message || "Something went wrong while processing the form.",
                                                             icon: "error"
                                                         });
                                                     }
                                                 })
                                                 .catch(error => {
+                                                    // Network or other issues that prevented the fetch request
+                                                    console.error("Error:", error);
                                                     Swal.fire({
                                                         title: "Error!",
-                                                        text: "Failed to send email. Please try again.",
-                                                        icon: "error"
+                                                        text: "Failed to send email. Please check your internet connection and try again. " +
+                                                            "If the issue persists, make sure you're connected to the internet and try again by clicking 'Retry'. " +
+                                                            "The page will reload and your input will be preserved, allowing you to attempt submission again.",
+                                                        icon: "error",
+                                                        showCancelButton: true,
+                                                        confirmButtonText: 'Retry',
+                                                        cancelButtonText: 'Cancel',
+                                                    }).then((result) => {
+                                                        if (result.isConfirmed) {
+                                                            // Reload the page and keep the form data
+                                                            window.location.reload();
+                                                        }
                                                     });
                                                 });
                                         });
                                     </script>
+
+
+
 
                                     <script>
                                         document.addEventListener("DOMContentLoaded", function() {
