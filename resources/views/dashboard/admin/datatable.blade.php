@@ -400,9 +400,21 @@
                                                         <button type="submit"
                                                             class="btn btn-outline-success w-100 d-flex align-items-center justify-content-center px-4 py-2 fw-semibold"
                                                             data-bs-toggle="tooltip" title="Send Credentials & Invitation">
-                                                            <i class="fa fa-bell me-2"></i> Invitation & Credentials
+                                                            <i class="fa fa-bell me-2"></i> Reminder for Coop Registration Statuses
                                                         </button>
                                                     </form>
+
+                                                    <form action="{{ route('cooperatives.notifyAll.unregistered') }}"
+                                                    method="POST"
+                                                    onsubmit="showSwalLoader(event, this, 'Sending Status & Invitation...')">
+                                                  @csrf
+                                                  <button type="submit"
+                                                          class="btn btn-outline-warning w-100 d-flex align-items-center justify-content-center px-4 py-2 fw-semibold"
+                                                          data-bs-toggle="tooltip" title="Send Credentials & Invitation">
+                                                      <i class="fa fa-bell me-2"></i> Send Credentials to Unregistered Coops
+                                                  </button>
+                                              </form>
+
 
                                                     <!-- Credentials Form -->
                                                     {{-- <form action="{{ route('cooperatives.notifyCredentialsAll') }}"
@@ -490,7 +502,7 @@
                                                                     <button type="submit"
                                                                         class="btn btn-link btn-info btn-lg"
                                                                         data-bs-toggle="tooltip"
-                                                                        title="Send Invitation & Credentials">
+                                                                        title="Send Credentials">
                                                                         <i class="fa fa-bell"></i>
                                                                     </button>
                                                                 </form>

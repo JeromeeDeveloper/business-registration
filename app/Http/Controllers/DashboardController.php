@@ -26,6 +26,7 @@ use App\Mail\CooperativeNotificationsingle;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Exports\ReportsExport; // If using Excel
 use App\Mail\CooperativeNotificationCredentials;
+use App\Mail\CooperativeNotificationunregistered;
 
 class DashboardController extends Controller
 {
@@ -127,6 +128,54 @@ class DashboardController extends Controller
             return back()->with('error', 'Error sending notifications. Please try again.');
         }
     }
+
+    public function sendNotificationToAllunregistered()
+{
+    try {
+        \Log::info('Notification request received for all cooperatives.');
+
+        // Retrieve all cooperatives
+        $cooperatives = Cooperative::all();
+
+        if ($cooperatives->isEmpty()) {
+            return back()->with('error', 'No cooperatives found.');
+        }
+
+        // Get the latest event
+        $event = Event::oldest()->first();
+
+        if (!$event) {
+            return back()->with('error', 'No event found to notify.');
+        }
+
+        // Send email to cooperatives with GARegistration status 'Rejected'
+        foreach ($cooperatives as $coop) {
+            // Retrieve GA Registration for the current cooperative with 'Rejected' status
+            $gaRegistration = GARegistration::where('coop_id', $coop->coop_id)
+                                              ->where('registration_status', 'Rejected') // Only 'Rejected' status
+                                              ->latest()
+                                              ->first();
+
+            // Check if GA Registration exists and status is 'Rejected'
+            if ($gaRegistration) {
+                // Retrieve users related to the cooperative (Adjust as needed)
+                $users = User::where('coop_id', $coop->coop_id)->get(); // Assuming User has a `coop_id`
+
+                // Send email with the correct number of arguments
+                Mail::to($coop->email)->queue(new CooperativeNotificationunregistered($coop, $event, $gaRegistration, $users));
+
+                \Log::info('Notification sent to: ' . $coop->email);
+            }
+        }
+
+        return redirect()->route('adminview')->with('success', 'Notification sent to all cooperatives with rejected registrations!');
+    } catch (\Exception $e) {
+        \Log::error('Error sending notifications: ' . $e->getMessage());
+
+        return back()->with('error', 'Error sending notifications. Please try again.');
+    }
+}
+
 
 
     public function sendCredentialsToAll()

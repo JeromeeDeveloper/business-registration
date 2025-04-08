@@ -136,6 +136,8 @@ Route::post('/generate-blank-pdf', [CooperativeController::class, 'generateBlank
     Route::post('/cooperatives/{coop_id}/notify', [DashboardController::class, 'sendNotification'])->name('cooperatives.notify');
     Route::post('/cooperatives/notify-all', [DashboardController::class, 'sendNotificationToAll'])->name('cooperatives.notifyAll');
     Route::post('/cooperatives/credentiasl/notify-all', [DashboardController::class, 'sendCredentialsToAll'])->name('cooperatives.notifyCredentialsAll');
+    Route::post('/cooperatives/notify-all/unregistered', [DashboardController::class, 'sendNotificationToAllunregistered'])
+    ->name('cooperatives.notifyAll.unregistered');
 
     Route::get('/Admin/Dashboard', [DashboardController::class, 'admin'])->name('adminDashboard');
     Route::get('/Admin/Register/Cooperatives', [DashboardController::class, 'register'])->name('adminregister');
