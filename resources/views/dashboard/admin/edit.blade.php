@@ -405,7 +405,7 @@
                                                             name="share_capital_balance" id="share_capital_balance"
                                                             value="{{ $coop->share_capital_balance }}"
                                                             placeholder="0" step="0.01">
-                                                            <span class="formatted-number" id="formatted-value"></span>
+                                                        <span class="formatted-number" id="formatted-value"></span>
                                                     </div>
 
 
@@ -517,304 +517,333 @@
                                                             for="membership_status_non_migs">Non-migs</label>
                                                     </div>
 
+                                                    <!-- Instructions on how to become a Migs member -->
+                                                    <div class="mt-4">
+                                                        <h6 class="text-secondary">How to Become a Migs Member:</h6>
+                                                        <ul class="text-muted">
+                                                            <li>The cooperative must not be delinquent (status: "no").
+                                                            </li>
+                                                            <li>At least one service must be availed from the
+                                                                cooperative.</li>
+                                                            <li>The share capital balance must be at least ₱25,000.</li>
+                                                            <li>The CETF balance must be ₱0.</li>
+                                                            <li>CETF remittance must not be null.</li>
+                                                            <li>The CETF required amount must be greater than ₱0.</li>
+                                                            <li>All required documents (Financial Statement, Resolution
+                                                                for Voting Delegates) must be approved.</li>
+                                                        </ul>
+                                                    </div>
                                                 </div>
-                                            </div>
-
-                                            <!-- Second Column: CETF Requirement Computation -->
-                                            <div class="col-md-6 col-lg-4">
-                                                <div class="card shadow-sm p-3">
-                                                    <h5 class="text-primary">CETF Requirement Computation</h5>
-                                                    <hr>
-
-                                                    <div class="form-group">
-                                                        <label for="fs_status">FS (YES/NO)</label>
-                                                        <select class="form-control" id="fs_status" disabled>
-                                                            <option value="yes"
-                                                                {{ $hasFinancialStatement == true ? 'selected' : '' }}>
-                                                                Yes</option>
-                                                            <option value="no"
-                                                                {{ $hasFinancialStatement == false ? 'selected' : '' }}>
-                                                                No</option>
-                                                        </select>
-                                                        <!-- Hidden input to store value -->
-                                                        <input type="hidden" name="fs_status"
-                                                            value="{{ $hasFinancialStatement ? 'yes' : 'no' }}">
-                                                    </div>
-
-
-                                                    <div class="form-group">
-                                                        <label for="delinquent">Delinquent</label>
-                                                        <select class="form-control" id="delinquent_display" disabled>
-                                                            <option value="yes"
-                                                                {{ $coop->total_overdue > 0 ? 'selected' : '' }}>
-                                                                Delinquent</option>
-                                                            <option value="no"
-                                                                {{ $coop->total_overdue <= 0 ? 'selected' : '' }}>
-                                                                Non-Delinquent</option>
-                                                        </select>
-                                                    </div>
-
-                                                    <!-- Hidden input for storing the actual delinquent value -->
-                                                    <input type="hidden" name="delinquent" id="delinquent"
-                                                        value="{{ $coop->total_overdue > 0 ? 'yes' : 'no' }}">
-
-                                                    <div class="form-group">
-                                                        <label for="total_asset">Total Assets</label>
-                                                        <input type="number" class="form-control" name="total_asset"
-                                                            id="total_asset" value="{{ $coop->total_asset }}"
-                                                            placeholder="Enter Total Asset" step="0.01">
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label for="net_surplus">Net Surplus</label>
-                                                        <input type="number" class="form-control" name="net_surplus"
-                                                            id="net_surplus" value="{{ $coop->net_surplus }}"
-                                                            placeholder="Enter Net Surplus" step="0.01">
-                                                    </div>
-
-
-                                                    <div class="form-group">
-                                                        <label for="cetf_due_to_apex">CETF Due to Apex</label>
-                                                        <input type="number" class="form-control"
-                                                            name="cetf_due_to_apex" id="cetf_due_to_apex"
-                                                            value="{{ $coop->cetf_due_to_apex }}"
-                                                            placeholder="Enter CETF Due to Apex" step="0.01">
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label for="cetf_required">Required CETF</label>
-                                                        <input type="number" class="form-control"
-                                                            name="cetf_required" id="cetf_required"
-                                                            value="{{ $coop->cetf_required }}"
-                                                            placeholder="Enter Required CETF" readonly>
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label for="cetf_remittance">CETF Remittance</label>
-                                                        <input type="number" class="form-control"
-                                                            name="cetf_remittance" id="cetf_remittance"
-                                                            id="cetf_remittance" value="{{ $coop->cetf_remittance }}"
-                                                            placeholder="Enter CETF Remittance" step="0.01">
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label for="additional_cetf">Additional CETF</label>
-                                                        <input type="number" class="form-control"
-                                                            name="additional_cetf" id="additional_cetf"
-                                                            id="cetf_remittance" value="{{ $coop->additional_cetf }}"
-                                                            placeholder="Enter Additional CETF" step="0.01">
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label for="cetf_undertaking">CETF Undertaking</label>
-                                                        <input type="text" class="form-control"
-                                                            name="cetf_undertaking" id="cetf_undertaking"
-                                                            id="cetf_undertaking"
-                                                            value="{{ $coop->cetf_undertaking }}"
-                                                            placeholder="Enter CETF Undertaking" step="0.01">
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label for="total_remittance">Total Remittance</label>
-                                                        <input type="number" class="form-control"
-                                                            name="total_remittance" id="total_remittance"
-                                                            id="total_remittance"
-                                                            value="{{ $coop->total_remittance }}"
-                                                            placeholder="Enter Total Remittance" readonly>
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label for="full_cetf_remitted">Full CETF Remitted</label>
-                                                        <select class="form-control" name="full_cetf_remitted"
-                                                            id="full_cetf_remitted" readonly>
-                                                            <option value="yes"
-                                                                {{ $coop->full_cetf_remitted == 'yes' ? 'selected' : '' }}>
-                                                                Yes</option>
-                                                            <option value="no"
-                                                                {{ $coop->full_cetf_remitted == 'no' ? 'selected' : '' }}>
-                                                                No</option>
-                                                        </select>
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label for="cetf_balance">CETF Balance</label>
-                                                        <input type="number" class="form-control"
-                                                            name="cetf_balance" id="cetf_balance"
-                                                            value="{{ $coop->cetf_balance }}"
-                                                            placeholder="CETF Balance" readonly>
-                                                    </div>
-
                                                 </div>
-                                            </div>
 
-                                            <div class="col-md-6 col-lg-4">
-                                                <div class="card shadow-sm p-3">
-                                                    <h5 class="text-primary">Registration Fee
-                                                    </h5>
-                                                    <hr>
+                                                <!-- Second Column: CETF Requirement Computation -->
+                                                <div class="col-md-6 col-lg-4">
+                                                    <div class="card shadow-sm p-3">
+                                                        <h5 class="text-primary">CETF Requirement Computation</h5>
+                                                        <hr>
 
-                                                    <div class="form-group">
-                                                        <label for="registration_date_paid">Registration Date
-                                                            [Paid]</label>
-                                                        <input type="date" class="form-control"
-                                                            name="registration_date_paid" id="registration_date_paid"
-                                                            value="{{ $coop->registration_date_paid }}">
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label for="registration_fee">Registration Fee</label>
-                                                        <input type="number" class="form-control"
-                                                            name="registration_fee" id="registration_fee"
-                                                            value="4500" placeholder="Enter Registration Fee"
-                                                            readonly>
-                                                    </div>
-
-
-
-                                                    <div class="form-group">
-                                                        <label for="num_participants"># of Participants</label>
-                                                        <input type="number" class="form-control"
-                                                            name="num_participants" id="num_participants"
-                                                            value="{{ $coop->participants()->count() }}"
-                                                            placeholder="Enter # of Participants" disabled>
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label for="total_reg_fee">Total Registration Fee</label>
-                                                        <input type="number" class="form-control"
-                                                            name="total_reg_fee" id="total_reg_fee"
-                                                            value="{{ $coop->total_reg_fee }}"
-                                                            placeholder="Enter Total Registration Fee" readonly>
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label>Checklist Automate:</label>
-
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                name="free_2pax_migs" id="free_2pax_migs"
-                                                                value="1"
-                                                                {{ $hasMigsRegistration ? 'checked' : '' }} disabled>
-                                                            <label class="form-check-label" for="free_2pax_migs">Free
-                                                                2 Pax for MIGS</label>
-                                                        </div>
-
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                name="free_100k_cetf" id="free_100k_cetf"
-                                                                value="1" {{ $free100kCETF ? 'checked' : '' }}
-                                                                disabled>
-                                                            <label class="form-check-label" for="free_100k_cetf">1 Pax
-                                                                Free 100K CETF</label>
-                                                        </div>
-
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                name="half_based_cetf" id="half_based_cetf"
-                                                                value="1" {{ $halfBasedCETF ? 'checked' : '' }}
-                                                                disabled>
-                                                            <label class="form-check-label" for="half_based_cetf">1/2
-                                                                Based on CETF</label>
+                                                        <div class="form-group">
+                                                            <label for="fs_status">FS (YES/NO)</label>
+                                                            <select class="form-control" id="fs_status" disabled>
+                                                                <option value="yes"
+                                                                    {{ $hasFinancialStatement == true ? 'selected' : '' }}>
+                                                                    Yes</option>
+                                                                <option value="no"
+                                                                    {{ $hasFinancialStatement == false ? 'selected' : '' }}>
+                                                                    No</option>
+                                                            </select>
+                                                            <!-- Hidden input to store value -->
+                                                            <input type="hidden" name="fs_status"
+                                                                value="{{ $hasFinancialStatement ? 'yes' : 'no' }}">
                                                         </div>
 
 
                                                         <div class="form-group">
-                                                            <label>Checklist Manual:</label>
+                                                            <label for="delinquent">Delinquent</label>
+                                                            <select class="form-control" id="delinquent_display"
+                                                                disabled>
+                                                                <option value="yes"
+                                                                    {{ $coop->total_overdue > 0 ? 'selected' : '' }}>
+                                                                    Delinquent</option>
+                                                                <option value="no"
+                                                                    {{ $coop->total_overdue <= 0 ? 'selected' : '' }}>
+                                                                    Non-Delinquent</option>
+                                                            </select>
+                                                        </div>
+
+                                                        <!-- Hidden input for storing the actual delinquent value -->
+                                                        <input type="hidden" name="delinquent" id="delinquent"
+                                                            value="{{ $coop->total_overdue > 0 ? 'yes' : 'no' }}">
+
+                                                        <div class="form-group">
+                                                            <label for="total_asset">Total Assets</label>
+                                                            <input type="number" class="form-control"
+                                                                name="total_asset" id="total_asset"
+                                                                value="{{ $coop->total_asset }}"
+                                                                placeholder="Enter Total Asset" step="0.01">
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="net_surplus">Net Surplus</label>
+                                                            <input type="number" class="form-control"
+                                                                name="net_surplus" id="net_surplus"
+                                                                value="{{ $coop->net_surplus }}"
+                                                                placeholder="Enter Net Surplus" step="0.01">
+                                                        </div>
+
+
+                                                        <div class="form-group">
+                                                            <label for="cetf_due_to_apex">CETF Due to Apex</label>
+                                                            <input type="number" class="form-control"
+                                                                name="cetf_due_to_apex" id="cetf_due_to_apex"
+                                                                value="{{ $coop->cetf_due_to_apex }}"
+                                                                placeholder="Enter CETF Due to Apex" step="0.01">
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="cetf_required">Required CETF</label>
+                                                            <input type="number" class="form-control"
+                                                                name="cetf_required" id="cetf_required"
+                                                                value="{{ $coop->cetf_required }}"
+                                                                placeholder="Enter Required CETF" readonly>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="cetf_remittance">CETF Remittance</label>
+                                                            <input type="number" class="form-control"
+                                                                name="cetf_remittance" id="cetf_remittance"
+                                                                id="cetf_remittance"
+                                                                value="{{ $coop->cetf_remittance }}"
+                                                                placeholder="Enter CETF Remittance" step="0.01">
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="additional_cetf">Additional CETF</label>
+                                                            <input type="number" class="form-control"
+                                                                name="additional_cetf" id="additional_cetf"
+                                                                id="cetf_remittance"
+                                                                value="{{ $coop->additional_cetf }}"
+                                                                placeholder="Enter Additional CETF" step="0.01">
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="cetf_undertaking">CETF Undertaking</label>
+                                                            <input type="text" class="form-control"
+                                                                name="cetf_undertaking" id="cetf_undertaking"
+                                                                id="cetf_undertaking"
+                                                                value="{{ $coop->cetf_undertaking }}"
+                                                                placeholder="Enter CETF Undertaking" step="0.01">
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="total_remittance">Total Remittance</label>
+                                                            <input type="number" class="form-control"
+                                                                name="total_remittance" id="total_remittance"
+                                                                id="total_remittance"
+                                                                value="{{ $coop->total_remittance }}"
+                                                                placeholder="Enter Total Remittance" readonly>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="full_cetf_remitted">Full CETF Remitted</label>
+                                                            <select class="form-control" name="full_cetf_remitted"
+                                                                id="full_cetf_remitted" readonly>
+                                                                <option value="yes"
+                                                                    {{ $coop->full_cetf_remitted == 'yes' ? 'selected' : '' }}>
+                                                                    Yes</option>
+                                                                <option value="no"
+                                                                    {{ $coop->full_cetf_remitted == 'no' ? 'selected' : '' }}>
+                                                                    No</option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="cetf_balance">CETF Balance</label>
+                                                            <input type="number" class="form-control"
+                                                                name="cetf_balance" id="cetf_balance"
+                                                                value="{{ $coop->cetf_balance }}"
+                                                                placeholder="CETF Balance" readonly>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6 col-lg-4">
+                                                    <div class="card shadow-sm p-3">
+                                                        <h5 class="text-primary">Registration Fee
+                                                        </h5>
+                                                        <hr>
+
+                                                        <div class="form-group">
+                                                            <label for="registration_date_paid">Registration Date
+                                                                [Paid]</label>
+                                                            <input type="date" class="form-control"
+                                                                name="registration_date_paid"
+                                                                id="registration_date_paid"
+                                                                value="{{ $coop->registration_date_paid }}">
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="registration_fee">Registration Fee</label>
+                                                            <input type="number" class="form-control"
+                                                                name="registration_fee" id="registration_fee"
+                                                                value="4500" placeholder="Enter Registration Fee"
+                                                                readonly>
+                                                        </div>
+
+
+
+                                                        <div class="form-group">
+                                                            <label for="num_participants"># of Participants</label>
+                                                            <input type="number" class="form-control"
+                                                                name="num_participants" id="num_participants"
+                                                                value="{{ $coop->participants()->count() }}"
+                                                                placeholder="Enter # of Participants" disabled>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="total_reg_fee">Total Registration Fee</label>
+                                                            <input type="number" class="form-control"
+                                                                name="total_reg_fee" id="total_reg_fee"
+                                                                value="{{ $coop->total_reg_fee }}"
+                                                                placeholder="Enter Total Registration Fee" readonly>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label>Checklist Automate:</label>
 
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="checkbox"
-                                                                    name="free_migs_pax" id="free_migs_pax"
-                                                                    value="4500"
-                                                                    {{ old('free_migs_pax', $coop->free_migs_pax) == 4500 ? 'checked' : '' }}>
-                                                                <label class="form-check-label" for="free_migs_pax">1
-                                                                    Pax Free Officer</label>
+                                                                    name="free_2pax_migs" id="free_2pax_migs"
+                                                                    value="1"
+                                                                    {{ $hasMigsRegistration ? 'checked' : '' }}
+                                                                    disabled>
+                                                                <label class="form-check-label"
+                                                                    for="free_2pax_migs">Free
+                                                                    2 Pax for MIGS</label>
                                                             </div>
-                                                        </div>
 
-                                                        <div class="form-group">
-                                                            <label for="net_required_regfee">Net Required
-                                                                RegFee</label>
-                                                            <input type="number" class="form-control"
-                                                                name="net_required_reg_fee" id="net_required_reg_fee"
-                                                                value="{{ $coop->net_required_reg_fee }}"
-                                                                placeholder="Enter Net Required RegFee" readonly>
-                                                        </div>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox"
+                                                                    name="free_100k_cetf" id="free_100k_cetf"
+                                                                    value="1"
+                                                                    {{ $free100kCETF ? 'checked' : '' }} disabled>
+                                                                <label class="form-check-label" for="free_100k_cetf">1
+                                                                    Pax
+                                                                    Free 100K CETF</label>
+                                                            </div>
 
-                                                        <div class="form-group">
-                                                            <label for="less_prereg_payment">Less: PreReg
-                                                                Payment</label>
-                                                            <input type="number" class="form-control"
-                                                                name="less_prereg_payment" id="less_prereg_payment"
-                                                                value="{{ $coop->less_prereg_payment }}"
-                                                                placeholder="Enter PreReg Payment Deduction"
-                                                                step="0.01">
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label for="less_cetf_balance">Less: CETF
-                                                                Utilization</label>
-                                                            <input type="number" class="form-control"
-                                                                name="less_cetf_balance" id="less_cetf_balance"
-                                                                value="{{ $coop->less_cetf_balance }}"
-                                                                placeholder="Enter CETF Balance Deduction"
-                                                                step="0.01">
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label for="reg_fee_payable">GA RegFee Payable</label>
-                                                            <input type="number" class="form-control"
-                                                                name="reg_fee_payable" id="reg_fee_payable"
-                                                                value="{{ $coop->reg_fee_payable }}"
-                                                                placeholder="Enter GA RegFee Payable" readonly>
-                                                        </div>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox"
+                                                                    name="half_based_cetf" id="half_based_cetf"
+                                                                    value="1"
+                                                                    {{ $halfBasedCETF ? 'checked' : '' }} disabled>
+                                                                <label class="form-check-label"
+                                                                    for="half_based_cetf">1/2
+                                                                    Based on CETF</label>
+                                                            </div>
 
 
+                                                            <div class="form-group">
+                                                                <label>Checklist Manual:</label>
 
-                                                        <h6 class="mt-3 text-secondary">Registration Status:</h6>
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="checkbox"
+                                                                        name="free_migs_pax" id="free_migs_pax"
+                                                                        value="4500"
+                                                                        {{ old('free_migs_pax', $coop->free_migs_pax) == 4500 ? 'checked' : '' }}>
+                                                                    <label class="form-check-label"
+                                                                        for="free_migs_pax">1
+                                                                        Pax Free Officer</label>
+                                                                </div>
+                                                            </div>
 
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                name="registration_status" id="registration_status"
-                                                                disabled
-                                                                {{ optional($coop->gaRegistration)->registration_status == 'Fully Registered' ? 'checked' : '' }}>
-                                                            <label
-                                                                class="form-check-label fw-bold text-dark opacity-75"
-                                                                for="registration_status">
-                                                                Fully Registered
-                                                            </label>
-                                                        </div>
+                                                            <div class="form-group">
+                                                                <label for="net_required_regfee">Net Required
+                                                                    RegFee</label>
+                                                                <input type="number" class="form-control"
+                                                                    name="net_required_reg_fee"
+                                                                    id="net_required_reg_fee"
+                                                                    value="{{ $coop->net_required_reg_fee }}"
+                                                                    placeholder="Enter Net Required RegFee" readonly>
+                                                            </div>
 
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                name="registration_status_partial"
-                                                                id="registration_status_partial" disabled
-                                                                {{ optional($coop->gaRegistration)->registration_status == 'Partial Registered' ? 'checked' : '' }}>
-                                                            <label
-                                                                class="form-check-label fw-bold text-warning opacity-75"
-                                                                for="registration_status_partial">
-                                                                Partially Registered
-                                                            </label>
-                                                        </div>
+                                                            <div class="form-group">
+                                                                <label for="less_prereg_payment">Less: PreReg
+                                                                    Payment</label>
+                                                                <input type="number" class="form-control"
+                                                                    name="less_prereg_payment"
+                                                                    id="less_prereg_payment"
+                                                                    value="{{ $coop->less_prereg_payment }}"
+                                                                    placeholder="Enter PreReg Payment Deduction"
+                                                                    step="0.01">
+                                                            </div>
 
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                name="registration_status_rejected"
-                                                                id="registration_status_rejected" disabled
-                                                                {{ optional($coop->gaRegistration)->registration_status == 'Rejected' ? 'checked' : '' }}>
-                                                            <label
-                                                                class="form-check-label fw-bold text-danger opacity-75"
-                                                                for="registration_status_rejected">
-                                                                Not Registered
-                                                            </label>
+                                                            <div class="form-group">
+                                                                <label for="less_cetf_balance">Less: CETF
+                                                                    Utilization</label>
+                                                                <input type="number" class="form-control"
+                                                                    name="less_cetf_balance" id="less_cetf_balance"
+                                                                    value="{{ $coop->less_cetf_balance }}"
+                                                                    placeholder="Enter CETF Balance Deduction"
+                                                                    step="0.01">
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label for="reg_fee_payable">GA RegFee Payable</label>
+                                                                <input type="number" class="form-control"
+                                                                    name="reg_fee_payable" id="reg_fee_payable"
+                                                                    value="{{ $coop->reg_fee_payable }}"
+                                                                    placeholder="Enter GA RegFee Payable" readonly>
+                                                            </div>
+
+
+
+                                                            <h6 class="mt-3 text-secondary">Registration Status:</h6>
+
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox"
+                                                                    name="registration_status"
+                                                                    id="registration_status" disabled
+                                                                    {{ optional($coop->gaRegistration)->registration_status == 'Fully Registered' ? 'checked' : '' }}>
+                                                                <label
+                                                                    class="form-check-label fw-bold text-dark opacity-75"
+                                                                    for="registration_status">
+                                                                    Fully Registered
+                                                                </label>
+                                                            </div>
+
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox"
+                                                                    name="registration_status_partial"
+                                                                    id="registration_status_partial" disabled
+                                                                    {{ optional($coop->gaRegistration)->registration_status == 'Partial Registered' ? 'checked' : '' }}>
+                                                                <label
+                                                                    class="form-check-label fw-bold text-warning opacity-75"
+                                                                    for="registration_status_partial">
+                                                                    Partially Registered
+                                                                </label>
+                                                            </div>
+
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox"
+                                                                    name="registration_status_rejected"
+                                                                    id="registration_status_rejected" disabled
+                                                                    {{ optional($coop->gaRegistration)->registration_status == 'Rejected' ? 'checked' : '' }}>
+                                                                <label
+                                                                    class="form-check-label fw-bold text-danger opacity-75"
+                                                                    for="registration_status_rejected">
+                                                                    Not Registered
+                                                                </label>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div class="card-action">
-                                            <button class="btn btn-primary btn-round me-2" type="submit">Submit
-                                                Information</button>
+                                            <div class="card-action">
+                                                <button class="btn btn-primary btn-round me-2" type="submit">Submit
+                                                    Information</button>
                                 </form>
                             </div>
                         </div>
@@ -1127,26 +1156,26 @@
 
             // Function to calculate the number of entitled votes
             function calculateEntitledVotes(shareCapital) {
-    let votes = 0;
+                let votes = 0;
 
-    if (shareCapital >= 25000) {
-        if (shareCapital >= 100000) {
-            votes = Math.floor(shareCapital / 100000); // Every ₱100,000 = 1 vote
-            const remaining = shareCapital % 100000;
+                if (shareCapital >= 25000) {
+                    if (shareCapital >= 100000) {
+                        votes = Math.floor(shareCapital / 100000); // Every ₱100,000 = 1 vote
+                        const remaining = shareCapital % 100000;
 
-            if (remaining >= 25000) {
-                votes += 1; // Add 1 more vote for remaining ₱25,000+
+                        if (remaining >= 25000) {
+                            votes += 1; // Add 1 more vote for remaining ₱25,000+
+                        }
+                    } else {
+                        votes = 1; // ₱25,000 to ₱99,999 = 1 vote
+                    }
+
+                    // Cap the votes at 5
+                    votes = Math.min(votes, 5);
+                }
+
+                return votes;
             }
-        } else {
-            votes = 1; // ₱25,000 to ₱99,999 = 1 vote
-        }
-
-        // Cap the votes at 5
-        votes = Math.min(votes, 5);
-    }
-
-    return votes;
-}
 
 
             // Function to update the entitled votes based on share capital
@@ -1194,7 +1223,19 @@
                 let preregPayment = parseFloat(document.getElementById('less_prereg_payment').value) || 0;
                 let cetfBalance = parseFloat(document.getElementById('less_cetf_balance').value) || 0;
 
-                // Total Registration Fee: (ALL participants counted, NO DEDUCTIONS)
+                let free100kCetf = document.getElementById('free_100k_cetf');
+                let halfBasedCetf = document.getElementById('half_based_cetf');
+
+                // Always keep half_based_cetf disabled
+                halfBasedCetf.disabled = true;
+
+                // If 100k CETF is checked, also uncheck half-based CETF
+                if (free100kCetf.checked) {
+                    halfBasedCetf.checked = false;
+                }
+
+
+                // Total Registration Fee
                 let totalRegFee = numParticipants * regFee;
 
                 // Calculate Free Amounts
@@ -1205,23 +1246,17 @@
                 if (document.getElementById('free_migs_pax').checked) {
                     freeAmount += 4500;
                 }
-                if (document.getElementById('free_100k_cetf').checked) {
+                if (free100kCetf.checked) {
                     freeAmount += 4500;
                 }
-
-                if (document.getElementById('half_based_cetf').checked) {
+                if (halfBasedCetf.checked) {
                     freeAmount += 2250;
                 }
 
                 // Net Required Registration Fee
-                let netRequiredRegFee = (numParticipants * regFee) - freeAmount;
+                let netRequiredRegFee = totalRegFee - freeAmount;
 
-                // Apply 50% discount on ONE participant if half_based_cetf is checked
-                // if (document.getElementById('half_based_cetf').checked && numParticipants > 0) {
-                //     netRequiredRegFee -= 2250; // Half of ₱4,500
-                // }
-
-                // GA RegFee Payable: Apply Prereg Payment & CETF Utilization here
+                // Final Payable Fee
                 let regFeePayable = netRequiredRegFee - (preregPayment + cetfBalance);
 
                 // Update Fields
@@ -1230,18 +1265,19 @@
                 document.getElementById('reg_fee_payable').value = regFeePayable.toFixed(2);
             }
 
-            // Attach event listeners
+            // Event Listeners
             let fields = [
                 'registration_fee', 'num_participants', 'less_prereg_payment', 'less_cetf_balance',
                 'free_2pax_migs', 'free_migs_pax', 'free_100k_cetf', 'half_based_cetf'
             ];
 
             fields.forEach(id => {
-                document.getElementById(id).addEventListener('input', calculateFees);
-                document.getElementById(id).addEventListener('change', calculateFees);
+                let el = document.getElementById(id);
+                el.addEventListener('input', calculateFees);
+                el.addEventListener('change', calculateFees);
             });
 
-            // Run on page load
+            // Run on load
             calculateFees();
         });
     </script>
@@ -1286,30 +1322,30 @@
         });
     </script>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        let cetfDueToApexInput = document.getElementById('cetf_due_to_apex');
-        let cetfRequiredInput = document.getElementById('cetf_required');
-        let netSurplusInput = document.getElementById('net_surplus');
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let cetfDueToApexInput = document.getElementById('cetf_due_to_apex');
+            let cetfRequiredInput = document.getElementById('cetf_required');
+            let netSurplusInput = document.getElementById('net_surplus');
 
-        function updateCetfRequired() {
-            let dueToApex = parseFloat(cetfDueToApexInput.value) || 0;
-            let netSurplus = parseFloat(netSurplusInput.value) || 0;
+            function updateCetfRequired() {
+                let dueToApex = parseFloat(cetfDueToApexInput.value) || 0;
+                let netSurplus = parseFloat(netSurplusInput.value) || 0;
 
-            // Check if net_surplus is negative, if so, override cetf_required to 3000
-            if (netSurplus < 0) {
-                cetfRequiredInput.value = "3000.00"; // Override to 3000
-            } else {
-                let cetfRequired = (dueToApex * 0.30).toFixed(2); // Normal calculation
-                cetfRequiredInput.value = cetfRequired;
+                // Check if net_surplus is negative, if so, override cetf_required to 3000
+                if (netSurplus < 0) {
+                    cetfRequiredInput.value = "3000.00"; // Override to 3000
+                } else {
+                    let cetfRequired = (dueToApex * 0.30).toFixed(2); // Normal calculation
+                    cetfRequiredInput.value = cetfRequired;
+                }
             }
-        }
 
-        cetfDueToApexInput.addEventListener('input', updateCetfRequired);
-        netSurplusInput.addEventListener('input', updateCetfRequired); // Recalculate when net_surplus changes
-        updateCetfRequired(); // Initialize on page load
-    });
-</script>
+            cetfDueToApexInput.addEventListener('input', updateCetfRequired);
+            netSurplusInput.addEventListener('input', updateCetfRequired); // Recalculate when net_surplus changes
+            updateCetfRequired(); // Initialize on page load
+        });
+    </script>
 
 
     <script>
