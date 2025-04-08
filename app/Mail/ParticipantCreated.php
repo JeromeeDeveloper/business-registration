@@ -23,7 +23,7 @@ class ParticipantCreated extends Mailable
 
     public function build()
     {
-        return $this->subject('Your Account Has Been Created')
+        return $this->subject('Congratulations on your initial registration at the 2025 MASS-SPECC General Assembly!')
                     ->view('emails.participant_created')
                     ->with([
                         'name' => $this->user->name,
