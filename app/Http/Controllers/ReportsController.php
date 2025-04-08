@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Log;
+use ZipArchive;
 use Carbon\Carbon;
 use App\Models\Cooperative;
 use App\Models\Participant;
@@ -12,8 +13,8 @@ use App\Models\GARegistration;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\UploadedDocument;
 use App\Exports\CoopStatusExport;
-use App\Exports\TshirtSizesExport;
 // use Barryvdh\DomPDF\Facade as PDF;
+use App\Exports\TshirtSizesExport;
 use Illuminate\Support\Facades\DB;
 use App\Exports\ParticipantsExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -21,6 +22,7 @@ use App\Exports\DocumentsStatusExport;
 use App\Exports\CoopRegistrationExport;
 use App\Exports\SummaryDelegatesExport;
 use App\Exports\CooperativeReportExport;
+use Illuminate\Support\Facades\Response;
 use App\Exports\FilteredCoopStatusExport;
 
 
@@ -447,7 +449,49 @@ public function exportDocumentsStatus()
 }
 
 
+public function downloadAllDocuments()
+{
+    // Set the path to the folder containing documents
+    $directoryPath = storage_path('app/public/documents');
 
+    // Check if the directory exists
+    if (!is_dir($directoryPath)) {
+        return response()->json(['error' => 'Directory not found'], 404);
+    }
+
+    // Set the path where the zip file will be created
+    $zipFilePath = storage_path('app/public/temp_documents/all_documents.zip');
+
+    // Create a new ZipArchive instance
+    $zip = new ZipArchive;
+
+    // Open the zip file for creation
+    if ($zip->open($zipFilePath, ZipArchive::CREATE) === TRUE) {
+
+        // Get all the files in the documents directory
+        $files = glob($directoryPath . '/*');  // Get all files
+
+        // Add each file to the zip
+        foreach ($files as $file) {
+            if (is_file($file)) {
+                $zip->addFile($file, basename($file));  // Add the file with its name in the zip
+            }
+        }
+
+        // Close the zip file
+        $zip->close();
+
+        // Check if the zip file was created
+        if (file_exists($zipFilePath)) {
+            return Response::download($zipFilePath, 'all_documents.zip')->deleteFileAfterSend(true);
+        } else {
+            return response()->json(['error' => 'Failed to create zip file'], 500);
+        }
+
+    } else {
+        return response()->json(['error' => 'Failed to open zip file'], 500);
+    }
+}
 
 
 

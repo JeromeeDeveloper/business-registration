@@ -31,6 +31,8 @@ use App\Http\Middleware\ParticipantUserMiddleware;
 use App\Http\Controllers\SupportAttendanceController;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 use App\Http\Controllers\EventParticipantExportController;
+use Illuminate\Support\Facades\Http;
+
 
 // Home Page
 Route::get('/', function () {
@@ -63,6 +65,7 @@ Route::middleware([AdminOrSupportMiddleware::class])->group(function () {
     ->name('reports.preview.filtered_coop_status');
 
 
+    Route::get('/download-all-documents', [ReportsController::class, 'downloadAllDocuments'])->name('download.all.documents');
 
     Route::get('export-event-participants', [EventParticipantExportController::class, 'export'])->name('export-event-participants');
     Route::get('/admin/reports/export', [ReportsController::class, 'export'])->name('reports.export');

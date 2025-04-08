@@ -89,9 +89,11 @@
       </div>
 
     </div>
+    
     <button id="helpBubble" class="help-bubble" data-bs-toggle="modal" data-bs-target="#guideModal" title="Need help?">
         <i class="fas fa-question"></i>
     </button>
+
 
 
     <div class="modal fade" id="guideModal" tabindex="-1" aria-labelledby="guideModalLabel" aria-hidden="true">
@@ -102,7 +104,7 @@
               <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-0">
-              <div id="loginGuideCarousel" class="carousel slide" data-bs-ride="carousel">
+              <div id="loginGuideCarousel" class="carousel slide">
                 <div class="carousel-inner">
 
                   <div class="carousel-item active text-center p-4">

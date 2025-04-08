@@ -320,6 +320,13 @@
                                             <button class="btn btn-label-info btn-round fw-bold d-flex align-items-center px-4 py-2" data-bs-toggle="modal" data-bs-target="#cooperativeModal">
                                                 <i class="fa fa-building me-2"></i> Cooperative Summary Report
                                               </button>
+
+                                              <button class="btn btn-label-info btn-round fw-bold d-flex align-items-center px-4 py-2" onclick="window.location.href='{{ route('download.all.documents') }}'">
+                                                <i class="fa fa-download me-2"></i> Download All Documents
+                                            </button>
+
+
+
                                           </div>
 
                                           <div class="modal fade" id="cooperativeModal" tabindex="-1" aria-labelledby="cooperativeModalLabel" aria-hidden="true">
