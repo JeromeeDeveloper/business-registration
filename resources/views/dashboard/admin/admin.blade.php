@@ -855,7 +855,7 @@
                                                         <p class="card-category mb-1 text-muted">
                                                             Voted Delegates
                                                         <h4 class="card-title mb-0 text-dark">
-                                                            0
+                                                        {{ $votedDelegates }}
                                                         </h4>
                                                     </div>
                                                 </div>
@@ -1066,7 +1066,7 @@
                                 .event-item .badge {
                                     font-size: 14px;
                                     padding: 8px 12px;
-                                    min-width: 60px;
+                                 
                                     text-align: center;
                                     font-weight: bold;
                                     border-radius: 10px;

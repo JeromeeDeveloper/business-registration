@@ -474,7 +474,7 @@
                             <style>
                                 .event-card {
                                     transition: 0.3s;
-                                  
+
                                     margin: auto;
                                     border-radius: 15px;
                                     overflow: hidden;
@@ -520,7 +520,7 @@
                                 .event-item .badge {
                                     font-size: 14px;
                                     padding: 8px 12px;
-                                    min-width: 60px;
+                                  
                                     text-align: center;
                                     font-weight: bold;
                                     border-radius: 10px;

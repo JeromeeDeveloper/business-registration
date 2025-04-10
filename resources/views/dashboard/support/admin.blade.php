@@ -396,39 +396,40 @@
                                             </div>
 
                                             <hr class="my-4">
-                                            <h6 class="fw-bold text-secondary">📊 Report Preview:</h6>
-                                            <div class="border rounded-3 overflow-hidden shadow-sm">
-                                                <iframe id="reportFrame" src="" width="100%"
-                                                    height="400px" frameborder="0"></iframe>
-                                            </div>
-                                        </div>
 
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <h6 class="fw-bold text-secondary mb-0">📊 Report Preview:</h6>
 
-                                        <div class="modal-footer d-flex justify-content-between">
-                                            <button type="button" class="btn btn-secondary px-4"
-                                                data-bs-dismiss="modal">
-                                                <i class="fas fa-times"></i> Close
-                                            </button>
-
-                                            <!-- Export Options -->
-                                            <div class="dropdown">
-                                                <button class="btn btn-success dropdown-toggle px-4" type="button"
-                                                    id="exportDropdown" data-bs-toggle="dropdown"
-                                                    aria-expanded="false">
-                                                    <i class="fas fa-download"></i> Export Options
+                                                <div class="d-flex justify-content-between align-items-center gap-2">
+                                                <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">
+                                                    <i class="fas fa-times"></i> Close
                                                 </button>
-                                                <ul class="dropdown-menu dropdown-menu-end shadow-lg">
-                                                    <li><a class="dropdown-item d-flex align-items-center gap-2"
-                                                            href="#" onclick="printReport()">
+                                                <!-- Export Options Dropdown -->
+                                                <div class="dropdown">
+                                                    <button class="btn btn-success dropdown-toggle px-4" type="button" id="exportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="fas fa-download"></i> Export Options
+                                                    </button>
+                                                    <ul class="dropdown-menu dropdown-menu-end shadow-lg">
+                                                        <li><a class="dropdown-item d-flex align-items-center gap-2" href="#" onclick="printReport()">
                                                             <i class="fas fa-print"></i> Print or Export as PDF
                                                         </a></li>
-                                                    <li><a class="dropdown-item d-flex align-items-center gap-2"
-                                                            href="#" id="exportExcel" target="_blank">
+                                                        <li><a class="dropdown-item d-flex align-items-center gap-2" href="#" id="exportExcel" target="_blank">
                                                             <i class="fas fa-file-excel"></i> Export as Excel
                                                         </a></li>
-                                                </ul>
+                                                    </ul>
+                                                </div>
                                             </div>
+
+                                            </div>
+
+                                            <!-- Report Iframe -->
+                                            <div class="border rounded-3 overflow-hidden shadow-sm mt-3">
+                                                <iframe id="reportFrame" src="" width="100%" height="400px" frameborder="0"></iframe>
+                                            </div>
+
                                         </div>
+
+
                                     </div>
                                 </div>
                             </div>
@@ -496,7 +497,17 @@
 
 
                                         <!-- Table to Preview Filtered Data -->
-                                        <h5 class="mt-3">Preview</h5>
+                                        <div class="d-flex justify-content-between align-items-center modal-footer w-100">
+                                            <h5 class="mt-3">📊 Report Preview:</h5>
+                                            <div>
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Close</button>
+                                                <button type="button" id="previewData" class="btn btn-info">Preview
+                                                    Data</button>
+                                                <button type="button" id="applyRegionFilter"
+                                                    class="btn btn-primary">Generate Excel</button>
+                                            </div>
+                                        </div>
                                         <div class="table-responsive">
                                             <table class="table table-bordered">
                                                 <thead>
@@ -525,14 +536,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Close</button>
-                                        <button type="button" id="previewData" class="btn btn-info">Preview
-                                            Data</button>
-                                        <button type="button" id="applyRegionFilter"
-                                            class="btn btn-primary">Generate Excel</button>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -860,7 +864,7 @@
                                                         <p class="card-category mb-1 text-muted">
                                                             Voted Delegates
                                                         <h4 class="card-title mb-0 text-dark">
-                                                            0
+                                                            {{ $votedDelegates }}
                                                         </h4>
                                                     </div>
                                                 </div>
@@ -1042,7 +1046,7 @@
                                 .event-item .badge {
                                     font-size: 14px;
                                     padding: 8px 12px;
-                                    min-width: 60px;
+                                 
                                     text-align: center;
                                     font-weight: bold;
                                     border-radius: 10px;

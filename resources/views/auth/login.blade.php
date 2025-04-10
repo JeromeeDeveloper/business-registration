@@ -89,7 +89,7 @@
       </div>
 
     </div>
-    
+
     <button id="helpBubble" class="help-bubble" data-bs-toggle="modal" data-bs-target="#guideModal" title="Need help?">
         <i class="fas fa-question"></i>
     </button>
@@ -116,7 +116,7 @@
                   <div class="carousel-item text-center p-4">
                     <h5>Step 2: Enter Your Credentials</h5>
                     <img src="{{ asset('images/step-password.png') }}" class="img-fluid mb-3" alt="Step 2">
-                    <p>Enter the username and password you received in the email. Click the eye icon to reveal the password.</p>
+                    <p>Enter the username and password you received in the email.</p>
                   </div>
 
                   <div class="carousel-item text-center p-4">

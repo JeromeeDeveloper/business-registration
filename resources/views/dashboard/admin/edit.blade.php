@@ -518,7 +518,7 @@
                                                     </div>
 
                                                     <!-- Instructions on how to become a Migs member -->
-                                                    <div class="mt-4">
+                                                    <div>
                                                         <h6 class="text-secondary">How to Become a Migs Member:</h6>
                                                         <ul class="text-muted">
                                                             <li>The cooperative must not be delinquent (status: "no").
@@ -530,9 +530,26 @@
                                                             <li>CETF remittance must not be null.</li>
                                                             <li>The CETF required amount must be greater than ₱0.</li>
                                                             <li>All required documents (Financial Statement, Resolution
-                                                                for Voting Delegates) must be approved.</li>
+                                                                for Voting Delegates) must be accepted.</li>
                                                         </ul>
                                                     </div>
+
+                                                    <div>
+                                                        <h6 class="text-secondary">How to Become Fully Registered:</h6>
+                                                        <ul class="text-muted">
+                                                            <li>All required documents must be accepted:
+                                                                <ul>
+                                                                    <li>Audited Financial Statement</li>
+                                                                    <li>Resolution for Voting Delegates</li>
+                                                                    <li>Deposit Slip for Registration Fee</li>
+                                                                    <li>Deposit Slip for CETF Remittance</li>
+                                                                </ul>
+                                                            </li>
+                                                            <li>None of the required documents should be rejected.</li>
+                                                            <li>The registration fee must be fully paid (₱0 payable).</li>
+                                                        </ul>
+                                                    </div>
+
                                                 </div>
                                                 </div>
 

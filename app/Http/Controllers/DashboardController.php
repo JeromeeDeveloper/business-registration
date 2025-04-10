@@ -229,7 +229,7 @@ class DashboardController extends Controller
     {
 
         $regions = Cooperative::distinct()->pluck('region', 'region')->sort();
-
+        $votedDelegates = Participant::where('voting_status', 'Voted')->count();
         $totalAttended = EventParticipant::whereNotNull('attendance_datetime')->count();
         $totalParticipants = Participant::count();
         $totalUsers = User::count();
@@ -357,7 +357,8 @@ class DashboardController extends Controller
             'totalNonMigsAttended',
             'totalVotingParticipants',
             'events',
-            'registeredParticipants'
+            'registeredParticipants',
+            'votedDelegates'
         ));
     }
 
