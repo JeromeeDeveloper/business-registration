@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\CooperativeNotification;
 use Illuminate\Support\Facades\Storage;
+use App\Mail\CooperativeNotificationsingle;
 
 
 class SupportController extends Controller
@@ -736,7 +737,7 @@ class SupportController extends Controller
                 }
 
                 // Send notification email
-                Mail::to($coop->email)->queue(new CooperativeNotification($coop, $event, $gaRegistration, $users, $sanitizedPassword));
+                Mail::to($coop->email)->queue(new CooperativeNotificationsingle($coop, $event, $gaRegistration, $users, $sanitizedPassword));
                 \Log::info("Notification sent to: {$coop->email}");
 
                 return redirect()->route('supportview')->with('success', 'Notification sent with updated password!');
