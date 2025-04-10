@@ -884,7 +884,8 @@
                                                     Financial Statement</label>
                                                 <input type="file" name="documents[Financial Statement]"
                                                     id="financialStatementFile"
-                                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv"
+                                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv,.zip"
+
                                                     class="form-control mb-2">
 
                                                 @if ($coop->uploadedDocuments()->where('document_type', 'Financial Statement')->exists())
@@ -916,7 +917,8 @@
                                                     class="form-label">Resolution for Voting Delegates</label>
                                                 <input type="file"
                                                     name="documents[Resolution for Voting Delegates]"
-                                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv"
+                                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv,.zip"
+
                                                     class="form-control mb-2">
                                                 @if ($coop->uploadedDocuments()->where('document_type', 'Resolution for Voting Delegates')->exists())
                                                     <p class="text-info">Current File:
@@ -953,7 +955,8 @@
                                                     Slip for Registration Fee</label>
                                                 <input type="file"
                                                     name="documents[Deposit Slip for Registration Fee]"
-                                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv"
+                                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv,.zip"
+
                                                     class="form-control mb-2">
                                                 @if ($coop->uploadedDocuments()->where('document_type', 'Deposit Slip for Registration Fee')->exists())
                                                     <p class="text-info">Current File:
@@ -987,7 +990,8 @@
                                                     Slip for CETF Remittance</label>
                                                 <input type="file"
                                                     name="documents[Deposit Slip for CETF Remittance]"
-                                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv"
+                                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv,.zip"
+
                                                     class="form-control mb-2">
                                                 @if ($coop->uploadedDocuments()->where('document_type', 'Deposit Slip for CETF Remittance')->exists())
                                                     <p class="text-info">Current File:
@@ -1019,7 +1023,8 @@
                                                 <label for="documents[CETF Undertaking]" class="form-label">CETF
                                                     Undertaking</label>
                                                 <input type="file" name="documents[CETF Undertaking]"
-                                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv"
+                                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv,.zip"
+
                                                     class="form-control mb-2">
                                                 @if ($coop->uploadedDocuments()->where('document_type', 'CETF Undertaking')->exists())
                                                     <p class="text-info">Current File:
@@ -1051,7 +1056,8 @@
                                                     class="form-label">Certificate of
                                                     Candidacy</label>
                                                 <input type="file" name="documents[Certificate of Candidacy]"
-                                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv"
+                                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv,.zip"
+
                                                     class="form-control mb-2">
                                                 @if ($coop->uploadedDocuments()->where('document_type', 'Certificate of Candidacy')->exists())
                                                     <p class="text-info">Current File:
@@ -1084,7 +1090,8 @@
                                                     class="form-label">CETF Utilization
                                                     Invoice</label>
                                                 <input type="file" name="documents[CETF Utilization invoice]"
-                                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv"
+                                                    accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv,.zip"
+
                                                     class="form-control mb-2">
                                                 @if ($coop->uploadedDocuments()->where('document_type', 'CETF Utilization invoice')->exists())
                                                     <p class="text-info">Current File:

@@ -446,13 +446,14 @@ class CooperativeController extends Controller
     public function storeDocuments(Request $request)
     {
         $request->validate([
-            'documents.Financial Statement' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv',
-            'documents.Resolution for Voting Delegates' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv',
-            'documents.Deposit Slip for Registration Fee' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv',
-            'documents.Deposit Slip for CETF Remittance' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv',
-            'documents.CETF Undertaking' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv',
-            'documents.Certificate of Candidacy' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv',
-            'documents.CETF Utilization Invoice' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv',
+          'documents.Financial Statement' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv,zip',
+'documents.Resolution for Voting Delegates' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv,zip',
+'documents.Deposit Slip for Registration Fee' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv,zip',
+'documents.Deposit Slip for CETF Remittance' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv,zip',
+'documents.CETF Undertaking' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv,zip',
+'documents.Certificate of Candidacy' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv,zip',
+'documents.CETF Utilization Invoice' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv,zip',
+
         ]);
 
         $cooperative = Auth::user()->cooperative;
