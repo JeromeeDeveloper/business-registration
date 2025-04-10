@@ -16,7 +16,7 @@ class Participant extends Model
     protected $fillable = [
         'coop_id', 'user_id', 'first_name', 'middle_name', 'last_name', 'email', 'nickname', 'gender',
         'phone_number', 'designation', 'congress_type', 'religious_affiliation',
-        'tshirt_size', 'is_msp_officer', 'msp_officer_position', 'delegate_type','reference_number'
+        'tshirt_size', 'is_msp_officer', 'msp_officer_position', 'delegate_type','reference_number','voting_status'
     ];
 
     public function cooperative()

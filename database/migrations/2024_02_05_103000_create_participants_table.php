@@ -34,6 +34,7 @@ return new class extends Migration {
             $table->enum('is_msp_officer', ['Yes', 'No']);
             $table->string('msp_officer_position')->nullable();
             $table->enum('delegate_type', ['Voting', 'Non-Voting']);
+            $table->enum('voting_status', ['Voted', 'Not Voted'])->nullable()->default('Not Voted');
             $table->timestamps();
             $table->string('qr_code')->nullable();
         });
