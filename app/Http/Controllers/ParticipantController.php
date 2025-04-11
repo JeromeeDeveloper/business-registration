@@ -14,6 +14,7 @@ use Illuminate\Validation\Rule;
 use App\Mail\ParticipantCreated;
 use App\Models\EventParticipant;
 use App\Models\UploadedDocument;
+use App\Jobs\SendParticipantEmail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -179,8 +180,8 @@ public function store(Request $request)
     $participant->user_id = $user->user_id;
     $participant->save();
 
-    Mail::to($user->email)->queue(new ParticipantCreated($user, $generatedPassword));
-
+    // Mail::to($user->email)->queue(new ParticipantCreated($user, $generatedPassword));
+    SendParticipantEmail::dispatch($user, $generatedPassword);
     $qrData = route('adminDashboard', ['coop_id' => $participant->coop_id]);
 
     $response = Http::timeout(30)->get('https://api.qrserver.com/v1/create-qr-code/', [
