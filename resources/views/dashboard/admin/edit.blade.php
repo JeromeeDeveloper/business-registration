@@ -1416,8 +1416,7 @@
     </script>
     <script>
         @if (session('markAsDone_success'))
-            <
-            script >
+            <script>
                 Swal.fire({
                     title: 'Success!',
                     text: '{{ session('markAsDone_success') }}',

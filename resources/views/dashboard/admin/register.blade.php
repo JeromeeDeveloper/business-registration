@@ -534,6 +534,7 @@
                                                                                 AGRIBEST</label></li>
                                                                     </ul>
                                                                 </div>
+                                                                <input type="hidden" id="services_availed_json" name="services_availed_json">
                                                             </div>
                                                         </fieldset>
                                                     </div>
@@ -766,49 +767,96 @@
 
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             const dropdownButton = document.getElementById("servicesDropdown");
             const dropdownMenu = document.getElementById("dropdownMenu");
             const checkboxes = dropdownMenu.querySelectorAll('input[type="checkbox"]');
             const hiddenInput = document.getElementById("services_availed_json");
 
-
-            dropdownMenu.addEventListener("click", function(event) {
+            // Prevent dropdown from closing when clicking inside
+            dropdownMenu.addEventListener("click", function (event) {
                 event.stopPropagation();
             });
 
-            dropdownButton.addEventListener("click", function(event) {
+            // Toggle dropdown on button click
+            dropdownButton.addEventListener("click", function (event) {
                 event.stopPropagation();
                 dropdownMenu.classList.toggle("show");
             });
 
-            document.addEventListener("click", function(event) {
+            // Close dropdown when clicking outside
+            document.addEventListener("click", function (event) {
                 if (!dropdownMenu.contains(event.target) && event.target !== dropdownButton) {
                     dropdownMenu.classList.remove("show");
                 }
             });
 
+            // Update dropdown label and hidden input
             function updateDropdownText() {
-                let selected = Array.from(checkboxes)
-                    .filter(i => i.checked)
-                    .map(i => i.value)
-                    .join(", ");
+                const selectedValues = Array.from(checkboxes)
+                    .filter(cb => cb.checked)
+                    .map(cb => cb.value);
 
-                dropdownButton.innerText = selected ? selected : "Select Services";
-                hiddenInput.value = JSON.stringify(selected.split(", ").filter(Boolean)); // Store as JSON
+                dropdownButton.innerText = selectedValues.length
+                    ? selectedValues.join(", ")
+                    : "Select Services";
+
+                hiddenInput.value = JSON.stringify(selectedValues); // JSON array
             }
 
-            // Update on checkbox change
+            // Listen for checkbox changes
             checkboxes.forEach(checkbox => {
                 checkbox.addEventListener("change", updateDropdownText);
             });
 
-            // Load preselected values
+            // Initialize on load
             updateDropdownText();
         });
     </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const dropdownButton = document.getElementById("servicesDropdown");
+        const dropdownMenu = document.getElementById("dropdownMenu");
+        const checkboxes = dropdownMenu.querySelectorAll('input[type="checkbox"]');
+        const hiddenInput = document.getElementById("services_availed_json");
+
+
+        dropdownMenu.addEventListener("click", function(event) {
+            event.stopPropagation();
+        });
+
+        dropdownButton.addEventListener("click", function(event) {
+            event.stopPropagation();
+            dropdownMenu.classList.toggle("show");
+        });
+
+        document.addEventListener("click", function(event) {
+            if (!dropdownMenu.contains(event.target) && event.target !== dropdownButton) {
+                dropdownMenu.classList.remove("show");
+            }
+        });
+
+        function updateDropdownText() {
+            let selected = Array.from(checkboxes)
+                .filter(i => i.checked)
+                .map(i => i.value)
+                .join(", ");
+
+            dropdownButton.innerText = selected ? selected : "Select Services";
+            hiddenInput.value = JSON.stringify(selected.split(", ").filter(Boolean)); // Store as JSON
+        }
+
+        // Update on checkbox change
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener("change", updateDropdownText);
+        });
+
+        // Load preselected values
+        updateDropdownText();
+    });
+</script>
 
 
 @if ($errors->any())
@@ -875,7 +923,7 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            console.log("DOM Loaded - Initializing CETF Calculation");
+
 
             let cetfRequired = document.getElementById('cetf_required');
             let totalRemittance = document.getElementById('total_remittance');
@@ -887,7 +935,7 @@
                 let balance = (required - remitted).toFixed(2);
                 cetfBalance.value = balance;
 
-                console.log(`CETF Update: Required = ${required}, Remitted = ${remitted}, Balance = ${balance}`);
+
             }
 
             cetfRequired?.addEventListener('input', updateCetfBalance);
@@ -898,8 +946,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            console.log("DOM Loaded - Initializing Registration Fee Calculation");
-
             function updateRegFeePayable() {
                 let netRequired = parseFloat(document.getElementById('net_required_reg_fee')?.value) || 0;
                 let lessPreReg = parseFloat(document.getElementById('less_prereg_payment')?.value) || 0;
@@ -908,9 +954,7 @@
                 let regFeePayable = netRequired - (lessPreReg + lessCetf);
                 document.getElementById('reg_fee_payable').value = regFeePayable.toFixed(2);
 
-                console.log(
-                    `Registration Fee Calculation: Net = ${netRequired}, PreReg = ${lessPreReg}, CETF = ${lessCetf}, Payable = ${regFeePayable}`
-                );
+
             }
 
             ['net_required_reg_fee', 'less_prereg_payment', 'less_cetf_balance'].forEach(id => {
@@ -964,7 +1008,7 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            console.log("DOM Loaded - CETF Remittance Calculation Started");
+
 
             let cetfRemittance = document.getElementById('cetf_remittance');
             let additionalCetf = document.getElementById('additional_cetf');
@@ -984,8 +1028,7 @@
                 if (cetfRequiredInput) cetfRequiredInput.value = cetfRequired;
                 if (cetfRequiredHidden) cetfRequiredHidden.value = cetfRequired;
 
-                console.log(`Updated CETF Required: Due to Apex = ${dueToApex}, Required = ${cetfRequired}`);
-                updateFullCetfRemitted();
+
             }
 
             function updateTotalRemittance() {
@@ -997,9 +1040,7 @@
                 if (totalRemittance) totalRemittance.value = total;
                 if (totalRemittanceHidden) totalRemittanceHidden.value = total;
 
-                console.log(
-                    `Updated Total Remittance: CETF = ${cetf}, Additional = ${additional}, Undertaking = ${undertaking}, Total = ${total}`
-                );
+
                 updateFullCetfRemitted();
             }
 
@@ -1008,8 +1049,7 @@
                 let required = parseFloat(cetfRequiredHidden?.value) || 0;
 
                 fullCetfRemitted.value = total === required ? "yes" : "no";
-                console.log(
-                    `Full CETF Remitted: ${fullCetfRemitted.value} (Total = ${total}, Required = ${required})`);
+
             }
 
             [cetfRemittance, additionalCetf, cetfUndertaking].forEach(input => input?.addEventListener('input',
