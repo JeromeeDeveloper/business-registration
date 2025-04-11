@@ -14,6 +14,7 @@ use Illuminate\Validation\Rule;
 use App\Mail\ParticipantCreated;
 use App\Models\EventParticipant;
 use App\Models\UploadedDocument;
+use App\Jobs\SendParticipantEmail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -225,7 +226,8 @@ class CooperativeController extends Controller
             $emailAttempts = 0;
             while (!$emailSent && $emailAttempts < $maxRetries) {
                 try {
-                    Mail::to($user->email)->queue(new ParticipantCreated($user, $generatedPassword));
+                    // Mail::to($user->email)->queue(new ParticipantCreated($user, $generatedPassword));
+                    SendParticipantEmail::dispatch($user, $generatedPassword);
                     $emailSent = true;
                 } catch (\Exception $e) {
                     Log::warning("Email sending attempt {$emailAttempts} failed: " . $e->getMessage());

@@ -67,7 +67,7 @@
 
 
         <h2 class="mb-4 fw-bold text-primary text-center">
-            📑 Coop Registration Summary with Breakdown
+            📑 Voting Delegate Status Count
         </h2>
 
         <table class="table table-hover align-middle border">

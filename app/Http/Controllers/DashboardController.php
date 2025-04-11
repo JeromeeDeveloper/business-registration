@@ -168,7 +168,7 @@ class DashboardController extends Controller
                 }
             }
 
-            return redirect()->route('adminview')->with('success', 'Notification sent to all cooperatives with rejected registrations!');
+            return redirect()->route('adminview')->with('success', 'Notification sent to all cooperatives with no registrations!');
         } catch (\Exception $e) {
             \Log::error('Error sending notifications: ' . $e->getMessage());
 
