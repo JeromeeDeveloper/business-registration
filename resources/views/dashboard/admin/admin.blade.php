@@ -5,64 +5,7 @@
     @include('layouts.adminheader')
     <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
 </head>
-<style>
-    .list-group-item {
-        transition: background-color 0.3s ease, transform 0.2s ease;
-        cursor: pointer;
-    }
 
-    .list-group-item:hover {
-        background-color: rgba(0, 123, 255, 0.1);
-        /* Light blue background */
-        transform: translateY(-3px);
-        /* Slight lift effect */
-    }
-
-    .list-group-item:hover .badge {
-        filter: brightness(1.2);
-        /* Slightly brighten the badge */
-    }
-</style>
-<style>
-    /* Style the Prev and Next buttons */
-    #eventsCarousel .carousel-control-prev,
-    #eventsCarousel .carousel-control-next {
-        width: 40px;
-        height: 40px;
-        background-color: white;
-        border-radius: 50%;
-        top: 50%;
-        transform: translateY(-50%);
-        opacity: 1;
-        /* Optional: always visible */
-    }
-
-    #eventsCarousel .carousel-control-prev-icon,
-    #eventsCarousel .carousel-control-next-icon {
-        filter: invert(32%) sepia(93%) saturate(2115%) hue-rotate(203deg) brightness(90%) contrast(90%);
-        width: 20px;
-        height: 20px;
-    }
-
-    #eventsCarousel .carousel-control-prev {
-        left: -20px;
-        /* Adjust position if needed */
-    }
-
-    #eventsCarousel .carousel-control-next {
-        right: -20px;
-        /* Adjust position if needed */
-    }
-
-    @media (max-width: 576px) {
-
-        /* For small screens */
-        .modal-dialog {
-            max-width: 90%;
-            margin: auto;
-        }
-    }
-</style>
 
 <body>
     <div class="wrapper">
@@ -322,7 +265,8 @@
                                             <h5 class="modal-title fw-bold" id="reportModalLabel">
                                                 <i class="fas fa-file-alt me-2"></i> Select a Report
                                             </h5>
-                                            {{-- <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button> --}}
+                                            <button type="button" class="btn-close btn-close-white"
+                                                data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
 
                                         <div class="modal-body">
@@ -399,30 +343,38 @@
                                                 <h6 class="fw-bold text-secondary mb-0">📊 Report Preview:</h6>
 
                                                 <div class="d-flex justify-content-between align-items-center gap-2">
-                                                <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">
+                                                    {{-- <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">
                                                     <i class="fas fa-times"></i> Close
-                                                </button>
-                                                <!-- Export Options Dropdown -->
-                                                <div class="dropdown">
-                                                    <button class="btn btn-success dropdown-toggle px-4" type="button" id="exportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="fas fa-download"></i> Export Options
-                                                    </button>
-                                                    <ul class="dropdown-menu dropdown-menu-end shadow-lg">
-                                                        <li><a class="dropdown-item d-flex align-items-center gap-2" href="#" onclick="printReport()">
-                                                            <i class="fas fa-print"></i> Print or Export as PDF
-                                                        </a></li>
-                                                        <li><a class="dropdown-item d-flex align-items-center gap-2" href="#" id="exportExcel" target="_blank">
-                                                            <i class="fas fa-file-excel"></i> Export as Excel
-                                                        </a></li>
-                                                    </ul>
+                                                </button> --}}
+                                                    <!-- Export Options Dropdown -->
+                                                    <div class="dropdown">
+                                                        <button
+                                                            class="btn btn-success dropdown-toggle px-4 custom-btn-dropdown"
+                                                            type="button" id="exportDropdown"
+                                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i class="fas fa-download"></i> Export Options
+                                                        </button>
+                                                        <ul
+                                                            class="dropdown-menu dropdown-menu-end shadow-lg custom-dropdown-menu">
+                                                            <li><a class="dropdown-item d-flex align-items-center gap-2"
+                                                                    href="#" onclick="printReport()">
+                                                                    <i class="fas fa-print"></i> Print or Export as PDF
+                                                                </a></li>
+                                                            <li><a class="dropdown-item d-flex align-items-center gap-2"
+                                                                    href="#" id="exportExcel" target="_blank">
+                                                                    <i class="fas fa-file-excel"></i> Export as Excel
+                                                                </a></li>
+                                                        </ul>
+                                                    </div>
+
                                                 </div>
-                                            </div>
 
                                             </div>
 
                                             <!-- Report Iframe -->
                                             <div class="border rounded-3 overflow-hidden shadow-sm mt-3">
-                                                <iframe id="reportFrame" src="" width="100%" height="400px" frameborder="0"></iframe>
+                                                <iframe id="reportFrame" src="" width="100%"
+                                                    height="400px" frameborder="0"></iframe>
                                             </div>
 
 
@@ -439,102 +391,127 @@
                             aria-labelledby="regionFilterLabel" aria-hidden="true">
                             <div class="modal-dialog modal-lg"> <!-- Increased size for better preview -->
                                 <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="regionFilterLabel">Filter Cooperatives</h5>
+                                    <div class="modal-header border-0">
+                                        <h5 class="modal-title d-flex align-items-center" id="regionFilterLabel">
+                                            <i class="bi bi-funnel-fill me-2"></i> Filter Cooperatives
+                                        </h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <label for="regionSelect">Select Region:</label>
-                                        <select id="regionSelect" class="form-select">
-                                            <option value="">All Regions</option>
-                                            <option value="Region I">Region I</option>
-                                            <option value="Region II">Region II</option>
-                                            <option value="Region III">Region III</option>
-                                            <option value="Region IV-A">Region IV-A</option>
-                                            <option value="Region IV-B">Region IV-B</option>
-                                            <option value="Region V">Region V</option>
-                                            <option value="Region VI">Region VI</option>
-                                            <option value="Region VII">Region VII</option>
-                                            <option value="Region VIII">Region VIII</option>
-                                            <option value="Region IX">Region IX</option>
-                                            <option value="Region X">Region X</option>
-                                            <option value="Region XI">Region XI</option>
-                                            <option value="Region XII">Region XII</option>
-                                            <option value="Region XIII">Region XIII</option>
-                                            <option value="NCR">NCR</option>
-                                            <option value="CAR">CAR</option>
-                                            <option value="BARMM">BARMM</option>
-                                            <option value="ZBST">ZBST</option>
-                                            <option value="LUZON">LUZON</option>
-                                        </select>
-
-                                        <label for="migsStatusSelect">Select Membership Status:</label>
-                                        <select id="migsStatusSelect" class="form-select">
-                                            <option value="">All</option>
-                                            <option value="Migs">MIGS</option>
-                                            <option value="Non-migs">Non-MIGS</option>
-                                        </select>
-
-                                        <label for="registrationStatusSelect">Select GA Registration Status:</label>
-                                        <select id="registrationStatusSelect" class="form-select">
-                                            <option value="">All</option>
-                                            <option value="Fully Registered">Fully Registered</option>
-                                            <option value="Partial Registered">Partial Registered</option>
-                                            <option value="Rejected">Not Registered</option>
-                                        </select>
-
-                                        <label for="documentStatusSelect">Select Document Status:</label>
-                                        <select id="documentStatusSelect" class="form-select">
-                                            <option value="">All</option>
-                                            <option value="Pending">Pending</option>
-                                            {{-- <option value="Checked">Checked</option> --}}
-                                            <option value="Approved">Accepted</option>
-                                            <option value="Rejected">Declined</option>
-                                        </select>
-
-                                        <div class="d-flex justify-content-between align-items-center modal-footer w-100">
-                                        <h5 class="mt-3">📊 Report Preview:</h5>
-                                        <div>
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Close</button>
-                                            <button type="button" id="previewData" class="btn btn-info">Preview
-                                                Data</button>
-                                            <button type="button" id="applyRegionFilter"
-                                                class="btn btn-primary">Generate Excel</button>
-                                        </div>
-                                    </div>
-                                        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
-                                            <table class="table table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Cooperative Name</th>
-                                                        <th>Coop ID</th>
-                                                        <th>Region</th>
-                                                        <th>No. of Participants</th>
-                                                        <th>GA Registration Status</th>
-                                                        <th>GA Membership Status</th>
-                                                        <th>Financial Statement</th>
-                                                        <th>Resolution for Voting Delegates</th>
-                                                        <th>Deposit Slip for Registration Fee</th>
-                                                        <th>Deposit Slip for CETF Remittance</th>
-                                                        <th>CETF Undertaking</th>
-                                                        <th>Certificate of Candidacy</th>
-                                                        <th>CETF Utilization Invoice</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="previewTableBody">
-                                                    <tr>
-                                                        <td colspan="13" class="text-center">No data available</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                                        <!-- Region Filter -->
+                                        <div class="mb-3">
+                                            <label for="regionSelect" class="form-label fw-semibold text-muted">Select
+                                                Region:</label>
+                                            <select id="regionSelect" class="form-select custom-select">
+                                                <option value="">All Regions</option>
+                                                <option value="Region I">Region I</option>
+                                                <option value="Region II">Region II</option>
+                                                <option value="Region III">Region III</option>
+                                                <option value="Region IV-A">Region IV-A</option>
+                                                <option value="Region IV-B">Region IV-B</option>
+                                                <option value="Region V">Region V</option>
+                                                <option value="Region VI">Region VI</option>
+                                                <option value="Region VII">Region VII</option>
+                                                <option value="Region VIII">Region VIII</option>
+                                                <option value="Region IX">Region IX</option>
+                                                <option value="Region X">Region X</option>
+                                                <option value="Region XI">Region XI</option>
+                                                <option value="Region XII">Region XII</option>
+                                                <option value="Region XIII">Region XIII</option>
+                                                <option value="NCR">NCR</option>
+                                                <option value="CAR">CAR</option>
+                                                <option value="BARMM">BARMM</option>
+                                                <option value="ZBST">ZBST</option>
+                                                <option value="LUZON">LUZON</option>
+                                            </select>
                                         </div>
 
+                                        <!-- Membership Status Filter -->
+                                        <div class="mb-3">
+                                            <label for="migsStatusSelect"
+                                                class="form-label fw-semibold text-muted">Select Membership
+                                                Status:</label>
+                                            <select id="migsStatusSelect" class="form-select custom-select">
+                                                <option value="">All</option>
+                                                <option value="Migs">MIGS</option>
+                                                <option value="Non-migs">Non-MIGS</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- GA Registration Status Filter -->
+                                        <div class="mb-3">
+                                            <label for="registrationStatusSelect"
+                                                class="form-label fw-semibold text-muted">Select GA Registration
+                                                Status:</label>
+                                            <select id="registrationStatusSelect" class="form-select custom-select">
+                                                <option value="">All</option>
+                                                <option value="Fully Registered">Fully Registered</option>
+                                                <option value="Partial Registered">Partial Registered</option>
+                                                <option value="Rejected">Not Registered</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- Document Status Filter -->
+                                        <div class="mb-3">
+                                            <label for="documentStatusSelect"
+                                                class="form-label fw-semibold text-muted">Select Document
+                                                Status:</label>
+                                            <select id="documentStatusSelect" class="form-select custom-select">
+                                                <option value="">All</option>
+                                                <option value="Pending">Pending</option>
+                                                <option value="Approved">Accepted</option>
+                                                <option value="Rejected">Declined</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- Footer with Action Buttons -->
+                                        <div
+                                            class="d-flex justify-content-between align-items-center modal-footer w-100">
+                                            <h5 class="mt-3 text-muted"><i class="bi bi-bar-chart-line me-2"></i>📊
+                                                Report Preview:</h5>
+                                            <div>
+                                                {{-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> --}}
+                                                <button type="button" id="previewData" class="btn btn-info">Preview
+                                                    Data</button>
+                                                <button type="button" id="applyRegionFilter"
+                                                    class="btn btn-success">Generate Excel</button>
+                                            </div>
+                                        </div>
                                     </div>
 
+
+                                    <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Cooperative Name</th>
+                                                    <th>Coop ID</th>
+                                                    <th>Region</th>
+                                                    <th>No. of Participants</th>
+                                                    <th>GA Registration Status</th>
+                                                    <th>GA Membership Status</th>
+                                                    <th>Financial Statement</th>
+                                                    <th>Resolution for Voting Delegates</th>
+                                                    <th>Deposit Slip for Registration Fee</th>
+                                                    <th>Deposit Slip for CETF Remittance</th>
+                                                    <th>CETF Undertaking</th>
+                                                    <th>Certificate of Candidacy</th>
+                                                    <th>CETF Utilization Invoice</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="previewTableBody">
+                                                <tr>
+                                                    <td colspan="13" class="text-center">No data available</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
 
                                 </div>
+
+
+
                             </div>
                         </div>
 
@@ -545,7 +522,7 @@
                         <!-- Cooperative -->
                         <div class="col">
                             <div class="card card-stats card-round shadow-sm h-100">
-                                 <div class="card-body d-flex flex-column align-items-center">
+                                <div class="card-body d-flex flex-column align-items-center">
                                     <div class="col-icon me-3">
                                         <div class="icon-big text-primary text-center">
                                             <i class="fas fa-building"></i>
@@ -561,7 +538,7 @@
 
                         <div class="col-md-2">
                             <div class="card card-stats card-round shadow-sm h-100">
-                                 <div class="card-body d-flex flex-column align-items-center">
+                                <div class="card-body d-flex flex-column align-items-center">
                                     <div class="col-icon me-3">
                                         <div class="icon-big text-primary text-center">
                                             <i class="fas fa-building"></i>
@@ -577,7 +554,7 @@
 
                         <div class="col-md-2">
                             <div class="card card-stats card-round shadow-sm h-100">
-                                 <div class="card-body d-flex flex-column align-items-center">
+                                <div class="card-body d-flex flex-column align-items-center">
                                     <div class="col-icon me-3">
                                         <div class="icon-big text-success text-center">
                                             <i class="fas fa-building"></i>
@@ -594,7 +571,7 @@
                         <!-- Registered Non-Migs Coops -->
                         <div class="col-md-2">
                             <div class="card card-stats card-round shadow-sm h-100">
-                                 <div class="card-body d-flex flex-column align-items-center">
+                                <div class="card-body d-flex flex-column align-items-center">
                                     <div class="col-icon me-3">
                                         <div class="icon-big text-danger text-center">
                                             <i class="fas fa-building"></i>
@@ -628,7 +605,7 @@
                         <!-- Partially Registered Coops -->
                         <div class="col-md-2">
                             <div class="card card-stats card-round shadow-sm h-100">
-                                 <div class="card-body d-flex flex-column align-items-center">
+                                <div class="card-body d-flex flex-column align-items-center">
                                     <div class="col-icon me-3">
                                         <div class="icon-big text-warning text-center">
                                             <i class="fas fa-exclamation-circle"></i>
@@ -645,7 +622,7 @@
 
                         <div class="col-md-2">
                             <div class="card card-stats card-round shadow-sm h-100">
-                                 <div class="card-body d-flex flex-column align-items-center">
+                                <div class="card-body d-flex flex-column align-items-center">
                                     <div class="col-icon me-3">
                                         <div class="icon-big text-secondary text-center">
                                             <i class="fas fa-users"></i>
@@ -662,7 +639,7 @@
                         <!-- Total Migs Participants -->
                         <div class="col">
                             <div class="card card-stats card-round shadow-sm h-100">
-                                 <div class="card-body d-flex flex-column align-items-center">
+                                <div class="card-body d-flex flex-column align-items-center">
                                     <div class="col-icon me-3">
                                         <div class="icon-big text-danger text-center">
                                             <i class="fas fa-id-card"></i>
@@ -680,7 +657,7 @@
                         <!-- Total Non-Migs Participants -->
                         <div class="col">
                             <div class="card card-stats card-round shadow-sm h-100">
-                                 <div class="card-body d-flex flex-column align-items-center">
+                                <div class="card-body d-flex flex-column align-items-center">
                                     <div class="col-icon me-3">
                                         <div class="icon-big text-secondary text-center">
                                             <i class="fas fa-user-times"></i>
@@ -698,7 +675,7 @@
                         <!-- Participants -->
                         <div class="col">
                             <div class="card card-stats card-round shadow-sm h-100">
-                                 <div class="card-body d-flex flex-column align-items-center">
+                                <div class="card-body d-flex flex-column align-items-center">
                                     <div class="col-icon me-3">
                                         <div class="icon-big text-success text-center">
                                             <i class="fas fa-hand-paper"></i>
@@ -727,7 +704,8 @@
                                         <!-- Total Coop Attended -->
                                         <div class="col-md-3 mb-4">
                                             <div class="card card-stats card-round shadow-sm h-100">
-                                                <div class="card-body d-flex flex-column align-items-center text-center p-3">
+                                                <div
+                                                    class="card-body d-flex flex-column align-items-center text-center p-3">
                                                     <div class="col-icon me-3">
                                                         <div
                                                             class="icon-big text-info text-center rounded-circle bg-light p-3">
@@ -747,7 +725,8 @@
                                         <!-- Total MIGS Coop Attended -->
                                         <div class="col-md-3 mb-4">
                                             <div class="card card-stats card-round shadow-sm h-100">
-                                                <div class="card-body d-flex flex-column align-items-center text-center p-3">
+                                                <div
+                                                    class="card-body d-flex flex-column align-items-center text-center p-3">
                                                     <div class="col-icon me-3">
                                                         <div
                                                             class="icon-big text-success text-center rounded-circle bg-light p-3">
@@ -768,7 +747,8 @@
                                         <!-- Total NON-MIGS Coop Attended -->
                                         <div class="col-md-3 mb-4">
                                             <div class="card card-stats card-round shadow-sm h-100">
-                                                <div class="card-body d-flex flex-column align-items-center text-center p-3">
+                                                <div
+                                                    class="card-body d-flex flex-column align-items-center text-center p-3">
                                                     <div class="col-icon me-3">
                                                         <div
                                                             class="icon-big text-danger text-center rounded-circle bg-light p-3">
@@ -789,7 +769,8 @@
                                         <!-- Total Attended Voting Participants -->
                                         <div class="col-md-3 mb-4">
                                             <div class="card card-stats card-round shadow-sm h-100">
-                                                <div class="card-body d-flex flex-column align-items-center text-center p-3">
+                                                <div
+                                                    class="card-body d-flex flex-column align-items-center text-center p-3">
                                                     <div class="col-icon me-3">
                                                         <div
                                                             class="icon-big text-primary text-center rounded-circle bg-light p-3">
@@ -821,7 +802,8 @@
                                         @foreach ($events as $event)
                                             <div class="col-md-4 mb-4">
                                                 <div class="card card-stats card-round shadow-sm h-100">
-                                                    <div class="card-body d-flex flex-column align-items-center text-center p-3">
+                                                    <div
+                                                        class="card-body d-flex flex-column align-items-center text-center p-3">
                                                         <div class="col-icon me-3">
                                                             <div
                                                                 class="icon-big text-primary text-center rounded-circle bg-light p-3">
@@ -843,7 +825,8 @@
 
                                         <div class="col-md-4 mb-4">
                                             <div class="card card-stats card-round shadow-sm h-100">
-                                                <div class="card-body d-flex flex-column text-center align-items-center p-3">
+                                                <div
+                                                    class="card-body d-flex flex-column text-center align-items-center p-3">
                                                     <div class="col-icon me-3">
                                                         <div
                                                             class="icon-big text-primary text-center rounded-circle bg-light p-3">
@@ -855,7 +838,7 @@
                                                         <p class="card-category mb-1 text-muted">
                                                             Voted Delegates
                                                         <h4 class="card-title mb-0 text-dark">
-                                                        {{ $votedDelegates }}
+                                                            {{ $votedDelegates }}
                                                         </h4>
                                                     </div>
                                                 </div>
@@ -927,21 +910,6 @@
                                 <div id="eventsCarousel" class="carousel slide" data-bs-ride="carousel"
                                     data-bs-interval="7000" data-bs-wrap="true">
 
-                                    <style>
-                                        .card-title {
-                                            white-space: nowrap;
-                                            /* Prevents text from wrapping */
-                                            overflow: hidden;
-                                            /* Hides overflowing text */
-                                            text-overflow: ellipsis;
-                                            /* Adds '...' when text is too long */
-                                            max-width: 80%;
-                                            /* Adjust based on your layout */
-                                            display: inline-block;
-                                            vertical-align: middle;
-                                        }
-                                    </style>
-
                                     <div class="carousel-inner">
                                         @foreach ($latestEvents as $index => $event)
                                             <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
@@ -1011,84 +979,6 @@
                             @else
                                 <p>No upcoming events at the moment.</p>
                             @endif
-
-
-
-                            <style>
-                                .event-card {
-                                    transition: 0.3s;
-
-                                    margin: auto;
-                                    border-radius: 15px;
-                                    overflow: hidden;
-                                    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-                                }
-
-                                .event-card:hover {
-                                    transform: scale(1.02);
-                                    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-                                }
-
-                                .event-card-header {
-                                    background: linear-gradient(45deg, #007bff, #00c6ff);
-                                    color: white;
-                                    padding: 15px;
-                                    text-align: center;
-                                }
-
-                                .event-card-header h5 {
-                                    margin-bottom: 5px;
-                                    font-weight: bold;
-                                }
-
-                                .event-card-body {
-                                    padding: 20px;
-                                    display: flex;
-                                    flex-direction: column;
-                                    gap: 12px;
-                                }
-
-                                .event-item {
-                                    display: flex;
-                                    align-items: center;
-                                    padding: 12px 15px;
-                                    transition: 0.3s;
-                                    border-radius: 10px;
-                                    background: #f9f9f9;
-                                    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-                                }
-
-                                .event-item:hover {
-                                    background: #f1f1f1;
-                                    transform: scale(1.02);
-                                }
-
-                                .event-item .badge {
-                                    font-size: 14px;
-                                    padding: 8px 12px;
-                                 
-                                    text-align: center;
-                                    font-weight: bold;
-                                    border-radius: 10px;
-                                }
-
-                                .event-footer {
-                                    background: linear-gradient(45deg, #ff6f61, #ff9068);
-                                    color: white;
-                                    padding: 15px;
-                                    text-align: center;
-                                    font-weight: bold;
-                                    cursor: pointer;
-                                    transition: 0.3s;
-                                    border-bottom-left-radius: 15px;
-                                    border-bottom-right-radius: 15px;
-                                }
-
-                                .event-footer:hover {
-                                    background: linear-gradient(45deg, #ff5733, #ff784f);
-                                    transform: scale(1.02);
-                                }
-                            </style>
 
                             <div class="card event-card">
                                 <div class="event-card-header">
@@ -1356,7 +1246,7 @@
                 let migsStatus = document.getElementById("migsStatusSelect").value.trim();
                 let registrationStatus = document.getElementById("registrationStatusSelect").value.trim();
                 let documentStatus = document.getElementById("documentStatusSelect").value
-            .trim(); // New filter
+                    .trim(); // New filter
 
                 fetch("{{ route('reports.preview.filtered_coop_status') }}", {
                         method: "POST",
@@ -1421,7 +1311,7 @@
                 let migsStatus = document.getElementById("migsStatusSelect").value.trim();
                 let registrationStatus = document.getElementById("registrationStatusSelect").value.trim();
                 let documentStatus = document.getElementById("documentStatusSelect").value
-            .trim(); // New filter
+                    .trim(); // New filter
 
                 let exportUrl = "{{ route('reports.export.filtered_coop_status') }}";
 
