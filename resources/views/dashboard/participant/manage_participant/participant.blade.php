@@ -183,26 +183,28 @@
                                                         <i class="fa fa-search"></i>
                                                     </button>
                                                     @php
-                                                    $isMay22 = now()->format('m-d') === '05-22';
-                                                @endphp
+                                                        $isMay22 = now()->format('m-d') === '05-22';
+                                                    @endphp
 
-                                                @if ($isMay22)
-                                                    <div class="alert alert-warning d-flex align-items-center" role="alert">
-                                                        <i class="fa fa-exclamation-triangle me-2"></i>
-                                                        <div>
-                                                            Registration is closed. You cannot add participants on May 22.
+                                                    @if ($isMay22)
+                                                        <div class="alert alert-warning d-flex align-items-center"
+                                                            role="alert">
+                                                            <i class="fa fa-exclamation-triangle me-2"></i>
+                                                            <div>
+                                                                Registration is closed. You cannot add participants on
+                                                                May 22.
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                @endif
+                                                    @endif
 
-                                                <button type="button"
+                                                    <button type="button"
                                                         class="btn btn-primary text-white {{ $isMay22 ? 'disabled' : '' }}"
                                                         data-bs-toggle="tooltip"
                                                         title="{{ $isMay22 ? 'Disabled on May 22' : 'Add Participant' }}"
                                                         {{ $isMay22 ? 'aria-disabled=true' : '' }}
                                                         onclick="{{ $isMay22 ? 'return false;' : "location.href='" . route('coopparticipantadd') . "'" }}">
-                                                    <i class="fa fa-plus"></i>
-                                                </button>
+                                                        <i class="fa fa-plus"></i>
+                                                    </button>
 
 
                                                     <button type="button" onclick="printAttendance()"
@@ -302,25 +304,28 @@
                                                                 </a>
 
                                                                 @php
-    $isMay13 = now()->format('m-d') === '05-13';
-@endphp
+                                                                    $isMay13 = now()->format('m-d') === '05-13';
+                                                                @endphp
 
-@if ($isMay13)
-    <div class="alert alert-warning d-flex align-items-center mb-2" role="alert">
-        <i class="fa fa-exclamation-triangle me-2"></i>
-        <div>
-            Editing participants is disabled. The edit period has ended (May 13).
-        </div>
-    </div>
-@endif
+                                                                @if ($isMay13)
+                                                                    <div class="alert alert-warning d-flex align-items-center mb-2"
+                                                                        role="alert">
+                                                                        <i class="fa fa-exclamation-triangle me-2"></i>
+                                                                        <div>
+                                                                            Editing participants is disabled. The edit
+                                                                            period has ended (May 13).
+                                                                        </div>
+                                                                    </div>
+                                                                @endif
 
-<a href="{{ $isMay13 ? '#' : route('coop.participants.edit', $participant->participant_id) }}"
-   class="btn btn-link btn-primary btn-lg {{ $isMay13 ? 'disabled' : '' }}"
-   {{ $isMay13 ? 'aria-disabled=true' : '' }}
-   onclick="{{ $isMay13 ? 'return false;' : '' }}"
-   data-bs-toggle="tooltip" title="{{ $isMay13 ? 'Edit disabled on May 13' : 'Edit Participant' }}">
-   <i class="fa fa-edit"></i>
-</a>
+                                                                <a href="{{ $isMay13 ? '#' : route('coop.participants.edit', $participant->participant_id) }}"
+                                                                    class="btn btn-link btn-primary btn-lg {{ $isMay13 ? 'disabled' : '' }}"
+                                                                    {{ $isMay13 ? 'aria-disabled=true' : '' }}
+                                                                    onclick="{{ $isMay13 ? 'return false;' : '' }}"
+                                                                    data-bs-toggle="tooltip"
+                                                                    title="{{ $isMay13 ? 'Edit disabled on May 13' : 'Edit Participant' }}">
+                                                                    <i class="fa fa-edit"></i>
+                                                                </a>
 
 
                                                                 <form
@@ -394,9 +399,30 @@
                                     </div>
                                 </div>
 
+                                <!-- Pagination info -->
+                                @if ($participants->count())
+                                    <div class="text-center mt-2">
+                                        <small>
+                                            Showing {{ $participants->firstItem() }} to
+                                            {{ $participants->lastItem() }} of
+                                            {{ $participants->total() }} entries
+                                        </small>
+                                    </div>
+                                @endif
+
+                                <!-- Mobile-friendly, centered pagination -->
                                 <div class="d-flex justify-content-center mt-3">
-                                    {{ $participants->appends(['search' => request('search'), 'limit' => request('limit')])->links('pagination::bootstrap-4') }}
+                                    <div class="w-100" style="overflow-x: auto;">
+                                        <div class="d-flex justify-content-center" style="min-width: max-content;">
+                                            {{ $participants->appends([
+                                                    'search' => request('search'),
+                                                    'limit' => request('limit'),
+                                                ])->links('pagination::bootstrap-4') }}
+                                        </div>
+                                    </div>
                                 </div>
+
+
                             </div>
                         </div>
                     </div>

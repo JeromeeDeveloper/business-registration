@@ -418,9 +418,26 @@
                                     </div>
                                 </div>
 
+                                <!-- Pagination info -->
+                                @if ($participants->count())
+                                    <div class="text-center mt-2">
+                                        <small>
+                                            Showing {{ $participants->firstItem() }} to
+                                            {{ $participants->lastItem() }} of
+                                            {{ $participants->total() }} entries
+                                        </small>
+                                    </div>
+                                @endif
+
+                                <!-- Mobile-friendly, centered pagination -->
                                 <div class="d-flex justify-content-center mt-3">
-                                    {{ $participants->appends(['search' => request('search')])->links('pagination::bootstrap-4') }}
+                                    <div class="w-100" style="overflow-x: auto;">
+                                        <div class="d-flex justify-content-center" style="min-width: max-content;">
+                                            {{ $participants->appends(['search' => request('search')])->links('pagination::bootstrap-4') }}
+                                        </div>
+                                    </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>

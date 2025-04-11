@@ -574,8 +574,21 @@
                                     @endif
 
                                 </div>
+
+                                <div class="text-center mt-2">
+                                    <small>
+                                        Showing {{ $cooperatives->firstItem() }} to {{ $cooperatives->lastItem() }} of
+                                        {{ $cooperatives->total() }} entries
+                                    </small>
+                                </div>
+
+                                <!-- Mobile responsive + centered pagination -->
                                 <div class="d-flex justify-content-center mt-3">
-                                    {{ $cooperatives->appends(request()->query())->links('pagination::bootstrap-4') }}
+                                    <div class="w-100" style="overflow-x: auto;">
+                                        <div class="d-flex justify-content-center" style="min-width: max-content;">
+                                            {{ $cooperatives->appends(request()->query())->links('pagination::bootstrap-4') }}
+                                        </div>
+                                    </div>
                                 </div>
 
                             </div>

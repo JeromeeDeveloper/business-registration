@@ -15,6 +15,7 @@ use Illuminate\Validation\Rule;
 use App\Mail\ParticipantCreated;
 use App\Models\EventParticipant;
 use App\Models\UploadedDocument;
+use App\Jobs\SendParticipantEmail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
@@ -170,7 +171,7 @@ class SupportController extends Controller
     {
         $search = $request->input('search');
         $filterNoGA = $request->input('filter_no_ga2');
-        $limit = $request->input('limit', 10);
+        $limit = $request->input('limit', 5);
 
         $cooperatives = Cooperative::query();
 
@@ -695,7 +696,9 @@ class SupportController extends Controller
         $user->save();
 
         // Send email with the new password
-        Mail::to($user->email)->queue(new ParticipantCreated($user, $temporaryPassword));
+        // Mail::to($user->email)->queue(new ParticipantCreated($user, $temporaryPassword));
+
+        SendParticipantEmail::dispatch($user, $temporaryPassword);
 
         return response()->json([
             'success' => true,

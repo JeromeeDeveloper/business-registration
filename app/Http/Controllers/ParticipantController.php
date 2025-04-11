@@ -77,7 +77,8 @@ class ParticipantController extends Controller
         $user->save();
 
         // Send email with the new password
-        Mail::to($user->email)->queue(new ParticipantCreated($user, $temporaryPassword));
+        // Mail::to($user->email)->queue(new ParticipantCreated($user, $temporaryPassword));
+        SendParticipantEmail::dispatch($user, $temporaryPassword);
 
         return response()->json([
             'success' => true,
@@ -97,8 +98,8 @@ class ParticipantController extends Controller
         $user->save();
 
         // Send email with the new password
-        Mail::to($user->email)->queue(new ParticipantCreated($user, $temporaryPassword));
-
+        // Mail::to($user->email)->queue(new ParticipantCreated($user, $temporaryPassword));
+        SendParticipantEmail::dispatch($user, $temporaryPassword);
         return response()->json([
             'success' => true,
             'message' => 'A new password has been generated and sent to the user.'
