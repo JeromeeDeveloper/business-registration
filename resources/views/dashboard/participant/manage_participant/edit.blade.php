@@ -45,22 +45,35 @@
                             <h4 class="text-section">Components</h4>
                         </li>
 
-                        <li class="nav-item">
-                            <a data-bs-toggle="collapse" href="#participant">
-                                <i class="fas fa-users"></i>
-                                <p>Participant</p>
-                                <span class="caret"></span>
-                            </a>
-                            <div class="collapse show" id="participant">
-                                <ul class="nav nav-collapse">
-                                    <li class="active">
-                                        <a href="{{ route('coop.index') }}">
-                                            <span class="sub-item">Participants</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
+                        @php
+    // Check if the current date is May 22
+    $isMay22 = now()->format('m-d') === '05-22';
+
+    // Check if the participant count exceeds 1000
+    $participantCount = \App\Models\EventParticipant::count();
+    $isMaxedParticipants = $participantCount >= 1000;
+@endphp
+
+<li class="nav-item">
+    <a data-bs-toggle="collapse" href="#participant"
+       class="{{ $isMay22 || $isMaxedParticipants ? 'disabled' : '' }}"
+       aria-disabled="{{ $isMay22 || $isMaxedParticipants ? 'true' : 'false' }}">
+        <i class="fas fa-users"></i>
+        <p>Participant</p>
+        <span class="caret"></span>
+    </a>
+    <div class="collapse show" id="participant">
+        <ul class="nav nav-collapse">
+            <li class="active">
+                <a href="{{ $isMay22 || $isMaxedParticipants ? '#' : route('coop.index') }}"
+                   class="{{ $isMay22 || $isMaxedParticipants ? 'disabled' : '' }}">
+                    <span class="sub-item">Participants</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</li>
+
 
                         <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#cooperative">
@@ -195,17 +208,36 @@
                                                     </div>
                                                 @endif
 
-                                                @if ($youthCongressFull)
-                                                <div class="alert alert-danger" role="alert">
-                                                    <strong>The Youth Congress is full.</strong> Please select a
-                                                    different congress.
+                                                @php
+                                                    $eventNames = [
+                                                        14 => 'Gender Congress',
+                                                        15 => 'Youth Congress',
+                                                        18 => 'Education Committee Forum',
+                                                    ];
+                                                @endphp
+
+                                                <div class="d-flex flex-wrap gap-3 mb-3">
+                                                    @foreach ([14, 15, 18] as $eventId)
+                                                        @if (isset($eventStatus[$eventId]))
+                                                            @php
+                                                                $status = $eventStatus[$eventId];
+                                                                $name = $eventNames[$eventId] ?? 'Unknown Event';
+                                                                $alertClass = $status['full']
+                                                                    ? 'alert-danger'
+                                                                    : 'alert-info';
+                                                                $message = $status['full']
+                                                                    ? "<strong>{$name} is full.</strong> All {$status['total']} slots have been taken."
+                                                                    : "<strong>{$status['remaining']} out of {$status['total']} slots remaining</strong> for the {$name}.";
+                                                            @endphp
+
+                                                            <div class="alert {{ $alertClass }} mb-0"
+                                                                role="alert" style="min-width: 280px; flex: 1;">
+                                                                {!! $message !!}
+                                                            </div>
+                                                        @endif
+                                                    @endforeach
                                                 </div>
-                                            @else
-                                                <div class="alert alert-info" role="alert">
-                                                    <strong>{{ $remainingSlots }} slots remaining</strong> for the
-                                                    Youth Congress. Hurry up and secure your spot!
-                                                </div>
-                                            @endif
+
 
                                                 <div class="col-md-6 col-lg-4">
                                                     <div class="form-group">
@@ -359,20 +391,48 @@
                                                             <ul class="dropdown-menu p-3"
                                                                 style="width: 100%; max-height: 300px; overflow-y: auto;">
                                                                 @foreach ($events as $event)
+                                                                    @php
+                                                                        $isEventFull =
+                                                                            isset($eventStatus[$event->event_id]) &&
+                                                                            $eventStatus[$event->event_id]['full'];
+                                                                        $isChecked = in_array(
+                                                                            $event->event_id,
+                                                                            $participantEventIds,
+                                                                        );
+                                                                        $eventTotal =
+                                                                            $eventStatus[$event->event_id]['total'] ??
+                                                                            0;
+                                                                        $eventRemaining =
+                                                                            $eventStatus[$event->event_id][
+                                                                                'remaining'
+                                                                            ] ?? 0;
+                                                                    @endphp
+
                                                                     <li>
                                                                         <div class="form-check">
                                                                             <input class="form-check-input"
                                                                                 type="checkbox" name="event_ids[]"
                                                                                 value="{{ $event->event_id }}"
                                                                                 id="event_{{ $event->event_id }}"
-                                                                                {{ in_array($event->event_id, $participantEventIds) ? 'checked' : '' }}>
+                                                                                {{ $isChecked ? 'checked' : '' }}
+                                                                                {{ $isEventFull ? 'disabled' : '' }}>
                                                                             <label class="form-check-label"
                                                                                 for="event_{{ $event->event_id }}">
                                                                                 {{ $event->title }}
+                                                                                @if (in_array($event->event_id, [14, 15, 18]))
+                                                                                    @if ($isEventFull)
+                                                                                        (Full)
+                                                                                    @else
+                                                                                        ({{ $eventRemaining }} out of
+                                                                                        {{ $eventTotal }} slots
+                                                                                        remaining)
+                                                                                    @endif
+                                                                                @endif
                                                                             </label>
                                                                         </div>
                                                                     </li>
                                                                 @endforeach
+
                                                             </ul>
                                                         </div>
                                                     </div>

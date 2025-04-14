@@ -80,16 +80,30 @@ class CooperativeController extends Controller
         $shareCapital = $cooperative->share_capital_balance ?? 0;
 
         // Get participant count for Youth Congress (event_id = 15)
-        $youthCongressParticipantCount = EventParticipant::where('event_id', 15)->count();
-        $totalCapacity = 150; // Assuming Youth Congress has 150 slots
-        $remainingSlots = $totalCapacity - $youthCongressParticipantCount;
+        // Define limits for specific events
+        $eventLimits = [
+            14 => 350,
+            15 => 150,
+            18 => 300,
+        ];
 
-        // Remove Youth Congress if participant count is 150 or more
-        $events = $events->filter(function ($event) use ($youthCongressParticipantCount) {
-            return !($event->event_id == 15 && $youthCongressParticipantCount >= 150);
+        $eventStatus = [];
+
+        foreach ($eventLimits as $eventId => $limit) {
+            $count = EventParticipant::where('event_id', $eventId)->count();
+            $eventStatus[$eventId] = [
+                'full' => $count >= $limit,
+                'remaining' => max(0, $limit - $count),
+                'total' => $limit,
+            ];
+        }
+
+
+        // Remove full events from the $events collection
+        $events = $events->filter(function ($event) use ($eventStatus) {
+            return !isset($eventStatus[$event->event_id]) || !$eventStatus[$event->event_id]['full'];
         });
 
-        $youthCongressFull = $youthCongressParticipantCount >= $totalCapacity;
 
         $votes = 0;
         $remaining = $shareCapital;
@@ -124,13 +138,9 @@ class CooperativeController extends Controller
             'shareCapital',
             'votes',
             'canAddVoting',
-            'youthCongressFull',
-            'remainingSlots'
+            'eventStatus'
         ));
     }
-
-
-
 
     public function store(Request $request)
     {
@@ -274,50 +284,50 @@ class CooperativeController extends Controller
     $cooperatives = Cooperative::all();
     $events = Event::all();
 
-    // ✅ Get participant count for Youth Congress (event_id = 15)
-    $youthCongressParticipantCount = EventParticipant::where('event_id', 15)->count();
-    $youthCongressCapacity = 150; // Set the capacity for Youth Congress
+    // ✅ Event capacity limits
+    $eventLimits = [
+        14 => 350,
+        15 => 150,
+        18 => 300,
+    ];
 
-    // ✅ Calculate remaining slots for Youth Congress
-    $remainingSlots = $youthCongressCapacity - $youthCongressParticipantCount;
+    $eventStatus = [];
 
-    // ✅ Remove Youth Congress if participant count is 150 or more
-    $events = $events->filter(function ($event) use ($youthCongressParticipantCount) {
-        if ($event->event_id == 15 && $youthCongressParticipantCount >= 150) {
-            return false;
-        }
-        return true;
+    foreach ($eventLimits as $eventId => $limit) {
+        $count = EventParticipant::where('event_id', $eventId)->count();
+        $eventStatus[$eventId] = [
+            'full' => $count >= $limit,
+            'remaining' => max(0, $limit - $count),
+            'total' => $limit,
+        ];
+    }
+
+    // ✅ Remove full events from list (optional – skip if you want to show disabled checkboxes instead)
+    $events = $events->filter(function ($event) use ($eventStatus) {
+        return !isset($eventStatus[$event->event_id]) || !$eventStatus[$event->event_id]['full'];
     });
-
-    // ✅ Optional: use this in Blade to show a message if Youth Congress is full
-    $youthCongressFull = $youthCongressParticipantCount >= 150;
 
     // ✅ Voting logic
     $shareCapital = $participant->cooperative->share_capital_balance ?? 0;
     $votes = 0;
 
-    // Calculate votes based on share capital
     if ($shareCapital >= 25000) {
-        $votes = 1; // ₱25,000 = 1 vote
+        $votes = 1;
     }
 
     if ($shareCapital >= 100000) {
-        $votes += floor(($shareCapital - 25000) / 100000); // For every ₱100,000 after the first ₱25,000
+        $votes += floor(($shareCapital - 25000) / 100000);
     }
 
-    // Max votes = 5
     $votes = min($votes, 5);
 
-    // ✅ Current Voting Count Logic
     $currentVotingCount = Participant::where('coop_id', $participant->coop_id)
         ->where('delegate_type', 'Voting')
         ->where('participant_id', '!=', $participant->participant_id)
         ->count();
 
-    // Check if additional voting delegate can be added
     $canAddVoting = $currentVotingCount < $votes || $participant->delegate_type === 'Voting';
 
-    // ✅ Pass the calculated `votes` to the view
     return view('dashboard.participant.manage_participant.edit', compact(
         'participant',
         'cooperatives',
@@ -326,10 +336,10 @@ class CooperativeController extends Controller
         'shareCapital',
         'currentVotingCount',
         'events',
-        'youthCongressFull',
-        'remainingSlots'
+        'eventStatus'
     ));
 }
+
 
 
     public function update(Request $request, $participant_id)
@@ -448,13 +458,13 @@ class CooperativeController extends Controller
     public function storeDocuments(Request $request)
     {
         $request->validate([
-          'documents.Financial Statement' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv,zip',
-'documents.Resolution for Voting Delegates' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv,zip',
-'documents.Deposit Slip for Registration Fee' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv,zip',
-'documents.Deposit Slip for CETF Remittance' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv,zip',
-'documents.CETF Undertaking' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv,zip',
-'documents.Certificate of Candidacy' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv,zip',
-'documents.CETF Utilization Invoice' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv,zip',
+            'documents.Financial Statement' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv,zip',
+            'documents.Resolution for Voting Delegates' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv,zip',
+            'documents.Deposit Slip for Registration Fee' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv,zip',
+            'documents.Deposit Slip for CETF Remittance' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv,zip',
+            'documents.CETF Undertaking' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv,zip',
+            'documents.Certificate of Candidacy' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv,zip',
+            'documents.CETF Utilization Invoice' => 'nullable|mimes:jpg,jpeg,png,pdf,xlsx,xls,csv,zip',
 
         ]);
 
@@ -671,6 +681,4 @@ class CooperativeController extends Controller
 
         return redirect()->route('cooperatives.edit', $cooperative->coop_id);
     }
-
-
 }

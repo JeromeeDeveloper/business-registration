@@ -53,7 +53,7 @@
             </p>
 
 
-            {{-- <h3>Login Credentials:</h3>
+            <h3>Login Credentials:</h3>
             <p><strong>Username:</strong> {{ $coop->email }}</p>
 
             <p><strong>Password:</strong>
@@ -69,7 +69,7 @@
                 @else
                     DefaultGA2025
                 @endif
-            </p> --}}
+            </p>
 
             <h3>Need to register more participants? Here's how:</h3>
             <ol>

@@ -223,15 +223,19 @@
                     </div>
                   </div>
                   <div class="card-body">
-                    @if ($youthCongressFull)
-                    <div class="alert alert-danger" role="alert">
-                        <strong>The Youth Congress is full.</strong> Please select a different congress.
-                    </div>
-                @else
-                    <div class="alert alert-info" role="alert">
-                        <strong>{{ $remainingSlots }} slots remaining</strong> for the Youth Congress. Hurry up and secure your spot!
-                    </div>
-                @endif
+                    @foreach ($eventStatus as $status)
+                        <div class="alert {{ $status['full'] ? 'alert-danger' : 'alert-info' }}" role="alert">
+                            <strong>{{ $status['name'] }}:</strong>
+                            @if ($status['full'])
+                                Full ({{ $status['total'] }} slots)
+                            @else
+                                {{ $status['remaining'] }} slots remaining out of {{ $status['total'] }}
+                            @endif
+                        </div>
+                    @endforeach
+                </div>
+
+
                     <form id="participantForm" action="{{ route('participants.update', $participant->participant_id) }}" method="POST">
                         @csrf
                         @method('PUT')

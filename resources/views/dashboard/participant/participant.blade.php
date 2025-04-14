@@ -172,22 +172,35 @@
                             <h4 class="text-section">Components</h4>
                         </li>
 
-                        <li class="nav-item">
-                            <a data-bs-toggle="collapse" href="#participant">
-                                <i class="fas fa-users"></i>
-                                <p>Participant</p>
-                                <span class="caret"></span>
-                            </a>
-                            <div class="collapse" id="participant">
-                                <ul class="nav nav-collapse">
-                                    <li>
-                                        <a href="{{ route('coop.index') }}">
-                                            <span class="sub-item">Participants</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
+                        @php
+    // Check if the current date is May 22
+    $isMay22 = now()->format('m-d') === '05-22';
+
+    // Check if the participant count exceeds 1000
+    $participantCount = \App\Models\EventParticipant::count();
+    $isMaxedParticipants = $participantCount >= 1000;
+@endphp
+
+<li class="nav-item">
+    <a data-bs-toggle="collapse" href="#participant"
+       class="{{ $isMay22 || $isMaxedParticipants ? 'disabled' : '' }}"
+       aria-disabled="{{ $isMay22 || $isMaxedParticipants ? 'true' : 'false' }}">
+        <i class="fas fa-users"></i>
+        <p>Participant</p>
+        <span class="caret"></span>
+    </a>
+    <div class="collapse" id="participant">
+        <ul class="nav nav-collapse">
+            <li>
+                <a href="{{ $isMay22 || $isMaxedParticipants ? '#' : route('coop.index') }}"
+                   class="{{ $isMay22 || $isMaxedParticipants ? 'disabled' : '' }}">
+                    <span class="sub-item">Participants</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</li>
+
 
 
                         <li class="nav-item">
@@ -369,21 +382,22 @@
                                 $isMay22 = now()->format('m-d') === '05-22';
                             @endphp
 
-                            @if ($isMay22)
-                                <div class="alert alert-warning d-flex align-items-center mb-3" role="alert">
-                                    <i class="fa fa-exclamation-triangle me-2"></i>
-                                    <div>
-                                        Registration is closed. You cannot add participants on May 22.
-                                    </div>
-                                </div>
-                            @endif
+                            @php
+                                // Check if the current date is May 22
+                                $isMay22 = now()->format('m-d') === '05-22';
 
-                            <a href="{{ $isMay22 ? '#' : route('coopparticipantadd') }}"
-                                class="btn btn-primary btn-lg action-btn {{ $isMay22 ? 'disabled' : '' }}"
-                                {{ $isMay22 ? 'aria-disabled=true' : '' }}
-                                onclick="{{ $isMay22 ? 'return false;' : '' }}">
+                                // Check if the participant count exceeds 1000
+                                $participantCount = \App\Models\EventParticipant::count();
+                                $isMaxedParticipants = $participantCount >= 1000;
+                            @endphp
+
+                            <a href="{{ $isMay22 || $isMaxedParticipants ? '#' : route('coopparticipantadd') }}"
+                                class="btn btn-primary btn-lg action-btn {{ $isMay22 || $isMaxedParticipants ? 'disabled' : '' }}"
+                                {{ $isMay22 || $isMaxedParticipants ? 'aria-disabled=true' : '' }}
+                                onclick="{{ $isMay22 || $isMaxedParticipants ? 'return false;' : '' }}">
                                 <i class="fas fa-user-plus me-2"></i> Register Participants
                             </a>
+
 
 
 
@@ -532,7 +546,7 @@
                                             <div class="numbers">
                                                 <p class="card-category">Registration Status</p>
                                                 <h4
-                                                    class="card-title
+                                                    class="event-title
                                                     {{ $registrationStatus === 'Fully Registered'
                                                         ? 'text-success'
                                                         : ($registrationStatus === 'Partial Registered'
@@ -561,7 +575,7 @@
                                             <div class="numbers">
                                                 <p class="card-category">Membership Status</p>
                                                 <h4
-                                                    class="card-title {{ $membershipStatus === 'Migs' ? 'text-success' : 'text-danger' }}">
+                                                    class="event-title {{ $membershipStatus === 'Migs' ? 'text-success' : 'text-danger' }}">
                                                     {{ strtoupper($membershipStatus === 'Migs' ? 'Migs' : 'Non-migs') }}
                                                 </h4>
                                             </div>
@@ -714,7 +728,8 @@
                                             <div class="input-group">
                                                 <span class="input-group-text"><i
                                                         class="fas fa-hand-holding-usd"></i></span>
-                                                <input type="number" class="form-control" id="cetfRemittance" readonly/>
+                                                <input type="number" class="form-control" id="cetfRemittance"
+                                                    readonly />
                                             </div>
                                         </div>
 
@@ -748,9 +763,8 @@
                                     gap: 10px;
                                 }
 
-                                .card-title {
+                                .event-title {
                                     flex-grow: 1;
-                                    /* Allows the title to take up available space */
                                     white-space: nowrap;
                                     overflow: hidden;
                                     text-overflow: ellipsis;
@@ -773,7 +787,7 @@
                                                     <div class="card card-primary card-round mb-3">
                                                         <div class="card-header">
                                                             <div class="card-head-row">
-                                                                <div class="card-title" title="{{ $event->title }}">
+                                                                <div class="card-title event-title" title="{{ $event->title }}">
                                                                     {{ $event->title }}</div>
                                                                 <div class="card-tools">
                                                                     <div class="dropdown">
@@ -941,7 +955,7 @@
                                 .event-item .badge {
                                     font-size: 14px;
                                     padding: 8px 12px;
-                                  
+
                                     text-align: center;
                                     font-weight: bold;
                                     border-radius: 10px;
@@ -1083,17 +1097,12 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         window.location.href =
-                        "{{ route('documents') }}"; // Update with actual upload route
+                            "{{ route('documents') }}"; // Update with actual upload route
                     }
                 });
             @endif
         });
     </script>
-
-
-
-
-
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {

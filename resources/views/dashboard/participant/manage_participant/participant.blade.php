@@ -45,22 +45,35 @@
                             <h4 class="text-section">Components</h4>
                         </li>
 
-                        <li class="nav-item">
-                            <a data-bs-toggle="collapse" href="#participant">
-                                <i class="fas fa-users"></i>
-                                <p>Participant</p>
-                                <span class="caret"></span>
-                            </a>
-                            <div class="collapse show" id="participant">
-                                <ul class="nav nav-collapse">
-                                    <li class="active">
-                                        <a href="{{ route('coop.index') }}">
-                                            <span class="sub-item">Participants</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
+                        @php
+    // Check if the current date is May 22
+    $isMay22 = now()->format('m-d') === '05-22';
+
+    // Check if the participant count exceeds 1000
+    $participantCount = \App\Models\EventParticipant::count();
+    $isMaxedParticipants = $participantCount >= 1000;
+@endphp
+
+<li class="nav-item">
+    <a data-bs-toggle="collapse" href="#participant"
+       class="{{ $isMay22 || $isMaxedParticipants ? 'disabled' : '' }}"
+       aria-disabled="{{ $isMay22 || $isMaxedParticipants ? 'true' : 'false' }}">
+        <i class="fas fa-users"></i>
+        <p>Participant</p>
+        <span class="caret"></span>
+    </a>
+    <div class="collapse show" id="participant">
+        <ul class="nav nav-collapse">
+            <li class="active">
+                <a href="{{ $isMay22 || $isMaxedParticipants ? '#' : route('coop.index') }}"
+                   class="{{ $isMay22 || $isMaxedParticipants ? 'disabled' : '' }}">
+                    <span class="sub-item">Participants</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</li>
+
 
 
                         <li class="nav-item">

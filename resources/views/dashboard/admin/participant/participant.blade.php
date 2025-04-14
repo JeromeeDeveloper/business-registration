@@ -235,6 +235,11 @@
                                                     data-bs-toggle="tooltip" title="Print Participant List">
                                                     <i class="fa fa-print"></i>
                                                 </button>
+                                                <button type="button" class="btn btn-primary text-white"
+                                                data-bs-toggle="tooltip" title="Send Notification to all Participants"
+                                                onclick="location.href='{{ route('participantadd') }}'">
+                                                <i class="fa fa-envelope"></i>
+                                            </button>
                                             </div>
                                         </form>
                                     </div>
@@ -290,7 +295,6 @@
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
-
 
                                             <tbody>
                                                 @forelse ($participants as $participant)

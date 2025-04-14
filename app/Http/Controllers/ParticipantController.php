@@ -108,22 +108,41 @@ class ParticipantController extends Controller
 
 
     public function participantadd()
-{
-    $events = Event::all();
-    $cooperatives = Cooperative::all();
-    $users = User::whereDoesntHave('participant')
-                ->where('role', 'participant') // Filter by role
-                ->get();
+    {
+        $events = Event::all();
+        $cooperatives = Cooperative::all();
+        $users = User::whereDoesntHave('participant')
+                    ->where('role', 'participant')
+                    ->get();
 
-    // Get participant count for Youth Congress (event_id = 15)
-    $youthCongressParticipantCount = EventParticipant::where('event_id', 15)->count();
-    $youthCongressFull = $youthCongressParticipantCount >= 150;
+        // Event limits and names
+        $eventLimits = [
+            14 => ['name' => 'Gender Congress', 'limit' => 350],
+            15 => ['name' => 'Youth Congress', 'limit' => 150],
+            18 => ['name' => 'Education Committee Forum', 'limit' => 300],
+        ];
 
-    // Calculate the remaining slots for Youth Congress
-    $remainingSlots = 150 - $youthCongressParticipantCount;
+        $eventStatus = [];
 
-    return view('dashboard.admin.participant.add', compact('cooperatives', 'users', 'events', 'youthCongressFull', 'remainingSlots'));
-}
+        foreach ($eventLimits as $eventId => $data) {
+            $count = EventParticipant::where('event_id', $eventId)->count();
+            $eventStatus[$eventId] = [
+                'name' => $data['name'],
+                'total' => $data['limit'],
+                'count' => $count,
+                'remaining' => max(0, $data['limit'] - $count),
+                'full' => $count >= $data['limit'],
+            ];
+        }
+
+        return view('dashboard.admin.participant.add', compact(
+            'cooperatives',
+            'users',
+            'events',
+            'eventStatus'
+        ));
+    }
+
 
 
 public function generateId($id)
@@ -217,20 +236,39 @@ public function store(Request $request)
 
    // Show the form for editing a participant
    public function edit($participant_id)
-{
-    $participant = Participant::where('participant_id', $participant_id)->firstOrFail();
-    $cooperatives = Cooperative::all();
-    $events = Event::all(); // ✅ Add this
+   {
+       $participant = Participant::where('participant_id', $participant_id)->firstOrFail();
+       $cooperatives = Cooperative::all();
+       $events = Event::all();
 
-    // Get participant count for Youth Congress (event_id = 15)
-    $youthCongressParticipantCount = EventParticipant::where('event_id', 15)->count();
-    $youthCongressFull = $youthCongressParticipantCount >= 150;
+       // Define event limits and names
+       $eventLimits = [
+           14 => ['name' => 'Gender Congress', 'limit' => 350],
+           15 => ['name' => 'Youth Congress', 'limit' => 150],
+           18 => ['name' => 'Education Committee Forum', 'limit' => 300],
+       ];
 
-    // Calculate the remaining slots for Youth Congress
-    $remainingSlots = 150 - $youthCongressParticipantCount;
+       $eventStatus = [];
 
-    return view('dashboard.admin.participant.edit', compact('participant', 'cooperatives', 'events', 'youthCongressFull', 'remainingSlots'));
-}
+       foreach ($eventLimits as $eventId => $data) {
+           $count = EventParticipant::where('event_id', $eventId)->count();
+           $eventStatus[$eventId] = [
+               'name' => $data['name'],
+               'total' => $data['limit'],
+               'count' => $count,
+               'remaining' => max(0, $data['limit'] - $count),
+               'full' => $count >= $data['limit'],
+           ];
+       }
+
+       return view('dashboard.admin.participant.edit', compact(
+           'participant',
+           'cooperatives',
+           'events',
+           'eventStatus'
+       ));
+   }
+
 
 
 

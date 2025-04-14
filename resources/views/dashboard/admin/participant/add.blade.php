@@ -228,15 +228,18 @@
                         @csrf
                         <div class="card-body">
                             <div class="row">
-                                @if ($youthCongressFull)
-                                <div class="alert alert-danger" role="alert">
-                                    <strong>The Youth Congress is full.</strong> Please select a different congress.
-                                </div>
-                            @else
-                                <div class="alert alert-info" role="alert">
-                                    <strong>{{ $remainingSlots }} slots remaining</strong> for the Youth Congress.
-                                </div>
-                            @endif
+                                @foreach ($eventStatus as $status)
+                                    <div class="alert {{ $status['full'] ? 'alert-danger' : 'alert-info' }}" role="alert">
+                                        <strong>{{ $status['name'] }}:</strong>
+                                        @if ($status['full'])
+                                            Full ({{ $status['total'] }} slots)
+                                        @else
+                                            {{ $status['remaining'] }} slots remaining out of {{ $status['total'] }}
+                                        @endif
+                                    </div>
+                                @endforeach
+
+
                                 <!-- Coop Selection -->
                                 <div class="col-md-6 col-lg-4">
 
