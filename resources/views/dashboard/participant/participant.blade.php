@@ -3,6 +3,8 @@
 
 <head>
     @include('layouts.adminheader')
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
 </head>
 
 <body>
@@ -173,33 +175,33 @@
                         </li>
 
                         @php
-    // Check if the current date is May 22
-    $isMay22 = now()->format('m-d') === '05-22';
+                            // Check if the current date is May 22
+                            $isMay22 = now()->format('m-d') === '05-22';
 
-    // Check if the participant count exceeds 1000
-    $participantCount = \App\Models\EventParticipant::count();
-    $isMaxedParticipants = $participantCount >= 1000;
-@endphp
+                            // Check if the participant count exceeds 1000
+                            $participantCount = \App\Models\EventParticipant::count();
+                            $isMaxedParticipants = $participantCount >= 1000;
+                        @endphp
 
-<li class="nav-item">
-    <a data-bs-toggle="collapse" href="#participant"
-       class="{{ $isMay22 || $isMaxedParticipants ? 'disabled' : '' }}"
-       aria-disabled="{{ $isMay22 || $isMaxedParticipants ? 'true' : 'false' }}">
-        <i class="fas fa-users"></i>
-        <p>Participant</p>
-        <span class="caret"></span>
-    </a>
-    <div class="collapse" id="participant">
-        <ul class="nav nav-collapse">
-            <li>
-                <a href="{{ $isMay22 || $isMaxedParticipants ? '#' : route('coop.index') }}"
-                   class="{{ $isMay22 || $isMaxedParticipants ? 'disabled' : '' }}">
-                    <span class="sub-item">Participants</span>
-                </a>
-            </li>
-        </ul>
-    </div>
-</li>
+                        <li class="nav-item">
+                            <a data-bs-toggle="collapse" href="#participant"
+                                class="{{ $isMay22 || $isMaxedParticipants ? 'disabled' : '' }}"
+                                aria-disabled="{{ $isMay22 || $isMaxedParticipants ? 'true' : 'false' }}">
+                                <i class="fas fa-users"></i>
+                                <p>Participant</p>
+                                <span class="caret"></span>
+                            </a>
+                            <div class="collapse" id="participant">
+                                <ul class="nav nav-collapse">
+                                    <li>
+                                        <a href="{{ $isMay22 || $isMaxedParticipants ? '#' : route('coop.index') }}"
+                                            class="{{ $isMay22 || $isMaxedParticipants ? 'disabled' : '' }}">
+                                            <span class="sub-item">Participants</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
 
 
 
@@ -238,6 +240,14 @@
                                 </ul>
                             </div>
                         </li>
+
+                        <li class="nav-item">
+                            <a href="https://mass-specc.coop/2025-coopvention-registration/" class="nav-link" title="Register for Coopvention" target="_blank">
+                                <i class="fas fa-building"></i>
+                                <p>Hotel Accomodation</p>
+                            </a>
+                        </li>
+
                     </ul>
                 </div>
             </div>
@@ -787,7 +797,8 @@
                                                     <div class="card card-primary card-round mb-3">
                                                         <div class="card-header">
                                                             <div class="card-head-row">
-                                                                <div class="card-title event-title" title="{{ $event->title }}">
+                                                                <div class="card-title event-title"
+                                                                    title="{{ $event->title }}">
                                                                     {{ $event->title }}</div>
                                                                 <div class="card-tools">
                                                                     <div class="dropdown">
@@ -1055,13 +1066,13 @@
 
                 @if (!empty($missingDocuments))
                     issues.push({
-                        title: '📌 Missing Documents',
+                        title: '📌 Reminders',
                         list: [
                             @foreach ($missingDocuments as $doc)
                                 "{{ $doc }}",
                             @endforeach
                         ],
-                        message: "These are required for your submission. Please upload them as soon as possible."
+                        message: "These are the remaining documents for your submission. Please upload them as soon as possible."
                     });
                 @endif
 

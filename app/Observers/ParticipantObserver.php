@@ -59,11 +59,7 @@ class ParticipantObserver
         );
 
         $requiredDocuments = [
-            'Financial Statement',
-            'Resolution for Voting delegates',
-            'Deposit Slip for Registration Fee',
-            'Deposit Slip for CETF Remittance'
-
+            'Financial Statement'
         ];
 
         $approvedDocumentsCount = UploadedDocument::where('coop_id', $coop_id)
@@ -76,14 +72,17 @@ class ParticipantObserver
             ->where('status', 'Rejected')
             ->exists();
 
-
-
         $hasParticipant = Participant::where('coop_id', $coop_id)->exists();
-        
+
         $isPaymentSufficient = !is_null($coop->reg_fee_payable) && $coop->reg_fee_payable <= 0;
 
-        // Ensure all documents are approved and payment is sufficient for Fully Registered
-        if (!$hasRejectedDocument && $approvedDocumentsCount === count($requiredDocuments) && $isPaymentSufficient) {
+        // Updated logic: Must have participant, all documents approved, and payment sufficient
+        if (
+            $hasParticipant &&
+            !$hasRejectedDocument &&
+            $approvedDocumentsCount === count($requiredDocuments) &&
+            $isPaymentSufficient
+        ) {
             $gaRegistration->registration_status = 'Fully Registered';
         } elseif ($hasParticipant) {
             $gaRegistration->registration_status = 'Partial Registered';

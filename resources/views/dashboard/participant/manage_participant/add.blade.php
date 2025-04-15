@@ -108,6 +108,14 @@
                                 </ul>
                             </div>
                         </li>
+
+                        <li class="nav-item">
+                            <a href="https://mass-specc.coop/2025-coopvention-registration/" class="nav-link" title="Register for Coopvention" target="_blank">
+                                <i class="fas fa-building"></i>
+                                <p>Hotel Accomodation</p>
+                            </a>
+                        </li>
+
                     </ul>
                 </div>
             </div>
@@ -204,11 +212,12 @@
                                                         14 => 'Gender Congress',
                                                         15 => 'Youth Congress',
                                                         18 => 'Education Committee Forum',
+                                                        13 => 'Managers Congress',
                                                     ];
                                                 @endphp
 
-                                                <div class="d-flex flex-wrap gap-3 mb-3">
-                                                    @foreach ([14, 15, 18] as $eventId)
+                                                   <div class="d-flex flex-wrap gap-3 mb-3">
+                                                    @foreach ([14, 15, 18, 13] as $eventId)
                                                         @if (isset($eventStatus[$eventId]))
                                                             @php
                                                                 $status = $eventStatus[$eventId];
@@ -262,7 +271,7 @@
 
                                                 <div class="col-md-6 col-lg-4">
                                                     <div class="form-group">
-                                                        <label for="email">Email</label>
+                                                        <label for="email">Participant Email</label>
                                                         <input type="email"
                                                             class="form-control @error('email') is-invalid @enderror"
                                                             name="email" id="email" placeholder="Enter Email"
@@ -275,7 +284,7 @@
 
                                                 <div class="col-md-6 col-lg-4">
                                                     <div class="form-group">
-                                                        <label for="phone_number">Phone Number</label>
+                                                        <label for="phone_number">Participant Phone Number</label>
                                                         <input type="text"
                                                             class="form-control @error('phone_number') is-invalid @enderror"
                                                             name="phone_number" id="phone_number"
@@ -394,51 +403,94 @@
                                                     <div class="form-group">
                                                         <label for="event_ids">Congress</label>
 
-
-
-
                                                         <div class="dropdown">
-                                                            <button
-                                                                class="btn btn-outline-secondary dropdown-toggle w-100 text-start"
-                                                                type="button" data-bs-toggle="dropdown"
-                                                                aria-expanded="false">
+                                                            <!-- Dropdown Toggle Button -->
+                                                            <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start" type="button"
+                                                                    data-bs-toggle="dropdown" aria-expanded="false" id="selectedEventsBtn"
+                                                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Selected Congresses">
                                                                 Select Congresses
                                                             </button>
-                                                            <ul class="dropdown-menu p-3"
-                                                                style="width: 100%; max-height: 300px; overflow-y: auto;">
+
+                                                            <!-- Dropdown Menu -->
+                                                            <ul class="dropdown-menu p-3 shadow w-100" style="max-height: 300px; overflow-y: auto;" onclick="event.stopPropagation();">
+
+                                                                <!-- Search Input -->
+                                                                <li class="mb-3">
+                                                                    <input type="text" class="form-control form-control-sm" placeholder="Search..." onkeyup="filterEvents(this)">
+                                                                </li>
+
                                                                 @foreach ($events as $event)
                                                                     @php
-                                                                        $status =
-                                                                            $eventStatus[$event->event_id] ?? null;
+                                                                        $status = $eventStatus[$event->event_id] ?? null;
                                                                         $isFull = $status['full'] ?? false;
                                                                         $remaining = $status['remaining'] ?? null;
                                                                         $total = $status['total'] ?? null;
                                                                     @endphp
-                                                                    <li>
-                                                                        <div class="form-check">
-                                                                            <input class="form-check-input"
-                                                                                type="checkbox" name="event_ids[]"
-                                                                                value="{{ $event->event_id }}"
-                                                                                id="event_{{ $event->event_id }}"
-                                                                                @disabled($isFull)>
 
-                                                                            <label
-                                                                                class="form-check-label {{ $isFull ? 'text-muted' : '' }}"
-                                                                                for="event_{{ $event->event_id }}">
+                                                                    <li class="mb-2 event-item">
+                                                                        <label for="event_{{ $event->event_id }}" class="d-flex align-items-center gap-2 py-1 px-2 rounded hover-shadow-sm w-100 {{ $isFull ? 'bg-light text-muted' : '' }}" style="cursor: pointer;">
+                                                                            <input class="form-check-input event-checkbox me-2" type="checkbox" name="event_ids[]"
+                                                                                   value="{{ $event->event_id }}" id="event_{{ $event->event_id }}"
+                                                                                   @disabled($isFull)>
+                                                                            <span>
                                                                                 {{ $event->title }}
                                                                                 @if ($status)
-                                                                                    ({{ $remaining }} /
-                                                                                    {{ $total }}
-                                                                                    slots{{ $isFull ? ' - Full' : '' }})
+                                                                                    ({{ $remaining }} / {{ $total }} slots{{ $isFull ? ' - Full' : '' }})
                                                                                 @endif
-                                                                            </label>
-                                                                        </div>
+                                                                            </span>
+                                                                        </label>
                                                                     </li>
                                                                 @endforeach
                                                             </ul>
                                                         </div>
                                                     </div>
                                                 </div>
+
+
+
+                                                <!-- Scripts -->
+                                                <script>
+                                                    const updateSelectedEvents = () => {
+                                                        const selectedCheckboxes = document.querySelectorAll('.event-checkbox:checked');
+                                                        const selected = Array.from(selectedCheckboxes).map(cb => cb.parentElement.textContent.trim());
+
+                                                        const button = document.getElementById('selectedEventsBtn');
+
+                                                        if (selected.length === 0) {
+                                                            button.textContent = 'Select Congresses';
+                                                            button.removeAttribute('title');
+                                                        } else {
+                                                            // Show first 2 selected, then "+X more"
+                                                            const visible = selected.slice(0, 2);
+                                                            const extra = selected.length - visible.length;
+                                                            button.textContent = extra > 0
+                                                                ? `${visible.join(', ')} +${extra} more`
+                                                                : visible.join(', ');
+
+                                                            // Tooltip for full list (optional)
+                                                            button.title = selected.join(', ');
+                                                        }
+                                                    };
+
+                                                    document.querySelectorAll('.event-checkbox').forEach(cb => {
+                                                        cb.addEventListener('change', updateSelectedEvents);
+                                                    });
+
+                                                    function filterEvents(input) {
+                                                        const filter = input.value.toLowerCase();
+                                                        document.querySelectorAll('.event-item').forEach(item => {
+                                                            const text = item.textContent.toLowerCase();
+                                                            item.style.display = text.includes(filter) ? '' : 'none';
+                                                        });
+                                                    }
+
+                                                    // Optional: Enable Bootstrap tooltips
+                                                    document.addEventListener('DOMContentLoaded', () => {
+                                                        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                                                        tooltipTriggerList.map(t => new bootstrap.Tooltip(t));
+                                                    });
+                                                </script>
+
 
 
 
@@ -573,10 +625,11 @@
                                                     value="{{ $shareCapital ?? 0 }}">
 
                                                 <div class="card-action">
+                                                    <button type="button" class="btn btn-label-info btn-round"
+                                                    onclick="window.location.href='{{ url()->previous() }}'">Back</button>
                                                     <button type="submit"
-                                                        class="btn btn-label-info btn-round">Submit</button>
-                                                    <button type="button" class="btn btn-primary btn-round"
-                                                        onclick="window.location.href='{{ route('coop.index') }}'">Back</button>
+                                                        class="btn btn-primary btn-round">Submit</button>
+
                                                 </div>
                                             </div>
 

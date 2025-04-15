@@ -151,6 +151,13 @@
                     </div>
                   </li>
 
+                  <li class="nav-item">
+                    <a href="https://mass-specc.coop/2025-coopvention-registration/" class="nav-link" title="Register for Coopvention" target="_blank">
+                        <i class="fas fa-building"></i>
+                        <p>Hotel Accomodation</p>
+                    </a>
+                </li>
+
               </ul>
           </div>
         </div>
@@ -220,9 +227,10 @@
                   <div class="card-header">
                     <div class="cooperative_doc_titles">
                     <div class="card-title">Uploaded Documents</div>
-                    <button type="button" class="btn btn-label-info btn-round me-2" onclick="window.location.href='{{ route('adminview') }}'">
+                    <button type="button" class="btn btn-primary btn-round me-2" onclick="window.location.href='{{ url()->previous() }}'">
                         <i class="fa fa-arrow-left"></i>
                     </button>
+
                 </div>
                     </div>
 

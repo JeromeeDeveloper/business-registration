@@ -151,6 +151,13 @@
                     </div>
                   </li>
 
+                  <li class="nav-item">
+                    <a href="https://mass-specc.coop/2025-coopvention-registration/" class="nav-link" title="Register for Coopvention" target="_blank">
+                        <i class="fas fa-building"></i>
+                        <p>Hotel Accomodation</p>
+                    </a>
+                </li>
+
               </ul>
           </div>
         </div>
@@ -236,16 +243,16 @@
                                 </div>
 
                                <!-- User Display -->
-                                <div class="col-md-6 col-lg-4">
+                                {{-- <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
                                         <label for="user_id">User Account</label>
                                         <div>{{ $participant->user->name ?? 'N/A' }}</div>
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label for="email">Email</label>
+                                        <label for="email">Participant Email</label>
                                         <div>{{ $participant->email }}</div>
                                     </div>
                                 </div>
@@ -293,7 +300,7 @@
                                 <!-- Phone Number -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label for="phone_number">Phone Number</label>
+                                        <label for="phone_number">Participant Phone Number</label>
                                         <div>{{ $participant->phone_number }}</div>
                                     </div>
                                 </div>
@@ -358,6 +365,15 @@
                                     </div>
                                 </div>
 
+
+                                 <!-- Delegate Type -->
+                                 <div class="col-md-6 col-lg-4">
+                                    <div class="form-group">
+                                        <label for="delegate_type">Delegate Type</label>
+                                        <div>{{ $participant->delegate_type ?? 'N/A' }}</div>
+                                    </div>
+                                </div>
+
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
                                         <label for="qr_code">QR Code</label>
@@ -373,9 +389,6 @@
                                     </div>
                                 </div>
 
-
-
-
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
                                         <label>Congress</label>
@@ -388,14 +401,6 @@
                                                 <span class="text-muted">No congress types selected.</span>
                                             @endif
                                         </div>
-                                    </div>
-                                </div>
-
-                                 <!-- Delegate Type -->
-                                 <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="delegate_type">Delegate Type</label>
-                                        <div>{{ $participant->delegate_type ?? 'N/A' }}</div>
                                     </div>
                                 </div>
 

@@ -151,6 +151,13 @@
                     </div>
                   </li>
 
+                  <li class="nav-item">
+                    <a href="https://mass-specc.coop/2025-coopvention-registration/" class="nav-link" title="Register for Coopvention" target="_blank">
+                        <i class="fas fa-building"></i>
+                        <p>Hotel Accomodation</p>
+                    </a>
+                </li>
+
               </ul>
           </div>
         </div>
@@ -223,6 +230,7 @@
                     </div>
                   </div>
                   <div class="card-body">
+                    <div class="d-flex justify-content-between text-center gap-2">
                     @foreach ($eventStatus as $status)
                         <div class="alert {{ $status['full'] ? 'alert-danger' : 'alert-info' }}" role="alert">
                             <strong>{{ $status['name'] }}:</strong>
@@ -233,6 +241,7 @@
                             @endif
                         </div>
                     @endforeach
+                </div>
                 </div>
 
 
@@ -293,7 +302,7 @@
 
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label for="email">Email</label>
+                                        <label for="email">Participant Email</label>
                                         <input type="text" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email', $participant->email) }}" required>
 
                                         @error('email')
@@ -334,7 +343,7 @@
                                 <!-- Phone Number -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label for="phone_number">Phone Number</label>
+                                        <label for="phone_number">Participant Phone Number</label>
                                         <input type="text" class="form-control" name="phone_number" value="{{ old('phone_number', $participant->phone_number) }}">
                                     </div>
                                 </div>
@@ -351,30 +360,96 @@
                                 $participantEventIds = $participant->events->pluck('event_id')->toArray();
                             @endphp
 
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group">
-                                    <label for="event_ids">Congress</label>
+<div class="col-md-6 col-lg-4">
+    <div class="form-group">
+        <label for="event_ids">Congress</label>
 
-                                    <div class="dropdown">
-                                        <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Select Congresses
-                                        </button>
-                                        <ul class="dropdown-menu p-3" style="width: 100%; max-height: 300px; overflow-y: auto;">
-                                            @foreach ($events as $event)
-                                                <li>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" name="event_ids[]" value="{{ $event->event_id }}" id="event_{{ $event->event_id }}"
-                                                        {{ in_array($event->event_id, $participantEventIds) ? 'checked' : '' }}>
-                                                        <label class="form-check-label" for="event_{{ $event->event_id }}">
-                                                            {{ $event->title }}
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                            @endforeach
+        <div class="dropdown">
+            <!-- Dropdown Button -->
+            <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start" type="button"
+                    data-bs-toggle="dropdown" aria-expanded="false" id="selectedEventsBtn"
+                    data-bs-toggle="tooltip" data-bs-placement="top" title="Selected Congresses">
+                Select Congresses
+            </button>
 
-                                        </div>
-                                    </div>
-                                </div>
+            <!-- Dropdown Menu -->
+            <ul class="dropdown-menu p-3 shadow w-100" style="max-height: 300px; overflow-y: auto;" onclick="event.stopPropagation();">
+
+                <!-- Search Input (optional) -->
+                <li class="mb-3">
+                    <input type="text" class="form-control form-control-sm" placeholder="Search..." onkeyup="filterEvents(this)">
+                </li>
+
+                @foreach ($events as $event)
+                    @php
+                        $isChecked = in_array($event->event_id, $participantEventIds);
+                    @endphp
+
+                    <li class="mb-2 event-item">
+                        <label for="event_{{ $event->event_id }}"
+                               class="d-flex align-items-center gap-2 py-1 px-2 rounded hover-shadow-sm w-100"
+                               style="cursor: pointer;">
+                            <input class="form-check-input event-checkbox me-2"
+                                   type="checkbox" name="event_ids[]"
+                                   value="{{ $event->event_id }}"
+                                   id="event_{{ $event->event_id }}"
+                                   {{ $isChecked ? 'checked' : '' }}>
+                            <span>
+                                {{ $event->title }}
+                            </span>
+                        </label>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    // Update selected events in the dropdown button
+    const updateSelectedEvents = () => {
+        const selectedCheckboxes = document.querySelectorAll('.event-checkbox:checked');
+        const selected = Array.from(selectedCheckboxes).map(cb => cb.parentElement.textContent.trim());
+
+        const button = document.getElementById('selectedEventsBtn');
+
+        if (selected.length === 0) {
+            button.textContent = 'Select Congresses';
+            button.removeAttribute('title');
+        } else {
+            const visible = selected.slice(0, 2);
+            const extra = selected.length - visible.length;
+            button.textContent = extra > 0
+                ? `${visible.join(', ')} +${extra} more`
+                : visible.join(', ');
+
+            button.title = selected.join(', ');
+        }
+    };
+
+    // Event listener for checkbox changes
+    document.querySelectorAll('.event-checkbox').forEach(cb => {
+        cb.addEventListener('change', updateSelectedEvents);
+    });
+
+    // Filter events based on input search
+    function filterEvents(input) {
+        const filter = input.value.toLowerCase();
+        document.querySelectorAll('.event-item').forEach(item => {
+            const text = item.textContent.toLowerCase();
+            item.style.display = text.includes(filter) ? '' : 'none';
+        });
+    }
+
+    // Enable Bootstrap tooltips
+    document.addEventListener('DOMContentLoaded', () => {
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(t => new bootstrap.Tooltip(t));
+        updateSelectedEvents(); // initial load
+    });
+</script>
+
                                 <!-- Is MSP Officer -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">

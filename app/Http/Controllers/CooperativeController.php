@@ -85,6 +85,7 @@ class CooperativeController extends Controller
             14 => 350,
             15 => 150,
             18 => 300,
+            13 => 500,
         ];
 
         $eventStatus = [];
@@ -289,6 +290,7 @@ class CooperativeController extends Controller
         14 => 350,
         15 => 150,
         18 => 300,
+        13 => 500,
     ];
 
     $eventStatus = [];

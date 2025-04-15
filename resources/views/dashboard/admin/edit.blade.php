@@ -150,6 +150,13 @@
                             </div>
                         </li>
 
+                        <li class="nav-item">
+                            <a href="https://mass-specc.coop/2025-coopvention-registration/" class="nav-link" title="Register for Coopvention" target="_blank">
+                                <i class="fas fa-building"></i>
+                                <p>Hotel Accomodation</p>
+                            </a>
+                        </li>
+
                     </ul>
                 </div>
             </div>
@@ -216,11 +223,11 @@
                                 <div class="card-header d-flex justify-content-between align-items-center">
                                     <div class="card-title">Cooperative Edit Form</div>
                                     <button type="button" class="btn btn-primary btn-round"
-                                        onclick="window.location.href='{{ route('adminview') }}'">
-                                        <i class="fas fa-arrow-left"></i> <!-- Back Icon -->
+                                        onclick="window.location.href='{{ url()->previous() }}'">
+                                        <i class="fas fa-arrow-left"></i>
                                     </button>
-
                                 </div>
+
 
                                 <form action="{{ route('cooperatives.update', $coop->coop_id) }}" method="POST">
                                     @csrf
@@ -519,34 +526,25 @@
 
                                                     <!-- Instructions on how to become a Migs member -->
                                                     <div>
-                                                        <h6 class="text-secondary">How to Become a Migs Member:</h6>
+                                                        <h6 class="text-secondary">How to become a MIGS members:</h6>
                                                         <ul class="text-muted">
-                                                            <li>The cooperative must not be delinquent (status: "no").
+                                                            <li>The cooperative must not be delinquent (status is Non-Delinquent).
                                                             </li>
-                                                            <li>At least one service must be availed from the
-                                                                cooperative.</li>
+                                                            <li>At least one service is availed by the cooperative.</li>
                                                             <li>The share capital balance must be at least ₱25,000.</li>
-                                                            <li>The CETF balance must be ₱0.</li>
-                                                            <li>CETF remittance must not be null.</li>
+                                                            <li>Required CETF is already computed or non-zero</li>
+                                                            <li>CETF remittance is not blank or zero.</li>
+                                                            <li>CETF balance is zero (means fully paid).</li>
                                                             <li>The CETF required amount must be greater than ₱0.</li>
-                                                            <li>All required documents (Financial Statement, Resolution
-                                                                for Voting Delegates) must be accepted.</li>
+                                                            <li>Required Docs (Financial Statement and Resolution for Voting delegate) is uploaded and accepted.</li>
                                                         </ul>
                                                     </div>
 
                                                     <div>
-                                                        <h6 class="text-secondary">How to Become Fully Registered:</h6>
+                                                        <h6 class="text-secondary">How to become Fully Registered</h6>
                                                         <ul class="text-muted">
-                                                            <li>All required documents must be accepted:
-                                                                <ul>
-                                                                    <li>Audited Financial Statement</li>
-                                                                    <li>Resolution for Voting Delegates</li>
-                                                                    <li>Deposit Slip for Registration Fee</li>
-                                                                    <li>Deposit Slip for CETF Remittance</li>
-                                                                </ul>
-                                                            </li>
-                                                            <li>None of the required documents should be rejected.</li>
-                                                            <li>The registration fee must be fully paid (₱0 payable).</li>
+                                                            <li>Financial Statement is uploaded and accepted.</li>
+                                                            <li>GA RegFee Payable is zero (means fully paid)</li>
                                                         </ul>
                                                     </div>
 

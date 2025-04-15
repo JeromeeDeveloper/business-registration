@@ -80,6 +80,14 @@
                   </ul>
                 </div>
               </li>
+
+              <li class="nav-item">
+                <a href="https://mass-specc.coop/2025-coopvention-registration/" class="nav-link" title="Register for Coopvention" target="_blank">
+                    <i class="fas fa-building"></i>
+                    <p>Hotel Accomodation</p>
+                </a>
+            </li>
+
             </ul>
           </div>
         </div>
@@ -198,7 +206,7 @@
                     title: info.event.title,
                     html: `
                         <strong>Start:</strong> ${info.event.start.toLocaleString()}<br>
-                        
+
                         <strong>Location:</strong> ${info.event.extendedProps.location || 'No location provided'}<br>
                         <strong>Description:</strong> ${info.event.extendedProps.description || 'No description provided'}
                     `,

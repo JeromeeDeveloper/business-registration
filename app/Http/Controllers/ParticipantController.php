@@ -120,6 +120,7 @@ class ParticipantController extends Controller
             14 => ['name' => 'Gender Congress', 'limit' => 350],
             15 => ['name' => 'Youth Congress', 'limit' => 150],
             18 => ['name' => 'Education Committee Forum', 'limit' => 300],
+            13 => ['name' => 'CEOs/Manager Congress', 'limit' => 500],
         ];
 
         $eventStatus = [];
@@ -246,6 +247,7 @@ public function store(Request $request)
            14 => ['name' => 'Gender Congress', 'limit' => 350],
            15 => ['name' => 'Youth Congress', 'limit' => 150],
            18 => ['name' => 'Education Committee Forum', 'limit' => 300],
+           13 => ['name' => 'CEOs/Manager Congress', 'limit' => 500],
        ];
 
        $eventStatus = [];

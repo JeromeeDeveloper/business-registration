@@ -139,7 +139,7 @@
 
                   <div class="carousel-item text-center p-4">
                     <h5>Need Help?</h5>
-                    <p>For assistance, email <a href="mailto:support@mass-specc.coop">support@mass-specc.coop</a></p>
+                    <p>For assistance, email <a href="mailto:msu@mass-specc.com">msu@mass-specc.com</a></p>
                   </div>
 
                 </div>
