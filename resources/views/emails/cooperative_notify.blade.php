@@ -18,10 +18,12 @@
 
             <hr>
 
-            <p><strong>2025 MASS-SPECC CO-OPVENTION REGISTRATION  NOTICE(Edcom Forum, Sectoral Congress, 55th Co-op Leaders' Congress, and 51st General Assembly)</strong></p>
+            <p><strong>2025 MASS-SPECC CO-OPVENTION REGISTRATION NOTICE(Edcom Forum, Sectoral Congress, 55th Co-op
+                    Leaders' Congress, and 51st General Assembly)</strong></p>
 
             <p>Co-operative greetings from MASS-SPECC!</p>
-            <p>Thank you for taking the time to register for our upcoming CO-OPvention. We're excited to have you with us. Please see below the latest update on your registration.</p>
+            <p>Thank you for taking the time to register for our upcoming CO-OPvention. We're excited to have you with
+                us. Please see below the latest update on your registration.</p>
 
             <p><strong>REGISTRATION STATUS</strong></p>
 
@@ -44,7 +46,23 @@
                     {{ strtoupper('Not Available') }}
                 @endif
             </p>
-            <p><strong>No. of Allowed Voting Delegates:</strong> {{ $coop->no_of_entitled_votes }}</p>
+            @php
+                $shareCapital = $coop->share_capital_balance ?? 0;
+                $votes = 0;
+
+                if ($shareCapital >= 25000) {
+                    $votes = 1;
+                }
+
+                if ($shareCapital >= 100000) {
+                    $votes += floor(($shareCapital - 25000) / 100000);
+                }
+
+                $votes = min($votes, 5);
+            @endphp
+
+            <p><strong>No. of Allowed Voting Delegates:</strong> {{ $votes }}</p>
+
             <p><strong>No. of Registered Participants:</strong>
                 {{ \App\Models\Participant::where('coop_id', $coop->coop_id)->count() }}
             </p>
@@ -86,10 +104,14 @@
             </ol>
 
             <p>Helpful Reminders:</p>
-            <p>✅ To view your co-op's list of participants, click <strong>Participant → Participants</strong> on the left side of the screen.</p>
-            <p>✅ To edit or remove a participant’s profile, simply click the <strong>Edit/Delete</strong> button in the action list under the identified participant. Kindly take note that editing of participant details is only allowed until May 17, 2025.</p>
+            <p>✅ To view your co-op's list of participants, click <strong>Participant → Participants</strong> on the
+                left side of the screen.</p>
+            <p>✅ To edit or remove a participant’s profile, simply click the <strong>Edit/Delete</strong> button in the
+                action list under the identified participant. Kindly take note that editing of participant details is
+                only allowed until May 17, 2025.</p>
 
-            <p>If you need any assistance, feel free to reach out to our Member Support Unit at <strong>0917-133-5218.</strong> We're here to help!</p>
+            <p>If you need any assistance, feel free to reach out to our Member Support Unit at
+                <strong>0917-133-5218.</strong> We're here to help!</p>
 
             <p>We look forward to your presence at the upcoming CO-OPvention!</p>
 
@@ -102,7 +124,8 @@
         <img src="https://ci3.googleusercontent.com/mail-sig/AIorK4wvLE7Z259KZkYLTl4fj54VtU7p-zQ4jjAB9ZXkSAwUOFgAfT6LwPgnqjsOXo9LpNSC6IojBRszQ4Mm"
             alt="Signature Image" style="max-width: 250px; height: auto;" />
 
-        <p>The contents of this email message and any attachments are intended solely for the addressee(s) and may contain confidential and/or privileged information...</p>
+        <p>The contents of this email message and any attachments are intended solely for the addressee(s) and may
+            contain confidential and/or privileged information...</p>
 
         <!-- Second Signature Image -->
         <img src="https://ci3.googleusercontent.com/mail-sig/AIorK4y3f7vZ8XrGXNcxDBf4tYVurPLjYeeZt2kNny2Bwwzvi8OL66nmQ7o4LvVFkTijuDgTLV6e3DdOI0oA"
