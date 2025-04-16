@@ -629,7 +629,7 @@
                                                             <td>{{ $cooperative->ga_remark ?? 'N/A' }}</td>
                                                         </tr>
 
-                                                        <tr>
+                                                        {{-- <tr>
                                                             <td class="fw-bold">2 Pax free for MIGS Membership Status
                                                             </td>
                                                             <td>
@@ -672,7 +672,7 @@
                                                                     value="1"
                                                                     {{ $halfBasedCETF ? 'checked' : '' }} disabled />
                                                             </td>
-                                                        </tr>
+                                                        </tr> --}}
 
                                                     </tbody>
                                                 </table>
@@ -722,71 +722,80 @@
         });
     </script>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            function calculateFees() {
-                // Fetch the text content and remove any commas before converting to float
-                let regFee = parseFloat(document.getElementById('registration_fee').textContent.replace(/,/g,
-                    '')) || 0;
-                let numParticipants = parseInt(document.getElementById('num_participants').textContent) || 0;
-                let preregPayment = parseFloat(document.getElementById('less_prereg_payment').textContent.replace(
-                    /,/g, '')) || 0;
-                let cetfBalance = parseFloat(document.getElementById('less_cetf_balance').textContent.replace(/,/g,
-                    '')) || 0;
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        function calculateFees() {
+            // Fetch numeric values
+            let regFee = parseFloat(document.getElementById('registration_fee').textContent.replace(/,/g, '')) || 0;
+            let numParticipants = parseInt(document.getElementById('num_participants').textContent) || 0;
+            let preregPayment = parseFloat(document.getElementById('less_prereg_payment').textContent.replace(/,/g, '')) || 0;
+            let cetfBalance = parseFloat(document.getElementById('less_cetf_balance').textContent.replace(/,/g, '')) || 0;
+            let cetfRemittance = parseFloat(document.getElementById('cetf_remittance').textContent.replace(/,/g, '')) || 0;
 
-                // Calculate Total Registration Fee: (ALL participants counted, NO DEDUCTIONS)
-                let totalRegFee = numParticipants * regFee;
+            // Checkbox references
+            let halfBasedCetf = document.getElementById('half_based_cetf');
+            let free100kCetf = document.getElementById('free_100k_cetf');
 
-                // Calculate Free Amounts
-                let freeAmount = 0;
-                if (document.getElementById('free_2pax_migs').checked) {
-                    freeAmount += 9000;
-                }
-                if (document.getElementById('free_migs_pax').checked) {
-                    freeAmount += 4500;
-                }
-                if (document.getElementById('free_100k_cetf').checked) {
-                    freeAmount += 4500;
-                }
-
-                if (document.getElementById('half_based_cetf').checked) {
-                    freeAmount += 2250;
-                }
-
-                // Calculate Net Required Registration Fee after applying deductions
-                let netRequiredRegFee = totalRegFee - freeAmount;
-
-                // Calculate Registration Fee Payable
-                let regFeePayable = netRequiredRegFee - (preregPayment + cetfBalance);
-
-                // Update the corresponding td elements with the calculated values
-                document.getElementById('total_reg_fee').textContent = totalRegFee.toFixed(2);
-                document.getElementById('net_required_reg_fee').textContent = netRequiredRegFee.toFixed(2);
-                document.getElementById('reg_fee_payable').textContent = regFeePayable.toFixed(2);
+            // Determine which checkbox should be checked based on CETF Remittance
+            if (cetfRemittance >= 100000) {
+                free100kCetf.checked = true;
+                halfBasedCetf.checked = false;
+            } else if (cetfRemittance >= 50000) {
+                free100kCetf.checked = false;
+                halfBasedCetf.checked = true;
+            } else {
+                free100kCetf.checked = false;
+                halfBasedCetf.checked = false;
             }
 
-            // List of ids for elements to watch for changes
-            let fields = [
-                'registration_fee', 'num_participants', 'less_prereg_payment', 'less_cetf_balance',
-                'free_2pax_migs', 'free_migs_pax', 'free_100k_cetf', 'half_based_cetf'
-            ];
+            // Calculate registration fee
+            let totalRegFee = numParticipants * regFee;
 
-            // Attach event listeners to all relevant fields
-            fields.forEach(id => {
-                let element = document.getElementById(id);
-                if (element) {
-                    element.addEventListener('input', calculateFees); // For inputs
-                    element.addEventListener('change', calculateFees); // For checkboxes
-                }
-            });
+            // Calculate free amounts
+            let freeAmount = 0;
 
-            // Run the calculation on page load
-            calculateFees();
+            if (document.getElementById('free_2pax_migs')?.checked) {
+                freeAmount += 9000;
+            }
+            if (document.getElementById('free_migs_pax')?.checked) {
+                freeAmount += 4500;
+            }
+
+            if (free100kCetf.checked) {
+                freeAmount += 4500;
+            } else if (halfBasedCetf.checked) {
+                freeAmount += 2250;
+            }
+
+            // Net required reg fee
+            let netRequiredRegFee = totalRegFee - freeAmount;
+
+            // Final payable amount
+            let regFeePayable = netRequiredRegFee - (preregPayment + cetfBalance);
+
+            // Update output
+            document.getElementById('total_reg_fee').textContent = totalRegFee.toFixed(2);
+            document.getElementById('net_required_reg_fee').textContent = netRequiredRegFee.toFixed(2);
+            document.getElementById('reg_fee_payable').textContent = regFeePayable.toFixed(2);
+        }
+
+        // Watch for changes (if fields are editable; otherwise this is just for initial load)
+        let fields = [
+            'registration_fee', 'num_participants', 'less_prereg_payment',
+            'less_cetf_balance', 'cetf_remittance'
+        ];
+
+        fields.forEach(id => {
+            let el = document.getElementById(id);
+            if (el) {
+                el.addEventListener('input', calculateFees);
+                el.addEventListener('change', calculateFees);
+            }
         });
-    </script>
 
-
-
+        calculateFees();
+    });
+</script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {

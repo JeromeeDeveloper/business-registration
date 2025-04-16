@@ -740,7 +740,7 @@
                                                                 disabled>
                                                             <label class="form-check-label" for="free_100k_cetf">1
                                                                 Pax
-                                                                Free 100K CETF</label>
+                                                                Free for every 100K CETF</label>
                                                         </div>
 
                                                         <div class="form-check">

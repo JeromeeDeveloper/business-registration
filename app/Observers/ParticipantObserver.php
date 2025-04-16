@@ -123,7 +123,6 @@ class ParticipantObserver
         // Define the required documents
         $requiredDocuments = [
             'Financial Statement',
-            'Resolution for Voting delegates',
         ];
 
         // Count the approved documents
