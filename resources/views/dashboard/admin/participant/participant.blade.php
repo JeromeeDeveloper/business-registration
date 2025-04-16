@@ -332,6 +332,7 @@
                                                                     onclick="printParticipantID(
                                                                     {{ $participant->participant_id }},
                                                                     '{{ $participant->first_name }}',
+                                                                     '{{ $participant->nickname }}',
                                                                     '{{ $participant->last_name }}',
                                                                     '{{ $participant->designation ?? 'N/A' }}',
                                                                     '{{ $participant->reference_number ?? 'N/A' }}',
@@ -499,7 +500,7 @@
     </script>
 
     <script>
-        function printParticipantID(id, firstName, lastName, designation, reference_number, cooperative, qrCode) {
+        function printParticipantID(id, nickname, firstName, lastName, designation, reference_number, cooperative, qrCode) {
             let printWindow = window.open('', '_blank', 'width=400,height=600');
             printWindow.document.write(`
                 <html>
@@ -528,12 +529,14 @@
                 </head>
                 <body>
                     <div class="id-card">
-                        <h2>Participant ID</h2>
-                        <p><strong>Name:</strong> ${firstName} ${lastName}</p>
-                        <p><strong>Designation:</strong> ${designation}</p>
-                        <p><strong>Cooperative:</strong> ${cooperative}</p>
-                          <p><strong>Access Key:</strong> ${reference_number}</p>
+                        <h2>${nickname}</h2>
+                        <p>${firstName}, ${lastName}</p>
+
+                        <p>${cooperative}</p>
+
                         ${qrCode ? `<img src="${qrCode}" alt="QR Code">` : `<p>No QR Code</p>`}
+                         <p>${reference_number}</p>
+                          <h2>${id}</h2>
                     </div>
                     <script>
                         setTimeout(() => {

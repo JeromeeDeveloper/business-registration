@@ -957,6 +957,8 @@ class DashboardController extends Controller
     {
         $coop = Cooperative::findOrFail($coop_id);
 
+        $documents = UploadedDocument::where('coop_id', $coop->coop_id)->get();
+
         $hasFinancialStatement = UploadedDocument::where('coop_id', $coop->coop_id)
             ->where('document_type', 'Financial Statement')
             ->where('status', 'Approved')
@@ -1023,7 +1025,8 @@ class DashboardController extends Controller
             'hasMspOfficer',
             'free100kCETF',
             'halfBasedCETF',
-            'hasFinancialStatement'
+            'hasFinancialStatement',
+            'documents'
         ));
     }
 
@@ -1228,18 +1231,23 @@ class DashboardController extends Controller
             }
         }
 
-        return redirect()->route('adminview')->with('success', 'Cooperative updated successfully!');
+        return redirect()->back()->with('success', 'Cooperative updated successfully!');
     }
 
 
     public function show($id)
-    {
-        // Find the cooperative by ID
-        $coop = Cooperative::findOrFail($id);
+{
+    // Get the cooperative or throw 404
+    $coop = Cooperative::findOrFail($id);
 
-        // Pass the cooperative data to the view
-        return view('dashboard.admin.view', compact('coop'));
-    }
+    // Get documents ONLY for this cooperative
+    $documents = UploadedDocument::where('coop_id', $coop->coop_id)->get();
+
+    // Return the view with related data
+    return view('dashboard.admin.view', compact('coop', 'documents'));
+}
+
+
 
     public function userregister(Request $request)
     {

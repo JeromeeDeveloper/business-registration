@@ -97,7 +97,7 @@ Route::middleware([AdminOrSupportMiddleware::class])->group(function () {
     Route::post('/generate-pdf', [ReportsController::class, 'generatePDF'])->name('generate.pdf');
 
     Route::get('/admin/reports/participants-list', [ReportsController::class, 'participantsList'])->name('admin.reports.participants_list');
-
+    Route::put('/Admin/Document/UpdateStatus/{document_id}', [CooperativeController::class, 'updateDocumentStatus'])->name('admin.documents.updateStatus');
     // In your web.php (routes file)
 // Route::get('/get-participant-count/{coop_id}', [YourController::class, 'getParticipantCount']);
 
@@ -158,7 +158,7 @@ Route::post('/generate-blank-pdf', [CooperativeController::class, 'generateBlank
     Route::delete('/admin/cooperatives/{coop_id}', [DashboardController::class, 'destroy'])->name('cooperatives.destroy');
 
     Route::get('/Admin/Document/View/{coop_id?}', [CooperativeController::class, 'viewadminDocuments'])->name('admin.documents.view');
-    Route::put('/Admin/Document/UpdateStatus/{document_id}', [CooperativeController::class, 'updateDocumentStatus'])->name('admin.documents.updateStatus');
+
 
 
     //edit

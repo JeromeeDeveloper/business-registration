@@ -281,8 +281,11 @@ class SupportController extends Controller
         // Find the cooperative by ID
         $coop = Cooperative::findOrFail($id);
 
+        // Get documents ONLY for this cooperative
+        $documents = UploadedDocument::where('coop_id', $coop->coop_id)->get();
+
         // Pass the cooperative data to the view
-        return view('dashboard.support.view', compact('coop'));
+        return view('dashboard.support.view', compact('coop', 'documents'));
     }
 
     public function viewsupportDocuments($coop_id = null)
@@ -315,6 +318,9 @@ class SupportController extends Controller
     public function edit($coop_id)
     {
         $coop = Cooperative::findOrFail($coop_id);
+
+        $documents = UploadedDocument::where('coop_id', $coop->coop_id)->get();
+
 
         $hasFinancialStatement = UploadedDocument::where('coop_id', $coop->coop_id)
             ->where('document_type', 'Financial Statement')
@@ -376,7 +382,8 @@ class SupportController extends Controller
             'hasMspOfficer',
             'free100kCETF',
             'halfBasedCETF',
-            'hasFinancialStatement'
+            'hasFinancialStatement',
+            'documents'
         ));
     }
 
@@ -543,7 +550,7 @@ class SupportController extends Controller
             }
         }
 
-        return redirect()->route('supportview')->with('success', 'Cooperative updated successfully!');
+        return redirect()->back()->with('success', 'Cooperative updated successfully!');
     }
 
     public function storeDocuments3(Request $request, $id)
