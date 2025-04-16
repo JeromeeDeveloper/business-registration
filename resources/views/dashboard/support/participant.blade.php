@@ -543,6 +543,10 @@
                             font-family: Arial, sans-serif;
                             text-align: center;
                             margin: 20px;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                            align-items: center;
                         }
                         .id-card {
                             width: 300px;
@@ -550,7 +554,10 @@
                             border: 2px solid black;
                             padding: 20px;
                             border-radius: 10px;
-                            display: inline-block;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                            align-items: center;
                             text-align: center;
                         }
                         .id-card img {
@@ -562,9 +569,9 @@
                 <body>
                     <div class="id-card">
                     <h2>${nickname.toUpperCase()}</h2>
-                       <p>${firstName.toUpperCase()}, ${lastName.toUpperCase()} ${middlename ? middlename.charAt(0).toUpperCase() + '.' : ''}</p>
+                       <p><strong>${firstName.toUpperCase()}, ${lastName.toUpperCase()} ${middlename ? middlename.charAt(0).toUpperCase() + '.' : ''}</strong></p>
 
-                       <p>${cooperative.toUpperCase()}</p>
+                    <p><strong><em>${cooperative.toUpperCase()}</em></strong></p>
                         ${qrCode ? `<img src="${qrCode}" alt="QR Code">` : `<p>No QR Code</p>`}
                            <p>${reference_number}</p>
                             <h2>${id}</h2>

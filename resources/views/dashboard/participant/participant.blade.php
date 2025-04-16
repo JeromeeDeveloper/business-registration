@@ -373,9 +373,6 @@
                                                 <p class="mb-0 text-dark">
                                                     Participant registration will be <strong>disabled on May 22</strong>, and editing will be <strong>disabled on May 13</strong>. Additionally, registration will be <strong>closed once 1000 participants</strong> have been reached. Current total: <strong>{{ $totalParticipantsforall }}</strong>.
                                                 </p>
-
-
-
                                             </div>
                                         </div>
                                     </div>

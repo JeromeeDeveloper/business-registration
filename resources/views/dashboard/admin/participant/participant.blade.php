@@ -151,7 +151,8 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="https://mass-specc.coop/2025-coopvention-registration/" class="nav-link" title="Register for Coopvention" target="_blank">
+                            <a href="https://mass-specc.coop/2025-coopvention-registration/" class="nav-link"
+                                title="Register for Coopvention" target="_blank">
                                 <i class="fas fa-building"></i>
                                 <p>Hotel Accomodation</p>
                             </a>
@@ -243,10 +244,11 @@
                                                     <i class="fa fa-print"></i>
                                                 </button>
                                                 <button type="button" class="btn btn-primary text-white"
-                                                data-bs-toggle="tooltip" title="Send Notification to all Participants"
-                                                onclick="location.href='{{ route('participantadd') }}'">
-                                                <i class="fa fa-envelope"></i>
-                                            </button>
+                                                    data-bs-toggle="tooltip"
+                                                    title="Send Notification to all Participants"
+                                                    onclick="location.href='{{ route('participantadd') }}'">
+                                                    <i class="fa fa-envelope"></i>
+                                                </button>
                                             </div>
                                         </form>
                                     </div>
@@ -501,7 +503,8 @@
     </script>
 
     <script>
-        function printParticipantID(id, nickname, firstName, lastName, middlename, designation, reference_number, cooperative, qrCode) {
+        function printParticipantID(id, nickname, firstName, lastName, middlename, designation, reference_number,
+            cooperative, qrCode) {
             let printWindow = window.open('', '_blank', 'width=400,height=600');
             printWindow.document.write(`
                 <html>
@@ -512,6 +515,10 @@
                             font-family: Arial, sans-serif;
                             text-align: center;
                             margin: 20px;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                            align-items: center;
                         }
                         .id-card {
                             width: 300px;
@@ -519,7 +526,10 @@
                             border: 2px solid black;
                             padding: 20px;
                             border-radius: 10px;
-                            display: inline-block;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                            align-items: center;
                             text-align: center;
                         }
                         .id-card img {
@@ -531,8 +541,9 @@
                 <body>
                     <div class="id-card">
                        <h2>${nickname.toUpperCase()}</h2>
-                        <p>${firstName.toUpperCase()}, ${lastName.toUpperCase()} ${middlename ? middlename.charAt(0).toUpperCase() + '.' : ''}</p>
-                       <p>${cooperative.toUpperCase()}</p>
+                       <p><strong>${firstName.toUpperCase()}, ${lastName.toUpperCase()} ${middlename ? middlename.charAt(0).toUpperCase() + '.' : ''}</strong></p>
+
+                    <p><strong><em>${cooperative.toUpperCase()}</em></strong></p>
 
                         ${qrCode ? `<img src="${qrCode}" alt="QR Code">` : `<p>No QR Code</p>`}
                          <p>${reference_number}</p>
