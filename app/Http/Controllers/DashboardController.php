@@ -501,7 +501,7 @@ class DashboardController extends Controller
 
         // Check the total remittance
         $totalRemittance = $cooperative->total_remittance ?? 0;
-        $free100kCETF = $totalRemittance >= 100000; // Free 1 pax if remittance >= 100K
+        $free100kCETF = $totalRemittance >= 100000;
         $halfBasedCETF = $totalRemittance >= 50000; // Free 1 pax if remittance >= 50K
 
         // Get the number of participants
@@ -980,7 +980,7 @@ class DashboardController extends Controller
         $coop->cetf_balance = ($coop->cetf_required ?? 0) - ($coop->total_remittance ?? 0);
         // Check the total remittance
         $totalRemittance = $coop->total_remittance ?? 0;
-        $free100kCETF = $totalRemittance >= 100000; // Free 1 pax if remittance >= 100K
+        $free100kCETF = $totalRemittance >= 100000; 
 
         // Only apply half-based CETF if it's 50K+ but less than 100K
         $halfBasedCETF = $totalRemittance >= 50000 && $totalRemittance < 100000;

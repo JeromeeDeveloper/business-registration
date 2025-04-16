@@ -1326,72 +1326,88 @@
         });
     </script>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            function calculateFees() {
-                let regFee = parseFloat(document.getElementById('registration_fee').value) || 0;
-                let numParticipants = parseInt(document.getElementById('num_participants').value) || 0;
-                let preregPayment = parseFloat(document.getElementById('less_prereg_payment').value) || 0;
-                let cetfBalance = parseFloat(document.getElementById('less_cetf_balance').value) || 0;
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        function calculateFees() {
+            let regFee = parseFloat(document.getElementById('registration_fee').value) || 0;
+            let numParticipants = parseInt(document.getElementById('num_participants').value) || 0;
+            let preregPayment = parseFloat(document.getElementById('less_prereg_payment').value) || 0;
+            let cetfBalance = parseFloat(document.getElementById('less_cetf_balance').value) || 0;
+            let cetfRemittance = parseFloat(document.getElementById('cetf_remittance').value) || 0;
 
-                let free100kCetf = document.getElementById('free_100k_cetf');
-                let halfBasedCetf = document.getElementById('half_based_cetf');
+            let free100kCetf = document.getElementById('free_100k_cetf');
+            let halfBasedCetf = document.getElementById('half_based_cetf');
 
-                // Always keep half_based_cetf disabled
-                halfBasedCetf.disabled = true;
+            // Always keep half_based_cetf disabled
+            halfBasedCetf.disabled = true;
 
-                // If 100k CETF is checked, also uncheck half-based CETF
-                if (free100kCetf.checked) {
-                    halfBasedCetf.checked = false;
-                }
+            // Calculate how many free pax based on every 100k remittance
+            let free100kCount = Math.floor(cetfRemittance / 100000);
 
-
-                // Total Registration Fee
-                let totalRegFee = numParticipants * regFee;
-
-                // Calculate Free Amounts
-                let freeAmount = 0;
-                if (document.getElementById('free_2pax_migs').checked) {
-                    freeAmount += 9000;
-                }
-                if (document.getElementById('free_migs_pax').checked) {
-                    freeAmount += 4500;
-                }
-                if (free100kCetf.checked) {
-                    freeAmount += 4500;
-                }
-                if (halfBasedCetf.checked) {
-                    freeAmount += 2250;
-                }
-
-                // Net Required Registration Fee
-                let netRequiredRegFee = totalRegFee - freeAmount;
-
-                // Final Payable Fee
-                let regFeePayable = netRequiredRegFee - (preregPayment + cetfBalance);
-
-                // Update Fields
-                document.getElementById('total_reg_fee').value = totalRegFee.toFixed(2);
-                document.getElementById('net_required_reg_fee').value = netRequiredRegFee.toFixed(2);
-                document.getElementById('reg_fee_payable').value = regFeePayable.toFixed(2);
+            // Update checkbox state and label text
+            if (free100kCetf) {
+                free100kCetf.checked = free100kCount > 0;
             }
 
-            // Event Listeners
-            let fields = [
-                'registration_fee', 'num_participants', 'less_prereg_payment', 'less_cetf_balance',
-                'free_2pax_migs', 'free_migs_pax', 'free_100k_cetf', 'half_based_cetf'
-            ];
+            let cetfLabel = document.getElementById('free_100k_cetf_label');
+            if (cetfLabel) {
+                cetfLabel.textContent = `${free100kCount} Pax`;
+            }
 
-            fields.forEach(id => {
-                let el = document.getElementById(id);
+            // Uncheck half CETF if 100k free is active
+            if (free100kCetf.checked) {
+                halfBasedCetf.checked = false;
+            }
+
+            // Total Registration Fee
+            let totalRegFee = numParticipants * regFee;
+
+            // Calculate Free Amounts
+            let freeAmount = 0;
+            if (document.getElementById('free_2pax_migs').checked) {
+                freeAmount += 9000;
+            }
+            if (document.getElementById('free_migs_pax').checked) {
+                freeAmount += 4500;
+            }
+            if (free100kCetf.checked && free100kCount > 0) {
+                freeAmount += free100kCount * 4500;
+            }
+            if (halfBasedCetf.checked) {
+                freeAmount += 2250;
+            }
+
+            // Net Required Registration Fee
+            let netRequiredRegFee = totalRegFee - freeAmount;
+
+            // Final Payable Fee
+            let regFeePayable = netRequiredRegFee - (preregPayment + cetfBalance);
+
+            // Update Fields
+            document.getElementById('total_reg_fee').value = totalRegFee.toFixed(2);
+            document.getElementById('net_required_reg_fee').value = netRequiredRegFee.toFixed(2);
+            document.getElementById('reg_fee_payable').value = regFeePayable.toFixed(2);
+        }
+
+        // Event Listeners
+        let fields = [
+            'registration_fee', 'num_participants', 'less_prereg_payment', 'less_cetf_balance',
+            'free_2pax_migs', 'free_migs_pax', 'free_100k_cetf', 'half_based_cetf', 'cetf_remittance'
+        ];
+
+        fields.forEach(id => {
+            let el = document.getElementById(id);
+            if (el) {
                 el.addEventListener('input', calculateFees);
                 el.addEventListener('change', calculateFees);
-            });
-
-            // Run on load
-            calculateFees();
+            }
         });
-    </script>
+
+        // Run on load
+        calculateFees();
+    });
+</script>
+
 
 
     <script>

@@ -195,10 +195,10 @@
                         </td>
 
 
-                            <td>Required Registration Fee:</td>
-                            <td class="text-right underline-box-med">
-                                {{ number_format($registrationFees[$registration->coop_id] ?? 0, 2) }}
-                            </td>
+                        <td>Required Registration Fee:</td>
+                        <td class="text-right underline-box-med">
+                            {{ number_format($registrationFees[$registration->coop_id] ?? 0, 2) }}
+                        </td>
 
 
                         <td>[On-line] Payment:</td>
@@ -216,29 +216,34 @@
                         <td>[LESS] Free Registration:</td>
 
                         @php
-                        $participantCount = $participants->where('coop_id', $registration->cooperative->coop_id)->count();
-                        $registrationFee = $participantCount * 4500;
+                            $participantCount = $participants
+                                ->where('coop_id', $registration->cooperative->coop_id)
+                                ->count();
+                            $registrationFee = $participantCount * 4500;
 
-                        $hasMspOfficer = $registration->cooperative->free_migs_pax == 4500;
-                        $mspOfficerFee = $hasMspOfficer ? 4500 : 0;
+                            $hasMspOfficer = $registration->cooperative->free_migs_pax == 4500;
+                            $mspOfficerFee = $hasMspOfficer ? 4500 : 0;
 
-                        // Check if cetf_remittance is 100k or more, if so, don't add both halfCetf and free4500
-                        if ($registration->cooperative->cetf_remittance >= 100000) {
-                            $halfCetf = 0;
-                            $free4500 = 4500;
-                        } else {
-                            // Only add halfCetf if cetf_remittance is 50k or more but less than 100k
-                            $halfCetf = $registration->cooperative->cetf_remittance >= 50000 ? 4500 / 2 : 0;
-                            $free4500 = 0;
-                        }
+                            $cetfRemittance = $registration->cooperative->cetf_remittance;
 
-                        $migsFree = $registration->membership_status === 'Migs' ? 9000 : 0;
-                        $totalFreeRegistration = $mspOfficerFee + $halfCetf + $free4500 + $migsFree;
+                            // New: Calculate how many full 100K chunks (₱4500 free per chunk)
+                            $free100kPax = floor($cetfRemittance / 100000);
+                            $free4500 = $free100kPax * 4500;
 
-                        $regPayable = $registrationFee - ($totalFreeRegistration +
-                                                          $registration->cooperative->less_prereg_payment +
-                                                          $registration->cooperative->less_cetf_balance);
-                    @endphp
+                            // No more need to compute halfCetf since it's exclusive
+$halfCetf = 0;
+
+$migsFree = $registration->membership_status === 'Migs' ? 9000 : 0;
+
+                            $totalFreeRegistration = $mspOfficerFee + $halfCetf + $free4500 + $migsFree;
+
+                            $regPayable =
+                                $registrationFee -
+                                ($totalFreeRegistration +
+                                    $registration->cooperative->less_prereg_payment +
+                                    $registration->cooperative->less_cetf_balance);
+                        @endphp
+
 
 
                         <td class="text-right highlight underline-box-med">
@@ -254,48 +259,49 @@
             </div>
 
 
-        <!-- Participants Table -->
-        <div>
-            <table>
-                <thead>
-                    <tr class="single-box-value">
-                        <th>NAME<br />(CAPITAL LETTERS)</th>
-                        <th>NICKNAME<br />(CAPITAL LETTERS)</th>
-                        <th>MOBILE NUMBER</th>
-                        <th>T-SHIRT SIZE</th>
-                        <th>GENDER</th>
-                        <th>VOTING STATUS</th>
-                        <th>SIGNATURE</th>
-                    </tr>
-                </thead>
-                <tbody id="dynamic-tbody">
-                    @foreach ($participants->where('coop_id', $registration->cooperative->coop_id) as $participant)
-                        <tr>
-                            <td class="underline-cell">
-                                {{ strtoupper($participant->first_name . ' ' . $participant->last_name) }}</td>
-                            <td class="underline-cell">{{ strtoupper($participant->nickname) }}</td>
-                            <td class="underline-cell">{{ $participant->phone_number }}</td>
-                            <td class="underline-cell">{{ $participant->tshirt_size }}</td>
-                            <td class="underline-cell">{{ $participant->gender }}</td>
-                            <td class="underline-cell">{{ $participant->delegate_type }}</td>
-                            <td class="underline-cell"></td>
+            <!-- Participants Table -->
+            <div>
+                <table>
+                    <thead>
+                        <tr class="single-box-value">
+                            <th>NAME<br />(CAPITAL LETTERS)</th>
+                            <th>NICKNAME<br />(CAPITAL LETTERS)</th>
+                            <th>MOBILE NUMBER</th>
+                            <th>T-SHIRT SIZE</th>
+                            <th>GENDER</th>
+                            <th>VOTING STATUS</th>
+                            <th>SIGNATURE</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody id="dynamic-tbody">
+                        @foreach ($participants->where('coop_id', $registration->cooperative->coop_id) as $participant)
+                            <tr>
+                                <td class="underline-cell">
+                                    {{ strtoupper($participant->first_name . ' ' . $participant->last_name) }}</td>
+                                <td class="underline-cell">{{ strtoupper($participant->nickname) }}</td>
+                                <td class="underline-cell">{{ $participant->phone_number }}</td>
+                                <td class="underline-cell">{{ $participant->tshirt_size }}</td>
+                                <td class="underline-cell">{{ $participant->gender }}</td>
+                                <td class="underline-cell">{{ $participant->delegate_type }}</td>
+                                <td class="underline-cell"></td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
 
-        <!-- Prepared and Received By Section -->
-        <div class="prepared-received-section" style="display: flex; justify-content: space-between; margin-top: 50px;">
-            <div>
-                <p>Prepared by:</p>
-                <div class="underline-box-med" style="margin-top: 20px;"></div>
+            <!-- Prepared and Received By Section -->
+            <div class="prepared-received-section"
+                style="display: flex; justify-content: space-between; margin-top: 50px;">
+                <div>
+                    <p>Prepared by:</p>
+                    <div class="underline-box-med" style="margin-top: 20px;"></div>
+                </div>
+                <div>
+                    <p>Received by:</p>
+                    <div class="underline-box-med" style="margin-top: 20px;"></div>
+                </div>
             </div>
-            <div>
-                <p>Received by:</p>
-                <div class="underline-box-med" style="margin-top: 20px;"></div>
-            </div>
-        </div>
 
         </div>
         <div style="page-break-after: always;"></div>

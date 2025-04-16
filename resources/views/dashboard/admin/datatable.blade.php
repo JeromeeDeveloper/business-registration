@@ -152,7 +152,8 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="https://mass-specc.coop/2025-coopvention-registration/" class="nav-link" title="Register for Coopvention" target="_blank">
+                            <a href="https://mass-specc.coop/2025-coopvention-registration/" class="nav-link"
+                                title="Register for Coopvention" target="_blank">
                                 <i class="fas fa-building"></i>
                                 <p>Hotel Accomodation</p>
                             </a>
@@ -267,11 +268,6 @@
 
                                                 <button type="submit" class="btn btn-primary"><i
                                                         class="fa fa-search"></i></button>
-                                                {{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                                    data-bs-target="#filterModal">
-                                                    <i class="fa fa-filter"></i>
-                                                </button> --}}
-
                                             </div>
 
                                             <!-- Action Buttons -->
@@ -320,44 +316,60 @@
                                         </div>
 
                                         <!-- Notifications Button -->
-                                        <div class="d-flex flex-wrap gap-2">
-                                            <button class="btn btn-label-info btn-round fw-bold d-flex align-items-center px-4 py-2" data-bs-toggle="modal" data-bs-target="#notifyModal">
-                                              <i class="fa fa-bell me-2"></i> Open Notifications
+                                        <div class="d-flex flex-wrap gap-2 justify-content-center align-items-center">
+                                            <button
+                                                class="btn btn-label-info btn-round fw-bold d-flex align-items-center px-4 py-2"
+                                                data-bs-toggle="modal" data-bs-target="#notifyModal">
+                                                <i class="fa fa-bell me-2"></i> Open Notifications
                                             </button>
-                                            <button class="btn btn-label-info btn-round fw-bold d-flex align-items-center px-4 py-2" data-bs-toggle="modal" data-bs-target="#cooperativeModal">
+                                            <button
+                                                class="btn btn-label-info btn-round fw-bold d-flex align-items-center px-4 py-2"
+                                                data-bs-toggle="modal" data-bs-target="#cooperativeModal">
                                                 <i class="fa fa-building me-2"></i> Cooperative Summary Report
-                                              </button>
-
-                                              <button class="btn btn-label-info btn-round fw-bold d-flex align-items-center px-4 py-2" onclick="window.location.href='{{ route('download.all.documents') }}'">
+                                            </button>
+                                            <button
+                                                class="btn btn-label-info btn-round fw-bold d-flex align-items-center px-4 py-2"
+                                                onclick="window.location.href='{{ route('download.all.documents') }}'">
                                                 <i class="fa fa-download me-2"></i> Download All Documents
                                             </button>
+                                        </div>
 
 
-
-                                          </div>
-
-                                          <div class="modal fade" id="cooperativeModal" tabindex="-1" aria-labelledby="cooperativeModalLabel" aria-hidden="true">
+                                        <div class="modal fade" id="cooperativeModal" tabindex="-1"
+                                            aria-labelledby="cooperativeModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="cooperativeModalLabel">Cooperative Summary Report</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        <h5 class="modal-title" id="cooperativeModalLabel">Cooperative
+                                                            Summary Report</h5>
+                                                        <button type="button" class="btn-close"
+                                                            data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <form action="{{ route('generate.pdf') }}" method="POST" target="_blank">
+                                                        <form action="{{ route('generate.pdf') }}" method="POST"
+                                                            target="_blank">
                                                             @csrf
-                                                            <label for="filter" class="form-label">Select Filter</label>
-                                                            <select id="filter" name="filter" class="form-select">
+                                                            <label for="filter" class="form-label">Select
+                                                                Filter</label>
+                                                            <select id="filter" name="filter"
+                                                                class="form-select">
                                                                 <option value="all">All Cooperative</option>
-                                                                <option value="fully_registered_migs">Fully Registered MIGS Cooperatives</option>
-                                                                <option value="fully_registered_non_migs">Fully Registered NON-MIGS Cooperatives</option>
-                                                                <option value="partial_registered_migs">Partial Registered MIGS Cooperatives</option>
-                                                                <option value="partial_registered_non_migs">Partial Registered NON MIGS Cooperatives</option>
+                                                                <option value="fully_registered_migs">Fully Registered
+                                                                    MIGS Cooperatives</option>
+                                                                <option value="fully_registered_non_migs">Fully
+                                                                    Registered NON-MIGS Cooperatives</option>
+                                                                <option value="partial_registered_migs">Partial
+                                                                    Registered MIGS Cooperatives</option>
+                                                                <option value="partial_registered_non_migs">Partial
+                                                                    Registered NON MIGS Cooperatives</option>
                                                             </select>
                                                             <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                <button type="button" class="btn btn-secondary"
+                                                                    data-bs-dismiss="modal">Close</button>
                                                                 {{-- <button type="submit" class="btn btn-primary">Generate PDF</button> --}}
-                                                                <button type="button" class="btn btn-success" onclick="printReport()">Print or Export as PDF</button>
+                                                                <button type="button" class="btn btn-success"
+                                                                    onclick="printReport()">Print or Export as
+                                                                    PDF</button>
                                                             </div>
                                                         </form>
                                                     </div>
@@ -365,12 +377,14 @@
                                             </div>
                                         </div>
 
-                                    @if(session('status'))
-                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                        <strong>Success!</strong> {{ session('status') }}
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                    </div>
-                                @endif
+                                        @if (session('status'))
+                                            <div class="alert alert-success alert-dismissible fade show"
+                                                role="alert">
+                                                <strong>Success!</strong> {{ session('status') }}
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                        @endif
 
                                     </div>
 
@@ -406,21 +420,25 @@
                                                         @csrf
                                                         <button type="submit"
                                                             class="btn btn-outline-success w-100 d-flex align-items-center justify-content-center px-4 py-2 fw-semibold"
-                                                            data-bs-toggle="tooltip" title="Send Credentials & Invitation">
-                                                            <i class="fa fa-bell me-2"></i> Reminder for Coop Registration Statuses
+                                                            data-bs-toggle="tooltip"
+                                                            title="Send Credentials & Invitation">
+                                                            <i class="fa fa-bell me-2"></i> Reminder for Coop
+                                                            Registration Statuses
                                                         </button>
                                                     </form>
 
                                                     <form action="{{ route('cooperatives.notifyAll.unregistered') }}"
-                                                    method="POST"
-                                                    onsubmit="showSwalLoader(event, this, 'Sending Status & Invitation...')">
-                                                  @csrf
-                                                  <button type="submit"
-                                                          class="btn btn-outline-warning w-100 d-flex align-items-center justify-content-center px-4 py-2 fw-semibold"
-                                                          data-bs-toggle="tooltip" title="Send Credentials & Invitation">
-                                                      <i class="fa fa-bell me-2"></i> Send Credentials to Unregistered Coops
-                                                  </button>
-                                              </form>
+                                                        method="POST"
+                                                        onsubmit="showSwalLoader(event, this, 'Sending Status & Invitation...')">
+                                                        @csrf
+                                                        <button type="submit"
+                                                            class="btn btn-outline-warning w-100 d-flex align-items-center justify-content-center px-4 py-2 fw-semibold"
+                                                            data-bs-toggle="tooltip"
+                                                            title="Send Credentials & Invitation">
+                                                            <i class="fa fa-bell me-2"></i> Send Credentials to
+                                                            Unregistered Coops
+                                                        </button>
+                                                    </form>
 
 
                                                     <!-- Credentials Form -->
@@ -469,26 +487,54 @@
                                                         <td>{{ $coop->registered_voting_participants }}</td>
                                                         <td>{{ $coop->votes ?? 0 }}</td>
 
-                                                        <!-- Registration Status Dropdown -->
+                                                        <!-- Registration Status -->
                                                         <td class="p-2 align-middle text-center">
-                                                            <div class="form-control text-center fw-semibold text-primary fs-6" style="min-width: 200px;">
-                                                                @php
-                                                                    $status = optional($coop->gaRegistration)->registration_status;
-                                                                    echo $status === 'Rejected' ? 'NO REGISTRATION' : ($status ?? 'NO REGISTRATION');
-                                                                @endphp
-                                                            </div>
+                                                            @php
+                                                                $status = optional($coop->gaRegistration)
+                                                                    ->registration_status;
+                                                                $statusLabel = strtoupper(
+                                                                    $status === 'Rejected'
+                                                                        ? 'NO REGISTRATION'
+                                                                        : $status ?? 'NO REGISTRATION',
+                                                                );
+
+                                                                $statusTextClass = match ($statusLabel) {
+                                                                    default => 'text-primary',
+                                                                };
+
+                                                                // White background and thick gray border
+                                                                $commonStyle =
+                                                                    'bg-white border border-gray-600 border-2';
+                                                            @endphp
+                                                            <span
+                                                                class="badge {{ $commonStyle }} {{ $statusTextClass }} fs-6 px-3 py-2 rounded-pill d-inline-block text-wrap w-100 fw-bold"
+                                                                style="min-width: 200px;">
+                                                                {{ $statusLabel }}
+                                                            </span>
                                                         </td>
 
-                                                        <!-- Membership Status Dropdown -->
+                                                        <!-- Membership Status -->
                                                         <td class="p-2 align-middle text-center">
-                                                            <div class="form-control text-center fw-semibold text-success fs-6" style="min-width: 200px;">
-                                                                @php
-                                                                    $membershipStatus = optional($coop->gaRegistration)->membership_status ?? 'NO REGISTRATION';
-                                                                @endphp
-                                                                {{ strtoupper($membershipStatus) }}
-                                                            </div>
-                                                        </td>
+                                                            @php
+                                                                $membershipStatus = strtoupper(
+                                                                    optional($coop->gaRegistration)
+                                                                        ->membership_status ?? 'NO REGISTRATION',
+                                                                );
 
+                                                                $membershipTextClass = match ($membershipStatus) {
+                                                                    default => 'text-success',
+                                                                };
+
+                                                                // White background and thick gray border
+                                                                $commonStyle =
+                                                                    'bg-white border border-gray-600 border-2';
+                                                            @endphp
+                                                            <span
+                                                                class="badge {{ $commonStyle }} {{ $membershipTextClass }} fs-6 px-3 py-2 rounded-pill d-inline-block text-wrap w-100 fw-bold"
+                                                                style="min-width: 200px;">
+                                                                {{ $membershipStatus }}
+                                                            </span>
+                                                        </td>
 
 
                                                         <td class="no-print">
@@ -615,10 +661,10 @@
 
     </div>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             let showEntries = document.getElementById("showEntries");
             if (showEntries) {
-                showEntries.addEventListener("change", function () {
+                showEntries.addEventListener("change", function() {
                     let url = new URL(window.location.href);
                     url.searchParams.set("limit", this.value); // Set 'limit' parameter
                     window.location.href = url.toString(); // Update the URL
@@ -729,13 +775,13 @@
         }
     </script>
 
-<script>
-    function openGmail() {
-        // Retrieve emails from Laravel and convert to a comma-separated list
-        let recipients = @json($emailsall).join(',');
+    <script>
+        function openGmail() {
+            // Retrieve emails from Laravel and convert to a comma-separated list
+            let recipients = @json($emailsall).join(',');
 
-        let subject = encodeURIComponent("52nd CO-OP LEADERS CONGRESS & 48th GENERAL ASSEMBLY");
-        let body = encodeURIComponent(`Dear Cooperative Members,
+            let subject = encodeURIComponent("52nd CO-OP LEADERS CONGRESS & 48th GENERAL ASSEMBLY");
+            let body = encodeURIComponent(`Dear Cooperative Members,
 
 We are pleased to invite you to our upcoming event:
 
@@ -746,10 +792,10 @@ Location:
 Best Regards,
 MASS-SPECC Cooperative Development Center`);
 
-        // Open Gmail compose window
-        window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${recipients}&su=${subject}&body=${body}`, '_blank');
-    }
-</script>
+            // Open Gmail compose window
+            window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${recipients}&su=${subject}&body=${body}`, '_blank');
+        }
+    </script>
 
     <script>
         function confirmDelete(event, button) {
@@ -791,6 +837,6 @@ MASS-SPECC Cooperative Development Center`);
             };
         };
     }
-    </script>
+</script>
 
 </html>

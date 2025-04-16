@@ -90,7 +90,7 @@
                         <td id="votes-{{ $data->share_capital_balance }}"></td> <!-- This is where the votes will be displayed -->
                         <td>{{ number_format($data->free_migs_pax, 2) }}</td>
                         <td>{{ number_format($data->half_cetf, 2) }}</td>
-                        <td>{{ number_format($data->free_4500, 2) }}</td>
+                        <td>{{ number_format(floor($data->cetf_remittance / 100000) * 4500, 2) }}</td>
                         <td>{{ number_format($data->less_cetf_balance, 2) }}</td>
                         <td>{{ number_format($data->less_prereg_payment, 2) }}</td>
                         <td>{{ number_format($data->reg_fee_payable, 2) }}</td>
