@@ -68,13 +68,15 @@ class UploadedDocumentObserver
         $hasParticipant = Participant::where('coop_id', $coop_id)->exists();
 
         $isPaymentSufficient = !is_null($coop->reg_fee_payable) && $coop->reg_fee_payable <= 0;
+        $netrequired = !is_null($coop->net_required_reg_fee) && $coop->net_required_reg_fee != 0;
 
         // Updated logic: Must have participant, all documents approved, and payment sufficient
         if (
             $hasParticipant &&
             !$hasRejectedDocument &&
             $approvedDocumentsCount === count($requiredDocuments) &&
-            $isPaymentSufficient
+            $isPaymentSufficient &&
+            $netrequired
         ) {
             $gaRegistration->registration_status = 'Fully Registered';
         } elseif ($hasParticipant) {
