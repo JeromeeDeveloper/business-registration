@@ -538,8 +538,7 @@
                                                             <li>CETF remittance is not blank or zero.</li>
                                                             <li>CETF balance is zero (means fully paid).</li>
                                                             <li>The CETF required amount must be greater than ₱0.</li>
-                                                            <li>Required Docs (Financial Statement and Resolution for
-                                                                Voting delegate) is uploaded and accepted.</li>
+                                                            <li>Required Documents (Financial Statement) is uploaded and accepted.</li>
                                                         </ul>
                                                     </div>
 
