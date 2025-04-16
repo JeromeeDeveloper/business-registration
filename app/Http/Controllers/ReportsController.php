@@ -298,8 +298,13 @@ public function previewFilteredCoopStatus(Request $request)
     public function participantsList()
 {
     $participants = Participant::with('cooperative')
-                                ->where('delegate_type', 'Voting')
-                                ->get();
+    ->where('delegate_type', 'Voting')
+    ->whereHas('cooperative.gaRegistration', function ($query) {
+        $query->where('membership_status', 'Migs')
+              ->where('registration_status', 'Fully Registered');
+    })
+    ->get();
+    
     return view('dashboard.admin.reports.participants_list', compact('participants'));
 }
 
