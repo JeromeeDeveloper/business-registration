@@ -224,7 +224,7 @@
                                 <div class="card-header d-flex justify-content-between align-items-center">
                                     <div class="card-title">Cooperative Edit Form</div>
                                     <button type="button" class="btn btn-primary btn-round"
-                                        onclick="window.location.href='{{ url()->previous() }}'">
+                                        onclick="window.location.href='{{route('adminview')}}'">
                                         <i class="fas fa-arrow-left"></i>
                                     </button>
                                 </div>
