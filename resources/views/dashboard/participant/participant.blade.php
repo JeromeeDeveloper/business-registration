@@ -371,10 +371,11 @@
                                                     <i class="fa fa-exclamation-triangle me-1"></i>Important Notice
                                                 </h6>
                                                 <p class="mb-0 text-dark">
-                                                    Participant registration will be <strong>disabled on May
-                                                        22</strong>, and editing will be <strong>disabled on May
-                                                        13</strong>.
+                                                    Participant registration will be <strong>disabled on May 22</strong>, and editing will be <strong>disabled on May 13</strong>. Additionally, registration will be <strong>closed once 1000 participants</strong> have been reached. Current total: <strong>{{ $totalParticipantsforall }}</strong>.
                                                 </p>
+
+
+
                                             </div>
                                         </div>
                                     </div>
@@ -407,9 +408,6 @@
                                 onclick="{{ $isMay22 || $isMaxedParticipants ? 'return false;' : '' }}">
                                 <i class="fas fa-user-plus me-2"></i> Register Participants
                             </a>
-
-
-
 
                             <a class="btn btn-info btn-lg action-btn pulse-btn" data-bs-toggle="modal"
                                 data-bs-target="#documentsModal">

@@ -561,9 +561,10 @@
                 </head>
                 <body>
                     <div class="id-card">
-                        <h2>${nickname}</h2>
-                        <p>${firstName}, ${lastName}</p>
-                        <p>${cooperative}</p>
+                    <h2>${nickname.toUpperCase()}</h2>
+                       <p>${firstName.toUpperCase()}, ${lastName.toUpperCase()} ${middlename ? middlename.charAt(0).toUpperCase() + '.' : ''}</p>
+
+                       <p>${cooperative.toUpperCase()}</p>
                         ${qrCode ? `<img src="${qrCode}" alt="QR Code">` : `<p>No QR Code</p>`}
                            <p>${reference_number}</p>
                             <h2>${id}</h2>

@@ -382,6 +382,8 @@ class DashboardController extends Controller
         // Count total events
         $totalEvents = Event::count();
 
+        $totalParticipantsforall = Participant::count();
+
         $latestEvents = Event::with('speakers')->orderBy('start_date', 'desc')->take(5)->get();
 
         // Count total speakers
@@ -477,6 +479,7 @@ class DashboardController extends Controller
             'currentVotingCount' => $currentVotingCount,
             'missingDocuments' => $missingDocuments,
             'declinedDocuments' => $declinedDocuments,
+            'totalParticipantsforall' => $totalParticipantsforall
         ]);
     }
 

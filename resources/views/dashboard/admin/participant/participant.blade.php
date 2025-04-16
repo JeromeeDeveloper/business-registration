@@ -332,8 +332,9 @@
                                                                     onclick="printParticipantID(
                                                                     {{ $participant->participant_id }},
                                                                     '{{ $participant->first_name }}',
-                                                                     '{{ $participant->nickname }}',
+                                                                    '{{ $participant->nickname }}',
                                                                     '{{ $participant->last_name }}',
+                                                                    '{{ $participant->middle_name }}',
                                                                     '{{ $participant->designation ?? 'N/A' }}',
                                                                     '{{ $participant->reference_number ?? 'N/A' }}',
                                                                     '{{ optional($participant->cooperative)->name ?? 'N/A' }}',
@@ -500,7 +501,7 @@
     </script>
 
     <script>
-        function printParticipantID(id, nickname, firstName, lastName, designation, reference_number, cooperative, qrCode) {
+        function printParticipantID(id, nickname, firstName, lastName, middlename, designation, reference_number, cooperative, qrCode) {
             let printWindow = window.open('', '_blank', 'width=400,height=600');
             printWindow.document.write(`
                 <html>
@@ -529,10 +530,9 @@
                 </head>
                 <body>
                     <div class="id-card">
-                        <h2>${nickname}</h2>
-                        <p>${firstName}, ${lastName}</p>
-
-                        <p>${cooperative}</p>
+                       <h2>${nickname.toUpperCase()}</h2>
+                        <p>${firstName.toUpperCase()}, ${lastName.toUpperCase()} ${middlename ? middlename.charAt(0).toUpperCase() + '.' : ''}</p>
+                       <p>${cooperative.toUpperCase()}</p>
 
                         ${qrCode ? `<img src="${qrCode}" alt="QR Code">` : `<p>No QR Code</p>`}
                          <p>${reference_number}</p>
