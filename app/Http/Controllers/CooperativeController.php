@@ -257,6 +257,52 @@ class CooperativeController extends Controller
 
             DB::commit();
 
+            $cooperative = Cooperative::where('coop_id', $validatedData['coop_id'])->first();
+
+            if ($cooperative) {
+                $registrationFee = 4500;
+                $totalParticipants = Participant::where('coop_id', $cooperative->coop_id)->count();
+
+                $freeAmount = 0;
+                $cetfRemittance = $cooperative->cetf_remittance ?? 0;
+
+                // MIGS check
+                $migsCount = GARegistration::where('coop_id', $cooperative->coop_id)
+                    ->where('membership_status', 'Migs')
+                    ->count();
+
+                if ($migsCount >= 2) {
+                    $freeAmount += 9000;
+                }
+
+                if ($migsCount >= 1) {
+                    $freeAmount += 4500;
+                }
+
+                // Free per 100k remittance
+                $free100kCount = floor($cetfRemittance / 100000);
+                $freeAmount += $free100kCount * 4500;
+
+                // Half CETF logic
+                if ($cooperative->half_based_cetf && $cetfRemittance >= 50000 && $cetfRemittance < 100000) {
+                    $freeAmount += 2250;
+                }
+
+                $totalRegFee = $totalParticipants * $registrationFee;
+                $netRequiredRegFee = $totalRegFee - $freeAmount;
+
+                // 🆕 New reg_fee_payable calculation (after netRequiredRegFee)
+                $regFeePayable = $netRequiredRegFee;
+                $regFeePayable -= ($cooperative->less_prereg_payment ?? 0);
+                $regFeePayable -= ($cooperative->less_cetf_balance ?? 0);
+
+                // 📝 Save both
+                $cooperative->total_reg_fee = $totalRegFee;
+                $cooperative->net_required_reg_fee = $netRequiredRegFee;
+                $cooperative->reg_fee_payable = $regFeePayable;
+                $cooperative->save();
+            }
+
             return response()->json([
                 'success' => true,
                 'message' => 'Participant registered successfully!'
@@ -280,67 +326,67 @@ class CooperativeController extends Controller
     }
 
     public function edit($participant_id)
-{
-    $participant = Participant::where('participant_id', $participant_id)->firstOrFail();
-    $cooperatives = Cooperative::all();
-    $events = Event::all();
+    {
+        $participant = Participant::where('participant_id', $participant_id)->firstOrFail();
+        $cooperatives = Cooperative::all();
+        $events = Event::all();
 
-    // ✅ Event capacity limits
-    $eventLimits = [
-        14 => 350,
-        15 => 150,
-        18 => 300,
-        13 => 500,
-    ];
-
-    $eventStatus = [];
-
-    foreach ($eventLimits as $eventId => $limit) {
-        $count = EventParticipant::where('event_id', $eventId)->count();
-        $eventStatus[$eventId] = [
-            'full' => $count >= $limit,
-            'remaining' => max(0, $limit - $count),
-            'total' => $limit,
+        // ✅ Event capacity limits
+        $eventLimits = [
+            14 => 350,
+            15 => 150,
+            18 => 300,
+            13 => 500,
         ];
+
+        $eventStatus = [];
+
+        foreach ($eventLimits as $eventId => $limit) {
+            $count = EventParticipant::where('event_id', $eventId)->count();
+            $eventStatus[$eventId] = [
+                'full' => $count >= $limit,
+                'remaining' => max(0, $limit - $count),
+                'total' => $limit,
+            ];
+        }
+
+        // ✅ Remove full events from list (optional – skip if you want to show disabled checkboxes instead)
+        $events = $events->filter(function ($event) use ($eventStatus) {
+            return !isset($eventStatus[$event->event_id]) || !$eventStatus[$event->event_id]['full'];
+        });
+
+        // ✅ Voting logic
+        $shareCapital = $participant->cooperative->share_capital_balance ?? 0;
+        $votes = 0;
+
+        if ($shareCapital >= 25000) {
+            $votes = 1;
+        }
+
+        if ($shareCapital >= 100000) {
+            $votes += floor(($shareCapital - 25000) / 100000);
+        }
+
+        $votes = min($votes, 5);
+
+        $currentVotingCount = Participant::where('coop_id', $participant->coop_id)
+            ->where('delegate_type', 'Voting')
+            ->where('participant_id', '!=', $participant->participant_id)
+            ->count();
+
+        $canAddVoting = $currentVotingCount < $votes || $participant->delegate_type === 'Voting';
+
+        return view('dashboard.participant.manage_participant.edit', compact(
+            'participant',
+            'cooperatives',
+            'votes',
+            'canAddVoting',
+            'shareCapital',
+            'currentVotingCount',
+            'events',
+            'eventStatus'
+        ));
     }
-
-    // ✅ Remove full events from list (optional – skip if you want to show disabled checkboxes instead)
-    $events = $events->filter(function ($event) use ($eventStatus) {
-        return !isset($eventStatus[$event->event_id]) || !$eventStatus[$event->event_id]['full'];
-    });
-
-    // ✅ Voting logic
-    $shareCapital = $participant->cooperative->share_capital_balance ?? 0;
-    $votes = 0;
-
-    if ($shareCapital >= 25000) {
-        $votes = 1;
-    }
-
-    if ($shareCapital >= 100000) {
-        $votes += floor(($shareCapital - 25000) / 100000);
-    }
-
-    $votes = min($votes, 5);
-
-    $currentVotingCount = Participant::where('coop_id', $participant->coop_id)
-        ->where('delegate_type', 'Voting')
-        ->where('participant_id', '!=', $participant->participant_id)
-        ->count();
-
-    $canAddVoting = $currentVotingCount < $votes || $participant->delegate_type === 'Voting';
-
-    return view('dashboard.participant.manage_participant.edit', compact(
-        'participant',
-        'cooperatives',
-        'votes',
-        'canAddVoting',
-        'shareCapital',
-        'currentVotingCount',
-        'events',
-        'eventStatus'
-    ));
-}
 
 
 
