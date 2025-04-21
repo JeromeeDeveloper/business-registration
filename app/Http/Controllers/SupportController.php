@@ -136,6 +136,25 @@ class SupportController extends Controller
         // Registered Participants: Those with non-null coop_id
         $registeredParticipants = Participant::whereNotNull('coop_id')->count();
 
+        $eventLimits = [
+            14 => ['limit' => 350, 'name' => 'Gender Congress'],
+            15 => ['limit' => 150, 'name' => 'Youth Congress'],
+            18 => ['limit' => 300, 'name' => 'Education Committee Forum'],
+            13 => ['limit' => 500, 'name' => 'Managers Congress'],
+        ];
+
+        $eventStatus = [];
+
+        foreach ($eventLimits as $eventId => $data) {
+            $count = EventParticipant::where('event_id', $eventId)->count();
+            $eventStatus[$eventId] = [
+                'name' => $data['name'],
+                'full' => $count >= $data['limit'],
+                'remaining' => max(0, $data['limit'] - $count),
+                'total' => $data['limit'],
+            ];
+        }
+
         return view('dashboard.support.admin', compact(
             'regions',
             'totalParticipants',
@@ -163,7 +182,8 @@ class SupportController extends Controller
             'totalVotingParticipants',
             'events',
             'registeredParticipants',
-            'votedDelegates'
+            'votedDelegates',
+            'eventStatus'
         ));
     }
 

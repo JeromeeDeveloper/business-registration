@@ -328,6 +328,25 @@ class DashboardController extends Controller
             $query->whereNotNull('event_participant.attendance_datetime');
         }])->get();
 
+        $eventLimits = [
+            14 => ['limit' => 350, 'name' => 'Gender Congress'],
+            15 => ['limit' => 150, 'name' => 'Youth Congress'],
+            18 => ['limit' => 300, 'name' => 'Education Committee Forum'],
+            13 => ['limit' => 500, 'name' => 'Managers Congress'],
+        ];
+
+        $eventStatus = [];
+
+        foreach ($eventLimits as $eventId => $data) {
+            $count = EventParticipant::where('event_id', $eventId)->count();
+            $eventStatus[$eventId] = [
+                'name' => $data['name'],
+                'full' => $count >= $data['limit'],
+                'remaining' => max(0, $data['limit'] - $count),
+                'total' => $data['limit'],
+            ];
+        }
+
 
         $registeredParticipants = Participant::whereNotNull('coop_id')->count();
 
@@ -358,7 +377,8 @@ class DashboardController extends Controller
             'totalVotingParticipants',
             'events',
             'registeredParticipants',
-            'votedDelegates'
+            'votedDelegates',
+            'eventStatus'
         ));
     }
 
@@ -980,7 +1000,7 @@ class DashboardController extends Controller
         $coop->cetf_balance = ($coop->cetf_required ?? 0) - ($coop->total_remittance ?? 0);
         // Check the total remittance
         $totalRemittance = $coop->total_remittance ?? 0;
-        $free100kCETF = $totalRemittance >= 100000; 
+        $free100kCETF = $totalRemittance >= 100000;
 
         // Only apply half-based CETF if it's 50K+ but less than 100K
         $halfBasedCETF = $totalRemittance >= 50000 && $totalRemittance < 100000;

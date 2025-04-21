@@ -701,6 +701,38 @@
 
                         <div class="col-md-8">
 
+                            <div class="card shadow-lg rounded-3">
+                                <div class="bg-primary text-white text-center py-3 rounded-top">
+                                    <h4 class="mb-0">🎯 Event Slot Status</h4>
+                                </div>
+
+                                <div class="card-body p-4">
+                                    <div class="row g-4">
+                                        @foreach ($eventStatus as $eventId => $status)
+                                            <div class="col-md-3">
+                                                <div class="card border-0 shadow-sm h-100 text-center">
+                                                    <div class="card-body">
+                                                        <div class="mb-3">
+                                                            <div class="rounded-circle mx-auto d-flex justify-content-center align-items-center {{ $status['full'] ? 'bg-danger' : 'bg-info' }}" style="width: 60px; height: 60px;">
+                                                                <i class="fas fa-calendar-alt fa-lg text-white"></i>
+                                                            </div>
+                                                        </div>
+                                                        <h6 class="text-muted mb-1">{{ $status['name'] ?? 'Event '.$eventId }}</h6>
+                                                        <h5 class="mb-1 text-dark">
+                                                            {{ $status['full'] ? 'Full' : $status['remaining'] . ' left' }}
+                                                        </h5>
+                                                        <span class="badge {{ $status['full'] ? 'bg-danger' : 'bg-secondary' }}">
+                                                            {{ $status['total'] }} total
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+
+
 
                             <div class="card card-round shadow-lg">
                                 <h3 class="p-4 text-center text-white bg-primary rounded-top">Attendance Status</h3>
