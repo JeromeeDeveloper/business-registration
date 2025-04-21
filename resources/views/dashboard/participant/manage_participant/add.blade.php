@@ -676,70 +676,95 @@
                                     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
                                     <script>
                                         document.getElementById("participantForm").addEventListener("submit", function(event) {
-                                            event.preventDefault(); // Prevent normal form submission
+                                            event.preventDefault();
+
+                                            // Clear old validation messages
+                                            document.querySelectorAll(".is-invalid").forEach(el => el.classList.remove("is-invalid"));
+                                            document.querySelectorAll(".invalid-feedback").forEach(el => el.remove());
 
                                             Swal.fire({
                                                 title: "Processing...",
                                                 text: "Sending email, please wait...",
                                                 allowOutsideClick: false,
                                                 didOpen: () => {
-                                                    Swal.showLoading(); // Show Swal loading indicator
+                                                    Swal.showLoading();
                                                 }
                                             });
 
-                                            // Prepare the form data to send via AJAX
                                             let formData = new FormData(this);
 
                                             fetch("{{ route('coopparticipantadd') }}", {
-                                                    method: "POST",
-                                                    body: formData,
-                                                    headers: {
-                                                        "X-CSRF-TOKEN": document.querySelector('input[name="_token"]').value
+                                                method: "POST",
+                                                body: formData,
+                                                headers: {
+                                                    "X-CSRF-TOKEN": document.querySelector('input[name="_token"]').value
+                                                }
+                                            })
+                                            .then(async response => {
+                                                const contentType = response.headers.get("content-type");
+                                                const isJson = contentType && contentType.includes("application/json");
+                                                const data = isJson ? await response.json() : {};
+
+                                                if (!response.ok) {
+                                                    // Laravel validation error (422)
+                                                    if (response.status === 422 && data.errors) {
+                                                        for (const field in data.errors) {
+                                                            const input = document.querySelector(`[name="${field}"]`);
+                                                            if (input) {
+                                                                input.classList.add("is-invalid");
+
+                                                                const errorDiv = document.createElement("div");
+                                                                errorDiv.classList.add("invalid-feedback");
+                                                                errorDiv.innerText = data.errors[field][0];
+
+                                                                input.parentNode.appendChild(errorDiv);
+                                                            }
+                                                        }
+
+                                                        Swal.close(); // Close loading popup
+                                                        return; // Skip the catch
                                                     }
-                                                })
-                                                .then(response => response.json())
-                                                .then(data => {
-                                                    if (data.success) {
-                                                        Swal.fire({
-                                                            title: "Success!",
-                                                            text: "Participant registered and email sent successfully!",
-                                                            icon: "success"
-                                                        }).then(() => {
-                                                            window.location.href =
-                                                                "{{ route('coop.index') }}"; // Redirect after success
-                                                        });
-                                                    } else {
-                                                        Swal.fire({
-                                                            title: "Error!",
-                                                            text: data.message || "Something went wrong while processing the form.",
-                                                            icon: "error"
-                                                        });
-                                                    }
-                                                })
-                                                .catch(error => {
-                                                    // Network or other issues that prevented the fetch request
-                                                    console.error("Error:", error);
+
+                                                    // For non-validation errors, show general message
+                                                    throw new Error(data.message || "An error occurred while submitting the form.");
+                                                }
+
+                                                return data;
+                                            })
+                                            .then(data => {
+                                                if (data?.success) {
+                                                    Swal.fire({
+                                                        title: "Success!",
+                                                        text: "Participant registered and email sent successfully!",
+                                                        icon: "success"
+                                                    }).then(() => {
+                                                        window.location.href = "{{ route('coop.index') }}";
+                                                    });
+                                                } else if (data) {
                                                     Swal.fire({
                                                         title: "Error!",
-                                                        text: "Failed to send email. Please check your internet connection and try again. " +
-                                                            "If the issue persists, make sure you're connected to the internet and try again by clicking 'Retry'. " +
-                                                            "The page will reload and your input will be preserved, allowing you to attempt submission again.",
-                                                        icon: "error",
-                                                        showCancelButton: true,
-                                                        confirmButtonText: 'Retry',
-                                                        cancelButtonText: 'Cancel',
-                                                    }).then((result) => {
-                                                        if (result.isConfirmed) {
-                                                            // Reload the page and keep the form data
-                                                            window.location.reload();
-                                                        }
+                                                        text: "The email address is already in use. Please provide a different one.",
+                                                        icon: "error"
                                                     });
+                                                }
+                                            })
+                                            .catch(error => {
+                                                console.error("Error:", error);
+                                                Swal.fire({
+                                                    title: "Error!",
+                                                    text: error.message || "Failed to send email. Please check your internet connection and try again.",
+                                                    icon: "error",
+                                                    showCancelButton: true,
+                                                    confirmButtonText: 'Retry',
+                                                    cancelButtonText: 'Cancel',
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        window.location.reload();
+                                                    }
                                                 });
+                                            });
                                         });
                                     </script>
-
-
-
 
                                     <script>
                                         document.addEventListener("DOMContentLoaded", function() {
