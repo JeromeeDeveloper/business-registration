@@ -960,14 +960,14 @@
                                                             </div>
 
                                                             <!-- ⚙️ More Options Dropdown -->
-                                                            <div class="dropdown">
+                                                            {{-- <div class="dropdown">
                                                                 <button class="btn btn-sm btn-outline-light rounded-pill" type="button" id="dropdownMenuButton{{ $event->event_id }}" data-bs-toggle="dropdown" aria-expanded="false">
                                                                     More
                                                                 </button>
                                                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton{{ $event->event_id }}">
                                                                     <li><a class="dropdown-item" href="{{ route('events.index') }}">View Details</a></li>
                                                                 </ul>
-                                                            </div>
+                                                            </div> --}}
                                                         </div>
 
                                                         <div class="card-body">

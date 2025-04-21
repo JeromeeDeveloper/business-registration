@@ -432,7 +432,7 @@
                                                                     More
                                                                 </button>
                                                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton{{ $event->event_id }}">
-                                                                    <li><a class="dropdown-item" href="{{ route('events.index') }}">View Details</a></li>
+                                                                    <li><a class="dropdown-item" href="{{ route('events_participant') }}">View Details</a></li>
                                                                 </ul>
                                                             </div>
                                                         </div>
