@@ -1066,10 +1066,7 @@
     </div>
     <script>
         // Open the modal when the "Preview Overview" button is clicked
-        document.getElementById("openModal").addEventListener("click", function() {
-            var myModal = new bootstrap.Modal(document.getElementById('overviewModal'));
-            myModal.show();
-        });
+
 
         // Print the overview content when the "Print" button is clicked
         document.getElementById("printOverview").addEventListener("click", function() {
@@ -1089,63 +1086,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 
     <!-- Load your custom script -->
-    <script src="{{ asset('js/registration-overview.js') }}"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var ctx = document.getElementById('registrationChart').getContext('2d');
-            var registrationChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: [
-                        'Fully Registered Coops',
-                        'Partially Registered Coops',
-                        'Fully Registered Participants',
-                        'Partially Registered Participants',
-                        // 'Total Events',
-
-                    ],
-                    datasets: [{
-                        label: 'Number of Registrations',
-                        data: [
-                            {{ $fullyRegisteredCoops }},
-                            {{ $partiallyRegisteredCoops }},
-                            {{ $fullyRegisteredParticipants }},
-                            {{ $partiallyRegisteredParticipants }},
-                            // {{ $totalEvents }},
-
-                        ],
-                        backgroundColor: [
-                            'rgba(40, 167, 69, 0.6)', // Green
-                            'rgba(255, 193, 7, 0.6)', // Yellow
-                            'rgba(23, 162, 184, 0.6)', // Blue
-                            'rgba(220, 53, 69, 0.6)', // Red
-                            'rgba(102, 16, 242, 0.6)', // Purple for Events
-                            'rgba(232, 62, 140, 0.6)' // Pink for Speakers
-                        ],
-                        borderColor: [
-                            'rgba(40, 167, 69, 1)',
-                            'rgba(255, 193, 7, 1)',
-                            'rgba(23, 162, 184, 1)',
-                            'rgba(220, 53, 69, 1)',
-                            'rgba(102, 16, 242, 1)',
-                            'rgba(232, 62, 140, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-        });
-    </script>
+   
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- Include SweetAlert -->
 

@@ -1064,28 +1064,17 @@
                                     🚀 Be part of this amazing event!
                                 </div>
                             </div>
-
-
-
                         </div>
                     </div>
                 </div>
             </div>
 
-
             @include('layouts.adminfooter')
 
         </div>
 
-
     </div>
     <script>
-        // Open the modal when the "Preview Overview" button is clicked
-        document.getElementById("openModal").addEventListener("click", function() {
-            var myModal = new bootstrap.Modal(document.getElementById('overviewModal'));
-            myModal.show();
-        });
-
         // Print the overview content when the "Print" button is clicked
         document.getElementById("printOverview").addEventListener("click", function() {
             var printContent = document.getElementById('overviewContent').innerHTML;
@@ -1097,120 +1086,6 @@
             newWindow.print();
         });
     </script>
-
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var ctx = document.getElementById('registrationChart').getContext('2d');
-            var registrationChart = new Chart(ctx, {
-                type: 'bar', // Change to 'bar' for a bar chart
-                data: {
-                    labels: [
-                        'Fully Registered Coops',
-                        'Partially Registered Coops',
-                        'Fully Registered Participants',
-                        'Partially Registered Participants',
-                    ],
-                    datasets: [{
-                        label: 'Number of Registrations',
-                        data: [
-                            {{ $fullyRegisteredCoops }},
-                            {{ $partiallyRegisteredCoops }},
-                            {{ $fullyRegisteredParticipants }},
-                            {{ $partiallyRegisteredParticipants }},
-                        ],
-                        backgroundColor: [
-                            'rgba(40, 167, 69, 0.6)', // Green
-                            'rgba(255, 193, 7, 0.6)', // Yellow
-                            'rgba(23, 162, 184, 0.6)', // Blue
-                            'rgba(220, 53, 69, 0.6)', // Red
-                        ],
-                        borderColor: [
-                            'rgba(40, 167, 69, 1)',
-                            'rgba(255, 193, 7, 1)',
-                            'rgba(23, 162, 184, 1)',
-                            'rgba(220, 53, 69, 1)',
-                        ],
-                        borderWidth: 2,
-                        borderRadius: 5, // Optional, to round the corners of the bars
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top', // Positions the legend at the top
-                            labels: {
-                                // This callback will format the label to include the number
-                                generateLabels: function(chart) {
-                                    var labels = Chart.defaults.plugins.legend.labels.generateLabels(
-                                        chart);
-                                    labels.forEach(function(label, index) {
-                                        label.text = label.text + ': ' + chart.data.datasets[0]
-                                            .data[index];
-                                    });
-                                    return labels;
-                                }
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(tooltipItem) {
-                                    // Display the label along with the value in the tooltip
-                                    return tooltipItem.label + ': ' + tooltipItem.raw;
-                                }
-                            }
-                        }
-                    },
-                    // Displaying the numbers on top of the bars
-                    animations: {
-                        tension: {
-                            duration: 1000,
-                            easing: 'easeInOutQuad',
-                            from: 1,
-                            to: 0,
-                            loop: true
-                        }
-                    },
-                    scales: {
-                        x: {
-                            ticks: {
-                                font: {
-                                    size: 14
-                                }
-                            }
-                        },
-                        y: {
-                            ticks: {
-                                font: {
-                                    size: 14
-                                },
-                                // Displaying the number on the y-axis
-                                callback: function(value) {
-                                    return value;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-
-            // Add data labels above the bars (numbers)
-            registrationChart.options.plugins.datalabels = {
-                anchor: 'end',
-                align: 'top',
-                formatter: function(value, ctx) {
-                    return value; // Display the numeric value on top of each bar
-                },
-                font: {
-                    size: 14,
-                    weight: 'bold'
-                }
-            };
-            registrationChart.update();
-        });
-    </script>
-
 
     @include('layouts.links')
     <!-- JavaScript -->
@@ -1365,9 +1240,6 @@
             });
         });
     </script>
-
-
-
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {

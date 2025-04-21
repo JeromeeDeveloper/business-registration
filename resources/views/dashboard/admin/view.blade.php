@@ -710,47 +710,6 @@
             // Example: If you have AJAX or live updates, call updateFullCetfRemitted() after fetching new data
         });
     </script>
-
-
-    <script>
-        // Handle the form submission using AJAX
-        document.getElementById('coopForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // Prevent the default form submission
-
-            let formData = new FormData(this);
-
-            // Send AJAX request to submit the form
-            fetch("{{ route('admin.storeCooperative') }}", {
-                    method: 'POST',
-                    body: formData,
-                })
-                .then(response => response.json())
-                .then(data => {
-                    // Check if the response contains a success message
-                    if (data.success) {
-                        // Display the success message using SweetAlert
-                        Swal.fire({
-                            title: 'Success!',
-                            text: data.success,
-                            icon: 'success',
-                            confirmButtonText: 'Okay'
-                        });
-
-                        // Optionally, you can reset the form here
-                        document.getElementById('coopForm').reset();
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    Swal.fire({
-                        title: 'Error!',
-                        text: 'An error occurred while submitting the form.',
-                        icon: 'error',
-                        confirmButtonText: 'Try Again'
-                    });
-                });
-        });
-    </script>
     @include('layouts.links')
 </body>
 
