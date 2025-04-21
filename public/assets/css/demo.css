@@ -398,9 +398,15 @@ body[data-background-color="dark"] .demo-icon .icon-class {
 .doc{
     padding: 10px;
 }
+
+.event-card-carousel {
+    margin: auto;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
 .event-card {
     transition: 0.3s;
-
     margin: auto;
     border-radius: 15px;
     overflow: hidden;

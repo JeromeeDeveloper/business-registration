@@ -940,26 +940,39 @@
                                         @foreach ($latestEvents as $index => $event)
                                             <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
                                                 <div style="padding: 0 1px;">
-                                                    <div class="card card-primary card-round mb-3">
-                                                        <div class="card-header">
-                                                            <div class="card-head-row">
-                                                                <div class="card-title">{{ $event->title }}</div>
-                                                                <div class="card-tools">
+                                                    <div class="card mb-4 rounded-3 event-card-carousel">
+                                                        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                                                            <div class="d-flex">
+                                                                <!-- 📅 Mini Calendar Box -->
+                                                                <div class="text-center bg-light text-primary rounded-3 p-3" style="width: 70px;">
+                                                                    <div style="font-size: 0.9rem;">
+                                                                        {{ \Carbon\Carbon::parse($event->start_date)->format('M') }}
+                                                                    </div>
+                                                                    <div style="font-size: 1.5rem; font-weight: bold;">
+                                                                        {{ \Carbon\Carbon::parse($event->start_date)->format('d') }}
+                                                                    </div>
+                                                                </div>
 
+                                                                <!-- 📋 Event Title -->
+                                                                <div class="ms-3">
+                                                                    <h5 class="mb-0" title="{{ $event->title }}">{{ Str::limit($event->title, 45) }}</h5>
                                                                 </div>
                                                             </div>
-                                                            <div class="card-category">
-                                                                {{ \Carbon\Carbon::parse($event->start_date)->format('F d, Y') }}
 
-                                                                {{-- {{ \Carbon\Carbon::parse($event->end_date)->format('F d, Y') }} --}}
+                                                            <!-- ⚙️ More Options Dropdown -->
+                                                            <div class="dropdown">
+                                                                <button class="btn btn-sm btn-outline-light rounded-pill" type="button" id="dropdownMenuButton{{ $event->event_id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    More
+                                                                </button>
+                                                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton{{ $event->event_id }}">
+                                                                    <li><a class="dropdown-item" href="{{ route('events.index') }}">View Details</a></li>
+                                                                </ul>
                                                             </div>
                                                         </div>
+
                                                         <div class="card-body">
-                                                            {{-- <p>{{ $event->description }}</p> --}}
-                                                            <ul>
-                                                                <li><strong>📍 Venue:</strong> {{ $event->location }}
-                                                                </li>
-                                                                {{-- <li><strong>🕒 Time:</strong> 9:00 AM - 5:00 PM</li> --}}
+                                                            <ul class="list-unstyled text-muted">
+                                                                <li class="mb-2"><strong>📍 Venue:</strong> {{ $event->location }}</li>
                                                                 <li><strong>🎤 Guest Speakers:</strong>
                                                                     @if ($event->speakers->count() > 0)
                                                                         {{ $event->speakers->pluck('name')->implode(', ') }}
@@ -967,7 +980,6 @@
                                                                         No speakers listed
                                                                     @endif
                                                                 </li>
-
                                                             </ul>
                                                         </div>
                                                     </div>
