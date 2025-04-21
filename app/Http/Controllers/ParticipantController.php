@@ -235,13 +235,9 @@ public function store(Request $request)
             ->where('membership_status', 'Migs')
             ->count();
 
-        if ($migsCount >= 2) {
-            $freeAmount += 9000;
-        }
-
-        if ($migsCount >= 1) {
-            $freeAmount += 4500;
-        }
+            if ($migsCount >= 1) {
+                $freeAmount += 9000;
+            }
 
         // Free per 100k remittance
         $free100kCount = floor($cetfRemittance / 100000);
