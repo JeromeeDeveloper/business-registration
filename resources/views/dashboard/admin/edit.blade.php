@@ -732,15 +732,24 @@
                                                                 2 Pax for MIGS</label>
                                                         </div>
 
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                name="free_100k_cetf" id="free_100k_cetf"
-                                                                value="1" {{ $free100kCETF ? 'checked' : '' }}
-                                                                disabled>
-                                                            <label class="form-check-label" for="free_100k_cetf">1
-                                                                Pax
-                                                                Free for every 100K CETF</label>
-                                                        </div>
+                                                        @php
+                                                        $freePaxCount = isset($cetfRemittance) && $cetfRemittance > 0 ? floor($cetfRemittance / 100000) : 'N/A';
+                                                    @endphp
+
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox"
+                                                            name="free_100k_cetf" id="free_100k_cetf"
+                                                            value="1" {{ $free100kCETF ? 'checked' : '' }}
+                                                            disabled>
+                                                        <label class="form-check-label" for="free_100k_cetf">
+                                                            1 Pax Free for every 100K CETF
+                                                            <span id="free_100k_cetf_label" class="text-primary fw-bold ms-2">
+                                                                {{ is_numeric($freePaxCount) ? $freePaxCount . ' Pax' : 'N/A' }}
+                                                            </span>
+                                                        </label>
+                                                    </div>
+
+
 
                                                         <div class="form-check">
                                                             <input class="form-check-input" type="checkbox"
