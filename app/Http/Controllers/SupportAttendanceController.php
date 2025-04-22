@@ -68,7 +68,7 @@ class SupportAttendanceController extends Controller
         ->distinct()
         ->count('participants.participant_id');
 
-        return view('dashboard.support.attendance', compact('participants', 'totalParticipantsWithAttendance', 'event', 'events', 'eventId'));
+        return view('components.support.attendance', compact('participants', 'totalParticipantsWithAttendance', 'event', 'events', 'eventId'));
     }
 
 
@@ -77,7 +77,7 @@ class SupportAttendanceController extends Controller
     public function supportshowattendance($participant_id)
     {
         $participant = Participant::where('participant_id', $participant_id)->firstOrFail();
-        return view('dashboard.support.attendanceview', compact('participant'));
+        return view('components.support.attendanceview', compact('participant'));
     }
 
     public function supportprintAttendance()
@@ -87,7 +87,7 @@ class SupportAttendanceController extends Controller
             ->whereNotNull('attendance_datetime')
             ->get();
 
-        return view('dashboard.support.attendance_print', compact('participants'));
+        return view('components.support.attendance_print', compact('participants'));
     }
 
 

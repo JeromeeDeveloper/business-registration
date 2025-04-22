@@ -127,7 +127,7 @@ class AuthController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate($limit); // Use dynamic limit for pagination
 
-        return view('dashboard.admin.user.datatable', compact('users'));
+        return view('components.admin.user.datatable', compact('users'));
     }
 
 
@@ -144,7 +144,7 @@ class AuthController extends Controller
     {
         $user = User::findOrFail($user_id);
         $cooperatives = Cooperative::all(); // Get all cooperatives to display in the dropdown
-        return view('dashboard.admin.user.edit', compact('user', 'cooperatives'));
+        return view('components.admin.user.edit', compact('user', 'cooperatives'));
     }
 
     public function update(Request $request, $user_id)
@@ -195,7 +195,7 @@ class AuthController extends Controller
     public function editProfile()
     {
         $user = Auth::user(); // Get the authenticated user
-        return view('dashboard.admin.myprofile', compact('user')); // Pass user data to the view
+        return view('components.admin.myprofile', compact('user')); // Pass user data to the view
     }
 
     public function updateProfile(Request $request)

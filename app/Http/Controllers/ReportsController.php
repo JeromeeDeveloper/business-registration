@@ -79,7 +79,7 @@ class ReportsController extends Controller
         ->groupBy('cooperatives.region')
         ->get();
 
-        return view('dashboard.admin.reports', compact(
+        return view('components.admin.reports.delegatereports', compact(
             'migsCoopsWithVotingDelegates',
             'fullyRegisteredMigsCoops',
             'nonMigsCoopsWithVotingDelegates',
@@ -132,7 +132,7 @@ class ReportsController extends Controller
         $registrationFees[$coopId] = $participantCount * 4500; // Calculate fee
     }
 
-    return view('dashboard.admin.reports.registration_form', compact('registrations', 'participants', 'registrationFees'));
+    return view('components.admin.reports.registration_form', compact('registrations', 'participants', 'registrationFees'));
 }
 
 public function exportFilteredCoopStatus(Request $request)
@@ -251,11 +251,11 @@ public function previewFilteredCoopStatus(Request $request)
 
         // Handle print request
         if ($isPrint) {
-            return view('dashboard.admin.reports.registration_form', compact('registrations'));
+            return view('components.admin.reports.registration_form', compact('registrations'));
         }
 
         // Handle PDF generation
-        $pdf = Pdf::loadView('dashboard.admin.reports.registration_form', compact('registrations'));
+        $pdf = Pdf::loadView('components.admin.reports.registration_form', compact('registrations'));
         return $pdf->download('cooperative_report.pdf');
     }
 
@@ -304,8 +304,8 @@ public function previewFilteredCoopStatus(Request $request)
               ->where('registration_status', 'Fully Registered');
     })
     ->get();
-    
-    return view('dashboard.admin.reports.participants_list', compact('participants'));
+
+    return view('components.admin.reports.participants_list', compact('participants'));
 }
 
 
@@ -318,7 +318,7 @@ public function coopStatusList(Request $request)
         ->orWhereHas('uploadedDocuments') // Includes those with uploaded documents
         ->get();
 
-    return view('dashboard.admin.reports.coop_status_list', compact('cooperatives'));
+    return view('components.admin.reports.coop_status_list', compact('cooperatives'));
 }
 
 public function summaryDelegates()
@@ -356,7 +356,7 @@ public function summaryDelegates()
         }
     }
 
-    return view('dashboard.admin.reports.summary_delegates', compact('cooperativesByRegion', 'cooperativesWithStatusCount'));
+    return view('components.admin.reports.summary_delegates', compact('cooperativesByRegion', 'cooperativesWithStatusCount'));
 }
 
 
@@ -409,7 +409,7 @@ public function coopRegistrationSummary(Request $request)
             'free_4500' => $free4500
         ]);
     });
-    return view('dashboard.admin.reports.coop-registration-summary', compact(
+    return view('components.admin.reports.coop-registration-summary', compact(
         'totalCoops',
         'compliantCoops',
         'delinquentCoops',
@@ -425,7 +425,7 @@ public function tshirt()
         ->groupBy('tshirt_size')
         ->get();
 
-    return view('dashboard.admin.reports.tshirt_sizes', compact('tshirtSizes'));
+    return view('components.admin.reports.tshirt_sizes', compact('tshirtSizes'));
 }
 
 
@@ -443,7 +443,7 @@ public function tshirt()
             return $region !== 'Unknown'; // Exclude "Unknown" regions
         });
 
-    return view('dashboard.admin.reports.documents_status', compact('documentsByRegion'));
+    return view('components.admin.reports.documents_status', compact('documentsByRegion'));
 }
 
 

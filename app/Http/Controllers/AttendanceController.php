@@ -63,7 +63,7 @@ class AttendanceController extends Controller
     ->count('participants.participant_id');
 
 
-        return view('dashboard.admin.attendance', compact('participants', 'totalParticipantsWithAttendance', 'event', 'events', 'eventId'));
+        return view('components.admin.attendance.datatable', compact('participants', 'totalParticipantsWithAttendance', 'event', 'events', 'eventId'));
     }
 
 
@@ -72,7 +72,7 @@ class AttendanceController extends Controller
     public function showattendance($participant_id)
     {
         $participant = Participant::where('participant_id', $participant_id)->firstOrFail();
-        return view('dashboard.admin.attendanceview', compact('participant'));
+        return view('components.admin.attendance.attendanceview', compact('participant'));
     }
 
     public function printAttendance()
@@ -82,7 +82,7 @@ class AttendanceController extends Controller
             ->whereNotNull('attendance_datetime')
             ->get();
 
-        return view('dashboard.admin.attendance_print', compact('participants'));
+        return view('components.admin.attendance.attendance_print', compact('participants'));
     }
 
 

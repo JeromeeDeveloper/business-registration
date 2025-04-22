@@ -41,13 +41,6 @@ Route::get('/', function () {
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/participants', [HomeController::class, 'home_participants'])->name('home_participants.index');
 
-// Grouped routes for other pages
-Route::view('/about', 'home.about');
-Route::view('/agenda', 'home.agenda');
-Route::view('/contact', 'home.contact');
-Route::view('/detail', 'home.detail');
-Route::view('/feature', 'home.feature');
-
 // Login Registration
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
@@ -62,7 +55,7 @@ Route::middleware([AdminOrSupportMiddleware::class])->group(function () {
 
     Route::get('/reports/export-filtered-coop-status', [ReportsController::class, 'exportFilteredCoopStatus'])->name('reports.export.filtered_coop_status');
     Route::post('/reports/preview-filtered-coop-status', [ReportsController::class, 'previewFilteredCoopStatus'])
-    ->name('reports.preview.filtered_coop_status');
+        ->name('reports.preview.filtered_coop_status');
 
 
     Route::get('/download-all-documents', [ReportsController::class, 'downloadAllDocuments'])->name('download.all.documents');
@@ -75,14 +68,14 @@ Route::middleware([AdminOrSupportMiddleware::class])->group(function () {
 
     Route::get('/admin/reports/summary-delegates', [ReportsController::class, 'summaryDelegates'])->name('admin.reports.summary_delegates');
     Route::get('/admin/reports/tshirt-sizes', [ReportsController::class, 'tshirt'])
-    ->name('admin.reports.tshirt_sizes');
+        ->name('admin.reports.tshirt_sizes');
 
 
     Route::get('/admin/reports', [ReportsController::class, 'generateReports'])->name('admin.reports');
 
     Route::get('/attendance/print', function () {
         $participants = Participant::whereNotNull('attendance_datetime')->get();
-        return view('dashboard.admin.attendance_print', compact('participants'));
+        return view('components.admin.attendance.attendance_print', compact('participants'));
     })->name('attendance.print');
 
     Route::get('/admin/reports/coop-registration-summary', [ReportsController::class, 'coopRegistrationSummary'])->name('admin.reports.coop_registration_summary');
@@ -99,7 +92,7 @@ Route::middleware([AdminOrSupportMiddleware::class])->group(function () {
     Route::get('/admin/reports/participants-list', [ReportsController::class, 'participantsList'])->name('admin.reports.participants_list');
     Route::put('/Admin/Document/UpdateStatus/{document_id}', [CooperativeController::class, 'updateDocumentStatus'])->name('admin.documents.updateStatus');
     // In your web.php (routes file)
-// Route::get('/get-participant-count/{coop_id}', [YourController::class, 'getParticipantCount']);
+    // Route::get('/get-participant-count/{coop_id}', [YourController::class, 'getParticipantCount']);
 
 
 });
@@ -108,14 +101,14 @@ Route::middleware([AdminOrSupportMiddleware::class])->group(function () {
 Route::middleware([AdminMiddleware::class])->group(function () {
 
     // web.php (or api.php, depending on where you want to trigger this)
-// Route::get('/update-all-cooperatives', [CooperativeController::class, 'updateAllCooperatives']);
+    // Route::get('/update-all-cooperatives', [CooperativeController::class, 'updateAllCooperatives']);
 
-// Route::get('/update-all-cooperatives-ga-registration', function () {
-//     (new UpdateCooperativeObserver)->updateAllCooperativesGARegistrationStatus();
-//     return response()->json(['message' => 'All cooperatives GA Registration status updated successfully.']);
-// });
+    // Route::get('/update-all-cooperatives-ga-registration', function () {
+    //     (new UpdateCooperativeObserver)->updateAllCooperativesGARegistrationStatus();
+    //     return response()->json(['message' => 'All cooperatives GA Registration status updated successfully.']);
+    // });
 
-Route::post('/generate-blank-pdf', [CooperativeController::class, 'generateBlankPdf']);
+    Route::post('/generate-blank-pdf', [CooperativeController::class, 'generateBlankPdf']);
 
     Route::get('/registration-overview-pdf', [ReportsController::class, 'showRegistrationOverview'])->name('registration.overview.pdf');
 
@@ -137,7 +130,7 @@ Route::post('/generate-blank-pdf', [CooperativeController::class, 'generateBlank
     Route::post('/cooperatives/notify-all', [DashboardController::class, 'sendNotificationToAll'])->name('cooperatives.notifyAll');
     Route::post('/cooperatives/credentiasl/notify-all', [DashboardController::class, 'sendCredentialsToAll'])->name('cooperatives.notifyCredentialsAll');
     Route::post('/cooperatives/notify-all/unregistered', [DashboardController::class, 'sendNotificationToAllunregistered'])
-    ->name('cooperatives.notifyAll.unregistered');
+        ->name('cooperatives.notifyAll.unregistered');
 
     Route::get('/Admin/Dashboard', [DashboardController::class, 'admin'])->name('adminDashboard');
     Route::get('/Admin/Register/Cooperatives', [DashboardController::class, 'register'])->name('adminregister');
@@ -147,7 +140,7 @@ Route::post('/generate-blank-pdf', [CooperativeController::class, 'generateBlank
     // attendance
     Route::get('/attendance/print', function () {
         $participants = Participant::whereNotNull('attendance_datetime')->get();
-        return view('dashboard.admin.attendance_print', compact('participants'));
+        return view('components.admin.attendance.attendance_print', compact('participants'));
     })->name('attendance.print');
 
 
@@ -341,9 +334,8 @@ Route::middleware([SupportMiddleware::class])->group(function () {
     Route::get('/Support/Participant/{participant_id}', [SupportController::class, 'show'])->name('support.participants.show');
 
     Route::get('/participants/{userId}/resend-email-support', [SupportController::class, 'resendEmail3'])
-    ->name('participants.resendEmail3');
+        ->name('participants.resendEmail3');
 
     Route::get('/scan-qr2', [SupportController::class, 'scanQR'])->name('scan.qr');
     Route::post('/scan-qr2', [SupportController::class, 'scanQR'])->name('scan.qr');
-
 });

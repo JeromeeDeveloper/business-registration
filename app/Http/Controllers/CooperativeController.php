@@ -61,7 +61,7 @@ class CooperativeController extends Controller
             ->paginate($perPage)
             ->appends(['limit' => $perPage, 'search' => $request->search]); // Preserve query parameters
 
-        return view('dashboard.participant.manage_participant.participant', compact('participants', 'totalParticipants'));
+        return view('components.cooperative.manage_participant.participant', compact('participants', 'totalParticipants'));
     }
 
 
@@ -132,7 +132,7 @@ class CooperativeController extends Controller
             ->count();
         $canAddVoting = $existingVotingParticipants < $votes;
 
-        return view('dashboard.participant.manage_participant.add', compact(
+        return view('components.cooperative.manage_participant.add', compact(
             'cooperatives',
             'users',
             'events',
@@ -318,7 +318,7 @@ class CooperativeController extends Controller
     public function show($participant_id)
     {
         $participant = Participant::where('participant_id', $participant_id)->firstOrFail();
-        return view('dashboard.participant.manage_participant.view', compact('participant'));
+        return view('components.cooperative.manage_participant.view', compact('participant'));
     }
 
     public function edit($participant_id)
@@ -372,7 +372,7 @@ class CooperativeController extends Controller
 
         $canAddVoting = $currentVotingCount < $votes || $participant->delegate_type === 'Voting';
 
-        return view('dashboard.participant.manage_participant.edit', compact(
+        return view('components.cooperative.manage_participant.edit', compact(
             'participant',
             'cooperatives',
             'votes',
@@ -525,7 +525,7 @@ class CooperativeController extends Controller
         $hasDocuments = $cooperative->uploadedDocuments()->exists();
 
         // Pass the cooperative and document existence data to the view
-        return view('dashboard.participant.documents', compact('cooperative', 'hasDocuments'));
+        return view('components.cooperative.documents', compact('cooperative', 'hasDocuments'));
     }
 
 
@@ -541,7 +541,7 @@ class CooperativeController extends Controller
 
         $documents = UploadedDocument::where('coop_id', $cooperative->coop_id)->get();
 
-        return view('dashboard.participant.view_documents', compact('documents', 'hasDocuments'));
+        return view('components.cooperative.view_documents', compact('documents', 'hasDocuments'));
     }
 
     public function storeDocuments(Request $request)
@@ -607,7 +607,7 @@ class CooperativeController extends Controller
             $documents = UploadedDocument::all(); // Show all documents if no participant is selected
         }
 
-        return view('dashboard.admin.participant.documents', compact('documents', 'coop_id'));
+        return view('components.admin.participant.documents', compact('documents', 'coop_id'));
     }
 
     public function updateDocumentStatus(Request $request, $document_id)

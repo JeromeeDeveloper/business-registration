@@ -51,8 +51,6 @@
 <hr>
 <div>
 
-
-
     <!-- Signature Image -->
     <!-- First Signature Image -->
     <img src="https://ci3.googleusercontent.com/mail-sig/AIorK4wvLE7Z259KZkYLTl4fj54VtU7p-zQ4jjAB9ZXkSAwUOFgAfT6LwPgnqjsOXo9LpNSC6IojBRszQ4Mm"

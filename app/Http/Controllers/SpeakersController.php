@@ -18,7 +18,7 @@ class SpeakersController extends Controller
     {
         $speakers = Speaker::with('event')->get(); // Load speakers with their associated event
         $events = Event::all(); // Get all events for the dropdown
-        return view('dashboard.admin.speakers.datatable', compact('speakers', 'events'));
+        return view('components.admin.speakers.datatable', compact('speakers', 'events'));
     }
 
     public function store(Request $request)

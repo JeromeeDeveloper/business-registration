@@ -62,7 +62,7 @@ class ParticipantController extends Controller
         // Load participants with user and retrieve stored password (if stored)
         $participants = $query->paginate($perPage);
 
-        return view('dashboard.admin.participant.participant', compact('participants'));
+        return view('components.admin.participant.participant', compact('participants'));
     }
 
     public function resendEmail($userId)
@@ -136,7 +136,7 @@ class ParticipantController extends Controller
             ];
         }
 
-        return view('dashboard.admin.participant.add', compact(
+        return view('components.admin.participant.add', compact(
             'cooperatives',
             'users',
             'events',
@@ -149,7 +149,7 @@ class ParticipantController extends Controller
 public function generateId($id)
 {
     $participant = Participant::findOrFail($id);
-    return view('dashboard.admin.participant.id_card', compact('participant'));
+    return view('components.admin.participant.id_card', compact('participant'));
 }
 
 
@@ -274,7 +274,7 @@ public function store(Request $request)
     $participant = Participant::with('events')->where('participant_id', $participant_id)->firstOrFail();
     $events = Event::all(); // ✅ Fetch all congress types
 
-    return view('dashboard.admin.participant.view', compact('participant', 'events'));
+    return view('components.admin.participant.view', compact('participant', 'events'));
 }
 
 
@@ -307,7 +307,7 @@ public function store(Request $request)
            ];
        }
 
-       return view('dashboard.admin.participant.edit', compact(
+       return view('components.admin.participant.edit', compact(
            'participant',
            'cooperatives',
            'events',
@@ -461,7 +461,7 @@ public function store(Request $request)
           }
 
           // Pass the cooperative data to the view
-          return view('dashboard.cooperative.documents', compact('cooperative'));
+          return view('components.cooperative.documents', compact('cooperative'));
       }
 
 
@@ -535,7 +535,7 @@ public function store(Request $request)
 
           $documents = UploadedDocument::where('participant_id', $participant->participant_id)->get();
 
-          return view('dashboard.participant.view_documents', compact('documents'));
+          return view('components.cooperative.view_documents', compact('documents'));
       }
 
       public function userDocuments()
@@ -549,7 +549,7 @@ public function store(Request $request)
 
         $documents = $participant->uploadedDocuments; // Fetch all documents
 
-        return view('dashboard.participant.participant', compact('documents'));
+        return view('components.cooperative.dashboard', compact('documents'));
     }
 
     // public function viewadminDocuments($participant_id = null)
@@ -561,7 +561,7 @@ public function store(Request $request)
     //         $documents = UploadedDocument::all(); // Show all documents if no participant is selected
     //     }
 
-    //     return view('dashboard.admin.participant.documents', compact('documents', 'participant_id'));
+    //     return view('components.admin.participant.documents', compact('documents', 'participant_id'));
     // }
 
     public function speakerlist(Request $request)
@@ -579,7 +579,7 @@ public function store(Request $request)
             ->orderBy('name', 'asc')
             ->paginate(5); // Ensure pagination is applied
 
-        return view('dashboard.participant.speakers', compact('speakers', 'search'));
+        return view('components.cooperative.speakers', compact('speakers', 'search'));
     }
 
     public function approve(Request $request, Participant $participant)
@@ -622,7 +622,7 @@ public function store(Request $request)
 public function editProfile()
 {
     $user = Auth::user(); // Get the authenticated user
-    return view('dashboard.admin.participantprofile', compact('user')); // Pass user data to the view
+    return view('components.admin.participantprofile', compact('user')); // Pass user data to the view
 }
 
 public function updateProfile(Request $request)

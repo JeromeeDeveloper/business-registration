@@ -357,7 +357,7 @@ class DashboardController extends Controller
 
         $registeredParticipants = Participant::whereNotNull('coop_id')->count();
 
-        return view('dashboard.admin.admin', compact(
+        return view('components.admin.dashboard', compact(
             'regions',
             'totalParticipants',
             'totalUsers',
@@ -491,7 +491,7 @@ class DashboardController extends Controller
             ->pluck('document_type')
             ->toArray();
 
-        return view('dashboard.participant.participant', [
+        return view('components.cooperative.dashboard', [
             'participant' => $participant,
             'event' => $latestEvent,
             'totalEvents' => $totalEvents,
@@ -563,7 +563,7 @@ class DashboardController extends Controller
 
         $regFeePayable = max(0, $netRequiredRegFee - ($lessPreregPayment + $lessCetfBalance));
 
-        return view('dashboard.participant.cooperativeprofile', compact(
+        return view('components.cooperative.cooperativeprofile', compact(
             'cooperative',
             'totalRegFee',
             'regFeePayable',
@@ -583,7 +583,7 @@ class DashboardController extends Controller
         $cooperative = Cooperative::findOrFail($coop_id);
 
         // Return the edit view with cooperative data
-        return view('dashboard.participant.edit', compact('cooperative'));
+        return view('components.cooperative.edit', compact('cooperative'));
     }
 
     public function updateCooperativeProfile(Request $request, $coop_id)
@@ -611,7 +611,7 @@ class DashboardController extends Controller
     public function participantregister()
     {
         $cooperatives = Cooperative::all();
-        return view('dashboard.participant.register', compact('cooperatives'));
+        return view('components.cooperative.register', compact('cooperatives'));
     }
 
     public function store(Request $request)
@@ -731,7 +731,7 @@ class DashboardController extends Controller
     // Show the cooperative registration form
     public function register()
     {
-        return view('dashboard.admin.register');
+        return view('components.admin.cooperative.register');
     }
 
     public function view(Request $request)
@@ -806,7 +806,7 @@ class DashboardController extends Controller
 
         $emails = $cooperatives->pluck('email')->filter()->implode(',');
 
-        return view('dashboard.admin.datatable', compact('cooperatives', 'search', 'emails', 'emailsall', 'filterNoGA'));
+        return view('components.admin.cooperative.datatable', compact('cooperatives', 'search', 'emails', 'emailsall', 'filterNoGA'));
     }
 
 
@@ -1050,7 +1050,7 @@ class DashboardController extends Controller
         $coop->total_reg_fee = $totalRegFee;
         $coop->reg_fee_payable = $regFeePayable;
 
-        return view('dashboard.admin.edit', compact(
+        return view('components.admin.cooperative.edit', compact(
             'coop',
             'hasMigsRegistration',
             'hasMspOfficer',
@@ -1275,7 +1275,7 @@ class DashboardController extends Controller
     $documents = UploadedDocument::where('coop_id', $coop->coop_id)->get();
 
     // Return the view with related data
-    return view('dashboard.admin.view', compact('coop', 'documents'));
+    return view('components.admin.cooperative.view', compact('coop', 'documents'));
 }
 
 
@@ -1328,13 +1328,7 @@ class DashboardController extends Controller
         $participant = Participant::all(); // Or any other data fetching logic
         $cooperatives = Cooperative::all();
         // Pass $participant to the view
-        return view('dashboard.admin.user.register', compact('participant', 'cooperatives'));
+        return view('components.admin.user.register', compact('participant', 'cooperatives'));
     }
 
-    public function showQR($id)
-    {
-        $participant = Participant::findOrFail($id);
-
-        return view('dashboard.admin.admin', compact('participant'));
-    }
 }

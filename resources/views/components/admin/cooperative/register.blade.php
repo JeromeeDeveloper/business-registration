@@ -1117,14 +1117,15 @@
         console.error("❌ Error:", error);
 
         Swal.fire({
-            title: 'Error!',
-            html: `
-                <strong>Message:</strong> ${error.message} <br>
-                <strong>Possible Cause:</strong> ${error.message.includes('<!DOCTYPE') ? "Server returned an HTML page instead of JSON. Check Laravel logs." : "Unknown issue"}
-            `,
-            icon: 'error',
-            confirmButtonText: 'Debug'
-        });
+    title: 'Duplicate Email!',
+    html: `
+        <strong>Message:</strong> The email address you entered is already in use. <br>
+        <strong>Possible Cause:</strong> A participant with this email already exists in the system.
+    `,
+    icon: 'warning',
+    confirmButtonText: 'OK'
+});
+
     });
 });
 

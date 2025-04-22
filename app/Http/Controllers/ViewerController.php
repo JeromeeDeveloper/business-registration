@@ -30,7 +30,7 @@ class ViewerController extends Controller
     // ✅ Fetch latest 5 events with speakers
     $latestEvents = Event::with('speakers')->orderBy('start_date', 'desc')->take(5)->get();
 
-    return view('dashboard.participant_viewer.dashboard', compact(
+    return view('components.participant.dashboard', compact(
         'cooperative',
         'participant',
         'event',
@@ -43,7 +43,7 @@ class ViewerController extends Controller
     public function events_participant()
     {
         $events = Event::all(); // Get all events
-        return view('dashboard.participant_viewer.eventschedule', compact('events'));
+        return view('components.participant.eventschedule', compact('events'));
     }
 
     public function speakerlistparticipant(Request $request)
@@ -61,13 +61,13 @@ class ViewerController extends Controller
             ->orderBy('name', 'asc')
             ->paginate(10); // Ensure pagination is applied
 
-        return view('dashboard.participant_viewer.speakers', compact('speakers', 'search'));
+        return view('components.participant.speakers', compact('speakers', 'search'));
     }
 
     public function editProfilepart()
     {
         $user = Auth::user(); // Get the authenticated user
-        return view('dashboard.participant_viewer.participantprofile', compact('user'));
+        return view('components.participant.participantprofile', compact('user'));
     }
 
     public function updateProfileParticipant(Request $request)

@@ -13,7 +13,7 @@ class EventsController extends Controller
     public function index()
     {
         $events = Event::orderBy('start_date', 'asc')->get(); // Order by start_date ascending
-        return view('dashboard.admin.events.datatable', compact('events'));
+        return view('components.admin.events.datatable', compact('events'));
     }
 
 
@@ -76,7 +76,7 @@ class EventsController extends Controller
     public function schedule()
     {
         $events = Event::all(); // Get all events
-        return view('dashboard.participant.eventschedule', compact('events'));
+        return view('components.cooperative.eventschedule', compact('events'));
     }
 
 
