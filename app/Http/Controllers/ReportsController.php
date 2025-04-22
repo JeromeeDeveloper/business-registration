@@ -55,8 +55,22 @@ class ReportsController extends Controller
 
 
         // Total Allowable Votes per Region
-        $totalAllowableVotes = Cooperative::selectRaw('region, SUM(no_of_entitled_votes) as total_votes')
-            ->groupBy('region')->get();
+        $totalAllowableVotes = Cooperative::selectRaw("
+        region,
+        SUM(
+            LEAST(
+                5,
+                CASE
+                    WHEN share_capital_balance >= 25000 THEN
+                        1 + FLOOR((share_capital_balance - 25000) / 100000)
+                    ELSE 0
+                END
+            )
+        ) as total_votes
+    ")
+    ->groupBy('region')
+    ->get();
+
 
         // Total Tagged as Voting Delegates (MIGS) per Region
         $totalVotingDelegatesMigs = Participant::where('delegate_type', 'Voting')
