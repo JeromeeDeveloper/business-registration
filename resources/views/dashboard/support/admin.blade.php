@@ -1060,7 +1060,7 @@
 
                             <div class="card mt-4 shadow-lg border-0 rounded-4 card-transition">
                                 <div class="card-header header-status bg-primary text-white rounded-top-4">
-                                    <h5><i class="fas fa-chart-bar me-2"></i> Voting Statistics</h5>
+                                    <h5><i class="fas fa-chart-bar me-2"></i>Voting Statistics</h5>
                                 </div>
                                 <div class="card-body bg-light rounded-bottom-4">
                                     <canvas id="votingDonutChart" style="max-height: 200px;"></canvas>
