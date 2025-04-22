@@ -288,6 +288,13 @@ class DashboardController extends Controller
             ->distinct('participants.coop_id') // Counts each coop only once
             ->count('participants.coop_id');
 
+        $totalAttendedParticipants = DB::table('participants')
+    ->join('event_participant', 'participants.participant_id', '=', 'event_participant.participant_id')
+    ->whereNotNull('event_participant.attendance_datetime') // Ensure they attended
+    ->distinct('participants.participant_id') // Count each participant once
+    ->count('participants.participant_id');
+
+
         $totalMigsAttended = DB::table('participants')
             ->join('event_participant', 'participants.participant_id', '=', 'event_participant.participant_id')
             ->whereNotNull('event_participant.attendance_datetime')
@@ -378,7 +385,8 @@ class DashboardController extends Controller
             'events',
             'registeredParticipants',
             'votedDelegates',
-            'eventStatus'
+            'eventStatus',
+            'totalAttendedParticipants'
         ));
     }
 

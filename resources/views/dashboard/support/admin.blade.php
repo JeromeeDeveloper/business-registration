@@ -704,15 +704,18 @@
                                                 <div class="card border-0 shadow-sm h-100 text-center">
                                                     <div class="card-body">
                                                         <div class="mb-3">
-                                                            <div class="rounded-circle mx-auto d-flex justify-content-center align-items-center {{ $status['full'] ? 'bg-danger' : 'bg-info' }}" style="width: 60px; height: 60px;">
+                                                            <div class="rounded-circle mx-auto d-flex justify-content-center align-items-center {{ $status['full'] ? 'bg-danger' : 'bg-info' }}"
+                                                                style="width: 60px; height: 60px;">
                                                                 <i class="fas fa-calendar-alt fa-lg text-white"></i>
                                                             </div>
                                                         </div>
-                                                        <h6 class="text-muted mb-1">{{ $status['name'] ?? 'Event '.$eventId }}</h6>
+                                                        <h6 class="text-muted mb-1">
+                                                            {{ $status['name'] ?? 'Event ' . $eventId }}</h6>
                                                         <h5 class="mb-1 text-dark">
                                                             {{ $status['full'] ? 'Full' : $status['remaining'] . ' left' }}
                                                         </h5>
-                                                        <span class="badge {{ $status['full'] ? 'bg-danger' : 'bg-secondary' }}">
+                                                        <span
+                                                            class="badge {{ $status['full'] ? 'bg-danger' : 'bg-secondary' }}">
                                                             {{ $status['total'] }} total
                                                         </span>
                                                     </div>
@@ -941,10 +944,12 @@
                                             <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
                                                 <div style="padding: 0 1px;">
                                                     <div class="card mb-4 rounded-3 event-card-carousel">
-                                                        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                                                        <div
+                                                            class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                                                             <div class="d-flex">
                                                                 <!-- 📅 Mini Calendar Box -->
-                                                                <div class="text-center bg-light text-primary rounded-3 p-3" style="width: 70px;">
+                                                                <div class="text-center bg-light text-primary rounded-3 p-3"
+                                                                    style="width: 70px;">
                                                                     <div style="font-size: 0.9rem;">
                                                                         {{ \Carbon\Carbon::parse($event->start_date)->format('M') }}
                                                                     </div>
@@ -955,7 +960,8 @@
 
                                                                 <!-- 📋 Event Title -->
                                                                 <div class="ms-3">
-                                                                    <h5 class="mb-0" title="{{ $event->title }}">{{ Str::limit($event->title, 45) }}</h5>
+                                                                    <h5 class="mb-0" title="{{ $event->title }}">
+                                                                        {{ Str::limit($event->title, 45) }}</h5>
                                                                 </div>
                                                             </div>
 
@@ -972,7 +978,8 @@
 
                                                         <div class="card-body">
                                                             <ul class="list-unstyled text-muted">
-                                                                <li class="mb-2"><strong>📍 Venue:</strong> {{ $event->location }}</li>
+                                                                <li class="mb-2"><strong>📍 Venue:</strong>
+                                                                    {{ $event->location }}</li>
                                                                 <li><strong>🎤 Guest Speakers:</strong>
                                                                     @if ($event->speakers->count() > 0)
                                                                         {{ $event->speakers->pluck('name')->implode(', ') }}
@@ -1051,6 +1058,25 @@
                                 </div>
                             </div>
 
+                            <div class="card mt-4 shadow-lg border-0 rounded-4 card-transition">
+                                <div class="card-header header-status bg-primary text-white rounded-top-4">
+                                    <h5><i class="fas fa-chart-bar me-2"></i> Voting Statistics</h5>
+                                </div>
+                                <div class="card-body bg-light rounded-bottom-4">
+                                    <canvas id="votingDonutChart" style="max-height: 200px;"></canvas>
+                                </div>
+                            </div>
+
+                            <div class="card mt-4 shadow-lg border-0 rounded-4 overflow-hidden card-transition">
+                                <div class="card-header header-status bg-purple text-white rounded-top-4 position-relative">
+                                    <h5><i class="fas fa-users me-2"></i> Attendance Overview</h5>
+                                    <div class="header-overlay"></div>
+                                </div>
+                                <div class="card-body bg-light rounded-bottom-4">
+                                    <canvas id="attendanceDonutChart" style="max-height: 200px;"></canvas>
+
+                                </div>
+                            </div>
 
                         </div>
                     </div>
@@ -1064,11 +1090,119 @@
 
 
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Open the modal when the "Preview Overview" button is clicked
+        const donutCtx = document.getElementById('votingDonutChart').getContext('2d');
 
+        const totalVoting = {{ $totalVoting }};
+        const votedDelegates = {{ $votedDelegates }};
+        const targetGoal = 300;
 
-        // Print the overview content when the "Print" button is clicked
+        const votingDonutChart = new Chart(donutCtx, {
+            type: 'doughnut',
+            data: {
+                labels: [' Voting Delegates', 'Voted Delegates', 'Target Goal'],
+                datasets: [{
+                    label: 'Voting Stats',
+                    data: [totalVoting, votedDelegates, targetGoal],
+                    backgroundColor: [
+                        'rgba(0, 123, 255, 0.8)', // Blue
+                        'rgba(0, 200, 255, 0.8)', // Cyan
+                        'rgba(255, 99, 132, 0.8)' // Red
+                    ],
+                    borderColor: '#fff',
+                    borderWidth: 3,
+                    hoverOffset: 12
+                }]
+            },
+            options: {
+                responsive: true,
+                cutout: '65%',
+                animation: {
+                    animateRotate: true,
+                    duration: 1500,
+                    easing: 'easeOutQuart'
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: '#333',
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            },
+                            padding: 20
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: '#1e1e2f',
+                        titleColor: '#fff',
+                        bodyColor: '#eee',
+                        padding: 10,
+                        cornerRadius: 8
+                    }
+                }
+            }
+        });
+    </script>
+    <script>
+        const donutCtx2 = document.getElementById('attendanceDonutChart').getContext('2d');
+
+        const registeredParticipants = {{ $registeredParticipants }};
+        const attendedParticipants = {{ $totalAttendedParticipants }};
+        const attendanceTarget = 1000;
+
+        const attendanceDonutChart = new Chart(donutCtx2, {
+            type: 'doughnut',
+            data: {
+                labels: ['Registered', 'Attended', 'Target Goal'],
+                datasets: [{
+                    label: 'Attendance Stats',
+                    data: [registeredParticipants, attendedParticipants, attendanceTarget],
+                    backgroundColor: [
+                        'rgba(161, 140, 209, 0.85)', // Registered - soft purple
+                        'rgba(142, 45, 226, 0.85)', // Attended - deep purple
+                        'rgba(255, 99, 132, 0.85)' // Target - red
+                    ],
+                    borderColor: '#fff',
+                    borderWidth: 3,
+                    hoverOffset: 14
+                }]
+            },
+            options: {
+                responsive: true,
+                cutout: '65%',
+                animation: {
+                    animateRotate: true,
+                    duration: 1500,
+                    easing: 'easeOutCirc'
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: '#444',
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            },
+                            padding: 20
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: '#2c284e',
+                        titleColor: '#fff',
+                        bodyColor: '#eee',
+                        cornerRadius: 10,
+                        padding: 12
+                    }
+                }
+            }
+        });
+    </script>
+    <script>
         document.getElementById("printOverview").addEventListener("click", function() {
             var printContent = document.getElementById('overviewContent').innerHTML;
             var newWindow = window.open('', '', 'height=600,width=800');
@@ -1086,7 +1220,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 
     <!-- Load your custom script -->
-   
+
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- Include SweetAlert -->
 

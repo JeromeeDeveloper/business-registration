@@ -703,7 +703,7 @@
 
                             <div class="card shadow-lg rounded-3">
                                 <div class="bg-primary text-white text-center py-3 rounded-top">
-                                    <h4 class="mb-0">🎯 Event Slot Status</h4>
+                                    <h4 class="mb-0">Event Slot Status</h4>
                                 </div>
 
                                 <div class="card-body p-4">
@@ -821,7 +821,7 @@
                                                         <p class="card-category mb-1 text-muted">Total Participants
                                                             Attended</p>
                                                         <h4 class="card-title mb-0 text-dark">
-                                                            {{ number_format($totalVotingParticipants) }}</h4>
+                                                            {{ number_format($totalAttendedParticipants) }}</h4>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1064,6 +1064,27 @@
                                     🚀 Be part of this amazing event!
                                 </div>
                             </div>
+
+                            <div class="card mt-4 shadow-lg border-0 rounded-4 card-transition">
+                                <div class="card-header header-status bg-primary text-white rounded-top-4">
+                                    <h5><i class="fas fa-chart-bar me-2"></i> Voting Statistics</h5>
+                                </div>
+                                <div class="card-body bg-light rounded-bottom-4">
+                                    <canvas id="votingDonutChart" style="max-height: 200px;"></canvas>
+                                </div>
+                            </div>
+
+                            <div class="card mt-4 shadow-lg border-0 rounded-4 overflow-hidden card-transition">
+                                <div class="card-header header-status bg-purple text-white rounded-top-4 position-relative">
+                                    <h5><i class="fas fa-users me-2"></i> Attendance Overview</h5>
+                                    <div class="header-overlay"></div>
+                                </div>
+                                <div class="card-body bg-light rounded-bottom-4">
+                                    <canvas id="attendanceDonutChart" style="max-height: 200px;"></canvas>
+
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -1074,6 +1095,118 @@
         </div>
 
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const donutCtx = document.getElementById('votingDonutChart').getContext('2d');
+
+        const totalVoting = {{ $totalVoting }};
+        const votedDelegates = {{ $votedDelegates }};
+        const targetGoal = 300;
+
+        const votingDonutChart = new Chart(donutCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Total Voting Delegates', 'Voted Delegates', 'Target Goal'],
+                datasets: [{
+                    label: 'Voting Stats',
+                    data: [totalVoting, votedDelegates, targetGoal],
+                    backgroundColor: [
+                        'rgba(0, 123, 255, 0.8)', // Blue
+                        'rgba(0, 200, 255, 0.8)', // Cyan
+                        'rgba(255, 99, 132, 0.8)' // Red
+                    ],
+                    borderColor: '#fff',
+                    borderWidth: 3,
+                    hoverOffset: 12
+                }]
+            },
+            options: {
+                responsive: true,
+                cutout: '65%',
+                animation: {
+                    animateRotate: true,
+                    duration: 1500,
+                    easing: 'easeOutQuart'
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: '#333',
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            },
+                            padding: 20
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: '#1e1e2f',
+                        titleColor: '#fff',
+                        bodyColor: '#eee',
+                        padding: 10,
+                        cornerRadius: 8
+                    }
+                }
+            }
+        });
+    </script>
+<script>
+    const donutCtx2 = document.getElementById('attendanceDonutChart').getContext('2d');
+
+    const registeredParticipants = {{ $registeredParticipants }};
+    const attendedParticipants = {{ $totalAttendedParticipants }};
+    const attendanceTarget = 1000;
+
+    const attendanceDonutChart = new Chart(donutCtx2, {
+        type: 'doughnut',
+        data: {
+            labels: ['Registered', 'Attended', 'Target Goal'],
+            datasets: [{
+                label: 'Attendance Stats',
+                data: [registeredParticipants, attendedParticipants, attendanceTarget],
+                backgroundColor: [
+                    'rgba(161, 140, 209, 0.85)',  // Registered - soft purple
+                    'rgba(142, 45, 226, 0.85)',   // Attended - deep purple
+                    'rgba(255, 99, 132, 0.85)'    // Target - red
+                ],
+                borderColor: '#fff',
+                borderWidth: 3,
+                hoverOffset: 14
+            }]
+        },
+        options: {
+            responsive: true,
+            cutout: '65%',
+            animation: {
+                animateRotate: true,
+                duration: 1500,
+                easing: 'easeOutCirc'
+            },
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: '#444',
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        },
+                        padding: 20
+                    }
+                },
+                tooltip: {
+                    backgroundColor: '#2c284e',
+                    titleColor: '#fff',
+                    bodyColor: '#eee',
+                    cornerRadius: 10,
+                    padding: 12
+                }
+            }
+        }
+    });
+</script>
+
     <script>
         // Print the overview content when the "Print" button is clicked
         document.getElementById("printOverview").addEventListener("click", function() {

@@ -473,11 +473,6 @@ body[data-background-color="dark"] .demo-icon .icon-class {
     border-bottom-right-radius: 15px;
 }
 
-.event-footer:hover {
-    background: linear-gradient(45deg, #ff5733, #ff784f);
-    transform: scale(1.02);
-}
-
 /* Main Dropdown Button */
 .custom-btn-dropdown {
     background-color: #28a745;
@@ -667,3 +662,21 @@ body[data-background-color="dark"] .demo-icon .icon-class {
     display: inline-block;
     vertical-align: middle;
 }
+
+.header-status {
+    background: linear-gradient(90deg, #007bff, #00c6ff);
+    color: white;
+    border-top-left-radius: 1.5rem;
+    border-top-right-radius: 1.5rem;
+}
+
+/* Smooth hover effects and card styling */
+.card-transition {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-transition:hover {
+    transform: scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 123, 255, 0.3);
+}
+
