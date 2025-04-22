@@ -689,7 +689,7 @@
                                         </div>
                                     </div>
                                     <div class="text-center">
-                                        <p class="card-category mb-1">Total Voting Delegates</p>
+                                        <p class="card-category mb-1">Voting Delegates</p>
                                         <h4 class="card-title mb-0">{{ number_format($totalVoting) }}</h4>
                                     </div>
                                 </div>

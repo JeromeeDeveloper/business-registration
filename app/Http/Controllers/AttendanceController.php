@@ -7,6 +7,7 @@ use App\Models\Event;
 use App\Models\Participant;
 use Illuminate\Http\Request;
 use App\Models\EventParticipant;
+use Illuminate\Support\Facades\DB;
 
 class AttendanceController extends Controller
 {
@@ -54,7 +55,13 @@ class AttendanceController extends Controller
 
         $perPage = $request->input('limit', 5);
         $participants = $participantsQuery->paginate($perPage);
-        $totalParticipantsWithAttendance = $participantsQuery->count();
+
+        $totalParticipantsWithAttendance = DB::table('participants')
+    ->join('event_participant', 'participants.participant_id', '=', 'event_participant.participant_id')
+    ->whereNotNull('event_participant.attendance_datetime') // Ensure they attended
+    ->distinct()
+    ->count('participants.participant_id');
+
 
         return view('dashboard.admin.attendance', compact('participants', 'totalParticipantsWithAttendance', 'event', 'events', 'eventId'));
     }
