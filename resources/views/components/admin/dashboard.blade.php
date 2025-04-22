@@ -373,7 +373,6 @@
                                                                 </a></li>
                                                         </ul>
                                                     </div>
-
                                                 </div>
 
                                             </div>
@@ -383,11 +382,7 @@
                                                 <iframe id="reportFrame" src="" width="100%"
                                                     height="400px" frameborder="0"></iframe>
                                             </div>
-
-
                                         </div>
-
-
                                     </div>
                                 </div>
                             </div>
@@ -886,11 +881,6 @@
                                     </div>
                                 </div>
                             </div>
-
-
-
-
-
                         </div>
 
                         <div class="modal" tabindex="-1" id="overviewModal">
