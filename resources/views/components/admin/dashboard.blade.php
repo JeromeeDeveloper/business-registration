@@ -9,10 +9,8 @@
 
 <body>
     <div class="wrapper">
-        <!-- Sidebar -->
         <div class="sidebar" data-background-color="dark">
             <div class="sidebar-logo">
-                <!-- Logo Header -->
                 <div class="logo-header" data-background-color="dark">
                     <a href="{{ route('adminDashboard') }}" class="logo">
                         <img class="logo-mass-specc" src="{{ asset('images/logo.png') }}" alt="">
@@ -29,7 +27,6 @@
                         <i class="gg-more-vertical-alt"></i>
                     </button>
                 </div>
-                <!-- End Logo Header -->
             </div>
             <div class="sidebar-wrapper scrollbar scrollbar-inner">
                 <div class="sidebar-content">
@@ -93,7 +90,6 @@
                                             <span class="sub-item">Manage attendance</span>
                                         </a>
                                     </li>
-
                                 </ul>
                             </div>
                         </li>
@@ -128,7 +124,6 @@
                                             <span class="sub-item">Manage Speaker</span>
                                         </a>
                                     </li>
-
                                 </ul>
                             </div>
                         </li>
@@ -151,7 +146,8 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="https://mass-specc.coop/2025-coopvention-registration/" class="nav-link" title="Register for Coopvention" target="_blank">
+                            <a href="https://mass-specc.coop/2025-coopvention-registration/" class="nav-link"
+                                title="Register for Coopvention" target="_blank">
                                 <i class="fas fa-building"></i>
                                 <p>Hotel Accomodation</p>
                             </a>
@@ -161,7 +157,6 @@
                 </div>
             </div>
         </div>
-        <!-- End Sidebar -->
 
         <div class="main-panel">
             <div class="main-header">
@@ -245,25 +240,15 @@
                         <div>
                             <h3 class="fw-bold mb-3">Admin Dashboard</h3>
                             <h6 class="text-muted">MASS-SPECC Online Registration System</h6>
-                            {{-- <p class="text-muted text-nowrap">
-                    Logged in as: <strong>{{ Auth::user()->name }}</strong>
-                    @if ($coop)
-                        | Cooperative: <strong>{{ $coop->name }}</strong>
-                    @else
-                        | No Cooperative Assigned
-                    @endif
-                </p> --}}
                         </div>
                         <div class="ms-md-auto py-2 py-md-0">
 
-                            <!-- Button to open the modal -->
                             <button type="button"
                                 class="btn btn-primary btn-lg d-flex align-items-center gap-2 shadow-sm"
                                 data-bs-toggle="modal" data-bs-target="#reportModal">
                                 <i class="fas fa-chart-bar"></i> Generate Reports
                             </button>
 
-                            <!-- Report Modal -->
                             <div class="modal fade" id="reportModal" tabindex="-1"
                                 aria-labelledby="reportModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-lg">
@@ -350,10 +335,7 @@
                                                 <h6 class="fw-bold text-secondary mb-0">📊 Report Preview:</h6>
 
                                                 <div class="d-flex justify-content-between align-items-center gap-2">
-                                                    {{-- <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">
-                                                    <i class="fas fa-times"></i> Close
-                                                </button> --}}
-                                                    <!-- Export Options Dropdown -->
+
                                                     <div class="dropdown">
                                                         <button
                                                             class="btn btn-success dropdown-toggle px-4 custom-btn-dropdown"
@@ -374,10 +356,8 @@
                                                         </ul>
                                                     </div>
                                                 </div>
-
                                             </div>
 
-                                            <!-- Report Iframe -->
                                             <div class="border rounded-3 overflow-hidden shadow-sm mt-3">
                                                 <iframe id="reportFrame" src="" width="100%"
                                                     height="400px" frameborder="0"></iframe>
@@ -386,12 +366,11 @@
                                     </div>
                                 </div>
                             </div>
-
                         </div>
 
                         <div class="modal fade" id="regionFilterModal" tabindex="-1"
                             aria-labelledby="regionFilterLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-lg"> <!-- Increased size for better preview -->
+                            <div class="modal-dialog modal-lg">
                                 <div class="modal-content">
                                     <div class="modal-header border-0">
                                         <h5 class="modal-title d-flex align-items-center" id="regionFilterLabel">
@@ -401,7 +380,6 @@
                                             aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <!-- Region Filter -->
                                         <div class="mb-3">
                                             <label for="regionSelect" class="form-label fw-semibold text-muted">Select
                                                 Region:</label>
@@ -429,7 +407,6 @@
                                             </select>
                                         </div>
 
-                                        <!-- Membership Status Filter -->
                                         <div class="mb-3">
                                             <label for="migsStatusSelect"
                                                 class="form-label fw-semibold text-muted">Select Membership
@@ -441,7 +418,6 @@
                                             </select>
                                         </div>
 
-                                        <!-- GA Registration Status Filter -->
                                         <div class="mb-3">
                                             <label for="registrationStatusSelect"
                                                 class="form-label fw-semibold text-muted">Select GA Registration
@@ -454,7 +430,6 @@
                                             </select>
                                         </div>
 
-                                        <!-- Document Status Filter -->
                                         <div class="mb-3">
                                             <label for="documentStatusSelect"
                                                 class="form-label fw-semibold text-muted">Select Document
@@ -467,13 +442,11 @@
                                             </select>
                                         </div>
 
-                                        <!-- Footer with Action Buttons -->
                                         <div
                                             class="d-flex justify-content-between align-items-center modal-footer w-100">
                                             <h5 class="mt-3 text-muted"><i class="bi bi-bar-chart-line me-2"></i>📊
                                                 Report Preview:</h5>
                                             <div>
-                                                {{-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> --}}
                                                 <button type="button" id="previewData" class="btn btn-info">Preview
                                                     Data</button>
                                                 <button type="button" id="applyRegionFilter"
@@ -509,19 +482,12 @@
                                             </tbody>
                                         </table>
                                     </div>
-
                                 </div>
-
-
-
                             </div>
                         </div>
-
-
                     </div>
-                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-3 mb-4">
 
-                        <!-- Cooperative -->
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-3 mb-4">
                         <div class="col">
                             <div class="card card-stats card-round shadow-sm h-100">
                                 <div class="card-body d-flex flex-column align-items-center">
@@ -570,7 +536,6 @@
                             </div>
                         </div>
 
-                        <!-- Registered Non-Migs Coops -->
                         <div class="col-md-2">
                             <div class="card card-stats card-round shadow-sm h-100">
                                 <div class="card-body d-flex flex-column align-items-center">
@@ -587,7 +552,6 @@
                             </div>
                         </div>
 
-                        <!-- Fully Registered Participants -->
                         <div class="col-md-2">
                             <div class="card card-stats card-round shadow-sm h-100">
                                 <div class="card-body d-flex flex-column align-items-center">
@@ -604,7 +568,6 @@
                             </div>
                         </div>
 
-                        <!-- Partially Registered Coops -->
                         <div class="col-md-2">
                             <div class="card card-stats card-round shadow-sm h-100">
                                 <div class="card-body d-flex flex-column align-items-center">
@@ -638,7 +601,6 @@
                             </div>
                         </div>
 
-                        <!-- Total Migs Participants -->
                         <div class="col">
                             <div class="card card-stats card-round shadow-sm h-100">
                                 <div class="card-body d-flex flex-column align-items-center">
@@ -656,7 +618,6 @@
                             </div>
                         </div>
 
-                        <!-- Total Non-Migs Participants -->
                         <div class="col">
                             <div class="card card-stats card-round shadow-sm h-100">
                                 <div class="card-body d-flex flex-column align-items-center">
@@ -674,7 +635,6 @@
                             </div>
                         </div>
 
-                        <!-- Participants -->
                         <div class="col">
                             <div class="card card-stats card-round shadow-sm h-100">
                                 <div class="card-body d-flex flex-column align-items-center">
@@ -693,14 +653,11 @@
                     </div>
 
                     <div class="row">
-
                         <div class="col-md-8">
-
                             <div class="card shadow-lg rounded-3">
                                 <div class="bg-primary text-white text-center py-3 rounded-top">
                                     <h4 class="mb-0">Event Slot Status</h4>
                                 </div>
-
                                 <div class="card-body p-4">
                                     <div class="row g-4">
                                         @foreach ($eventStatus as $eventId => $status)
@@ -708,15 +665,18 @@
                                                 <div class="card border-0 shadow-sm h-100 text-center">
                                                     <div class="card-body">
                                                         <div class="mb-3">
-                                                            <div class="rounded-circle mx-auto d-flex justify-content-center align-items-center {{ $status['full'] ? 'bg-danger' : 'bg-info' }}" style="width: 60px; height: 60px;">
+                                                            <div class="rounded-circle mx-auto d-flex justify-content-center align-items-center {{ $status['full'] ? 'bg-danger' : 'bg-info' }}"
+                                                                style="width: 60px; height: 60px;">
                                                                 <i class="fas fa-calendar-alt fa-lg text-white"></i>
                                                             </div>
                                                         </div>
-                                                        <h6 class="text-muted mb-1">{{ $status['name'] ?? 'Event '.$eventId }}</h6>
+                                                        <h6 class="text-muted mb-1">
+                                                            {{ $status['name'] ?? 'Event ' . $eventId }}</h6>
                                                         <h5 class="mb-1 text-dark">
                                                             {{ $status['full'] ? 'Full' : $status['remaining'] . ' left' }}
                                                         </h5>
-                                                        <span class="badge {{ $status['full'] ? 'bg-danger' : 'bg-secondary' }}">
+                                                        <span
+                                                            class="badge {{ $status['full'] ? 'bg-danger' : 'bg-secondary' }}">
                                                             {{ $status['total'] }} total
                                                         </span>
                                                     </div>
@@ -727,15 +687,10 @@
                                 </div>
                             </div>
 
-
-
                             <div class="card card-round shadow-lg">
                                 <h3 class="p-4 text-center text-white bg-primary rounded-top">Attendance Status</h3>
-                                <!-- Title -->
-
                                 <div class="card-body p-4">
                                     <div class="row">
-                                        <!-- Total Coop Attended -->
                                         <div class="col-md-3 mb-4">
                                             <div class="card card-stats card-round shadow-sm h-100">
                                                 <div
@@ -755,8 +710,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <!-- Total MIGS Coop Attended -->
                                         <div class="col-md-3 mb-4">
                                             <div class="card card-stats card-round shadow-sm h-100">
                                                 <div
@@ -765,7 +718,6 @@
                                                         <div
                                                             class="icon-big text-success text-center rounded-circle bg-light p-3">
                                                             <i class="fas fa-user-friends fa-lg"></i>
-                                                            <!-- MIGS Coop Icon -->
                                                         </div>
                                                     </div>
                                                     <div>
@@ -777,8 +729,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <!-- Total NON-MIGS Coop Attended -->
                                         <div class="col-md-3 mb-4">
                                             <div class="card card-stats card-round shadow-sm h-100">
                                                 <div
@@ -787,7 +737,6 @@
                                                         <div
                                                             class="icon-big text-danger text-center rounded-circle bg-light p-3">
                                                             <i class="fas fa-user-times fa-lg"></i>
-                                                            <!-- NON-MIGS Coop Icon -->
                                                         </div>
                                                     </div>
                                                     <div>
@@ -799,8 +748,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <!-- Total Attended Voting Participants -->
                                         <div class="col-md-3 mb-4">
                                             <div class="card card-stats card-round shadow-sm h-100">
                                                 <div
@@ -809,7 +756,6 @@
                                                         <div
                                                             class="icon-big text-primary text-center rounded-circle bg-light p-3">
                                                             <i class="fas fa-check-circle fa-lg"></i>
-                                                            <!-- Voting Icon -->
                                                         </div>
                                                     </div>
                                                     <div>
@@ -828,9 +774,7 @@
 
                             <div class="card card-round shadow-lg">
                                 <h3 class="p-4 text-center text-white bg-primary rounded-top">Event Attendance Status
-                                </h3> <!-- Title -->
-
-
+                                </h3>
                                 <div class="card-body p-4">
                                     <div class="row">
                                         @foreach ($events as $event)
@@ -892,7 +836,6 @@
                                             aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <!-- Overview content to be printed -->
                                         <div id="overviewContent">
                                             <table class="table table-bordered">
                                                 <thead>
@@ -923,7 +866,6 @@
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <!-- Print button -->
                                         <button id="printOverview" class="btn btn-primary">
                                             <i class="fas fa-print"></i> Print
                                         </button>
@@ -938,16 +880,16 @@
                             @if ($latestEvents->count() > 0)
                                 <div id="eventsCarousel" class="carousel slide" data-bs-ride="carousel"
                                     data-bs-interval="7000" data-bs-wrap="true">
-
                                     <div class="carousel-inner">
                                         @foreach ($latestEvents as $index => $event)
                                             <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
                                                 <div style="padding: 0 1px;">
                                                     <div class="card mb-4 rounded-3 event-card-carousel">
-                                                        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                                                        <div
+                                                            class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                                                             <div class="d-flex">
-                                                                <!-- 📅 Mini Calendar Box -->
-                                                                <div class="text-center bg-light text-primary rounded-3 p-3" style="width: 70px;">
+                                                                <div class="text-center bg-light text-primary rounded-3 p-3"
+                                                                    style="width: 70px;">
                                                                     <div style="font-size: 0.9rem;">
                                                                         {{ \Carbon\Carbon::parse($event->start_date)->format('M') }}
                                                                     </div>
@@ -955,27 +897,31 @@
                                                                         {{ \Carbon\Carbon::parse($event->start_date)->format('d') }}
                                                                     </div>
                                                                 </div>
-
-                                                                <!-- 📋 Event Title -->
                                                                 <div class="ms-3">
-                                                                    <h5 class="mb-0" title="{{ $event->title }}">{{ Str::limit($event->title, 45) }}</h5>
+                                                                    <h5 class="mb-0" title="{{ $event->title }}">
+                                                                        {{ Str::limit($event->title, 45) }}</h5>
                                                                 </div>
                                                             </div>
-
-                                                            <!-- ⚙️ More Options Dropdown -->
                                                             <div class="dropdown">
-                                                                <button class="btn btn-sm btn-outline-light rounded-pill" type="button" id="dropdownMenuButton{{ $event->event_id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                <button
+                                                                    class="btn btn-sm btn-outline-light rounded-pill"
+                                                                    type="button"
+                                                                    id="dropdownMenuButton{{ $event->event_id }}"
+                                                                    data-bs-toggle="dropdown" aria-expanded="false">
                                                                     More
                                                                 </button>
-                                                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton{{ $event->event_id }}">
-                                                                    <li><a class="dropdown-item" href="{{ route('events.index') }}">View Details</a></li>
+                                                                <ul class="dropdown-menu dropdown-menu-end"
+                                                                    aria-labelledby="dropdownMenuButton{{ $event->event_id }}">
+                                                                    <li><a class="dropdown-item"
+                                                                            href="{{ route('events.index') }}">View
+                                                                            Details</a></li>
                                                                 </ul>
                                                             </div>
                                                         </div>
-
                                                         <div class="card-body">
                                                             <ul class="list-unstyled text-muted">
-                                                                <li class="mb-2"><strong>📍 Venue:</strong> {{ $event->location }}</li>
+                                                                <li class="mb-2"><strong>📍 Venue:</strong>
+                                                                    {{ $event->location }}</li>
                                                                 <li><strong>🎤 Guest Speakers:</strong>
                                                                     @if ($event->speakers->count() > 0)
                                                                         {{ $event->speakers->pluck('name')->implode(', ') }}
@@ -990,9 +936,6 @@
                                             </div>
                                         @endforeach
                                     </div>
-
-
-                                    <!-- Prev/Next buttons -->
                                     <button class="carousel-control-prev" type="button"
                                         data-bs-target="#eventsCarousel" data-bs-slide="prev">
                                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -1003,7 +946,6 @@
                                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                         <span class="visually-hidden">Next</span>
                                     </button>
-
                                 </div>
                             @else
                                 <p>No upcoming events at the moment.</p>
@@ -1065,34 +1007,30 @@
                             </div>
 
                             <div class="card mt-4 shadow-lg border-0 rounded-4 overflow-hidden card-transition">
-                                <div class="card-header header-status bg-purple text-white rounded-top-4 position-relative">
+                                <div
+                                    class="card-header header-status bg-purple text-white rounded-top-4 position-relative">
                                     <h5><i class="fas fa-users me-2"></i> Attendance Overview</h5>
                                     <div class="header-overlay"></div>
                                 </div>
                                 <div class="card-body bg-light rounded-bottom-4">
                                     <canvas id="attendanceDonutChart" style="max-height: 200px;"></canvas>
-
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
             </div>
-
             @include('layouts.adminfooter')
-
         </div>
-
     </div>
+
+    @include('layouts.links')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         const donutCtx = document.getElementById('votingDonutChart').getContext('2d');
-
         const totalVoting = {{ $totalVoting }};
         const votedDelegates = {{ $votedDelegates }};
         const targetGoal = 300;
-
         const votingDonutChart = new Chart(donutCtx, {
             type: 'doughnut',
             data: {
@@ -1101,9 +1039,9 @@
                     label: 'Voting Stats',
                     data: [totalVoting, votedDelegates, targetGoal],
                     backgroundColor: [
-                        'rgba(0, 123, 255, 0.8)', // Blue
-                        'rgba(0, 200, 255, 0.8)', // Cyan
-                        'rgba(255, 99, 132, 0.8)' // Red
+                        'rgba(0, 123, 255, 0.8)',
+                        'rgba(0, 200, 255, 0.8)',
+                        'rgba(255, 99, 132, 0.8)'
                     ],
                     borderColor: '#fff',
                     borderWidth: 3,
@@ -1141,64 +1079,60 @@
             }
         });
     </script>
-<script>
-    const donutCtx2 = document.getElementById('attendanceDonutChart').getContext('2d');
-
-    const registeredParticipants = {{ $registeredParticipants }};
-    const attendedParticipants = {{ $totalAttendedParticipants }};
-    const attendanceTarget = 1000;
-
-    const attendanceDonutChart = new Chart(donutCtx2, {
-        type: 'doughnut',
-        data: {
-            labels: ['Registered', 'Attended', 'Target Goal'],
-            datasets: [{
-                label: 'Attendance Stats',
-                data: [registeredParticipants, attendedParticipants, attendanceTarget],
-                backgroundColor: [
-                    'rgba(161, 140, 209, 0.85)',  // Registered - soft purple
-                    'rgba(142, 45, 226, 0.85)',   // Attended - deep purple
-                    'rgba(255, 99, 132, 0.85)'    // Target - red
-                ],
-                borderColor: '#fff',
-                borderWidth: 3,
-                hoverOffset: 14
-            }]
-        },
-        options: {
-            responsive: true,
-            cutout: '65%',
-            animation: {
-                animateRotate: true,
-                duration: 1500,
-                easing: 'easeOutCirc'
+    <script>
+        const donutCtx2 = document.getElementById('attendanceDonutChart').getContext('2d');
+        const registeredParticipants = {{ $registeredParticipants }};
+        const attendedParticipants = {{ $totalAttendedParticipants }};
+        const attendanceTarget = 1000;
+        const attendanceDonutChart = new Chart(donutCtx2, {
+            type: 'doughnut',
+            data: {
+                labels: ['Registered', 'Attended', 'Target Goal'],
+                datasets: [{
+                    label: 'Attendance Stats',
+                    data: [registeredParticipants, attendedParticipants, attendanceTarget],
+                    backgroundColor: [
+                        'rgba(161, 140, 209, 0.85)',
+                        'rgba(142, 45, 226, 0.85)',
+                        'rgba(255, 99, 132, 0.85)'
+                    ],
+                    borderColor: '#fff',
+                    borderWidth: 3,
+                    hoverOffset: 14
+                }]
             },
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        color: '#444',
-                        font: {
-                            size: 14,
-                            weight: 'bold'
-                        },
-                        padding: 20
-                    }
+            options: {
+                responsive: true,
+                cutout: '65%',
+                animation: {
+                    animateRotate: true,
+                    duration: 1500,
+                    easing: 'easeOutCirc'
                 },
-                tooltip: {
-                    backgroundColor: '#2c284e',
-                    titleColor: '#fff',
-                    bodyColor: '#eee',
-                    cornerRadius: 10,
-                    padding: 12
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: '#444',
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            },
+                            padding: 20
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: '#2c284e',
+                        titleColor: '#fff',
+                        bodyColor: '#eee',
+                        cornerRadius: 10,
+                        padding: 12
+                    }
                 }
             }
-        }
-    });
-</script>
-
+        });
+    </script>
     <script>
-        // Print the overview content when the "Print" button is clicked
         document.getElementById("printOverview").addEventListener("click", function() {
             var printContent = document.getElementById('overviewContent').innerHTML;
             var newWindow = window.open('', '', 'height=600,width=800');
@@ -1209,29 +1143,20 @@
             newWindow.print();
         });
     </script>
-
-    @include('layouts.links')
-    <!-- JavaScript -->
     <script>
         var exportBaseUrl = "{{ route('reports.export') }}";
     </script>
-
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const reportFrame = document.getElementById("reportFrame");
             const exportExcel = document.getElementById("exportExcel");
-
-
-            // Get the base export URL from a data attribute in the button
             const exportBaseUrl = "{{ route('reports.export') }}";
-
             document.querySelectorAll(".list-group-item").forEach(item => {
                 item.addEventListener("click", function(event) {
                     event.preventDefault();
                     const reportType = this.getAttribute(
-                        "data-report-type"); // Add a data attribute for report type
+                        "data-report-type");
                     const reportUrl = this.getAttribute("href");
-
                     if (reportUrl) {
                         reportFrame.src = reportUrl;
                         exportExcel.href = exportBaseUrl + "?report=" + encodeURIComponent(
@@ -1239,52 +1164,41 @@
                     }
                 });
             });
-
         });
-
         function printReport() {
             var iframe = document.getElementById('reportFrame').contentWindow;
             iframe.focus();
             iframe.print();
         }
     </script>
-
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const applyRegionFilter = document.getElementById("applyRegionFilter");
-
             applyRegionFilter.addEventListener("click", function() {
                 let selectedRegion = document.getElementById("regionSelect").value.trim();
                 let migsStatus = document.getElementById("migsStatusSelect").value.trim();
                 let registrationStatus = document.getElementById("registrationStatusSelect").value.trim();
-
-                let exportUrl = "{{ route('reports.export.filtered_coop_status') }}"; // Laravel route
-
+                let exportUrl = "{{ route('reports.export.filtered_coop_status') }}";
                 let params = new URLSearchParams({
                     region: selectedRegion || "All",
                     migs_status: migsStatus || "All",
                     registration_status: registrationStatus || "All"
                 });
-
-                // Redirect to export URL with filters
                 window.location.href = exportUrl + "?" + params.toString();
             });
         });
     </script>
-
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const previewDataBtn = document.getElementById("previewData");
             const applyRegionFilter = document.getElementById("applyRegionFilter");
             const previewTableBody = document.getElementById("previewTableBody");
-
             previewDataBtn.addEventListener("click", function() {
                 let selectedRegion = document.getElementById("regionSelect").value.trim();
                 let migsStatus = document.getElementById("migsStatusSelect").value.trim();
                 let registrationStatus = document.getElementById("registrationStatusSelect").value.trim();
                 let documentStatus = document.getElementById("documentStatusSelect").value
-                    .trim(); // New filter
-
+                    .trim();
                 fetch("{{ route('reports.preview.filtered_coop_status') }}", {
                         method: "POST",
                         headers: {
@@ -1296,26 +1210,22 @@
                             migs_status: migsStatus || "All",
                             registration_status: registrationStatus || "All",
                             document_status: documentStatus ||
-                                "All" // Pass the new document status filter
+                                "All"
                         })
                     })
                     .then(response => response.json())
                     .then(data => {
-                        previewTableBody.innerHTML = ""; // Clear previous data
-
+                        previewTableBody.innerHTML = "";
                         if (data.length === 0) {
                             previewTableBody.innerHTML =
                                 `<tr><td colspan="13" class="text-center">No data found</td></tr>`;
                             applyRegionFilter.disabled = true;
                             return;
                         }
-
-                        applyRegionFilter.disabled = false; // Enable Generate Excel button
-
+                        applyRegionFilter.disabled = false;
                         data.forEach(coop => {
                             let registrationStatus = coop.registration_status === "Rejected" ?
                                 "Unregistered" : coop.registration_status;
-
                             let row = `
                     <tr>
                         <td>${coop.name}</td>
@@ -1342,28 +1252,23 @@
                             `<tr><td colspan="13" class="text-center text-danger">Error loading data</td></tr>`;
                     });
             });
-
             applyRegionFilter.addEventListener("click", function() {
                 let selectedRegion = document.getElementById("regionSelect").value.trim();
                 let migsStatus = document.getElementById("migsStatusSelect").value.trim();
                 let registrationStatus = document.getElementById("registrationStatusSelect").value.trim();
                 let documentStatus = document.getElementById("documentStatusSelect").value
-                    .trim(); // New filter
-
+                    .trim();
                 let exportUrl = "{{ route('reports.export.filtered_coop_status') }}";
-
                 let params = new URLSearchParams({
                     region: selectedRegion || "All",
                     migs_status: migsStatus || "All",
                     registration_status: registrationStatus || "All",
-                    document_status: documentStatus || "All" // Pass the new document status filter
+                    document_status: documentStatus || "All"
                 });
-
                 window.location.href = exportUrl + "?" + params.toString();
             });
         });
     </script>
-
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             setInterval(() => {
@@ -1371,7 +1276,5 @@
             }, 180000);
         });
     </script>
-
 </body>
-
 </html>

@@ -890,7 +890,6 @@
                                             aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <!-- Overview content to be printed -->
                                         <div id="overviewContent">
                                             <table class="table table-bordered">
                                                 <thead>
@@ -921,7 +920,6 @@
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <!-- Print button -->
                                         <button id="printOverview" class="btn btn-primary">
                                             <i class="fas fa-print"></i> Print
                                         </button>
@@ -932,13 +930,10 @@
                             </div>
                         </div>
 
-
-
                         <div class="col-md-4">
                             @if ($latestEvents->count() > 0)
                                 <div id="eventsCarousel" class="carousel slide" data-bs-ride="carousel"
                                     data-bs-interval="7000" data-bs-wrap="true">
-
                                     <div class="carousel-inner">
                                         @foreach ($latestEvents as $index => $event)
                                             <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
@@ -947,7 +942,6 @@
                                                         <div
                                                             class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                                                             <div class="d-flex">
-                                                                <!-- 📅 Mini Calendar Box -->
                                                                 <div class="text-center bg-light text-primary rounded-3 p-3"
                                                                     style="width: 70px;">
                                                                     <div style="font-size: 0.9rem;">
@@ -957,23 +951,11 @@
                                                                         {{ \Carbon\Carbon::parse($event->start_date)->format('d') }}
                                                                     </div>
                                                                 </div>
-
-                                                                <!-- 📋 Event Title -->
                                                                 <div class="ms-3">
                                                                     <h5 class="mb-0" title="{{ $event->title }}">
                                                                         {{ Str::limit($event->title, 45) }}</h5>
                                                                 </div>
                                                             </div>
-
-                                                            <!-- ⚙️ More Options Dropdown -->
-                                                            {{-- <div class="dropdown">
-                                                                <button class="btn btn-sm btn-outline-light rounded-pill" type="button" id="dropdownMenuButton{{ $event->event_id }}" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                    More
-                                                                </button>
-                                                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton{{ $event->event_id }}">
-                                                                    <li><a class="dropdown-item" href="{{ route('events.index') }}">View Details</a></li>
-                                                                </ul>
-                                                            </div> --}}
                                                         </div>
 
                                                         <div class="card-body">
@@ -1011,7 +993,6 @@
                             @else
                                 <p>No upcoming events at the moment.</p>
                             @endif
-
                             <div class="card event-card">
                                 <div class="event-card-header">
                                     <h5><i class="fas fa-calendar-alt"></i> Important Dates</h5>
@@ -1057,7 +1038,6 @@
                                     🚀 Be part of this amazing event!
                                 </div>
                             </div>
-
                             <div class="card mt-4 shadow-lg border-0 rounded-4 card-transition">
                                 <div class="card-header header-status bg-primary text-white rounded-top-4">
                                     <h5><i class="fas fa-chart-bar me-2"></i>Voting Statistics</h5>
@@ -1066,7 +1046,6 @@
                                     <canvas id="votingDonutChart" style="max-height: 200px;"></canvas>
                                 </div>
                             </div>
-
                             <div class="card mt-4 shadow-lg border-0 rounded-4 overflow-hidden card-transition">
                                 <div class="card-header header-status bg-purple text-white rounded-top-4 position-relative">
                                     <h5><i class="fas fa-users me-2"></i> Attendance Overview</h5>
@@ -1077,28 +1056,21 @@
 
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
             </div>
-
-
             @include('layouts.adminfooter')
-
         </div>
-
-
     </div>
 
+    @include('layouts.links')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         const donutCtx = document.getElementById('votingDonutChart').getContext('2d');
-
         const totalVoting = {{ $totalVoting }};
         const votedDelegates = {{ $votedDelegates }};
         const targetGoal = 300;
-
         const votingDonutChart = new Chart(donutCtx, {
             type: 'doughnut',
             data: {
@@ -1107,9 +1079,9 @@
                     label: 'Voting Stats',
                     data: [totalVoting, votedDelegates, targetGoal],
                     backgroundColor: [
-                        'rgba(0, 123, 255, 0.8)', // Blue
-                        'rgba(0, 200, 255, 0.8)', // Cyan
-                        'rgba(255, 99, 132, 0.8)' // Red
+                        'rgba(0, 123, 255, 0.8)',
+                        'rgba(0, 200, 255, 0.8)',
+                        'rgba(255, 99, 132, 0.8)'
                     ],
                     borderColor: '#fff',
                     borderWidth: 3,
@@ -1153,7 +1125,6 @@
         const registeredParticipants = {{ $registeredParticipants }};
         const attendedParticipants = {{ $totalAttendedParticipants }};
         const attendanceTarget = 1000;
-
         const attendanceDonutChart = new Chart(donutCtx2, {
             type: 'doughnut',
             data: {
@@ -1162,9 +1133,9 @@
                     label: 'Attendance Stats',
                     data: [registeredParticipants, attendedParticipants, attendanceTarget],
                     backgroundColor: [
-                        'rgba(161, 140, 209, 0.85)', // Registered - soft purple
-                        'rgba(142, 45, 226, 0.85)', // Attended - deep purple
-                        'rgba(255, 99, 132, 0.85)' // Target - red
+                        'rgba(161, 140, 209, 0.85)',
+                        'rgba(142, 45, 226, 0.85)',
+                        'rgba(255, 99, 132, 0.85)'
                     ],
                     borderColor: '#fff',
                     borderWidth: 3,
@@ -1213,37 +1184,20 @@
             newWindow.print();
         });
     </script>
-    <!-- Load jsPDF -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-    <!-- Load autoTable plugin -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
-
-    <!-- Load your custom script -->
-
-
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- Include SweetAlert -->
-
     <script>
         var exportBaseUrl = "{{ route('reports.export') }}";
     </script>
-
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const reportFrame = document.getElementById("reportFrame");
             const exportExcel = document.getElementById("exportExcel");
-
-
-            // Get the base export URL from a data attribute in the button
             const exportBaseUrl = "{{ route('reports.export') }}";
-
             document.querySelectorAll(".list-group-item").forEach(item => {
                 item.addEventListener("click", function(event) {
                     event.preventDefault();
                     const reportType = this.getAttribute(
-                        "data-report-type"); // Add a data attribute for report type
+                        "data-report-type");
                     const reportUrl = this.getAttribute("href");
-
                     if (reportUrl) {
                         reportFrame.src = reportUrl;
                         exportExcel.href = exportBaseUrl + "?report=" + encodeURIComponent(
@@ -1251,16 +1205,13 @@
                     }
                 });
             });
-
         });
-
         function printReport() {
             var iframe = document.getElementById('reportFrame').contentWindow;
             iframe.focus();
             iframe.print();
         }
     </script>
-
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const applyRegionFilter = document.getElementById("applyRegionFilter");
@@ -1277,13 +1228,10 @@
                     migs_status: migsStatus || "All",
                     registration_status: registrationStatus || "All"
                 });
-
-                // Redirect to export URL with filters
                 window.location.href = exportUrl + "?" + params.toString();
             });
         });
     </script>
-
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const previewDataBtn = document.getElementById("previewData");
@@ -1295,8 +1243,7 @@
                 let migsStatus = document.getElementById("migsStatusSelect").value.trim();
                 let registrationStatus = document.getElementById("registrationStatusSelect").value.trim();
                 let documentStatus = document.getElementById("documentStatusSelect").value
-                    .trim(); // New filter
-
+                    .trim();
                 fetch("{{ route('reports.preview.filtered_coop_status') }}", {
                         method: "POST",
                         headers: {
@@ -1308,12 +1255,12 @@
                             migs_status: migsStatus || "All",
                             registration_status: registrationStatus || "All",
                             document_status: documentStatus ||
-                                "All" // Pass the new document status filter
+                                "All"
                         })
                     })
                     .then(response => response.json())
                     .then(data => {
-                        previewTableBody.innerHTML = ""; // Clear previous data
+                        previewTableBody.innerHTML = "";
 
                         if (data.length === 0) {
                             previewTableBody.innerHTML =
@@ -1321,13 +1268,10 @@
                             applyRegionFilter.disabled = true;
                             return;
                         }
-
-                        applyRegionFilter.disabled = false; // Enable Generate Excel button
-
+                        applyRegionFilter.disabled = false;
                         data.forEach(coop => {
                             let registrationStatus = coop.registration_status === "Rejected" ?
                                 "Unregistered" : coop.registration_status;
-
                             let row = `
                     <tr>
                         <td>${coop.name}</td>
@@ -1354,16 +1298,13 @@
                             `<tr><td colspan="13" class="text-center text-danger">Error loading data</td></tr>`;
                     });
             });
-
             applyRegionFilter.addEventListener("click", function() {
                 let selectedRegion = document.getElementById("regionSelect").value.trim();
                 let migsStatus = document.getElementById("migsStatusSelect").value.trim();
                 let registrationStatus = document.getElementById("registrationStatusSelect").value.trim();
                 let documentStatus = document.getElementById("documentStatusSelect").value
-                    .trim(); // New filter
-
+                    .trim();
                 let exportUrl = "{{ route('reports.export.filtered_coop_status') }}";
-
                 let params = new URLSearchParams({
                     region: selectedRegion || "All",
                     migs_status: migsStatus || "All",
@@ -1375,8 +1316,6 @@
             });
         });
     </script>
-
-    @include('layouts.links')
 </body>
 
 </html>
