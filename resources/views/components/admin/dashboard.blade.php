@@ -1096,7 +1096,7 @@
         const votingDonutChart = new Chart(donutCtx, {
             type: 'doughnut',
             data: {
-                labels: ['Total Voting Delegates', 'Voted Delegates', 'Target Goal'],
+                labels: ['Voting Delegates', 'Voted Delegates', 'Target Goal'],
                 datasets: [{
                     label: 'Voting Stats',
                     data: [totalVoting, votedDelegates, targetGoal],
