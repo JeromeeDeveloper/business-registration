@@ -221,7 +221,7 @@
                 <div class="card">
                   <div class="card-header coop">
                     <div class="d-flex align-items-center">
-                      <h4 class="card-title">Speaker</h4>
+                      <h4>Speaker</h4>
                     </div>
                     <div class="d-flex justify-content-start mb-3">
                         <button type="button" class="btn btn-primary btn-round" data-bs-toggle="modal" data-bs-target="#addSpeakerModal">
