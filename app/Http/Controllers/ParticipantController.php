@@ -149,7 +149,7 @@ class ParticipantController extends Controller
 public function generateId($id)
 {
     $participant = Participant::findOrFail($id);
-    return view('components.admin.participant.id_card', compact('participant'));
+    return view('components.admin.participant.id', compact('participant'));
 }
 
 
@@ -622,7 +622,7 @@ public function store(Request $request)
 public function editProfile()
 {
     $user = Auth::user(); // Get the authenticated user
-    return view('components.admin.participantprofile', compact('user')); // Pass user data to the view
+    return view('components.cooperative.profile.cooperativeprofile', compact('user')); // Pass user data to the view
 }
 
 public function updateProfile(Request $request)

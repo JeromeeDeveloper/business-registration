@@ -116,7 +116,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::post('/Admin/Cooperatives/Edit/{id}/Documents', [CooperativeController::class, 'storeDocuments2'])->name('cooperatives.storeDocuments2');
 
     // Display the upload form
-    Route::get('/import', [ExcelImportController::class, 'showImportForm'])->name('import.form');
+    Route::get('/Admin/Cooperative/import', [ExcelImportController::class, 'showImportForm'])->name('import.form');
 
     Route::get('/participants/{id}/generate-id', [ParticipantController::class, 'generateId'])->name('participants.generateId');
 
@@ -225,11 +225,11 @@ Route::middleware([ParticipantMiddleware::class])->group(function () {
     Route::get('/participants/{userId}/resend-email', [ParticipantController::class, 'resendEmail'])
         ->name('participants.resendEmail');
 
-    Route::get('/participant/dashboard', [DashboardController::class, 'participant'])->name('participantDashboard');
+    Route::get('/Cooperative/Dashboard', [DashboardController::class, 'participant'])->name('participantDashboard');
 
-    Route::get('/cooperativeprofile/{coop_id}', [DashboardController::class, 'cooperativeprofile'])->name('cooperativeprofile');
-    Route::get('/cooperativeprofile/{coop_id}/edit', [DashboardController::class, 'editCooperativeProfile'])->name('cooperativeprofile.edit');
-    Route::put('/cooperativeprofile/update/{coop_id}', [DashboardController::class, 'updateCooperativeProfile'])->name('cooperativeprofile.update');
+    Route::get('/Cooperative/Profile/{coop_id}', [DashboardController::class, 'cooperativeprofile'])->name('cooperativeprofile');
+    Route::get('/Cooperative/Profile/{coop_id}/edit', [DashboardController::class, 'editCooperativeProfile'])->name('cooperativeprofile.edit');
+    Route::put('/Cooperative/Profile/update/{coop_id}', [DashboardController::class, 'updateCooperativeProfile'])->name('cooperativeprofile.update');
 
 
     Route::get('/participant/register', [DashboardController::class, 'participantregister'])->name('participant.register');
@@ -240,9 +240,9 @@ Route::middleware([ParticipantMiddleware::class])->group(function () {
 
     // Route::get('/participant/documents', [ParticipantController::class, 'viewDocuments'])->name('documents.view');
 
-    Route::get('/Participant/speakers', [ParticipantController::class, 'speakerlist'])->name('speakerlist');
+    Route::get('/Cooperative/speakers', [ParticipantController::class, 'speakerlist'])->name('speakerlist');
 
-    Route::get('/Participant/Event/Schedules', [EventsController::class, 'schedule'])->name('schedule');
+    Route::get('/Cooperative/Event/Schedules', [EventsController::class, 'schedule'])->name('schedule');
 
     // profile participant
     Route::get('Cooperative/Myprofile/edit', [ParticipantController::class, 'editProfile'])->name('participant.profile.edit');

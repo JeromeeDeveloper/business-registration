@@ -195,7 +195,7 @@ class AuthController extends Controller
     public function editProfile()
     {
         $user = Auth::user(); // Get the authenticated user
-        return view('components.admin.myprofile', compact('user')); // Pass user data to the view
+        return view('components.admin.profile.adminprofile', compact('user')); // Pass user data to the view
     }
 
     public function updateProfile(Request $request)

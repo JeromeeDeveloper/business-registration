@@ -13,7 +13,7 @@ class ExcelImportController extends Controller
 {
     public function showImportForm()
     {
-        return view('import'); // Blade file at resources/views/import.blade.php
+        return view('components.admin.cooperative.import'); // Blade file at resources/views/import.blade.php
     }
 
     public function importExcel(Request $request)
@@ -94,7 +94,7 @@ class ExcelImportController extends Controller
             $timeDeposit = cleanNumber($row[9] ?? 0);
             $loanReceivable = cleanNumber($row[10] ?? 0);
             $accountsReceivable = cleanNumber($row[11] ?? 0);
-          
+
 
             // Services Availed
             $serviceColumns = [

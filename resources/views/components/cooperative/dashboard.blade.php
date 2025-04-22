@@ -557,7 +557,7 @@
                                                         : ($registrationStatus === 'Partial Registered'
                                                             ? 'text-warning'
                                                             : 'text-danger') }}">
-                                                    {{ $registrationStatus === 'Rejected' ? 'Not Available' : $registrationStatus }}
+                                                    {{ $registrationStatus === 'Rejected' ? 'Not Registered' : $registrationStatus }}
                                                 </h4>
                                             </div>
                                         </div>

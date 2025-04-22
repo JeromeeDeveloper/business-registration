@@ -161,7 +161,7 @@ class SupportController extends Controller
             ];
         }
 
-        return view('components.support.admin', compact(
+        return view('components.support.dashboard', compact(
             'regions',
             'totalParticipants',
             'totalUsers',
@@ -263,14 +263,14 @@ class SupportController extends Controller
 
         $emails = $cooperatives->pluck('email')->filter()->implode(',');
 
-        return view('components.support.datatable', compact('cooperatives', 'search', 'emails', 'filterNoGA'));
+        return view('components.support.cooperative.datatable', compact('cooperatives', 'search', 'emails', 'filterNoGA'));
     }
 
 
     public function editProfile3()
     {
         $user = Auth::user(); // Get the authenticated user
-        return view('components.support.myprofile', compact('user')); // Pass user data to the view
+        return view('components.support.profile.supportprofile', compact('user')); // Pass user data to the view
     }
 
 
@@ -312,7 +312,7 @@ class SupportController extends Controller
         $documents = UploadedDocument::where('coop_id', $coop->coop_id)->get();
 
         // Pass the cooperative data to the view
-        return view('components.support.view', compact('coop', 'documents'));
+        return view('components.support.cooperative.view', compact('coop', 'documents'));
     }
 
     public function viewsupportDocuments($coop_id = null)
@@ -324,7 +324,7 @@ class SupportController extends Controller
             $documents = UploadedDocument::all(); // Show all documents if no participant is selected
         }
 
-        return view('components.support.documents', compact('documents', 'coop_id'));
+        return view('components.support.cooperative.documents', compact('documents', 'coop_id'));
     }
 
     public function updateDocumentStatus(Request $request, $document_id)
@@ -403,7 +403,7 @@ class SupportController extends Controller
         $coop->total_reg_fee = $totalRegFee;
         $coop->reg_fee_payable = $regFeePayable;
 
-        return view('components.support.edit', compact(
+        return view('components.support.cooperative.edit', compact(
             'coop',
             'hasMigsRegistration',
             'hasMspOfficer',
@@ -795,7 +795,7 @@ class SupportController extends Controller
 
     public function supportregister()
     {
-        return view('components.support.add');
+        return view('components.support.cooperative.add');
     }
 
     public function supportstoreCooperative(Request $request)
@@ -887,7 +887,7 @@ class SupportController extends Controller
 
         $participants = $query->paginate($perPage);
 
-        return view('components.support.participant', compact('participants'));
+        return view('components.support.participant.datatable', compact('participants'));
     }
 
     public function show($participant_id)
@@ -895,7 +895,7 @@ class SupportController extends Controller
         $participant = Participant::with('events')->where('participant_id', $participant_id)->firstOrFail();
         $events = Event::all();
 
-        return view('components.support.viewparticipant', compact('participant', 'events'));
+        return view('components.support.participant.view', compact('participant', 'events'));
     }
 
     public function scanQR(Request $request)

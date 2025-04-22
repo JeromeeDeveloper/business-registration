@@ -61,7 +61,7 @@ class CooperativeController extends Controller
             ->paginate($perPage)
             ->appends(['limit' => $perPage, 'search' => $request->search]); // Preserve query parameters
 
-        return view('components.cooperative.manage_participant.participant', compact('participants', 'totalParticipants'));
+        return view('components.cooperative.participant.participant', compact('participants', 'totalParticipants'));
     }
 
 
@@ -132,7 +132,7 @@ class CooperativeController extends Controller
             ->count();
         $canAddVoting = $existingVotingParticipants < $votes;
 
-        return view('components.cooperative.manage_participant.add', compact(
+        return view('components.cooperative.participant.add', compact(
             'cooperatives',
             'users',
             'events',
@@ -318,7 +318,7 @@ class CooperativeController extends Controller
     public function show($participant_id)
     {
         $participant = Participant::where('participant_id', $participant_id)->firstOrFail();
-        return view('components.cooperative.manage_participant.view', compact('participant'));
+        return view('components.cooperative.participant.view', compact('participant'));
     }
 
     public function edit($participant_id)
@@ -372,7 +372,7 @@ class CooperativeController extends Controller
 
         $canAddVoting = $currentVotingCount < $votes || $participant->delegate_type === 'Voting';
 
-        return view('components.cooperative.manage_participant.edit', compact(
+        return view('components.cooperative.participant.edit', compact(
             'participant',
             'cooperatives',
             'votes',
