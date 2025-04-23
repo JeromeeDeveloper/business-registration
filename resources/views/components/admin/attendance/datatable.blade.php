@@ -679,73 +679,64 @@
             }
         }
 
-        document.addEventListener("DOMContentLoaded", function() {
-            const eventSelect = document.getElementById('eventSelect');
+        document.addEventListener("DOMContentLoaded", function () {
+    const eventSelect = document.getElementById('eventSelect');
+    const modalElement = document.getElementById("qrScannerModal");
 
-            // Initial check on page load
-            checkEventSelection();
+    checkEventSelection();
 
-            // Enable/disable button on event selection change
-            eventSelect.addEventListener('change', checkEventSelection);
+    eventSelect.addEventListener('change', checkEventSelection);
 
-            document.getElementById("qrScannerModal").addEventListener("shown.bs.modal", async function() {
-                if (typeof Html5Qrcode === "undefined") {
-                    console.error("Html5Qrcode is NOT loaded!");
-                    return;
-                }
+    // Only use modal event to start the scanner
+    modalElement.addEventListener("shown.bs.modal", async function () {
+        if (!qrScanner) {
+            qrScanner = new Html5Qrcode("qr-reader");
+        }
 
-                await requestCameraPermission();
+        if (qrScanner._isScanning) {
+            console.log("Scanner is already running.");
+            return;
+        }
 
-                const selectedEvent = eventSelect.value;
-
-                if (!selectedEvent) {
-                    Swal.fire({
-                        icon: "warning",
-                        title: "No Event Selected",
-                        text: "Please select an event first before scanning.",
-                    });
-                    const modal = bootstrap.Modal.getInstance(document.getElementById(
-                        'qrScannerModal'));
-                    modal.hide();
-                    return;
-                }
-
-                qrScanner = new Html5Qrcode("qr-reader");
-                try {
-                    let devices = await navigator.mediaDevices.enumerateDevices();
-                    let cameraId = null;
-                    devices.forEach(device => {
-                        if (device.kind === "videoinput") {
-                            cameraId = device.deviceId;
-                            return; // Select the first video input device found
-                        }
-                    });
-
-
-                    if (cameraId) {
-                        qrScanner.start(
-                            cameraId, {
-                                fps: 10,
-                                qrbox: {
-                                    width: 250,
-                                    height: 250
-                                }
-                            },
-                            decodedText => handleScannedQR(decodedText, qrScanner),
-                            errorMessage => console.warn(errorMessage)
-                        ).catch(err => console.error("Error starting QR scanner:", err));
-                    }
-                } catch (err) {
-                    console.error("Error accessing cameras:", err);
-                }
+        const selectedEvent = eventSelect.value;
+        if (!selectedEvent) {
+            Swal.fire({
+                icon: "warning",
+                title: "No Event Selected",
+                text: "Please select an event before scanning.",
             });
+            bootstrap.Modal.getInstance(modalElement).hide();
+            return;
+        }
 
-            document.getElementById("qrScannerModal").addEventListener("hidden.bs.modal", function() {
-                if (qrScanner) {
-                    qrScanner.stop().catch(err => console.warn("Error stopping scanner:", err));
-                }
-            });
-        });
+        await requestCameraPermission();
+
+        try {
+            const devices = await navigator.mediaDevices.enumerateDevices();
+            const camera = devices.find(device => device.kind === "videoinput");
+
+            if (camera) {
+                await qrScanner.start(
+                    camera.deviceId,
+                    { fps: 10, qrbox: { width: 250, height: 250 } },
+                    decodedText => handleScannedQR(decodedText, qrScanner),
+                    errorMessage => console.warn(errorMessage)
+                );
+            }
+        } catch (err) {
+            console.error("Error accessing camera:", err);
+        }
+    });
+
+    modalElement.addEventListener("hidden.bs.modal", function () {
+        if (qrScanner) {
+            qrScanner.stop()
+                .then(() => console.log("Scanner stopped"))
+                .catch(err => console.warn("Error stopping scanner:", err));
+        }
+    });
+});
+
 
         function handleScannedQR(decodedText, qrScanner) {
             console.log("Scanned QR Code:", decodedText);
