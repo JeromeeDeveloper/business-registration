@@ -37,7 +37,7 @@ class AuthController extends Controller
                 return redirect()->route('participantDashboard')->with('success', 'Welcome back!');
             } elseif ($user->role === 'participant') {
                 return redirect()->route('participantViewerDashboard')->with('success', 'Welcome to your dashboard!');
-            } elseif ($user->role === 'support') { // ✅ Add support role
+            } elseif ($user->role === 'support') {
                 return redirect()->route('supportDashboard')->with('success', 'Welcome to the support dashboard!');
             }
         }

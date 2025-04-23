@@ -22,7 +22,7 @@ use App\Http\Controllers\SpeakersController;
 use App\Observers\UpdateCooperativeObserver;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AttendanceController;
-use App\Http\Middleware\ParticipantMiddleware;
+use App\Http\Middleware\CooperativeMiddleware;
 use App\Http\Controllers\CooperativeController;
 use App\Http\Controllers\ExcelImportController;
 use App\Http\Controllers\ParticipantController;
@@ -44,7 +44,6 @@ Route::get('/participants', [HomeController::class, 'home_participants'])->name(
 // Login Registration
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
-Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', function () {
     Auth::logout();
@@ -93,11 +92,8 @@ Route::middleware([AdminOrSupportMiddleware::class])->group(function () {
     Route::put('/Admin/Document/UpdateStatus/{document_id}', [CooperativeController::class, 'updateDocumentStatus'])->name('admin.documents.updateStatus');
     // In your web.php (routes file)
     // Route::get('/get-participant-count/{coop_id}', [YourController::class, 'getParticipantCount']);
-
-
 });
 
-//store
 Route::middleware([AdminMiddleware::class])->group(function () {
 
     // web.php (or api.php, depending on where you want to trigger this)
@@ -112,15 +108,12 @@ Route::middleware([AdminMiddleware::class])->group(function () {
 
     Route::get('/registration-overview-pdf', [ReportsController::class, 'showRegistrationOverview'])->name('registration.overview.pdf');
 
-
     Route::post('/Admin/Cooperatives/Edit/{id}/Documents', [CooperativeController::class, 'storeDocuments2'])->name('cooperatives.storeDocuments2');
 
-    // Display the upload form
     Route::get('/Admin/Cooperative/import', [ExcelImportController::class, 'showImportForm'])->name('import.form');
 
     Route::get('/participants/{id}/generate-id', [ParticipantController::class, 'generateId'])->name('participants.generateId');
 
-    // Handle the file upload via POST
     Route::post('/import-excel', [ExcelImportController::class, 'importExcel'])->name('import.excel');
 
     Route::get('/participants/{userId}/resend-email-admin', [ParticipantController::class, 'resendEmail2'])
@@ -151,8 +144,6 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     Route::delete('/admin/cooperatives/{coop_id}', [DashboardController::class, 'destroy'])->name('cooperatives.destroy');
 
     Route::get('/Admin/Document/View/{coop_id?}', [CooperativeController::class, 'viewadminDocuments'])->name('admin.documents.view');
-
-
 
     //edit
     Route::get('/Admin/Cooperatives/Edit/{coop_id}', [DashboardController::class, 'edit'])->name('cooperatives.edit');
@@ -220,7 +211,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
 });
 
 // participant user
-Route::middleware([ParticipantMiddleware::class])->group(function () {
+Route::middleware([CooperativeMiddleware::class])->group(function () {
 
     Route::get('/participants/{userId}/resend-email', [ParticipantController::class, 'resendEmail'])
         ->name('participants.resendEmail');

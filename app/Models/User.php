@@ -35,7 +35,7 @@ class User extends Authenticatable
 
     public function participant()
     {
-        return $this->hasOne(Participant::class, 'user_id'); // The foreign key is 'user_id' in the Participant table
+        return $this->hasOne(Participant::class, 'user_id');
     }
 
     public function cooperative()
