@@ -131,6 +131,9 @@ class ReportsController extends Controller
             break;
     }
 
+    // Add order by latest updated first
+    $query->orderBy('updated_at', 'desc');
+
     // Fetch the registrations with cooperative data
     $registrations = $query->with('cooperative')->get();
 
@@ -148,6 +151,7 @@ class ReportsController extends Controller
 
     return view('components.admin.reports.registration_form', compact('registrations', 'participants', 'registrationFees'));
 }
+
 
 public function exportFilteredCoopStatus(Request $request)
 {
@@ -231,47 +235,49 @@ public function previewFilteredCoopStatus(Request $request)
     return response()->json($cooperatives);
 }
 
-    public function generatePDF(Request $request)
-    {
-        $filter = $request->input('filter');
-        $isPrint = $request->input('print'); // Check if it's a print request
+public function generatePDF(Request $request)
+{
+    $filter = $request->input('filter');
+    $isPrint = $request->input('print'); // Check if it's a print request
 
-        $query = GARegistration::with('cooperative', 'participant');
+    $query = GARegistration::with('cooperative', 'participant');
 
-        // Apply filters
-        switch ($filter) {
-            case 'fully_registered_non_migs':
-                $query->where('registration_status', 'Fully Registered')
-                    ->where('membership_status', 'Non-migs');
-                break;
-            case 'fully_registered_migs':
-                $query->where('registration_status', 'Fully Registered')
-                    ->where('membership_status', 'Migs');
-                break;
-            case 'partial_registered_non_migs':
-                $query->where('registration_status', 'Partial Registered')
-                    ->where('membership_status', 'Non-migs');
-                break;
-            case 'partial_registered_migs':
-                $query->where('registration_status', 'Partial Registered')
-                    ->where('membership_status', 'Migs');
-                break;
-            default:
-                // No additional filters
-                break;
-        }
-
-        $registrations = $query->get();
-
-        // Handle print request
-        if ($isPrint) {
-            return view('components.admin.reports.registration_form', compact('registrations'));
-        }
-
-        // Handle PDF generation
-        $pdf = Pdf::loadView('components.admin.reports.registration_form', compact('registrations'));
-        return $pdf->download('cooperative_report.pdf');
+    // Apply filters
+    switch ($filter) {
+        case 'fully_registered_non_migs':
+            $query->where('registration_status', 'Fully Registered')
+                  ->where('membership_status', 'Non-migs');
+            break;
+        case 'fully_registered_migs':
+            $query->where('registration_status', 'Fully Registered')
+                  ->where('membership_status', 'Migs');
+            break;
+        case 'partial_registered_non_migs':
+            $query->where('registration_status', 'Partial Registered')
+                  ->where('membership_status', 'Non-migs');
+            break;
+        case 'partial_registered_migs':
+            $query->where('registration_status', 'Partial Registered')
+                  ->where('membership_status', 'Migs');
+            break;
+        default:
+            // No additional filters
+            break;
     }
+
+    // Order by latest modified
+    $registrations = $query->orderBy('updated_at', 'desc')->get();
+
+    // Handle print request
+    if ($isPrint) {
+        return view('components.admin.reports.registration_form', compact('registrations'));
+    }
+
+    // Handle PDF generation
+    $pdf = Pdf::loadView('components.admin.reports.registration_form', compact('registrations'));
+    return $pdf->download('cooperative_report.pdf');
+}
+
 
 
     public function export(Request $request)
