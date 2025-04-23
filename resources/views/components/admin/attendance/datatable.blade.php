@@ -151,8 +151,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="https://mass-specc.coop/2025-coopvention-registration/" class="nav-link"
-                                title="Register for Coopvention" target="_blank">
+                            <a href="https://mass-specc.coop/2025-coopvention-registration/" class="nav-link" title="Register for Coopvention" target="_blank">
                                 <i class="fas fa-building"></i>
                                 <p>Hotel Accomodation</p>
                             </a>
@@ -620,6 +619,7 @@
 
     <script>
         let qrScanner;
+        let qrScannerInitialized = false;
 
         async function requestCameraPermission() {
             try {
@@ -655,7 +655,11 @@
 
             await requestCameraPermission(); // Ensure camera permission is requested
 
-            qrScanner = new Html5Qrcode("qr-reader");
+           if (!qrScannerInitialized) {
+    qrScanner = new Html5Qrcode("qr-reader");
+    qrScannerInitialized = true;
+}
+
 
             try {
                 let devices = await navigator.mediaDevices.enumerateDevices();
@@ -679,64 +683,79 @@
             }
         }
 
-        document.addEventListener("DOMContentLoaded", function () {
-    const eventSelect = document.getElementById('eventSelect');
-    const modalElement = document.getElementById("qrScannerModal");
+        document.addEventListener("DOMContentLoaded", function() {
+            const eventSelect = document.getElementById('eventSelect');
 
-    checkEventSelection();
+            // Initial check on page load
+            checkEventSelection();
 
-    eventSelect.addEventListener('change', checkEventSelection);
+            // Enable/disable button on event selection change
+            eventSelect.addEventListener('change', checkEventSelection);
 
-    // Only use modal event to start the scanner
-    modalElement.addEventListener("shown.bs.modal", async function () {
-        if (!qrScanner) {
-            qrScanner = new Html5Qrcode("qr-reader");
-        }
+            document.getElementById("qrScannerModal").addEventListener("shown.bs.modal", async function() {
+                if (typeof Html5Qrcode === "undefined") {
+                    console.error("Html5Qrcode is NOT loaded!");
+                    return;
+                }
 
-        if (qrScanner._isScanning) {
-            console.log("Scanner is already running.");
-            return;
-        }
+                await requestCameraPermission();
 
-        const selectedEvent = eventSelect.value;
-        if (!selectedEvent) {
-            Swal.fire({
-                icon: "warning",
-                title: "No Event Selected",
-                text: "Please select an event before scanning.",
+                const selectedEvent = eventSelect.value;
+
+                if (!selectedEvent) {
+                    Swal.fire({
+                        icon: "warning",
+                        title: "No Event Selected",
+                        text: "Please select an event first before scanning.",
+                    });
+                    const modal = bootstrap.Modal.getInstance(document.getElementById(
+                        'qrScannerModal'));
+                    modal.hide();
+                    return;
+                }
+
+                if (!qrScannerInitialized) {
+    qrScanner = new Html5Qrcode("qr-reader");
+    qrScannerInitialized = true;
+}
+
+
+
+                try {
+                    let devices = await navigator.mediaDevices.enumerateDevices();
+                    let cameraId = null;
+                    devices.forEach(device => {
+                        if (device.kind === "videoinput") {
+                            cameraId = device.deviceId;
+                            return; // Select the first video input device found
+                        }
+                    });
+
+
+                    if (cameraId) {
+                        qrScanner.start(
+                            cameraId, {
+                                fps: 10,
+                                qrbox: {
+                                    width: 250,
+                                    height: 250
+                                }
+                            },
+                            decodedText => handleScannedQR(decodedText, qrScanner),
+                            errorMessage => console.warn(errorMessage)
+                        ).catch(err => console.error("Error starting QR scanner:", err));
+                    }
+                } catch (err) {
+                    console.error("Error accessing cameras:", err);
+                }
             });
-            bootstrap.Modal.getInstance(modalElement).hide();
-            return;
-        }
 
-        await requestCameraPermission();
-
-        try {
-            const devices = await navigator.mediaDevices.enumerateDevices();
-            const camera = devices.find(device => device.kind === "videoinput");
-
-            if (camera) {
-                await qrScanner.start(
-                    camera.deviceId,
-                    { fps: 10, qrbox: { width: 250, height: 250 } },
-                    decodedText => handleScannedQR(decodedText, qrScanner),
-                    errorMessage => console.warn(errorMessage)
-                );
-            }
-        } catch (err) {
-            console.error("Error accessing camera:", err);
-        }
-    });
-
-    modalElement.addEventListener("hidden.bs.modal", function () {
-        if (qrScanner) {
-            qrScanner.stop()
-                .then(() => console.log("Scanner stopped"))
-                .catch(err => console.warn("Error stopping scanner:", err));
-        }
-    });
-});
-
+            document.getElementById("qrScannerModal").addEventListener("hidden.bs.modal", function() {
+                if (qrScanner) {
+                    qrScanner.stop().catch(err => console.warn("Error stopping scanner:", err));
+                }
+            });
+        });
 
         function handleScannedQR(decodedText, qrScanner) {
             console.log("Scanned QR Code:", decodedText);
