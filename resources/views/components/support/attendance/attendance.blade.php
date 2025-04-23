@@ -418,24 +418,25 @@
                                     </div>
 
                                     <!-- QR Scanner Modal -->
-                                    <div class="modal fade" id="qrScannerModal" tabindex="-1"
-                                        aria-labelledby="qrScannerModalLabel" aria-hidden="true">
+                                    <div class="modal fade" id="qrScannerModal" tabindex="-1" aria-labelledby="qrScannerModalLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered modal-sm">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="qrScannerModalLabel">
-                                                        <i class="fa fa-qrcode"></i> Scan QR Code
-                                                    </h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body text-center">
-                                                    <!-- QR Reader -->
-                                                    <div id="qr-reader" style="width: 100%;"></div>
-                                                </div>
+                                          <div class="modal-content rounded-4 shadow-lg border-0">
+                                            <div class="modal-header bg-dark text-white border-0 rounded-top-4">
+                                              <h5 class="modal-title d-flex align-items-center gap-2" id="qrScannerModalLabel">
+                                                <i class="fas fa-qrcode"></i> Scan QR Code
+                                              </h5>
+                                              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
+                                            <div class="modal-body bg-light rounded-bottom-4">
+                                              <div class="text-center p-3">
+                                                <div id="qr-reader"></div>
+                                                <p class="mt-3 text-muted small">Place your QR code within the frame</p>
+                                              </div>
+                                            </div>
+                                          </div>
                                         </div>
-                                    </div>
+                                      </div>
+
 
 
                                     <div class="table-responsive">

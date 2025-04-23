@@ -377,32 +377,6 @@
                                         </div>
                                     </div>
 
-
-
-                                    <!-- QR Scanner Modal -->
-                                    <style>
-                                        #qr-reader {
-                                          width: 100%;
-                                          max-width: 100%;
-                                          border: 2px dashed #6c757d;
-                                          border-radius: 1rem;
-                                          padding: 1rem;
-                                          position: relative;
-                                          overflow: hidden;
-                                        }
-
-                                        #qr-reader video {
-                                          width: 100% !important;
-                                          height: auto !important;
-                                          object-fit: cover;
-                                          border-radius: 0.5rem;
-                                        }
-
-                                        #qr-reader__dashboard_section_swaplink {
-                                          display: none; /* Optional: Hide camera switch link if you don't need it */
-                                        }
-                                      </style>
-
                                       <div class="modal fade" id="qrScannerModal" tabindex="-1" aria-labelledby="qrScannerModalLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered modal-sm">
                                           <div class="modal-content rounded-4 shadow-lg border-0">

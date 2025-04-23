@@ -182,7 +182,6 @@
                     <div class="container-fluid">
                         <nav
                             class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
-
                         </nav>
 
                         <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
@@ -258,29 +257,24 @@
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <div
-                                        class="d-flex align-items-center justify-content-between flex-wrap w-100 gap-2">
+                                    <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3 w-100">
                                         <!-- Title -->
-                                        <h4 class="card-title m-0">Participants</h4>
+                                        <h4 class="m-0">Participants</h4>
 
                                         <!-- Search Form & Buttons -->
-                                        <form method="GET" class="d-flex align-items-center ms-auto">
-                                            <div class="input-group w-auto w-sm-50 w-md-25">
-                                                <input type="text" name="search" class="form-control"
-                                                    placeholder="Search..." value="{{ request('search') }}">
-                                                <button type="submit" class="btn btn-primary">
-                                                    <i class="fa fa-search"></i>
-                                                </button>
-                                            </div>
-                                            <div class="d-flex gap-2 ms-2">
-                                                <button type="button" onclick="printAttendance()"
-                                                    class="btn btn-primary text-white" data-bs-toggle="tooltip"
-                                                    title="Print Participant List">
-                                                    <i class="fa fa-print"></i>
-                                                </button>
-                                            </div>
+                                        <form method="GET" class="d-flex flex-column flex-sm-row align-items-stretch w-100 w-md-auto gap-2 ms-md-auto">
+                                          <div class="input-group flex-grow-1 flex-md-grow-0 w-100 w-sm-50 w-md-25">
+                                            <input type="text" name="search" class="form-control" placeholder="Search..." value="{{ request('search') }}">
+                                            <button type="submit" class="btn btn-primary">
+                                              <i class="fa fa-search"></i>
+                                            </button>
+                                          </div>
+                                          <button type="button" onclick="printAttendance()" class="btn btn-primary text-white" data-bs-toggle="tooltip" title="Print Participant List">
+                                            <i class="fa fa-print"></i>
+                                          </button>
                                         </form>
-                                    </div>
+                                      </div>
+
                                 </div>
 
 
