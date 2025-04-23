@@ -619,7 +619,6 @@
 
     <script>
         let qrScanner;
-        let qrScannerInitialized = false;
 
         async function requestCameraPermission() {
             try {
@@ -655,11 +654,7 @@
 
             await requestCameraPermission(); // Ensure camera permission is requested
 
-           if (!qrScannerInitialized) {
-    qrScanner = new Html5Qrcode("qr-reader");
-    qrScannerInitialized = true;
-}
-
+            qrScanner = new Html5Qrcode("qr-reader");
 
             try {
                 let devices = await navigator.mediaDevices.enumerateDevices();
@@ -714,13 +709,7 @@
                     return;
                 }
 
-                if (!qrScannerInitialized) {
-    qrScanner = new Html5Qrcode("qr-reader");
-    qrScannerInitialized = true;
-}
-
-
-
+                qrScanner = new Html5Qrcode("qr-reader");
                 try {
                     let devices = await navigator.mediaDevices.enumerateDevices();
                     let cameraId = null;

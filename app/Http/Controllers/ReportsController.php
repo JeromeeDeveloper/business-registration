@@ -497,12 +497,14 @@ public function downloadAllDocuments()
             }
         }
 
-        // Close the zip file
+        // Instead of closing the zip immediately, let's attempt direct download
         $zip->close();
 
         // Check if the zip file was created
         if (file_exists($zipFilePath)) {
-            return Response::download($zipFilePath, 'all_documents.zip')->deleteFileAfterSend(true);
+            // Flush the response buffer before sending the file
+            ob_end_clean();  // Clear any previous output buffer
+            return response()->download($zipFilePath, 'all_documents.zip')->deleteFileAfterSend(true);
         } else {
             return response()->json(['error' => 'Failed to create zip file'], 500);
         }
@@ -511,7 +513,6 @@ public function downloadAllDocuments()
         return response()->json(['error' => 'Failed to open zip file'], 500);
     }
 }
-
 
 
 }
