@@ -151,7 +151,8 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="https://mass-specc.coop/2025-coopvention-registration/" class="nav-link" title="Register for Coopvention" target="_blank">
+                            <a href="https://mass-specc.coop/2025-coopvention-registration/" class="nav-link"
+                                title="Register for Coopvention" target="_blank">
                                 <i class="fas fa-building"></i>
                                 <p>Hotel Accomodation</p>
                             </a>
