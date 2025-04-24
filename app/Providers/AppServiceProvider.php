@@ -4,12 +4,13 @@ namespace App\Providers;
 
 use App\Models\Cooperative;
 use App\Models\Participant;
+use App\Models\GARegistration;
 use App\Models\UploadedDocument;
 use App\Observers\CooperativeObserver;
 use App\Observers\ParticipantObserver;
-use Illuminate\Support\ServiceProvider;
+use App\Observers\GARegistrationObserver;
 use App\Observers\UploadedDocumentObserver;
-use App\Observers\UpdateCooperativeObserver;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,7 +30,9 @@ class AppServiceProvider extends ServiceProvider
         UploadedDocument::observe(UploadedDocumentObserver::class);
         Cooperative::observe(CooperativeObserver::class);
         Participant::observe(ParticipantObserver::class);
+        GARegistration::observe(GARegistrationObserver::class);
     }
 }
+
 
 
