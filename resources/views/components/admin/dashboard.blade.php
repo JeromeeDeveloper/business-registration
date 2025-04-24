@@ -660,29 +660,82 @@
                                 </div>
                                 <div class="card-body p-4">
                                     <div class="row g-4">
+                                        <!-- First row: 3 cards -->
                                         @foreach ($eventStatus as $eventId => $status)
-                                            <div class="col-md-3">
-                                                <div class="card border-0 shadow-sm h-100 text-center">
-                                                    <div class="card-body">
-                                                        <div class="mb-3">
-                                                            <div class="rounded-circle mx-auto d-flex justify-content-center align-items-center {{ $status['full'] ? 'bg-danger' : 'bg-info' }}"
-                                                                style="width: 60px; height: 60px;">
-                                                                <i class="fas fa-calendar-alt fa-lg text-white"></i>
+                                            @if ($loop->index < 3)  <!-- Limit to 3 cards for the first row -->
+                                                <div class="col-md-4">
+                                                    <div class="card border-0 shadow-sm h-100 text-center">
+                                                        <div class="card-body">
+                                                            <div class="mb-3">
+                                                                <div class="rounded-circle mx-auto d-flex justify-content-center align-items-center {{ $status['full'] ? 'bg-danger' : 'bg-info' }}"
+                                                                    style="width: 60px; height: 60px;">
+                                                                    <i class="fas fa-calendar-alt fa-lg text-white"></i>
+                                                                </div>
                                                             </div>
+                                                            <h6 class="text-muted mb-1">
+                                                                {{ $status['name'] ?? 'Event ' . $eventId }}
+                                                            </h6>
+                                                            <h5 class="mb-1 text-dark">
+                                                                {{ $status['full'] ? 'Full' : $status['remaining'] . ' left' }}
+                                                            </h5>
+                                                            <span class="badge {{ $status['full'] ? 'bg-danger' : 'bg-secondary' }}">
+                                                                {{ $status['total'] }} total
+                                                            </span>
                                                         </div>
-                                                        <h6 class="text-muted mb-1">
-                                                            {{ $status['name'] ?? 'Event ' . $eventId }}</h6>
-                                                        <h5 class="mb-1 text-dark">
-                                                            {{ $status['full'] ? 'Full' : $status['remaining'] . ' left' }}
-                                                        </h5>
-                                                        <span
-                                                            class="badge {{ $status['full'] ? 'bg-danger' : 'bg-secondary' }}">
-                                                            {{ $status['total'] }} total
-                                                        </span>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            @endif
                                         @endforeach
+
+                                        <!-- Second row: 2 cards -->
+                                        @foreach ($eventStatus as $eventId => $status)
+                                            @if ($loop->index >= 3 && $loop->index < 5)  <!-- Limit to 2 cards for the second row -->
+                                                <div class="col-md-6">
+                                                    <div class="card border-0 shadow-sm h-100 text-center">
+                                                        <div class="card-body">
+                                                            <div class="mb-3">
+                                                                <div class="rounded-circle mx-auto d-flex justify-content-center align-items-center {{ $status['full'] ? 'bg-danger' : 'bg-info' }}"
+                                                                    style="width: 60px; height: 60px;">
+                                                                    <i class="fas fa-calendar-alt fa-lg text-white"></i>
+                                                                </div>
+                                                            </div>
+                                                            <h6 class="text-muted mb-1">
+                                                                {{ $status['name'] ?? 'Event ' . $eventId }}
+                                                            </h6>
+                                                            <h5 class="mb-1 text-dark">
+                                                                {{ $status['full'] ? 'Full' : $status['remaining'] . ' left' }}
+                                                            </h5>
+                                                            <span class="badge {{ $status['full'] ? 'bg-danger' : 'bg-secondary' }}">
+                                                                {{ $status['total'] }} total
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        @endforeach
+
+                                        <!-- Registered Participants Card -->
+                                        <div class="col-md-6">
+                                            <div class="card border-0 shadow-sm h-100 text-center">
+                                                <div class="card-body">
+                                                    <div class="mb-3">
+                                                        <div class="rounded-circle mx-auto d-flex justify-content-center align-items-center {{ $registeredParticipants >= 1000 ? 'bg-danger' : 'bg-info' }}"
+                                                            style="width: 60px; height: 60px;">
+                                                            <i class="fas fa-calendar-alt fa-lg text-white"></i>
+                                                        </div>
+                                                    </div>
+                                                    <h6 class="text-muted mb-1">
+                                                        Registered Participants
+                                                    </h6>
+                                                    <h5 class="mb-1 text-dark">
+                                                        {{ 1000 - $registeredParticipants }} left
+                                                    </h5>
+                                                    <span class="badge {{ $registeredParticipants >= 1000 ? 'bg-danger' : 'bg-secondary' }}">
+                                                        {{ $registeredParticipants }} total
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
