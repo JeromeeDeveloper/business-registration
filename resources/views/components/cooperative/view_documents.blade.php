@@ -51,7 +51,7 @@
     $isMay22 = now()->format('m-d') === '05-22';
 
     // Check if the participant count exceeds 1000
-    $participantCount = \App\Models\Participant::count();
+    $participantCount = \App\Models\Participant::whereNotNull('coop_id')->count();
     $isMaxedParticipants = $participantCount >= 1000;
 @endphp
 
