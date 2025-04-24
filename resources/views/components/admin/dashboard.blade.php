@@ -731,7 +731,7 @@
                                                         {{ 1000 - $registeredParticipants }} left
                                                     </h5>
                                                     <span class="badge {{ $registeredParticipants >= 1000 ? 'bg-danger' : 'bg-secondary' }}">
-                                                        {{ $registeredParticipants }} total
+                                                        1000 total
                                                     </span>
                                                 </div>
                                             </div>
