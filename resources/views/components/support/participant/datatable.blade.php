@@ -352,21 +352,23 @@
                                                             <div class="form-button-action no-print">
 
                                                                 <button
-                                                                    class="btn btn-link btn-success btn-lg no-print"
-                                                                    data-bs-toggle="tooltip"
-                                                                    title="Generate & Print ID"
-                                                                    onclick="printParticipantID(
-                                                                    {{ $participant->participant_id }},
-                                                                    '{{ $participant->first_name }}',
-                                                                    '{{ $participant->nickname }}',
-                                                                    '{{ $participant->last_name }}',
+                                                                class="btn btn-link btn-success btn-lg no-print"
+                                                                data-bs-toggle="tooltip"
+                                                                title="Generate & Print ID"
+                                                                onclick="printParticipantID(
+                                                                {{ $participant->participant_id }},
+                                                                '{{ $participant->first_name }}',
+                                                                '{{ $participant->nickname }}',
+                                                                '{{ $participant->last_name }}',
+                                                                '{{ $participant->middle_name }}',
+                                                                '{{ $participant->designation ?? 'N/A' }}',
+                                                                '{{ $participant->reference_number ?? 'N/A' }}',
+                                                                '{{ optional($participant->cooperative)->name ?? 'N/A' }}',
+                                                                'https://api.qrserver.com/v1/create-qr-code/?data={{ urlencode(route('adminDashboard', ['participant_id' => $participant->participant_id])) }}&size=200x200'
+                                                            )">
+                                                                <i class="fa fa-id-card"></i>
+                                                            </button>
 
-                                                                    '{{ $participant->reference_number ?? 'N/A' }}',
-                                                                    '{{ optional($participant->cooperative)->name ?? 'N/A' }}',
-                                                                    'https://api.qrserver.com/v1/create-qr-code/?data={{ urlencode(route('adminDashboard', ['participant_id' => $participant->participant_id])) }}&size=200x200'
-                                                                )">
-                                                                    <i class="fa fa-id-card"></i>
-                                                                </button>
 
                                                                 @if ($participant->user && $participant->user->user_id)
                                                                     <a href="javascript:void(0);"
@@ -526,7 +528,8 @@
     </script>
 
     <script>
-        function printParticipantID(id, nickname, firstName, lastName, reference_number, cooperative, qrCode) {
+        function printParticipantID(id, nickname, firstName, lastName, middlename, designation, reference_number,
+            cooperative, qrCode) {
             let printWindow = window.open('', '_blank', 'width=400,height=600');
             printWindow.document.write(`
                 <html>
@@ -562,13 +565,14 @@
                 </head>
                 <body>
                     <div class="id-card">
-                    <h2>${nickname.toUpperCase()}</h2>
+                       <h2>${nickname.toUpperCase()}</h2>
                        <p><strong>${firstName.toUpperCase()}, ${lastName.toUpperCase()} ${middlename ? middlename.charAt(0).toUpperCase() + '.' : ''}</strong></p>
 
                     <p><strong><em>${cooperative.toUpperCase()}</em></strong></p>
+
                         ${qrCode ? `<img src="${qrCode}" alt="QR Code">` : `<p>No QR Code</p>`}
-                           <p>${reference_number}</p>
-                            <h2>${id}</h2>
+                         <p>${reference_number}</p>
+                          <h2>${id}</h2>
                     </div>
                     <script>
                         setTimeout(() => {

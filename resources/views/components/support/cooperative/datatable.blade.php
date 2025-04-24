@@ -246,13 +246,13 @@
                                 <i class="icon-arrow-right"></i>
                             </li>
                             <li class="nav-item">
-                                <a href="{{route('supportDashboard')}}">Dashboard</a>
+                                <a href="{{ route('supportDashboard') }}">Dashboard</a>
                             </li>
                             <li class="separator">
                                 <i class="icon-arrow-right"></i>
                             </li>
                             <li class="nav-item">
-                                <a href="{{route('supportview')}}">Cooperative</a>
+                                <a href="{{ route('supportview') }}">Cooperative</a>
                             </li>
                         </ul>
                     </div>
@@ -275,16 +275,20 @@
                                             class="d-flex flex-column flex-md-row align-items-stretch align-items-md-center gap-2 flex-grow-1"
                                             id="searchForm">
 
+
                                             <!-- Search Input and Filter -->
                                             <div class="input-group">
                                                 <input type="text" name="search" class="form-control"
                                                     placeholder="Search..." value="{{ request('search') }}">
+
+
 
                                                 <button type="submit" class="btn btn-primary"><i
                                                         class="fa fa-search"></i></button>
 
 
                                             </div>
+
 
                                             <!-- Action Buttons -->
                                             {{-- <div class="d-flex flex-row gap-2">
@@ -293,17 +297,21 @@
                                                     data-bs-toggle="tooltip" title="Import Cooperative">
                                                     <i class="fa fa-upload"></i>
                                                 </a>
-                                                <button type="button" onclick="printAttendance()"
-                                                    class="btn btn-primary" data-bs-toggle="tooltip"
-                                                    title="Print Cooperative List">
-                                                    <i class="fa fa-print"></i>
-                                                </button>
+
                                             </div> --}}
 
+
                                             <a href="{{ route('supportregister') }}" class="btn btn-primary"
-                                                    data-bs-toggle="tooltip" title="Add Cooperative">
-                                                    <i class="fa fa-plus"></i>
-                                                </a>
+                                                data-bs-toggle="tooltip" title="Add Cooperative">
+                                                <i class="fa fa-plus"></i>
+                                            </a>
+
+                                            <button type="button" onclick="printAttendance()"
+                                                class="btn btn-primary" data-bs-toggle="tooltip"
+                                                title="Print Cooperative List">
+                                                <i class="fa fa-print"></i>
+                                            </button>
+
 
                                         </form>
                                     </div>
@@ -428,19 +436,21 @@
 
                                                         <!-- Registration Status Dropdown -->
                                                         <td class="p-2 align-middle text-center">
-                                                            <span class="fw-semibold text-primary fs-6 rounded-pill shadow-sm border-0 px-3 py-1"
-                                                                  style="min-width: 200px; display: inline-block; background: #eef2ff;">
-                                                              {{ optional($coop->gaRegistration)->registration_status === 'Rejected' ? 'No Registration' : (optional($coop->gaRegistration)->registration_status ?? 'No Registration') }}
+                                                            <span
+                                                                class="fw-semibold text-primary fs-6 rounded-pill shadow-sm border-0 px-3 py-1"
+                                                                style="min-width: 200px; display: inline-block; background: #eef2ff;">
+                                                                {{ optional($coop->gaRegistration)->registration_status === 'Rejected' ? 'No Registration' : optional($coop->gaRegistration)->registration_status ?? 'No Registration' }}
                                                             </span>
-                                                          </td>
+                                                        </td>
 
 
-                                                          <td class="p-2 align-middle text-center">
-                                                            <span class="fw-semibold text-success fs-6 rounded-pill shadow-sm border-0 px-3 py-1"
-                                                                  style="min-width: 200px; display: inline-block; background: #eaffea;">
-                                                              {{ strtoupper(optional($coop->gaRegistration)->membership_status ?? '---') }}
+                                                        <td class="p-2 align-middle text-center">
+                                                            <span
+                                                                class="fw-semibold text-success fs-6 rounded-pill shadow-sm border-0 px-3 py-1"
+                                                                style="min-width: 200px; display: inline-block; background: #eaffea;">
+                                                                {{ strtoupper(optional($coop->gaRegistration)->membership_status ?? '---') }}
                                                             </span>
-                                                          </td>
+                                                        </td>
 
 
                                                         <td class="no-print">
@@ -467,17 +477,17 @@
                                                                 </form> --}}
 
                                                                 <form
-                                                                action="{{ route('support.cooperatives.notify', $coop->coop_id) }}"
-                                                                method="POST" style="display:inline;"
-                                                                onsubmit="showSwalLoader(event, this, 'Sending Status & Invitation...')">
-                                                                @csrf
-                                                                <button type="submit"
-                                                                    class="btn btn-link btn-info btn-lg"
-                                                                    data-bs-toggle="tooltip"
-                                                                    title="Send Invitation & Credentials">
-                                                                    <i class="fa fa-bell"></i>
-                                                                </button>
-                                                            </form>
+                                                                    action="{{ route('support.cooperatives.notify', $coop->coop_id) }}"
+                                                                    method="POST" style="display:inline;"
+                                                                    onsubmit="showSwalLoader(event, this, 'Sending Status & Invitation...')">
+                                                                    @csrf
+                                                                    <button type="submit"
+                                                                        class="btn btn-link btn-info btn-lg"
+                                                                        data-bs-toggle="tooltip"
+                                                                        title="Send Invitation & Credentials">
+                                                                        <i class="fa fa-bell"></i>
+                                                                    </button>
+                                                                </form>
 
                                                                 <a href="{{ route('support.documents.view', ['coop_id' => $coop->coop_id]) }}"
                                                                     class="btn btn-link btn-info btn-lg"
@@ -496,8 +506,9 @@
 
                                                                 <!-- Edit Coop -->
                                                                 <button type="button"
-                                                                class="btn btn-link btn-info btn-lg"
-                                                                data-bs-toggle="tooltip" title="Edit & Upload Documents">
+                                                                    class="btn btn-link btn-info btn-lg"
+                                                                    data-bs-toggle="tooltip"
+                                                                    title="Edit & Upload Documents">
                                                                     <a href="{{ route('support.cooperatives.edit', $coop->coop_id) }}"
                                                                         class="text-decoration-none text-primary">
                                                                         <i class="fa fa-edit"></i>
@@ -546,22 +557,22 @@
                                     @endif
 
                                 </div>
-                              <!-- Pagination info -->
-<div class="text-center mt-2">
-    <small>
-        Showing {{ $cooperatives->firstItem() }} to {{ $cooperatives->lastItem() }} of
-        {{ $cooperatives->total() }} entries
-    </small>
-</div>
+                                <!-- Pagination info -->
+                                <div class="text-center mt-2">
+                                    <small>
+                                        Showing {{ $cooperatives->firstItem() }} to {{ $cooperatives->lastItem() }} of
+                                        {{ $cooperatives->total() }} entries
+                                    </small>
+                                </div>
 
-<!-- Mobile-friendly, centered pagination -->
-<div class="d-flex justify-content-center mt-3">
-    <div class="w-100" style="overflow-x: auto;">
-        <div class="d-flex justify-content-center" style="min-width: max-content;">
-            {{ $cooperatives->appends(request()->query())->links('pagination::bootstrap-4') }}
-        </div>
-    </div>
-</div>
+                                <!-- Mobile-friendly, centered pagination -->
+                                <div class="d-flex justify-content-center mt-3">
+                                    <div class="w-100" style="overflow-x: auto;">
+                                        <div class="d-flex justify-content-center" style="min-width: max-content;">
+                                            {{ $cooperatives->appends(request()->query())->links('pagination::bootstrap-4') }}
+                                        </div>
+                                    </div>
+                                </div>
 
 
                             </div>
