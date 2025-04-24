@@ -28,7 +28,8 @@ class AppServiceProvider extends ServiceProvider
     {
         UploadedDocument::observe(UploadedDocumentObserver::class);
         Cooperative::observe(CooperativeObserver::class);
-        Cooperative::observe(UpdateCooperativeObserver::class);
         Participant::observe(ParticipantObserver::class);
     }
 }
+
+
