@@ -31,6 +31,9 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user(); // Get the authenticated user
 
+            // 👇 Update status to 'active'
+            $user->update(['status' => 'active']);
+
             if ($user->role === 'admin') {
                 return redirect()->route('adminDashboard')->with('success', 'Welcome back, Admin!');
             } elseif ($user->role === 'cooperative') {
@@ -44,8 +47,6 @@ class AuthController extends Controller
 
         return redirect()->route('login')->with('error', 'Invalid email or password.');
     }
-
-
 
     public function register(Request $request)
     {
@@ -70,9 +71,19 @@ class AuthController extends Controller
 
     public function logout()
     {
+        $user = Auth::user(); // Get the authenticated user
+        if ($user) {
+            // Update status to 'offline' before logging out
+            $user->update(['status' => 'offline']);
+        }
+
+        // Log out the user
         Auth::logout();
+
+        // Redirect to the login page
         return redirect('/login')->with('success', 'Logged out successfully');
     }
+
 
     // private function redirectToDashboard()
     // {
@@ -124,10 +135,11 @@ class AuthController extends Controller
             ->where('name', 'like', '%' . $search . '%')
             ->orWhere('email', 'like', '%' . $search . '%')
             ->orWhere('role', 'like', '%' . $search . '%')
+            ->orWhere('status', 'like', '%' . $search . '%')
             ->orderBy('created_at', 'desc')
             ->paginate($limit); // Use dynamic limit for pagination
 
-        return view('components.admin.user.datatable', compact('users'));
+        return view('components.admin.user.datatable', compact('users', 'search'));
     }
 
 

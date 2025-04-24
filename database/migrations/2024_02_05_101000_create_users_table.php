@@ -14,7 +14,7 @@ return new class extends Migration
             $table->unsignedBigInteger('coop_id')->nullable();
             $table->foreign('coop_id')->references('coop_id')->on('cooperatives')->onDelete('cascade');
 
-
+            $table->enum('status', ['active', 'offline'])->default('offline');
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();

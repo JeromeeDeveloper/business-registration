@@ -261,8 +261,9 @@
                                                 <thead>
                                                     <tr>
                                                         <th>Name</th>
-                                                        <th>Assigned Cooperative</th>
+                                                        <th>Cooperative</th>
                                                         <th>Email</th>
+                                                        <th>Status</th>
                                                         <th>Role</th>
                                                         <th>Date Created</th>
                                                         <th style="width: 10%">Action</th>
@@ -275,6 +276,22 @@
                                                             <td>{{ $user->cooperative ? $user->cooperative->name : 'Mass Specc Cooperative' }}
                                                             </td>
                                                             <td>{{ $user->email }}</td>
+                                                            <td>
+                                                                @if ($user->status === 'active')
+                                                                    <span class="badge bg-success">
+                                                                        <i class="bi bi-circle-fill me-1"></i> Active
+                                                                    </span>
+                                                                @elseif ($user->status === 'offline')
+                                                                    <span class="badge bg-secondary">
+                                                                        <i class="bi bi-circle me-1"></i> Offline
+                                                                    </span>
+                                                                @else
+                                                                    <span class="badge bg-warning text-dark">
+                                                                        <i class="bi bi-exclamation-circle me-1"></i> Unknown
+                                                                    </span>
+                                                                @endif
+                                                            </td>
+
                                                             <td>{{ ucfirst($user->role) }}</td>
                                                             <td>{{ $user->created_at->format('F d, Y') }}</td>
                                                             <td>

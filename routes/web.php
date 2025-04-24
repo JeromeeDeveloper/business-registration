@@ -46,8 +46,12 @@ Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', function () {
+    $user = Auth::user();
+    if ($user) {
+        $user->update(['status' => 'offline']);
+    }
     Auth::logout();
-    return redirect('/login');
+    return redirect('/login')->with('success', 'Logged out successfully');
 })->name('logout');
 
 Route::middleware([AdminOrSupportMiddleware::class])->group(function () {
