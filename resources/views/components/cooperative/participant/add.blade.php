@@ -50,7 +50,7 @@
                         $isMay22 = now()->format('m-d') === '05-22';
 
                         // Check if the participant count exceeds 1000
-                        $participantCount = \App\Models\EventParticipant::count();
+                        $participantCount = \App\Models\Participant::count();
                         $isMaxedParticipants = $participantCount >= 1000;
                     @endphp
 
