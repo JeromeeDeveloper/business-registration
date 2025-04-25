@@ -467,7 +467,7 @@
                                                             placeholder="Enter Savings" step="0.01">
                                                     </div>
 
-                                                   
+
 
                                                     <div class="form-group">
                                                         <label for="services_availed">Services Availed</label>
@@ -764,16 +764,20 @@
 
                                                         <div class="form-group">
                                                             <label>Checklist Manual:</label>
-
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox"
-                                                                    name="free_migs_pax" id="free_migs_pax"
-                                                                    value="4500"
-                                                                    {{ old('free_migs_pax', $coop->free_migs_pax) == 4500 ? 'checked' : '' }}>
-                                                                <label class="form-check-label" for="free_migs_pax">1
-                                                                    Pax Free Officer</label>
+                                                            <label for="free_migs_pax">Free Officer Pax:</label>
+                                                            <div class="input-group">
+                                                                <input type="number"
+                                                                       class="form-control"
+                                                                       name="free_migs_pax"
+                                                                       id="free_migs_pax"
+                                                                       min="0"
+                                                                       step="1"
+                                                                       value="{{ old('free_migs_pax', $coop->free_migs_pax ? (int) $coop->free_migs_pax : 0) }}">
+                                                                <span class="input-group-text">Pax</span>
                                                             </div>
+                                                            <small class="text-muted">Amount per pax: ₱4,500</small>
                                                         </div>
+
 
                                                         <div class="form-group">
                                                             <label for="net_required_regfee">Net Required
@@ -1376,9 +1380,11 @@
             if (document.getElementById('free_2pax_migs').checked) {
                 freeAmount += 9000;
             }
-            if (document.getElementById('free_migs_pax').checked) {
-                freeAmount += 4500;
-            }
+
+            // Modified free_migs_pax calculation
+            let freeMigsPax = parseInt(document.getElementById('free_migs_pax').value) || 0;
+            freeAmount += freeMigsPax * 4500;
+
             if (free100kCetf.checked && free100kCount > 0) {
                 freeAmount += free100kCount * 4500;
             }
@@ -1418,128 +1424,3 @@
 </script>
 
 
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            let cetfRemittance = document.getElementById('cetf_remittance');
-            let additionalCetf = document.getElementById('additional_cetf');
-            let cetfUndertaking = document.getElementById('cetf_undertaking');
-            let totalRemittance = document.getElementById('total_remittance');
-            let fullCetfRemitted = document.getElementById('full_cetf_remitted');
-            let cetfRequired = document.getElementById('cetf_required');
-
-            function calculateTotalRemittance() {
-                let remittance = parseFloat(cetfRemittance.value) || 0;
-                let additional = parseFloat(additionalCetf.value) || 0;
-                let undertaking = parseFloat(cetfUndertaking.value) || 0;
-                let total = (remittance + additional + undertaking).toFixed(2);
-
-                totalRemittance.value = total;
-                updateFullCetfRemitted(parseFloat(total));
-            }
-
-            function updateFullCetfRemitted(total) {
-                let required = parseFloat(cetfRequired.value) || 0;
-
-                // If cetf_required is 0 or null, set fullCetfRemitted to "no"
-                if (required <= 0) {
-                    fullCetfRemitted.value = "no";
-                    return;
-                }
-
-                // Otherwise, check if total remittance meets or exceeds the requirement
-                fullCetfRemitted.value = total >= required ? "yes" : "no";
-            }
-
-            cetfRemittance.addEventListener('input', calculateTotalRemittance);
-            additionalCetf.addEventListener('input', calculateTotalRemittance);
-            cetfUndertaking.addEventListener('input', calculateTotalRemittance);
-            calculateTotalRemittance(); // Initialize on page load
-        });
-    </script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            let cetfDueToApexInput = document.getElementById('cetf_due_to_apex');
-            let cetfRequiredInput = document.getElementById('cetf_required');
-            let netSurplusInput = document.getElementById('net_surplus');
-
-            function updateCetfRequired() {
-                let dueToApex = parseFloat(cetfDueToApexInput.value) || 0;
-                let netSurplus = parseFloat(netSurplusInput.value) || 0;
-
-                // Check if net_surplus is negative, if so, override cetf_required to 3000
-                if (netSurplus < 0) {
-                    cetfRequiredInput.value = "3000.00"; // Override to 3000
-                } else {
-                    let cetfRequired = (dueToApex * 0.30).toFixed(2); // Normal calculation
-                    cetfRequiredInput.value = cetfRequired;
-                }
-            }
-
-            cetfDueToApexInput.addEventListener('input', updateCetfRequired);
-            netSurplusInput.addEventListener('input', updateCetfRequired); // Recalculate when net_surplus changes
-            updateCetfRequired(); // Initialize on page load
-        });
-    </script>
-
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const dropdownButton = document.getElementById("servicesDropdown");
-            const dropdownMenu = document.getElementById("dropdownMenu");
-            const checkboxes = dropdownMenu.querySelectorAll('input[type="checkbox"]');
-            const hiddenInput = document.getElementById("services_availed_json");
-
-
-            dropdownMenu.addEventListener("click", function(event) {
-                event.stopPropagation();
-            });
-
-            dropdownButton.addEventListener("click", function(event) {
-                event.stopPropagation();
-                dropdownMenu.classList.toggle("show");
-            });
-
-            document.addEventListener("click", function(event) {
-                if (!dropdownMenu.contains(event.target) && event.target !== dropdownButton) {
-                    dropdownMenu.classList.remove("show");
-                }
-            });
-
-            function updateDropdownText() {
-                let selected = Array.from(checkboxes)
-                    .filter(i => i.checked)
-                    .map(i => i.value)
-                    .join(", ");
-
-                dropdownButton.innerText = selected ? selected : "Select Services";
-                hiddenInput.value = JSON.stringify(selected.split(", ").filter(Boolean)); // Store as JSON
-            }
-
-            // Update on checkbox change
-            checkboxes.forEach(checkbox => {
-                checkbox.addEventListener("change", updateDropdownText);
-            });
-
-            // Load preselected values
-            updateDropdownText();
-        });
-    </script>
-    <script>
-        @if (session('markAsDone_success'))
-            <
-            script >
-                Swal.fire({
-                    title: 'Success!',
-                    text: '{{ session('markAsDone_success') }}',
-                    icon: 'success',
-                    confirmButtonText: 'OK'
-                });
-    </script>
-    @endif
-    </script>
-    @include('layouts.links')
-</body>
-
-</html>
