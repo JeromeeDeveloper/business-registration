@@ -345,7 +345,15 @@
                                                     </div>
                                                 </div>
 
-
+                                                <div class="col-md-6 col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="phone_number">Participant Phone Number</label>
+                                                        <input type="text" class="form-control"
+                                                            name="phone_number"
+                                                            value="{{ old('phone_number', $participant->phone_number) }}">
+                                                    </div>
+                                                </div>
+                                                
                                                 <!-- Gender -->
                                                 <div class="col-md-6 col-lg-4">
                                                     <div class="form-group">
@@ -362,15 +370,8 @@
                                                     </div>
                                                 </div>
 
-                                                <!-- Phone Number -->
-                                                <div class="col-md-6 col-lg-4">
-                                                    <div class="form-group">
-                                                        <label for="phone_number">Participant Phone Number</label>
-                                                        <input type="text" class="form-control"
-                                                            name="phone_number"
-                                                            value="{{ old('phone_number', $participant->phone_number) }}">
-                                                    </div>
-                                                </div>
+
+
 
                                                 <!-- Designation -->
                                                 <div class="col-md-6 col-lg-4">
@@ -617,57 +618,13 @@
                                             </div>
                                         </div>
 
-                                        <div class="card-action">
-                                            <button type="submit"
-                                                class="btn btn-label-info btn-round">Update</button>
-                                            <button type="button" class="btn btn-primary btn-round"
+                                        <div class="card-action g-2">
+                                            <button type="button" class="btn btn-label-info btn-round"
                                                 onclick="window.location.href='{{ route('coop.index') }}'">Back</button>
+                                                <button type="submit"
+                                                class="btn btn-primary btn-round">Update</button>
                                         </div>
                                     </form>
-
-                                    <style>
-                                        .floating-notice {
-                                            position: fixed;
-                                            bottom: 20px;
-                                            right: 20px;
-                                            background-color: #f8d7da;
-                                            color: #721c24;
-                                            padding: 15px 25px;
-                                            border-radius: 5px;
-                                            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                                            z-index: 9999;
-                                            width: auto;
-                                            max-width: 300px;
-                                            display: flex;
-                                            flex-direction: column;
-                                            /* Align content vertically */
-                                        }
-
-                                        .notice-content {
-                                            font-family: Arial, sans-serif;
-                                            font-size: 14px;
-                                            max-width: 240px;
-                                        }
-
-                                        .floating-notice p {
-                                            margin: 0;
-                                        }
-
-                                        .floating-notice strong {
-                                            font-weight: bold;
-                                        }
-
-                                        .close-btn {
-                                            background: none;
-                                            border: none;
-                                            font-size: 20px;
-                                            color: #721c24;
-                                            cursor: pointer;
-                                            position: absolute;
-                                            top: 5px;
-                                            right: 10px;
-                                        }
-                                    </style>
 
                                     <!-- Floating Notice with Close Button -->
                                     <div class="floating-notice">
@@ -679,14 +636,6 @@
                                         </div>
                                     </div>
 
-                                    <script>
-                                        // Function to close the floating notice
-                                        function closeNotice() {
-                                            document.querySelector('.floating-notice').style.display = 'none';
-                                        }
-                                    </script>
-
-
                                 </div>
                             </div>
                         </div>
@@ -696,6 +645,12 @@
             @include('layouts.adminfooter')
         </div>
     </div>
+    <script>
+        // Function to close the floating notice
+        function closeNotice() {
+            document.querySelector('.floating-notice').style.display = 'none';
+        }
+    </script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             let isMspOfficer = document.getElementById("is_msp_officer");

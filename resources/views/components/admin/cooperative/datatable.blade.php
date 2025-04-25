@@ -218,49 +218,15 @@
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <!-- Filter Modal -->
-                                    {{-- <div class="modal fade" id="filterModal" tabindex="-1"
-                                        aria-labelledby="filterModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="filterModalLabel">Filter Options</h5>
 
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox"
-                                                            name="filter_no_ga" value="1" id="filterNoGA"
-                                                            form="searchForm"
-                                                            {{ request('filter_no_ga') == '1' ? 'checked' : '' }}>
-                                                        <label class="form-check-label" for="filterNoGA">
-                                                            Show only cooperatives with <strong>no GA
-                                                                registrations</strong>
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-label-info btn-round"
-                                                        data-bs-dismiss="modal">Close</button>
-                                                    <button type="submit" class="btn btn-primary btn-round"
-                                                        form="searchForm">Apply Filter</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> --}}
-
-                                    <!-- Responsive Layout -->
                                     <div
                                         class="d-flex flex-column flex-md-row align-items-stretch align-items-md-center gap-2">
-
                                         <!-- Title -->
                                         <h4 class="card-title mb-0 flex-shrink-0">Cooperative</h4>
-
                                         <!-- Search Form -->
                                         <form method="GET" action="{{ route('adminview') }}"
                                             class="d-flex flex-column flex-md-row align-items-stretch align-items-md-center gap-2 flex-grow-1"
                                             id="searchForm">
-
                                             <!-- Search Input and Filter -->
                                             <div class="input-group">
                                                 <input type="text" name="search" class="form-control"
@@ -269,7 +235,6 @@
                                                 <button type="submit" class="btn btn-primary"><i
                                                         class="fa fa-search"></i></button>
                                             </div>
-
                                             <!-- Action Buttons -->
                                             <div class="d-flex flex-row gap-2">
                                                 <a href="{{ route('adminregister') }}" class="btn btn-primary"
@@ -280,7 +245,7 @@
                                                     data-bs-toggle="tooltip" title="Import Cooperative">
                                                     <i class="fa fa-upload"></i>
                                                 </a>
-                                                
+
                                                 <button type="button" onclick="printAttendance()"
                                                     class="btn btn-primary" data-bs-toggle="tooltip"
                                                     title="Print Cooperative List">
@@ -288,8 +253,6 @@
                                                 </button>
 
                                             </div>
-
-
                                         </form>
                                     </div>
                                 </div>
