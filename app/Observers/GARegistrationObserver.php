@@ -25,7 +25,7 @@ class GARegistrationObserver
             $totalParticipants = Participant::where('coop_id', $cooperative->coop_id)->count();
 
             $freeAmount = 0;
-            $cetfRemittance = $cooperative->cetf_remittance ?? 0;
+            $cetfRemittance = $cooperative->total_remittance ?? 0;
 
             // MIGS check
             $migsCount = GARegistration::where('coop_id', $cooperative->coop_id)
