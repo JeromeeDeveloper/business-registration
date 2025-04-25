@@ -31,6 +31,7 @@ class AttendanceController extends Controller
                     $participantQuery->where('first_name', 'like', '%' . $request->search . '%')
                         ->orWhere('last_name', 'like', '%' . $request->search . '%')
                         ->orWhere('middle_name', 'like', '%' . $request->search . '%')
+                        ->orWhere('email', 'like', '%' . $request->search . '%')
                         ->orWhere('designation', 'like', '%' . $request->search . '%')
                         ->orWhereHas('user', function ($userQuery) use ($request) {
                             $userQuery->where('name', 'like', '%' . $request->search . '%');
