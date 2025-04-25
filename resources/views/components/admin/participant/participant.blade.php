@@ -300,6 +300,9 @@
                                                     <th>
                                                         Designation
                                                     </th>
+                                                    <th>
+                                                        Email Address
+                                                    </th>
                                                     <th>QR Code</th>
                                                     <th>Action</th>
                                                 </tr>
@@ -315,6 +318,7 @@
                                                         <td>{{ $participant->first_name }}</td>
                                                         <td>{{ $participant->last_name }}</td>
                                                         <td>{{ $participant->designation ?? 'N/A' }}</td>
+                                                        <td>{{ $participant->email ?? 'N/A' }}</td>
                                                         <td>
                                                             @if ($participant->participant_id)
                                                                 <img src="https://api.qrserver.com/v1/create-qr-code/?data={{ urlencode(route('adminDashboard', ['participant_id' => $participant->participant_id])) }}&size=100x100"
