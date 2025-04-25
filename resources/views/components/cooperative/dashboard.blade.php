@@ -8,133 +8,6 @@
 </head>
 
 <body>
-
-    <style>
-        .list-group-item {
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            cursor: pointer;
-        }
-
-        .list-group-item:hover {
-            background-color: rgba(0, 123, 255, 0.1);
-            /* Light blue background */
-            transform: translateY(-3px);
-            /* Slight lift effect */
-        }
-
-        .list-group-item:hover .badge {
-            filter: brightness(1.2);
-            /* Slightly brighten the badge */
-        }
-
-        .wrapper {
-            overflow-x: hidden;
-        }
-
-        @media (max-width: 992px) {
-            .main-panel .row {
-                --bs-gutter-x: 1px;
-            }
-        }
-
-        /* Small screens (mobile) */
-        @media (max-width: 768px) {
-            .main-panel .row {
-                --bs-gutter-x: 1px;
-            }
-        }
-
-        /* Extra small screens */
-        @media (max-width: 576px) {
-            .main-panel .row {
-                --bs-gutter-x: 1px;
-            }
-        }
-
-        /* Style the Prev and Next buttons */
-        #eventsCarousel .carousel-control-prev,
-        #eventsCarousel .carousel-control-next {
-            width: 40px;
-            height: 40px;
-            background-color: white;
-            border-radius: 50%;
-            top: 50%;
-            transform: translateY(-50%);
-            opacity: 1;
-            /* Optional: always visible */
-        }
-
-        #eventsCarousel .carousel-control-prev-icon,
-        #eventsCarousel .carousel-control-next-icon {
-            filter: invert(32%) sepia(93%) saturate(2115%) hue-rotate(203deg) brightness(90%) contrast(90%);
-            width: 20px;
-            height: 20px;
-        }
-
-        #eventsCarousel .carousel-control-prev {
-            left: -20px;
-            /* Adjust position if needed */
-        }
-
-        #eventsCarousel .carousel-control-next {
-            right: -20px;
-            /* Adjust position if needed */
-        }
-    </style>
-    <style>
-        <style>
-
-        /* Red dot indicator */
-        .notice-icon {
-            position: relative;
-        }
-
-        .notice-icon::after {
-            content: '';
-            position: absolute;
-            top: 2px;
-            right: 2px;
-            width: 10px;
-            height: 10px;
-            background-color: red;
-            border: 2px solid white;
-            border-radius: 50%;
-            z-index: 1000;
-        }
-
-        /* Animated bounce effect on icon */
-        @keyframes bounce {
-
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-3px);
-            }
-        }
-
-        .attention {
-            animation: bounce 1s infinite;
-        }
-
-        /* Styled notice box */
-        #noticeBox .card {
-            background-color: #fff7e6;
-            border-left: 5px solid #ff9900;
-        }
-
-        button#noticeToggle {
-            border: none;
-        }
-
-        .info-grouped {
-            position: relative;
-            top: 10px;
-        }
-    </style>
-    </style>
     <div class="wrapper">
         <!-- Sidebar -->
         <div class="sidebar" data-background-color="dark">
@@ -279,67 +152,38 @@
                 <!-- Navbar Header -->
                 <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
                     <div class="container-fluid">
-                        <nav
-                            class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
-
-                            <p
-                                class="text-muted text-nowrap d-flex flex-column flex-md-row align-items-center justify-content-center info-grouped">
-                                <span>Logged in as: <strong>{{ Auth::user()->name }}</strong></span>
-
-                                @if ($coop)
-                                    <span class="mx-2 d-none d-md-inline">|</span>
-                                    <span>Cooperative: <strong>{{ $coop->name }}</strong></span>
-                                @else
-                                    <span class="mx-2 d-none d-md-inline">|</span>
-                                    <span>No Cooperative Assigned</span>
-                                @endif
-                            </p>
-
-                        </nav>
-
-                        <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
-                            <li class="nav-item topbar-user dropdown hidden-caret">
-
-                                <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#"
-                                    aria-expanded="false">
-                                    <i class="fa fa-user"></i>
-                                    <span class="profile-username">
-                                        <span class="op-7">Hi,</span>
-                                        <span class="fw-bold" style="text-transform: capitalize;">
-                                            {{ Auth::user()->name }}
-                                        </span>
-
-                                    </span>
-                                </a>
-                                <ul class="dropdown-menu dropdown-user animated fadeIn">
-                                    <div class="dropdown-user-scroll scrollbar-outer">
+                        <div class="d-flex flex-column flex-md-row align-items-center justify-content-between w-100">
+                            <div class="text-center text-md-start mb-2 mb-md-0">
+                                <p class="text-muted mb-0">
+                                    <span class="mb-2 mb-md-0">Logged in as: <strong>{{ Auth::user()->name }}</strong></span>
+                                    @if ($coop)
+                                        <span class="mx-2 d-none d-md-inline">|</span>
+                                        <span>Cooperative: <strong>{{ $coop->name }}</strong></span>
+                                    @else
+                                        <span class="mx-2 d-none d-md-inline">|</span>
+                                        <span>No Cooperative Assigned</span>
+                                    @endif
+                                </p>
+                            </div>
+                            <ul class="navbar-nav topbar-nav align-items-center">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fa fa-user me-2"></i>
+                                        <span class="d-none d-md-inline">{{ Auth::user()->name }}</span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                        <li><a class="dropdown-item" href="{{ route('participant.profile.edit') }}">My Profile</a></li>
+                                        <li><hr class="dropdown-divider"></li>
                                         <li>
-                                            <div class="user-box">
-                                                <div class="u-text">
-                                                    <h4> {{ Auth::user()->name }}</h4>
-                                                    <p class="text-muted"> {{ Auth::user()->email }}</p>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item"
-                                                href="{{ route('participant.profile.edit') }}">My
-                                                Profile</a>
-                                            <div class="dropdown-divider"></div>
-                                            <form action="{{ route('logout') }}" method="POST" id="logout-form"
-                                                style="display: none;">
+                                            <form action="{{ route('logout') }}" method="POST" id="logout-form">
                                                 @csrf
+                                                <button type="submit" class="dropdown-item">Logout</button>
                                             </form>
-                                            <a class="dropdown-item" href="#"
-                                                onclick="document.getElementById('logout-form').submit();">Logout</a>
                                         </li>
-                                    </div>
-                                </ul>
-
-
-                            </li>
-                        </ul>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </nav>
 
@@ -425,29 +269,6 @@
                                 </a>
                             @endif
 
-                            <!-- Upload Documents (Triggers Modal) -->
-                            <style>
-                                .pulse-btn {
-                                    animation: pulse 1.5s infinite;
-                                }
-
-                                @keyframes pulse {
-                                    0% {
-                                        transform: scale(1);
-                                    }
-
-                                    50% {
-                                        transform: scale(1.05);
-                                    }
-
-                                    100% {
-                                        transform: scale(1);
-                                    }
-                                }
-                            </style>
-
-
-
                         </div>
 
                         <!-- Documents Modal -->
@@ -502,36 +323,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Custom Styling -->
-                        <style>
-                            /* Button Enhancements */
-                            .action-btn {
-                                padding: 12px 24px;
-                                border-radius: 50px;
-                                transition: all 0.3s ease-in-out;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-                            }
-
-                            .action-btn:hover {
-                                transform: scale(1.05);
-                                box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
-                            }
-
-                            /* Modal Styling */
-                            .modal-content {
-                                background: rgba(255, 255, 255, 0.95);
-                                backdrop-filter: blur(10px);
-                            }
-
-                            .modal-header {
-                                border-bottom: none;
-                            }
-                        </style>
-
 
                     </div>
 
@@ -704,14 +495,14 @@
                                 <!-- Card Body -->
                                 <div class="card-body d-flex flex-column justify-content-between">
                                     <!-- Caution Message -->
-                                    <p class="alert alert-warning text-center rounded-pill py-2">
+                                    <p class="alert alert-warning text-center rounded-pill py-2 mt-4">
                                         ⚠️ This calculation is for testing purposes only and is not recorded.
                                     </p>
 
                                     <!-- Form -->
-                                    <form id="cetfForm" class="d-flex flex-column gap-3">
+                                    <form id="cetfForm" class="d-flex flex-column gap-4">
                                         <!-- Formula Display Section -->
-                                        <div class="mt-4 p-3 border rounded shadow-sm bg-light">
+                                        <div class="mt-4 p-4 border rounded shadow-sm bg-light">
                                             <p class="fw-semibold fs-5 mb-0">
                                                 CETF Required = <span class="fw-bold text-primary">(Total Income *
                                                     0.05) * 0.30 - CETF Remittance to MSP</span>
@@ -719,39 +510,39 @@
                                         </div>
 
                                         <div class="form-group position-relative">
-                                            <label for="totalIncome" class="fw-semibold">Total Income (Latest
+                                            <label for="totalIncome" class="fw-semibold mb-2">Total Income (Latest
                                                 Audited FS)</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i
                                                         class="fas fa-chart-line"></i></span>
-                                                <input type="number" class="form-control" id="totalIncome"
+                                                <input type="number" class="form-control form-control-lg" id="totalIncome"
                                                     required />
                                             </div>
                                         </div>
 
                                         <div class="form-group position-relative">
-                                            <label for="cetfRemittance" class="fw-semibold">CETF Remittance to
+                                            <label for="cetfRemittance" class="fw-semibold mb-2">CETF Remittance to
                                                 MSP</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i
                                                         class="fas fa-hand-holding-usd"></i></span>
-                                                <input type="number" class="form-control" id="cetfRemittance"
+                                                <input type="number" class="form-control form-control-lg" id="cetfRemittance"
                                                     readonly />
                                             </div>
                                         </div>
 
                                         <div class="form-group position-relative">
-                                            <label for="cetfRequired" class="fw-semibold">CETF Required</label>
+                                            <label for="cetfRequired" class="fw-semibold mb-2">CETF Required</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i
                                                         class="fas fa-file-invoice-dollar"></i></span>
-                                                <input type="text" class="form-control" id="cetfRequired"
+                                                <input type="text" class="form-control form-control-lg" id="cetfRequired"
                                                     readonly />
                                             </div>
                                         </div>
 
                                         <!-- Compute Button -->
-                                        <button type="button" class="btn btn-primary btn-lg btn-round mt-3 shadow-sm"
+                                        <button type="button" class="btn btn-primary btn-lg btn-round mt-4 shadow-sm"
                                             onclick="calculateCETF()">
                                             <i class="fas fa-calculator me-2"></i> Compute
                                         </button>
@@ -762,27 +553,6 @@
 
 
                         <div class="col-md-4">
-                            <style>
-                                .card-head-row {
-                                    display: flex;
-                                    align-items: center;
-                                    justify-content: space-between;
-                                    gap: 10px;
-                                }
-
-                                .event-title {
-                                    flex-grow: 1;
-                                    white-space: nowrap;
-                                    overflow: hidden;
-                                    text-overflow: ellipsis;
-                                    font-weight: bold;
-                                }
-
-                                .card-tools {
-                                    flex-shrink: 0;
-                                    /* Prevents the tools section from shrinking */
-                                }
-                            </style>
 
                             @if ($latestEvents->count() > 0)
                                 <div id="eventsCarousel" class="carousel slide" data-bs-ride="carousel"
@@ -854,50 +624,6 @@
                             @else
                                 <p>No upcoming events at the moment.</p>
                             @endif
-                            <style>
-                                .floating-notice {
-                                    position: fixed;
-                                    bottom: 20px;
-                                    right: 20px;
-                                    background-color: #f8d7da;
-                                    color: #721c24;
-                                    padding: 15px 25px;
-                                    border-radius: 5px;
-                                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                                    z-index: 9999;
-                                    width: auto;
-                                    max-width: 300px;
-                                    display: flex;
-                                    flex-direction: column;
-                                    /* Align content vertically */
-                                }
-
-                                .notice-content {
-                                    font-family: Arial, sans-serif;
-                                    font-size: 14px;
-                                    max-width: 240px;
-                                }
-
-                                .floating-notice p {
-                                    margin: 0;
-                                }
-
-                                .floating-notice strong {
-                                    font-weight: bold;
-                                }
-
-                                .close-btn {
-                                    background: none;
-                                    border: none;
-                                    font-size: 20px;
-                                    color: #721c24;
-                                    cursor: pointer;
-                                    position: absolute;
-                                    top: 5px;
-                                    right: 10px;
-                                }
-                            </style>
-
                             <!-- Floating Notice with Close Button -->
                             <div class="floating-notice">
                                 <button class="close-btn" onclick="closeNotice()">×</button>
@@ -907,79 +633,6 @@
                                         first-come, first-served basis.</p>
                                 </div>
                             </div>
-
-                            <style>
-                                .event-card {
-                                    transition: 0.3s;
-
-                                    margin: auto;
-                                    border-radius: 15px;
-                                    overflow: hidden;
-                                    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-                                }
-
-                                .event-card:hover {
-                                    transform: scale(1.02);
-                                    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-                                }
-
-                                .event-card-header {
-                                    background: linear-gradient(45deg, #007bff, #00c6ff);
-                                    color: white;
-                                    padding: 15px;
-                                    text-align: center;
-                                }
-
-                                .event-card-header h5 {
-                                    margin-bottom: 5px;
-                                    font-weight: bold;
-                                }
-
-                                .event-card-body {
-                                    max-height: 400px;
-                                    overflow-y: auto;
-                                    padding: 15px;
-                                }
-
-                                .event-item {
-                                    display: flex;
-                                    align-items: center;
-                                    padding: 10px 15px;
-                                    transition: 0.3s;
-                                    border-bottom: 1px solid #ddd;
-                                }
-
-                                .event-item:hover {
-                                    background: #f8f9fa;
-                                    transform: scale(1.01);
-                                }
-
-                                .event-item .badge {
-                                    font-size: 14px;
-                                    padding: 8px 12px;
-
-                                    text-align: center;
-                                    font-weight: bold;
-                                    border-radius: 10px;
-                                }
-
-                                .event-footer {
-                                    background: linear-gradient(45deg, #ff6f61, #ff9068);
-                                    color: white;
-                                    padding: 12px;
-                                    text-align: center;
-                                    font-weight: bold;
-                                    cursor: pointer;
-                                    transition: 0.3s;
-                                    border-bottom-left-radius: 15px;
-                                    border-bottom-right-radius: 15px;
-                                }
-
-                                .event-footer:hover {
-                                    background: linear-gradient(45deg, #ff5733, #ff784f);
-                                    transform: scale(1.02);
-                                }
-                            </style>
 
                             <div class="card event-card">
                                 <div class="event-card-header">

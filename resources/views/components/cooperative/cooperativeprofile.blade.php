@@ -567,12 +567,21 @@
                                                         </tr>
 
                                                         <tr>
-                                                            <td class="fw-bold">Net Required Registration Fee:</td>
-                                                            <td id="net_required_reg_fee">
-                                                                {{ number_format($cooperative->net_required_reg_fee, 2) ?? 'N/A' }}
+                                                            <td class="fw-bold">Number of Entitled Votes:</td>
+                                                            <td id="no_of_entitled_votes">
+                                                                {{ $cooperative->no_of_entitled_votes ?? 'N/A' }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="fw-bold">Registration Date Paid:</td>
+                                                            <td>{{ $cooperative->registration_date_paid ?? 'N/A' }}
                                                             </td>
                                                         </tr>
-
+                                                        <tr>
+                                                            <td class="fw-bold">Total Registration Fee:</td>
+                                                            <td id="total_reg_fee">
+                                                                {{ number_format($cooperative->registration_fee * $cooperative->participants->count(), 2) ?? 'N/A' }}
+                                                            </td>
+                                                        </tr>
 
                                                         <tr>
                                                             <td class="fw-bold">Less Pre-Registration Fee:</td>
@@ -594,24 +603,13 @@
                                                             </td>
                                                         </tr>
 
-
-
                                                         <tr>
-                                                            <td class="fw-bold">Number of Entitled Votes:</td>
-                                                            <td id="no_of_entitled_votes">
-                                                                {{ $cooperative->no_of_entitled_votes ?? 'N/A' }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="fw-bold">Registration Date Paid:</td>
-                                                            <td>{{ $cooperative->registration_date_paid ?? 'N/A' }}
+                                                            <td class="fw-bold">Net Required Registration Fee:</td>
+                                                            <td id="net_required_reg_fee">
+                                                                {{ number_format($cooperative->net_required_reg_fee, 2) ?? 'N/A' }}
                                                             </td>
                                                         </tr>
-                                                        <tr>
-                                                            <td class="fw-bold">Total Registration Fee:</td>
-                                                            <td id="total_reg_fee">
-                                                                {{ number_format($cooperative->registration_fee * $cooperative->participants->count(), 2) ?? 'N/A' }}
-                                                            </td>
-                                                        </tr>
+                                                        
                                                         <tr>
                                                             <td class="fw-bold">Registration Fee Payable:</td>
                                                             <td id="reg_fee_payable">

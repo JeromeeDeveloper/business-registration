@@ -4,37 +4,6 @@
 <head>
     @include('layouts.adminheader')
 </head>
-<style>
-    /* Style the Prev and Next buttons */
-    #eventsCarousel .carousel-control-prev,
-    #eventsCarousel .carousel-control-next {
-        width: 40px;
-        height: 40px;
-        background-color: white;
-        border-radius: 50%;
-        top: 50%;
-        transform: translateY(-50%);
-        opacity: 1;
-        /* Optional: always visible */
-    }
-
-    #eventsCarousel .carousel-control-prev-icon,
-    #eventsCarousel .carousel-control-next-icon {
-        filter: invert(32%) sepia(93%) saturate(2115%) hue-rotate(203deg) brightness(90%) contrast(90%);
-        width: 20px;
-        height: 20px;
-    }
-
-    #eventsCarousel .carousel-control-prev {
-        left: -20px;
-        /* Adjust position if needed */
-    }
-
-    #eventsCarousel .carousel-control-next {
-        right: -20px;
-        /* Adjust position if needed */
-    }
-</style>
 
 <body>
     <div class="wrapper">
@@ -92,9 +61,6 @@
                                 </ul>
                             </div>
                         </li>
-
-
-
                         <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#user">
                                 <i class="fas fa-user"></i>
@@ -150,49 +116,40 @@
                 <!-- Navbar Header -->
                 <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
                     <div class="container-fluid">
-                        <nav
-                            class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
-                        </nav>
-                        <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
-                            <li class="nav-item topbar-user dropdown hidden-caret">
+                        <div class="d-flex flex-column flex-md-row align-items-center justify-content-between w-100">
+                            <div class="text-center text-md-start mb-2 mb-md-0">
+                                <p class="text-muted mb-0">
+                                    <span>Logged in as: <strong>{{ Auth::user()->name }}</strong></span>
+                                    @if ($cooperative)
+                                        <span class="d-none d-md-inline mx-2">|</span>
+                                        <span>Cooperative: <strong>{{ $cooperative->name }}</strong></span>
+                                    @else
+                                        <span class="d-none d-md-inline mx-2">|</span>
+                                        <span>No Cooperative Assigned</span>
+                                    @endif
+                                </p>
+                            </div>
 
-                                <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#"
-                                    aria-expanded="false">
-                                    <i class="fa fa-user"></i>
-                                    <span class="profile-username">
-                                        <span class="op-7">Hi,</span>
-                                        <span class="fw-bold" style="text-transform: capitalize;">
-                                            {{ Auth::user()->name }}
-                                        </span>
-
-                                    </span>
-                                </a>
-                                <ul class="dropdown-menu dropdown-user animated fadeIn">
-                                    <div class="dropdown-user-scroll scrollbar-outer">
+                            <ul class="navbar-nav topbar-nav align-items-center">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fa fa-user me-2"></i>
+                                        <span class="d-none d-md-inline">{{ Auth::user()->name }}</span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                        <li><h6 class="dropdown-header">{{ Auth::user()->email }}</h6></li>
+                                        <li><a class="dropdown-item" href="{{ route('participant.profile.user.edit') }}">My Profile</a></li>
+                                        <li><hr class="dropdown-divider"></li>
                                         <li>
-                                            <div class="user-box">
-                                                <div class="u-text">
-                                                    <h4> {{ Auth::user()->name }}</h4>
-                                                    <p class="text-muted"> {{ Auth::user()->email }}</p>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item"
-                                                href="{{ route('participant.profile.user.edit') }}">My Profile</a>
-                                            <div class="dropdown-divider"></div>
-                                            <form action="{{ route('logout') }}" method="POST" id="logout-form"
-                                                style="display: none;">
+                                            <form action="{{ route('logout') }}" method="POST" id="logout-form">
                                                 @csrf
+                                                <button type="submit" class="dropdown-item">Logout</button>
                                             </form>
-                                            <a class="dropdown-item" href="#"
-                                                onclick="document.getElementById('logout-form').submit();">Logout</a>
                                         </li>
-                                    </div>
-                                </ul>
-                            </li>
-                        </ul>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </nav>
                 <!-- End Navbar -->
@@ -204,23 +161,12 @@
                             <h3 class="fw-bold mb-3">
                                 Participant Dashboard
                             </h3>
-                            <p
-                                class="text-muted text-nowrap d-flex flex-column flex-md-row align-items-center justify-content-center">
-                                <span>Logged in as: <strong>{{ Auth::user()->name }}</strong></span>
 
-                                @if ($cooperative)
-                                    <span class="mx-2 d-none d-md-inline">|</span>
-                                    <span>Cooperative: <strong>{{ $cooperative->name }}</strong></span>
-                                @else
-                                    <span class="mx-2 d-none d-md-inline">|</span>
-                                    <span>No Cooperative Assigned</span>
-                                @endif
-                            </p>
                         </div>
                         <div class="ms-md-auto py-2 py-md-0 p-6">
 
-                            <a href="#qr_here" class="btn btn-primary btn-round d-inline-flex align-items-center">
-                                <i class="fa fa-arrow-down me-2"></i> QR
+                            <a href="#qr_here" class="augment-scroll-btn" aria-label="Scroll to QR Code">
+                                <div class="augment-scroll-arrow"></div>
                             </a>
 
                         </div>
@@ -611,3 +557,26 @@
 </body>
 
 </html>
+
+<script>
+document.querySelector('.augment-scroll-btn').addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+
+    target.scrollIntoView({
+        behavior: 'smooth'
+    });
+
+    // Add animation class to target
+    target.classList.add('augment-scroll-reveal');
+
+    // Remove animation class after it completes
+    setTimeout(() => {
+        target.classList.remove('augment-scroll-reveal');
+    }, 800);
+});
+</script>
+
+
+
+
