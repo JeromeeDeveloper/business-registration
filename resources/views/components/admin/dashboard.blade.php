@@ -285,12 +285,17 @@
                                                     Region
                                                 </a>
 
-
                                                 <a href="{{ route('admin.reports.tshirt_sizes') }}"
+                                                class="list-group-item list-group-item-action py-3 fw-semibold"
+                                                data-report-type="tshirt_sizes">
+                                                <i class="fas fa-tshirt me-2"></i> T-Shirt Sizes (All or Per
+                                                Congress)
+                                                </a>
+
+                                                <a href="{{ route('admin.reports.tshirt_sizes_list') }}"
                                                     class="list-group-item list-group-item-action py-3 fw-semibold"
-                                                    data-report-type="tshirt_sizes">
-                                                    <i class="fas fa-tshirt me-2"></i> T-Shirt Sizes (All or Per
-                                                    Congress)
+                                                    data-report-type="tshirt_sizeslist">
+                                                    <i class="fas fa-tshirt me-2"></i> T-Shirt Sizes List (All Participants)
                                                 </a>
 
 

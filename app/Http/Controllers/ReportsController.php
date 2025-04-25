@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\DB;
 use App\Exports\ParticipantsExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\DocumentsStatusExport;
+use App\Exports\TshirtSizesExportlist;
 use App\Exports\CoopRegistrationExport;
 use App\Exports\SummaryDelegatesExport;
 use App\Exports\CooperativeReportExport;
@@ -298,6 +299,8 @@ public function generatePDF(Request $request)
                     return Excel::download(new SummaryDelegatesExport(), 'cooperative_per_region.xlsx');
                 case 'tshirt_sizes':
                     return Excel::download(new TshirtSizesExport(), 'tshirt_sizes.xlsx');
+                case 'tshirt_sizeslist':
+                        return Excel::download(new TshirtSizesExportlist(), 'tshirt_sizeslist.xlsx');
                 case 'coop_registration':
                     return Excel::download(new CoopRegistrationExport(), 'coop_registration.xlsx');
                     case 'participants_list':
@@ -447,6 +450,17 @@ public function tshirt()
 
     return view('components.admin.reports.tshirt_sizes', compact('tshirtSizes'));
 }
+
+public function tshirtlist()
+{
+    // Fetch cooperatives with their participants
+    $cooperatives = Cooperative::with(['participants' => function ($query) {
+        $query->select('participant_id', 'coop_id', 'first_name', 'middle_name', 'last_name', 'gender', 'tshirt_size');
+    }])->select('coop_id', 'name')->get();
+
+    return view('components.admin.reports.tshirt_sizeslist', compact('cooperatives'));
+}
+
 
 
 

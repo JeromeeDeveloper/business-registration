@@ -70,8 +70,12 @@ Route::middleware([AdminOrSupportMiddleware::class])->group(function () {
         ->name('admin.reports.documents_status');
 
     Route::get('/admin/reports/summary-delegates', [ReportsController::class, 'summaryDelegates'])->name('admin.reports.summary_delegates');
+
     Route::get('/admin/reports/tshirt-sizes', [ReportsController::class, 'tshirt'])
         ->name('admin.reports.tshirt_sizes');
+
+    Route::get('/admin/reports/tshirt-sizes/list', [ReportsController::class, 'tshirtlist'])
+        ->name('admin.reports.tshirt_sizes_list');
 
 
     Route::get('/admin/reports', [ReportsController::class, 'generateReports'])->name('admin.reports');
