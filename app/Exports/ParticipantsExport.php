@@ -13,7 +13,10 @@ class ParticipantsExport implements FromCollection, WithHeadings
         return Participant::selectRaw("
                 CONCAT(participants.first_name, ' ', IFNULL(CONCAT(participants.middle_name, ' '), ''), participants.last_name) as full_name,
                 participants.reference_number,
-                IFNULL(cooperatives.name, 'N/A') as cooperative_name
+                IFNULL(cooperatives.name, 'N/A') as cooperative_name,
+                participants.phone_number,
+                participants.region,
+                participants.email
             ")
             ->leftJoin('cooperatives', 'participants.coop_id', '=', 'cooperatives.coop_id')
             ->where('participants.delegate_type', 'Voting')
@@ -30,6 +33,9 @@ class ParticipantsExport implements FromCollection, WithHeadings
             'Full Name',
             'Access Key',
             'Cooperative Name',
+            'Phone Number',
+            'Region',
+            'Email',
         ];
     }
 }

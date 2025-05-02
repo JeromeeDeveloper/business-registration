@@ -85,7 +85,9 @@
                     <th>Full Name</th>
                     <th>Access Key</th>
                     <th>Cooperative</th>
-                    {{-- <th>Phone Number</th> --}}
+                    <th>Phone Number</th>
+                    <th>Email</th>
+                    <th>Region</th>
                 </tr>
             </thead>
             <tbody class="bg-light">
@@ -97,7 +99,9 @@
                     </td>
                     <td>{{ $participant->reference_number }}</td>
                     <td>{{ $participant->cooperative->name }}</td>
-                    {{-- <td>{{ $participant->phone_number }}</td> --}}
+                    <td>{{ $participant->phone_number }}</td>
+                    <td>{{ $participant->email }}</td>
+                    <td>{{ $participant->region }}</td>
 
                 </tr>
                 @endforeach
