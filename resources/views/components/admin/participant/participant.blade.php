@@ -238,11 +238,11 @@
                                                     onclick="location.href='{{ route('participantadd') }}'">
                                                     <i class="fa fa-plus"></i>
                                                 </button>
-                                                <button type="button" onclick="printAttendance()"
+                                                {{-- <button type="button" onclick="printAllParticipantIDs()"
                                                     class="btn btn-primary d-flex align-items-center justify-content-center shadow-sm"
-                                                    data-bs-toggle="tooltip" title="Print Participant List">
-                                                    <i class="fa fa-print"></i>
-                                                </button>
+                                                    data-bs-toggle="tooltip" title="Print All Participant IDs">
+                                                    <i class="fa fa-id-card"></i>
+                                                </button> --}}
                                                 <button type="button" class="btn btn-primary text-white"
                                                     data-bs-toggle="tooltip"
                                                     title="Send Notification to all Participants"
@@ -332,22 +332,24 @@
                                                             <div class="form-button-action no-print">
 
                                                                 <button
-                                                                    class="btn btn-link btn-success btn-lg no-print"
-                                                                    data-bs-toggle="tooltip"
-                                                                    title="Generate & Print ID"
-                                                                    onclick="printParticipantID(
+                                                                class="btn btn-link btn-success btn-lg no-print"
+                                                                data-bs-toggle="tooltip"
+                                                                title="Generate & Print ID"
+                                                                onclick="printParticipantID(
                                                                     {{ $participant->participant_id }},
-                                                                    '{{ $participant->first_name }}',
                                                                     '{{ $participant->nickname }}',
+                                                                    '{{ $participant->first_name }}',
                                                                     '{{ $participant->last_name }}',
                                                                     '{{ $participant->middle_name }}',
                                                                     '{{ $participant->designation ?? 'N/A' }}',
                                                                     '{{ $participant->reference_number ?? 'N/A' }}',
                                                                     '{{ optional($participant->cooperative)->name ?? 'N/A' }}',
-                                                                    'https://api.qrserver.com/v1/create-qr-code/?data={{ urlencode(route('adminDashboard', ['participant_id' => $participant->participant_id])) }}&size=200x200'
+                                                                    'https://api.qrserver.com/v1/create-qr-code/?data={{ urlencode(route('adminDashboard', ['participant_id' => $participant->participant_id])) }}&size=200x200',
+                                                                    '{{ $participant->is_msp_officer }}'
                                                                 )">
-                                                                    <i class="fa fa-id-card"></i>
-                                                                </button>
+                                                                <i class="fa fa-id-card"></i>
+                                                            </button>
+
 
                                                                 @if ($participant->user && $participant->user->user_id)
                                                                     <a href="javascript:void(0);"
@@ -506,65 +508,93 @@
         });
     </script>
 
-    <script>
-        function printParticipantID(id, nickname, firstName, lastName, middlename, designation, reference_number,
-            cooperative, qrCode) {
-            let printWindow = window.open('', '_blank', 'width=400,height=600');
-            printWindow.document.write(`
-                <html>
-                <head>
-                    <title>Print Participant ID</title>
-                    <style>
-                        body {
-                            font-family: Arial, sans-serif;
-                            text-align: center;
-                            margin: 20px;
-                            display: flex;
-                            flex-direction: column;
-                            justify-content: center;
-                            align-items: center;
-                        }
-                        .id-card {
-                            width: 300px;
-                            height: 450px;
-                            border: 2px solid black;
-                            padding: 20px;
-                            border-radius: 10px;
-                            display: flex;
-                            flex-direction: column;
-                            justify-content: center;
-                            align-items: center;
-                            text-align: center;
-                        }
-                        .id-card img {
-                            width: 100px;
-                            height: 100px;
-                        }
-                    </style>
-                </head>
-                <body>
-                    <div class="id-card">
-                       <h2>${nickname.toUpperCase()}</h2>
-                       <p><strong>${firstName.toUpperCase()}, ${lastName.toUpperCase()} ${middlename ? middlename.charAt(0).toUpperCase() + '.' : ''}</strong></p>
+<script>
+    function printParticipantID(id, nickname, firstName, lastName, middlename, designation, reference_number,
+        cooperative, qrCode, is_msp_officer) {
 
-                    <p><strong><em>${cooperative.toUpperCase()}</em></strong></p>
+        const backgroundUrl = is_msp_officer === 'Yes' ? '/img/2.png' : '/img/1.png';
 
-                        ${qrCode ? `<img src="${qrCode}" alt="QR Code">` : `<p>No QR Code</p>`}
-                         <p>${reference_number}</p>
-                          <h2>${id}</h2>
-                    </div>
-                    <script>
-                        setTimeout(() => {
-                            window.print();
-                            setTimeout(() => { window.close(); }, 500);
-                        }, 500);
-                    <\/script>
-                </body>
-                </html>
-            `);
-            printWindow.document.close();
-        }
-    </script>
+        let printWindow = window.open('', '_blank', 'width=400,height=600');
+        printWindow.document.write(`
+    <html>
+    <head>
+        <title>Print Participant ID</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                text-align: center;
+                margin: 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+            .id-card {
+                width: 250px;
+                height: 400px;
+                border: 2px solid black;
+                padding: 20px;
+                border-radius: 10px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                background-image: url('${backgroundUrl}');
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+            }
+            .id-card h2 {
+                margin: 1px 0;
+                font-size: 18px;
+            }
+            .id-card p {
+                margin: 10px;
+                font-size: 14px;
+            }
+            .id-card img {
+                width: 100px;
+                height: 100px;
+            }
+            .footer {
+                position: relative;
+                bottom: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="id-card">
+            <h2>${nickname.toUpperCase()}</h2>
+            <p><strong>${firstName.toUpperCase()}, ${lastName.toUpperCase()} ${middlename ? middlename.charAt(0).toUpperCase() + '.' : ''}</strong></p>
+            <p><strong><em>${cooperative.toUpperCase()}</em></strong></p>
+            ${qrCode ? `<img id="qrImage" src="${qrCode}" alt="QR Code">` : `<p>No QR Code</p>`}
+            <p class="footer">${reference_number}</p>
+        </div>
+        <script>
+            const qrImage = document.getElementById('qrImage');
+            if (qrImage) {
+                qrImage.onload = function() {
+                    window.print();
+                    setTimeout(() => window.close(), 500);
+                };
+                qrImage.onerror = function() {
+                    console.error('QR image failed to load');
+                    window.print();
+                    setTimeout(() => window.close(), 500);
+                };
+            } else {
+                window.print();
+                setTimeout(() => window.close(), 500);
+            }
+        <\/script>
+    </body>
+    </html>
+    `);
+        printWindow.document.close();
+    }
+</script>
+
 
 
     <script>
