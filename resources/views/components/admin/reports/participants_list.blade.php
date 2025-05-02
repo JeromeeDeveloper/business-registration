@@ -101,7 +101,7 @@
                     <td>{{ $participant->cooperative->name }}</td>
                     <td>{{ $participant->phone_number }}</td>
                     <td>{{ $participant->email }}</td>
-                    <td>{{ $participant->region }}</td>
+                    <td>{{ $participant->cooperative->region }}</td>
 
                 </tr>
                 @endforeach

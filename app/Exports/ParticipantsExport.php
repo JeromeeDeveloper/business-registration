@@ -15,7 +15,7 @@ class ParticipantsExport implements FromCollection, WithHeadings
                 participants.reference_number,
                 IFNULL(cooperatives.name, 'N/A') as cooperative_name,
                 participants.phone_number,
-                participants.region,
+                IFNULL(cooperatives.region, 'N/A') as region,
                 participants.email
             ")
             ->leftJoin('cooperatives', 'participants.coop_id', '=', 'cooperatives.coop_id')
