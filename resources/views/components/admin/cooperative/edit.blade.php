@@ -626,7 +626,7 @@
                                                         <label for="cetf_remittance">CETF Remittance</label>
                                                         <input type="number" class="form-control"
                                                             name="cetf_remittance" id="cetf_remittance"
-                                                            id="cetf_remittance" value="{{ $coop->cetf_remittance }}"
+                                                            value="{{ $coop->cetf_remittance }}"
                                                             placeholder="Enter CETF Remittance" step="0.01">
                                                     </div>
 
@@ -634,7 +634,7 @@
                                                         <label for="additional_cetf">Additional CETF</label>
                                                         <input type="number" class="form-control"
                                                             name="additional_cetf" id="additional_cetf"
-                                                            id="cetf_remittance" value="{{ $coop->additional_cetf }}"
+                                                            value="{{ $coop->additional_cetf }}"
                                                             placeholder="Enter Additional CETF" step="0.01">
                                                     </div>
 
@@ -642,7 +642,6 @@
                                                         <label for="cetf_undertaking">CETF Undertaking</label>
                                                         <input type="text" class="form-control"
                                                             name="cetf_undertaking" id="cetf_undertaking"
-                                                            id="cetf_undertaking"
                                                             value="{{ $coop->cetf_undertaking }}"
                                                             placeholder="Enter CETF Undertaking" step="0.01">
                                                     </div>
@@ -651,7 +650,6 @@
                                                         <label for="total_remittance">Total Remittance</label>
                                                         <input type="number" class="form-control"
                                                             name="total_remittance" id="total_remittance"
-                                                            id="total_remittance"
                                                             value="{{ $coop->total_remittance }}"
                                                             placeholder="Enter Total Remittance" readonly>
                                                     </div>
@@ -765,11 +763,12 @@
                                                             <label>Free Officer Pax:</label>
                                                             <div class="input-group">
                                                                 <input type="number"
-                                                                       class="form-control"
-                                                                       name="free_migs_pax"
-                                                                       id="free_migs_pax"
-                                                                       min="0"
-                                                                       value="{{ old('free_migs_pax', $coop->free_migs_pax ? $coop->free_migs_pax : 0) }}">
+                                                                class="form-control"
+                                                                name="free_migs_pax"
+                                                                id="free_migs_pax"
+                                                                min="0"
+                                                                value="{{ old('free_migs_pax', (int) ($coop->free_migs_pax ?? 0)) }}">
+
                                                                 <span class="input-group-text">Pax</span>
                                                             </div>
                                                             <small class="text-muted">Amount per pax: ₱4,500</small>
@@ -1343,7 +1342,7 @@
             let numParticipants = parseInt(document.getElementById('num_participants').value) || 0;
             let preregPayment = parseFloat(document.getElementById('less_prereg_payment').value) || 0;
             let cetfBalance = parseFloat(document.getElementById('less_cetf_balance').value) || 0;
-            let cetfRemittance = parseFloat(document.getElementById('total_remittance').value) || 0;
+            let totalRemittance = parseFloat(document.getElementById('total_remittance').value) || 0;
             // let totalRemittance = parseFloat(document.getElementById('total_remittance').value) || 0;
             // let totalRemittance = document.getElementById('total_remittance');
 
@@ -1354,7 +1353,7 @@
             halfBasedCetf.disabled = true;
 
             // Calculate how many free pax based on every 100k remittance
-            let free100kCount = Math.floor(cetfRemittance / 100000);
+            let free100kCount = Math.floor(totalRemittance / 100000);
 
             // Update checkbox state and label text
             if (free100kCetf) {
@@ -1387,7 +1386,7 @@
                 freeAmount += free100kCount * 4500;
             }
 
-           
+
             if (halfBasedCetf.checked) {
                 freeAmount += 2250;
             }
@@ -1407,7 +1406,7 @@
         // Event Listeners
         let fields = [
             'registration_fee', 'num_participants', 'less_prereg_payment', 'less_cetf_balance',
-            'free_2pax_migs', 'free_migs_pax', 'free_100k_cetf', 'half_based_cetf', 'cetf_remittance'
+            'free_2pax_migs', 'free_migs_pax', 'free_100k_cetf', 'half_based_cetf', 'cetf_remittance', 'total_remittance'
         ];
 
         fields.forEach(id => {
@@ -1422,8 +1421,6 @@
         calculateFees();
     });
 </script>
-
-
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -1441,6 +1438,7 @@
                 let total = (remittance + additional + undertaking).toFixed(2);
 
                 totalRemittance.value = total;
+                totalRemittance.dispatchEvent(new Event('input'));
                 updateFullCetfRemitted(parseFloat(total));
             }
 
