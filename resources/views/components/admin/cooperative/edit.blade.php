@@ -1343,7 +1343,9 @@
             let numParticipants = parseInt(document.getElementById('num_participants').value) || 0;
             let preregPayment = parseFloat(document.getElementById('less_prereg_payment').value) || 0;
             let cetfBalance = parseFloat(document.getElementById('less_cetf_balance').value) || 0;
-            let cetfRemittance = parseFloat(document.getElementById('cetf_remittance').value) || 0;
+            let cetfRemittance = parseFloat(document.getElementById('total_remittance').value) || 0;
+            // let totalRemittance = parseFloat(document.getElementById('total_remittance').value) || 0;
+            // let totalRemittance = document.getElementById('total_remittance');
 
             let free100kCetf = document.getElementById('free_100k_cetf');
             let halfBasedCetf = document.getElementById('half_based_cetf');
@@ -1385,9 +1387,7 @@
                 freeAmount += free100kCount * 4500;
             }
 
-            if (free100kCetf.checked && free100kCount > 0) {
-                freeAmount += free100kCount * 4500;
-            }
+           
             if (halfBasedCetf.checked) {
                 freeAmount += 2250;
             }

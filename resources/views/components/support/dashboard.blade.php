@@ -741,7 +741,28 @@
 
 
                             <div class="card card-round shadow-lg">
-                                <h3 class="p-4 text-center text-white bg-primary rounded-top">Attendance Status</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                
+
+
                                 <!-- Title -->
 
                                 <div class="card-body p-4">
