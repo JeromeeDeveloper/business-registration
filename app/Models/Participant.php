@@ -26,13 +26,8 @@ class Participant extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id'); // A participant belongs to one user
+        return $this->belongsTo(User::class, 'user_id'); 
     }
-
-    // public function uploadedDocuments()
-    // {
-    //     return $this->hasMany(UploadedDocument::class, 'participant_id');
-    // }
 
     public function gaRegistrations()
 {

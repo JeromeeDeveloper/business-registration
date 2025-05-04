@@ -5,15 +5,17 @@ namespace App\Http\Controllers;
 use Log;
 use ZipArchive;
 use Carbon\Carbon;
+use App\Models\Event;
 use App\Models\Cooperative;
 use App\Models\Participant;
 use Illuminate\Http\Request;
 use App\Exports\ReportsExport;
 use App\Models\GARegistration;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\EventParticipant;
+// use Barryvdh\DomPDF\Facade as PDF;
 use App\Models\UploadedDocument;
 use App\Exports\CoopStatusExport;
-// use Barryvdh\DomPDF\Facade as PDF;
 use App\Exports\TshirtSizesExport;
 use Illuminate\Support\Facades\DB;
 use App\Exports\ParticipantsExport;
@@ -305,6 +307,8 @@ public function generatePDF(Request $request)
                     return Excel::download(new CoopRegistrationExport(), 'coop_registration.xlsx');
                     case 'participants_list':
                         return Excel::download(new ParticipantsExport(), 'voting_list.xlsx');
+                        case 'participants_list_congress':
+                            return Excel::download(new ParticipantsExportCongress(), 'congresses.xlsx');
                 case 'coop_status':
                     return Excel::download(new CoopStatusExport(), 'coop_status.xlsx');
                 default:
@@ -330,6 +334,37 @@ public function generatePDF(Request $request)
 
     return view('components.admin.reports.participants_list', compact('participants'));
 }
+
+public function participantsListcongress()
+{
+    $events = Event::with(['participants.cooperative'])->get();
+
+    $eventParticipants = $events->mapWithKeys(function ($event) {
+        $participants = $event->participants->map(function ($participant) {
+            return [
+                'Full Name' => strtoupper(trim(
+                    $participant->first_name . ' ' .
+                    ($participant->middle_name && $participant->middle_name !== 'N/A' ? $participant->middle_name . ' ' : '') .
+                    $participant->last_name
+                )),
+                'Delegate Type' => $participant->delegate_type,
+                'Cooperative' => optional($participant->cooperative)->name ?? 'N/A',
+                'Region' => optional($participant->cooperative)->region ?? 'N/A',
+                'Access Key' => $participant->reference_number,
+                'Phone Number' => $participant->phone_number,
+                'Email' => $participant->email,
+            ];
+        });
+
+        return [$event->title => $participants];
+    });
+
+    return view('components.admin.reports.participants_list_congress', [
+        'eventParticipants' => $eventParticipants,
+        'events' => $events,
+    ]);
+}
+
 
 
 public function coopStatusList(Request $request)

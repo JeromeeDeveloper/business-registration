@@ -306,15 +306,20 @@
                                                     Breakdown
                                                 </a>
 
-
-
                                                 <a href="{{ route('admin.reports.participants_list') }}"
                                                     class="list-group-item list-group-item-action py-3 fw-semibold"
                                                     data-report-type="participants_list">
                                                     <i class="fas fa-users me-2"></i> List of Voting Delegates
                                                 </a>
 
+                                                <a href="{{ route('admin.reports.participants_list_congress') }}"
+                                                class="list-group-item list-group-item-action py-3 fw-semibold"
+                                                data-report-type="participants_list_congress">
+                                                <i class="fas fa-users me-2"></i> List of Registered Delagate Congresses
+                                            </a>
+
                                                 <div class="d-flex gap-3">
+
                                                     <a href="{{ route('admin.reports.coop_status_list') }}"
                                                         class="list-group-item list-group-item-action py-3 fw-semibold"
                                                         data-report-type="coop_status">

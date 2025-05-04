@@ -98,6 +98,9 @@ Route::middleware([AdminOrSupportMiddleware::class])->group(function () {
 
     Route::get('/admin/reports/participants-list', [ReportsController::class, 'participantsList'])->name('admin.reports.participants_list');
     Route::put('/Admin/Document/UpdateStatus/{document_id}', [CooperativeController::class, 'updateDocumentStatus'])->name('admin.documents.updateStatus');
+
+    Route::get('/admin/reports/participants-list-congress', [ReportsController::class, 'participantsListcongress'])->name('admin.reports.participants_list_congress');
+
     // In your web.php (routes file)
     // Route::get('/get-participant-count/{coop_id}', [YourController::class, 'getParticipantCount']);
 });
