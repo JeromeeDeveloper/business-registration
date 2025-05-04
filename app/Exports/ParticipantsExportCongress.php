@@ -27,9 +27,18 @@ class ParticipantsExportCongress implements FromCollection, WithHeadings
                 $query->where('membership_status', 'Migs')
                       ->where('registration_status', 'Fully Registered');
             })
-            ->groupBy('participants.participant_id') // Ensures participants are grouped
+            ->groupBy('participants.participant_id',
+                      'participants.first_name',
+                      'participants.middle_name',
+                      'participants.last_name',
+                      'participants.reference_number',
+                      'cooperatives.name',
+                      'participants.phone_number',
+                      'cooperatives.region',
+                      'participants.email') // Include all non-aggregated columns
             ->get();
     }
+
 
     public function headings(): array
     {
