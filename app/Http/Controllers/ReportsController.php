@@ -27,6 +27,7 @@ use App\Exports\SummaryDelegatesExport;
 use App\Exports\CooperativeReportExport;
 use Illuminate\Support\Facades\Response;
 use App\Exports\FilteredCoopStatusExport;
+use App\Exports\ParticipantsExportCongress;
 
 
 class ReportsController extends Controller
