@@ -516,6 +516,13 @@ public function tshirtlist()
     return view('components.admin.reports.documents_status', compact('documentsByRegion'));
 }
 
+public function generateIds()
+{
+    $participants = Participant::with('cooperative')->get();
+
+    return view('components.admin.reports.generate_ids', compact('participants'));
+}
+
 
 
 public function exportDocumentsStatus()

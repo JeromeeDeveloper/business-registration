@@ -216,7 +216,21 @@
                                                 </h6>
                                                 <p class="mb-0 text-dark">
                                                     Participant registration will be <strong>disabled on May 22</strong>, and editing will be <strong>disabled on May 13</strong>. Additionally, registration will be <strong>closed once 1000 participants</strong> have been reached. Current total: <strong>{{ $totalParticipantsforall }}</strong>.
+                                                    <span id="cutoff-message" class="mt-2 text-danger fw-bold"></span>
                                                 </p>
+
+                                                <script>
+                                                    const cutoffDate = '2025-05-10';  // Example cutoff date (YYYY-MM-DD)
+                                                    const cutoffMessage = document.getElementById('cutoff-message');
+                                                    const today = new Date().toISOString().split('T')[0];
+
+                                                    if (today >= cutoffDate) {
+                                                        cutoffMessage.textContent = ` ⚠️ Participant registration and editing are now closed due to the cutoff date of ${cutoffDate}.`;
+                                                    } else {
+                                                        cutoffMessage.textContent = ` ⚠️ The cutoff date for t-shirt registration is ${cutoffDate}.`;
+                                                    }
+                                                </script>
+
                                             </div>
                                         </div>
                                     </div>

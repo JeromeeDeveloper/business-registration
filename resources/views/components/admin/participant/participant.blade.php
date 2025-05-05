@@ -244,11 +244,13 @@
                                                     <i class="fa fa-id-card"></i>
                                                 </button> --}}
                                                 <button type="button" class="btn btn-primary text-white"
-                                                    data-bs-toggle="tooltip"
-                                                    title="Send Notification to all Participants"
-                                                    onclick="location.href='{{ route('participantadd') }}'">
-                                                    <i class="fa fa-envelope"></i>
-                                                </button>
+                                                data-bs-toggle="tooltip"
+                                                title="Print All Participant IDs"
+                                                onclick="window.open('{{ route('generateids') }}', '_blank')">
+                                            <i class="fa fa-id-card"></i>
+                                        </button>
+
+
                                             </div>
                                         </form>
                                     </div>
@@ -545,12 +547,12 @@
                 background-position: center;
                 background-repeat: no-repeat;
             }
-            .id-card h2 {
+             .id-card h2 {
                 margin: 1px 0;
                 font-size: 18px;
             }
             .id-card p {
-                margin: 10px;
+                margin: 2px;
                 font-size: 14px;
             }
             .id-card img {
@@ -559,7 +561,7 @@
             }
             .footer {
                 position: relative;
-                bottom: 10px;
+                bottom: 2px;
             }
         </style>
     </head>

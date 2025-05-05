@@ -101,6 +101,7 @@ Route::middleware([AdminOrSupportMiddleware::class])->group(function () {
 
     Route::get('/admin/reports/participants-list-congress', [ReportsController::class, 'participantsListcongress'])->name('admin.reports.participants_list_congress');
 
+    Route::get('/reports/ids', [ReportsController::class, 'generateIds'])->name('generateids');
     // In your web.php (routes file)
     // Route::get('/get-participant-count/{coop_id}', [YourController::class, 'getParticipantCount']);
 });
