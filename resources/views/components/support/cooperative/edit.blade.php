@@ -751,14 +751,21 @@
                                                                 2 Pax for MIGS</label>
                                                         </div>
 
+                                                        @php
+                                                        $freePaxCount = isset($cetfRemittance) && $cetfRemittance > 0 ? floor($cetfRemittance / 100000) : 'N/A';
+                                                    @endphp
+
                                                         <div class="form-check">
                                                             <input class="form-check-input" type="checkbox"
                                                                 name="free_100k_cetf" id="free_100k_cetf"
                                                                 value="1" {{ $free100kCETF ? 'checked' : '' }}
                                                                 disabled>
-                                                            <label class="form-check-label" for="free_100k_cetf">1
-                                                                Pax
-                                                                Free for every 100K CETF</label>
+                                                             <label class="form-check-label" for="free_100k_cetf">
+                                                            1 Pax Free for every 100K CETF
+                                                            <span id="free_100k_cetf_label" class="text-primary fw-bold ms-2">
+                                                                {{ is_numeric($freePaxCount) ? $freePaxCount . ' Pax' : 'N/A' }}
+                                                            </span>
+                                                        </label>
                                                         </div>
 
                                                         <div class="form-check">
@@ -774,13 +781,19 @@
                                                         <div class="form-group">
                                                             <label>Checklist Manual:</label>
 
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox"
-                                                                       name="free_migs_pax" id="free_migs_pax"
-                                                                       value="4500"
-                                                                       {{ old('free_migs_pax', $coop->free_migs_pax) == 4500 ? 'checked' : '' }}
-                                                                       disabled>
-                                                                <label class="form-check-label" for="free_migs_pax">1 Pax Free Officer</label>
+                                                            <div class="form-group">
+                                                                <label>Free Officer Pax:</label>
+                                                                <div class="input-group">
+                                                                    <input type="number"
+                                                                    class="form-control"
+                                                                    name="free_migs_pax"
+                                                                    id="free_migs_pax"
+                                                                    min="0"
+                                                                    value="{{ old('free_migs_pax', (int) ($coop->free_migs_pax ?? 0)) }}" disabled>
+
+                                                                    <span class="input-group-text">Pax</span>
+                                                                </div>
+                                                                <small class="text-muted">Amount per pax: ₱4,500</small>
                                                             </div>
 
                                                         </div>
