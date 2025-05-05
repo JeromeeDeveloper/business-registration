@@ -1215,8 +1215,13 @@ class DashboardController extends Controller
     // Get documents ONLY for this cooperative
     $documents = UploadedDocument::where('coop_id', $coop->coop_id)->get();
 
+    $hasFinancialStatement = UploadedDocument::where('coop_id', $coop->coop_id)
+            ->where('document_type', 'Financial Statement')
+            ->where('status', 'Approved')
+            ->exists();
+
     // Return the view with related data
-    return view('components.admin.cooperative.view', compact('coop', 'documents'));
+    return view('components.admin.cooperative.view', compact('coop', 'documents', 'hasFinancialStatement'));
 }
 
 

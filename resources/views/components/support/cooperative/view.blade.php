@@ -364,7 +364,7 @@
                                             <div class="col-md-6 col-lg-4">
                                                 <div class="form-group">
                                                     <label for="fs_status">Audited Financial Statement Status</label>
-                                                    <p>{{ $coop->fs_status }}</p>
+                                                    <p>{{ $hasFinancialStatement ? 'Yes' : 'No' }}</p>
                                                 </div>
                                             </div>
 

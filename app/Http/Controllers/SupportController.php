@@ -308,11 +308,16 @@ class SupportController extends Controller
         // Find the cooperative by ID
         $coop = Cooperative::findOrFail($id);
 
+        $hasFinancialStatement = UploadedDocument::where('coop_id', $coop->coop_id)
+        ->where('document_type', 'Financial Statement')
+        ->where('status', 'Approved')
+        ->exists();
+
         // Get documents ONLY for this cooperative
         $documents = UploadedDocument::where('coop_id', $coop->coop_id)->get();
 
         // Pass the cooperative data to the view
-        return view('components.support.cooperative.view', compact('coop', 'documents'));
+        return view('components.support.cooperative.view', compact('coop', 'documents', 'hasFinancialStatement'));
     }
 
     public function viewsupportDocuments($coop_id = null)

@@ -3,16 +3,6 @@
 <head>
     <title>Print All IDs</title>
     <style>
-         body {
-                font-family: Arial, sans-serif;
-                text-align: center;
-                margin: 0;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-            }
-
         .page {
             width: 100vw;
             height: 100vh;
@@ -26,38 +16,44 @@
             page-break-after: auto;
         }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
         .id-card {
             width: 250px;
             height: 400px;
-            border: 2px solid black;
-            padding: 20px;
-            border-radius: 10px;
+            margin: -30px auto 0;
+            background-image: url('${backgroundUrl}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            box-sizing: border-box;
         }
-            .id-card h2 {
-                margin: 1px 0;
-                font-size: 18px;
-            }
-            .id-card p {
-                margin: 2px;
-                font-size: 14px;
-            }
-            .id-card img {
-                width: 100px;
-                height: 100px;
-            }
-            .footer {
-                position: relative;
-                bottom: 2px;
-            }
+
+        .id-card h2 {
+            font-size: 18px;
+        }
+
+        .id-card p {
+            font-size: 14px;
+        }
+
+        .id-card img {
+            width: 100px;
+            height: 100px;
+        }
 
         @media print {
             .page {
