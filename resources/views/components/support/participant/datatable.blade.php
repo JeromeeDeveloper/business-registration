@@ -272,6 +272,14 @@
                                           <button type="button" onclick="printAttendance()" class="btn btn-primary text-white" data-bs-toggle="tooltip" title="Print Participant List">
                                             <i class="fa fa-print"></i>
                                           </button>
+
+                                          <button type="button" class="btn btn-primary text-white"
+                                          data-bs-toggle="tooltip"
+                                          title="Print All Participant IDs"
+                                          onclick="window.open('{{ route('generateids') }}', '_blank')">
+                                      <i class="fa fa-id-card"></i>
+                                  </button>
+
                                         </form>
                                       </div>
 
@@ -527,65 +535,92 @@
         });
     </script>
 
-    <script>
-        function printParticipantID(id, nickname, firstName, lastName, middlename, designation, reference_number,
-            cooperative, qrCode) {
-            let printWindow = window.open('', '_blank', 'width=400,height=600');
-            printWindow.document.write(`
-                <html>
-                <head>
-                    <title>Print Participant ID</title>
-                    <style>
-                        body {
-                            font-family: Arial, sans-serif;
-                            text-align: center;
-                            margin: 20px;
-                            display: flex;
-                            flex-direction: column;
-                            justify-content: center;
-                            align-items: center;
-                        }
-                        .id-card {
-                            width: 300px;
-                            height: 450px;
-                            border: 2px solid black;
-                            padding: 20px;
-                            border-radius: 10px;
-                            display: flex;
-                            flex-direction: column;
-                            justify-content: center;
-                            align-items: center;
-                            text-align: center;
-                        }
-                        .id-card img {
-                            width: 100px;
-                            height: 100px;
-                        }
-                    </style>
-                </head>
-                <body>
-                    <div class="id-card">
-                       <h2>${nickname.toUpperCase()}</h2>
-                       <p><strong>${firstName.toUpperCase()}, ${lastName.toUpperCase()} ${middlename ? middlename.charAt(0).toUpperCase() + '.' : ''}</strong></p>
+<script>
+    function printParticipantID(id, nickname, firstName, lastName, middlename, designation, reference_number,
+        cooperative, qrCode, is_msp_officer) {
 
-                    <p><strong><em>${cooperative.toUpperCase()}</em></strong></p>
+        const backgroundUrl = is_msp_officer === 'Yes' ? '/img/2.png' : '/img/1.png';
 
-                        ${qrCode ? `<img src="${qrCode}" alt="QR Code">` : `<p>No QR Code</p>`}
-                         <p>${reference_number}</p>
-                          <h2>${id}</h2>
-                    </div>
-                    <script>
-                        setTimeout(() => {
-                            window.print();
-                            setTimeout(() => { window.close(); }, 500);
-                        }, 500);
-                    <\/script>
-                </body>
-                </html>
-            `);
-            printWindow.document.close();
-        }
-    </script>
+        let printWindow = window.open('', '_blank', 'width=400,height=600');
+        printWindow.document.write(`
+    <html>
+    <head>
+        <title>Print Participant ID</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                text-align: center;
+                margin: 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+            .id-card {
+                width: 250px;
+                height: 400px;
+                border: 2px solid black;
+                padding: 20px;
+                border-radius: 10px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                background-image: url('${backgroundUrl}');
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+            }
+             .id-card h2 {
+                margin: 1px 0;
+                font-size: 18px;
+            }
+            .id-card p {
+                margin: 2px;
+                font-size: 14px;
+            }
+            .id-card img {
+                width: 100px;
+                height: 100px;
+            }
+            .footer {
+                position: relative;
+                bottom: 2px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="id-card">
+            <h2>${nickname.toUpperCase()}</h2>
+            <p><strong>${firstName.toUpperCase()}, ${lastName.toUpperCase()} ${middlename ? middlename.charAt(0).toUpperCase() + '.' : ''}</strong></p>
+            <p><strong><em>${cooperative.toUpperCase()}</em></strong></p>
+            ${qrCode ? `<img id="qrImage" src="${qrCode}" alt="QR Code">` : `<p>No QR Code</p>`}
+            <p class="footer">${reference_number}</p>
+        </div>
+        <script>
+            const qrImage = document.getElementById('qrImage');
+            if (qrImage) {
+                qrImage.onload = function() {
+                    window.print();
+                    setTimeout(() => window.close(), 500);
+                };
+                qrImage.onerror = function() {
+                    console.error('QR image failed to load');
+                    window.print();
+                    setTimeout(() => window.close(), 500);
+                };
+            } else {
+                window.print();
+                setTimeout(() => window.close(), 500);
+            }
+        <\/script>
+    </body>
+    </html>
+    `);
+        printWindow.document.close();
+    }
+</script>
 
 
     <script>
