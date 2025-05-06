@@ -598,6 +598,7 @@
                                                     <button type="button" id="submitParticipant"
                                                         class="btn btn-primary btn-round">Submit</button>
                                                 </div>
+
                                             </div>
 
                                         </div>
@@ -625,30 +626,70 @@
     </script>
 @endif
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const form = document.getElementById('participantForm');
-            const submitBtn = document.getElementById('submitParticipant');
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('participantForm');
+        const submitBtn = document.getElementById('submitParticipant');
 
-            submitBtn.addEventListener('click', function () {
-                const checkboxes = document.querySelectorAll('.event-checkbox:not(:disabled)');
-                const isChecked = Array.from(checkboxes).some(cb => cb.checked);
+        submitBtn.addEventListener('click', function (e) {
+            e.preventDefault(); // Prevent form submission until validation is done
+            const checkboxes = document.querySelectorAll('.event-checkbox:not(:disabled)');
+            const isChecked = Array.from(checkboxes).some(cb => cb.checked);
 
-                if (!isChecked) {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Missing Selection',
-                        text: 'Please select at least one Congress.',
-                        confirmButtonColor: '#3085d6'
-                    });
-                    document.getElementById('selectedEventsBtn').classList.add('is-invalid');
-                } else {
-                    document.getElementById('selectedEventsBtn').classList.remove('is-invalid');
-                    form.submit(); // ✅ Only submit after validation passes
-                }
-            });
+            if (!isChecked) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Missing Selection',
+                    text: 'Please select at least one Congress.',
+                    confirmButtonColor: '#3085d6'
+                });
+                document.getElementById('selectedEventsBtn').classList.add('is-invalid');
+            } else {
+                document.getElementById('selectedEventsBtn').classList.remove('is-invalid');
+
+                // Show SweetAlert loading spinner
+                Swal.fire({
+                    title: 'Submitting...',
+                    text: 'Please wait while we process your request.',
+                    showConfirmButton: false,
+                    allowOutsideClick: false, // Prevent clicking outside the modal
+                    willOpen: () => {
+                        Swal.showLoading(); // Show the loading spinner
+                    }
+                });
+
+                // Now submit the form (this can be an Ajax request or standard form submit)
+                form.submit(); // For standard form submission, remove this if using Ajax
+
+                // For Ajax-based submission:
+                /*
+                $.ajax({
+                    type: 'POST',
+                    url: form.action, // action URL
+                    data: $(form).serialize(), // Serialize the form data
+                    success: function (response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: 'Participant registered successfully!',
+                            confirmButtonColor: '#3085d6'
+                        });
+                    },
+                    error: function () {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: 'Something went wrong. Please try again.',
+                            confirmButtonColor: '#d33'
+                        });
+                    }
+                });
+                */
+            }
         });
-    </script>
+    });
+</script>
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
