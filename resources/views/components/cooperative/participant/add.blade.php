@@ -447,6 +447,7 @@
                                                                                 value="{{ $event->event_id }}"
                                                                                 id="event_{{ $event->event_id }}"
                                                                                 data-exclusive="{{ in_array($event->event_id, [13, 14, 15]) ? 'gender-youth' : '' }}"
+                                                                                {{ in_array($event->event_id, [19, 20]) ? 'checked' : '' }}
                                                                                 @disabled($isFull)>
 
                                                                             <span>
@@ -630,12 +631,10 @@
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('participantForm');
         const submitBtn = document.getElementById('submitParticipant');
-
         submitBtn.addEventListener('click', function (e) {
-            e.preventDefault(); // Prevent form submission until validation is done
+            e.preventDefault();
             const checkboxes = document.querySelectorAll('.event-checkbox:not(:disabled)');
             const isChecked = Array.from(checkboxes).some(cb => cb.checked);
-
             if (!isChecked) {
                 Swal.fire({
                     icon: 'warning',
@@ -646,45 +645,16 @@
                 document.getElementById('selectedEventsBtn').classList.add('is-invalid');
             } else {
                 document.getElementById('selectedEventsBtn').classList.remove('is-invalid');
-
-                // Show SweetAlert loading spinner
                 Swal.fire({
                     title: 'Submitting...',
                     text: 'Please wait while we process your request.',
                     showConfirmButton: false,
-                    allowOutsideClick: false, // Prevent clicking outside the modal
+                    allowOutsideClick: false,
                     willOpen: () => {
-                        Swal.showLoading(); // Show the loading spinner
+                        Swal.showLoading();
                     }
                 });
-
-                // Now submit the form (this can be an Ajax request or standard form submit)
-                form.submit(); // For standard form submission, remove this if using Ajax
-
-                // For Ajax-based submission:
-                /*
-                $.ajax({
-                    type: 'POST',
-                    url: form.action, // action URL
-                    data: $(form).serialize(), // Serialize the form data
-                    success: function (response) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success!',
-                            text: 'Participant registered successfully!',
-                            confirmButtonColor: '#3085d6'
-                        });
-                    },
-                    error: function () {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error!',
-                            text: 'Something went wrong. Please try again.',
-                            confirmButtonColor: '#d33'
-                        });
-                    }
-                });
-                */
+                form.submit();
             }
         });
     });

@@ -387,9 +387,8 @@
                                                                type="checkbox" name="event_ids[]"
                                                                value="{{ $event->event_id }}"
                                                                id="event_{{ $event->event_id }}"
-                                                               data-exclusive="{{ in_array($event->event_id, [13, 14, 15]) ? 'gender-youth' : '' }}">
-
-
+                                                               data-exclusive="{{ in_array($event->event_id, [13, 14, 15]) ? 'gender-youth' : '' }}"
+                                                               {{ in_array($event->event_id, [19, 20]) ? 'checked' : '' }}>
                                                             <span>
                                                                 {{ $event->title }}
                                                             </span>
