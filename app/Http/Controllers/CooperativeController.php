@@ -300,10 +300,14 @@ class CooperativeController extends Controller
                 $cooperative->save();
             }
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Participant registered successfully!'
+            return redirect()->route('coopparticipantadd')  // or any other route you want
+            ->with('swal', [
+                'icon' => 'success',
+                'title' => 'Success!',
+                'text' => 'Email Sent and Participant registered successfully!',
             ]);
+
+
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Error during participant registration: ' . $e->getMessage());

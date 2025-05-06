@@ -401,54 +401,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Styling for hover effect -->
-
-                                <!-- Script -->
-                                <script>
-                                    // Update selected events in the dropdown button
-                                    const updateSelectedEvents = () => {
-                                        const selectedCheckboxes = document.querySelectorAll('.event-checkbox:checked');
-                                        const selected = Array.from(selectedCheckboxes).map(cb => cb.parentElement.textContent.trim());
-
-                                        const button = document.getElementById('selectedEventsBtn');
-
-                                        if (selected.length === 0) {
-                                            button.textContent = 'Select Congresses';
-                                            button.removeAttribute('title');
-                                        } else {
-                                            const visible = selected.slice(0, 2);
-                                            const extra = selected.length - visible.length;
-                                            button.textContent = extra > 0
-                                                ? `${visible.join(', ')} +${extra} more`
-                                                : visible.join(', ');
-
-                                            button.title = selected.join(', ');
-                                        }
-                                    };
-
-                                    // Event listener for checkbox changes
-                                    document.querySelectorAll('.event-checkbox').forEach(cb => {
-                                        cb.addEventListener('change', updateSelectedEvents);
-                                    });
-
-                                    // Filter events based on input search
-                                    function filterEvents(input) {
-                                        const filter = input.value.toLowerCase();
-                                        document.querySelectorAll('.event-item').forEach(item => {
-                                            const text = item.textContent.toLowerCase();
-                                            item.style.display = text.includes(filter) ? '' : 'none';
-                                        });
-                                    }
-
-                                    // Enable Bootstrap tooltips
-                                    document.addEventListener('DOMContentLoaded', () => {
-                                        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-                                        tooltipTriggerList.map(t => new bootstrap.Tooltip(t));
-                                        updateSelectedEvents(); // initial load
-                                    });
-                                </script>
-
-
                                 <!-- T-shirt Size -->
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
@@ -515,7 +467,8 @@
 
                                 </div>
                                 <div class="card-action">
-                                    <button type="submit" class="btn btn-label-info btn-round me-2">Submit</button>
+                                    <button type="button" class="btn btn-label-info btn-round me-2" id="submitParticipant">Submit</button>
+
                                     <button type="button" class="btn btn-primary btn-round" onclick="window.location.href='{{ route('participants.index') }}'">Back</button>
                                 </div>
                             </div>
@@ -531,6 +484,34 @@
             @include('layouts.adminfooter')
       </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('participantForm');
+            const submitBtn = document.getElementById('submitParticipant');
+
+            submitBtn.addEventListener('click', function () {
+                const checkboxes = document.querySelectorAll('.event-checkbox:not(:disabled)');
+                const isChecked = Array.from(checkboxes).some(cb => cb.checked);
+
+                if (!isChecked) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Missing Selection',
+                        text: 'Please select at least one Congress.',
+                        confirmButtonColor: '#3085d6'
+                    });
+                    document.getElementById('selectedEventsBtn').classList.add('is-invalid');
+                } else {
+                    document.getElementById('selectedEventsBtn').classList.remove('is-invalid');
+                    form.submit(); // ✅ only submit after validation passes
+                }
+            });
+        });
+    </script>
+
+
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             let isMspOfficer = document.getElementById("is_msp_officer");

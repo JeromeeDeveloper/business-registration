@@ -589,213 +589,19 @@
                                                     </div>
                                                 </div>
 
-
-
                                                 <input type="hidden" id="share_capital"
                                                     value="{{ $shareCapital ?? 0 }}">
 
                                                 <div class="card-action">
                                                     <button type="button" class="btn btn-label-info btn-round"
                                                         onclick="window.location.href='{{ url()->previous() }}'">Back</button>
-                                                    <button type="submit"
+                                                    <button type="button" id="submitParticipant"
                                                         class="btn btn-primary btn-round">Submit</button>
-
                                                 </div>
                                             </div>
 
                                         </div>
                                     </form>
-
-                                    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-                                    <script>
-                                        document.addEventListener('DOMContentLoaded', function () {
-                                            const checkboxes = document.querySelectorAll('.event-checkbox');
-
-                                            checkboxes.forEach(cb => {
-                                                cb.addEventListener('change', function () {
-                                                    // If current checkbox is marked as "gender-youth" and checked
-                                                    if (this.dataset.exclusive === 'gender-youth' && this.checked) {
-                                                        checkboxes.forEach(otherCb => {
-                                                            // Uncheck other checkboxes with the same exclusive group
-                                                            if (otherCb !== this && otherCb.dataset.exclusive === 'gender-youth') {
-                                                                otherCb.checked = false;
-                                                            }
-                                                        });
-                                                    }
-                                                });
-                                            });
-                                        });
-                                    </script>
-
-                                    <script>
-                                        $(document).ready(function() {
-                                            $('#event_ids').select2({
-                                                placeholder: 'Select Congress Types'
-                                            });
-                                        });
-                                    </script>
-
-                                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-                                    <script>
-                                        document.getElementById("participantForm").addEventListener("submit", function(event) {
-                                            event.preventDefault();
-
-                                            // Clear old validation messages
-                                            document.querySelectorAll(".is-invalid").forEach(el => el.classList.remove("is-invalid"));
-                                            document.querySelectorAll(".invalid-feedback").forEach(el => el.remove());
-
-                                            Swal.fire({
-                                                title: "Processing...",
-                                                text: "Sending email, please wait...",
-                                                allowOutsideClick: false,
-                                                didOpen: () => {
-                                                    Swal.showLoading();
-                                                }
-                                            });
-
-                                            let formData = new FormData(this);
-
-                                            fetch("{{ route('coopparticipantadd') }}", {
-                                                    method: "POST",
-                                                    body: formData,
-                                                    headers: {
-                                                        "X-CSRF-TOKEN": document.querySelector('input[name="_token"]').value
-                                                    }
-                                                })
-                                                .then(async response => {
-                                                    const contentType = response.headers.get("content-type");
-                                                    const isJson = contentType && contentType.includes("application/json");
-                                                    const data = isJson ? await response.json() : {};
-
-                                                    if (!response.ok) {
-                                                        // Laravel validation error (422)
-                                                        if (response.status === 422 && data.errors) {
-                                                            for (const field in data.errors) {
-                                                                const input = document.querySelector(`[name="${field}"]`);
-                                                                if (input) {
-                                                                    input.classList.add("is-invalid");
-
-                                                                    const errorDiv = document.createElement("div");
-                                                                    errorDiv.classList.add("invalid-feedback");
-                                                                    errorDiv.innerText = data.errors[field][0];
-
-                                                                    input.parentNode.appendChild(errorDiv);
-                                                                }
-                                                            }
-
-                                                            Swal.close(); // Close loading popup
-                                                            return; // Skip the catch
-                                                        }
-
-                                                        // For non-validation errors, show general message
-                                                        throw new Error(data.message || "An error occurred while submitting the form.");
-                                                    }
-
-                                                    return data;
-                                                })
-                                                .then(data => {
-                                                    if (data?.success) {
-                                                        Swal.fire({
-                                                            title: "Success!",
-                                                            text: "Participant registered and email sent successfully!",
-                                                            icon: "success"
-                                                        }).then(() => {
-                                                            window.location.href = "{{ route('coop.index') }}";
-                                                        });
-                                                    } else if (data) {
-                                                        Swal.fire({
-                                                            title: "Error!",
-                                                            text: "The email address is already in use. Please provide a different one.",
-                                                            icon: "error"
-                                                        });
-                                                    }
-                                                })
-                                                .catch(error => {
-                                                    console.error("Error:", error);
-                                                    Swal.fire({
-                                                        title: "Error!",
-                                                        text: error.message ||
-                                                            "Failed to send email. Please check your internet connection and try again.",
-                                                        icon: "error",
-                                                        showCancelButton: true,
-                                                        confirmButtonText: 'Retry',
-                                                        cancelButtonText: 'Cancel',
-                                                    }).then((result) => {
-                                                        if (result.isConfirmed) {
-                                                            window.location.reload();
-                                                        }
-                                                    });
-                                                });
-                                        });
-                                    </script>
-
-                                    <script>
-                                        document.addEventListener("DOMContentLoaded", function() {
-                                            let isMspOfficer = document.getElementById("is_msp_officer");
-                                            let mspOfficerPosition = document.getElementById("msp_officer_position");
-
-                                            function togglePositionField() {
-                                                if (isMspOfficer.value === "Yes") {
-                                                    mspOfficerPosition.removeAttribute("disabled");
-                                                    mspOfficerPosition.setAttribute("required", "required");
-                                                } else {
-                                                    mspOfficerPosition.setAttribute("disabled", "disabled");
-                                                    mspOfficerPosition.removeAttribute("required");
-                                                    mspOfficerPosition.value = "";
-                                                }
-                                            }
-
-                                            // Run on page load to set initial state
-                                            togglePositionField();
-
-                                            // Add event listener to the dropdown
-                                            isMspOfficer.addEventListener("change", togglePositionField);
-                                        });
-                                    </script>
-
-                                    <!-- Scripts -->
-                                    <script>
-                                        const updateSelectedEvents = () => {
-                                            const selectedCheckboxes = document.querySelectorAll('.event-checkbox:checked');
-                                            const selected = Array.from(selectedCheckboxes).map(cb => cb.parentElement.textContent.trim());
-
-                                            const button = document.getElementById('selectedEventsBtn');
-
-                                            if (selected.length === 0) {
-                                                button.textContent = 'Select Congresses';
-                                                button.removeAttribute('title');
-                                            } else {
-                                                // Show first 2 selected, then "+X more"
-                                                const visible = selected.slice(0, 2);
-                                                const extra = selected.length - visible.length;
-                                                button.textContent = extra > 0 ?
-                                                    `${visible.join(', ')} +${extra} more` :
-                                                    visible.join(', ');
-
-                                                // Tooltip for full list (optional)
-                                                button.title = selected.join(', ');
-                                            }
-                                        };
-
-                                        document.querySelectorAll('.event-checkbox').forEach(cb => {
-                                            cb.addEventListener('change', updateSelectedEvents);
-                                        });
-
-                                        function filterEvents(input) {
-                                            const filter = input.value.toLowerCase();
-                                            document.querySelectorAll('.event-item').forEach(item => {
-                                                const text = item.textContent.toLowerCase();
-                                                item.style.display = text.includes(filter) ? '' : 'none';
-                                            });
-                                        }
-
-                                        // Optional: Enable Bootstrap tooltips
-                                        document.addEventListener('DOMContentLoaded', () => {
-                                            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-                                            tooltipTriggerList.map(t => new bootstrap.Tooltip(t));
-                                        });
-                                    </script>
 
                                 </div>
                             </div>
@@ -806,6 +612,232 @@
             @include('layouts.adminfooter')
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    @if (session('swal'))
+    <script>
+        Swal.fire({
+            icon: "{{ session('swal')['icon'] }}",
+            title: "{{ session('swal')['title'] }}",
+            text: "{{ session('swal')['text'] }}",
+            confirmButtonColor: '#3085d6'
+        });
+    </script>
+@endif
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('participantForm');
+            const submitBtn = document.getElementById('submitParticipant');
+
+            submitBtn.addEventListener('click', function () {
+                const checkboxes = document.querySelectorAll('.event-checkbox:not(:disabled)');
+                const isChecked = Array.from(checkboxes).some(cb => cb.checked);
+
+                if (!isChecked) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Missing Selection',
+                        text: 'Please select at least one Congress.',
+                        confirmButtonColor: '#3085d6'
+                    });
+                    document.getElementById('selectedEventsBtn').classList.add('is-invalid');
+                } else {
+                    document.getElementById('selectedEventsBtn').classList.remove('is-invalid');
+                    form.submit(); // ✅ Only submit after validation passes
+                }
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const checkboxes = document.querySelectorAll('.event-checkbox');
+
+            checkboxes.forEach(cb => {
+                cb.addEventListener('change', function () {
+                    // If current checkbox is marked as "gender-youth" and checked
+                    if (this.dataset.exclusive === 'gender-youth' && this.checked) {
+                        checkboxes.forEach(otherCb => {
+                            // Uncheck other checkboxes with the same exclusive group
+                            if (otherCb !== this && otherCb.dataset.exclusive === 'gender-youth') {
+                                otherCb.checked = false;
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $('#event_ids').select2({
+                placeholder: 'Select Congress Types'
+            });
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.getElementById("participantForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            // Clear old validation messages
+            document.querySelectorAll(".is-invalid").forEach(el => el.classList.remove("is-invalid"));
+            document.querySelectorAll(".invalid-feedback").forEach(el => el.remove());
+
+            Swal.fire({
+                title: "Processing...",
+                text: "Sending email, please wait...",
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            let formData = new FormData(this);
+
+            fetch("{{ route('coopparticipantadd') }}", {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                        "X-CSRF-TOKEN": document.querySelector('input[name="_token"]').value
+                    }
+                })
+                .then(async response => {
+                    const contentType = response.headers.get("content-type");
+                    const isJson = contentType && contentType.includes("application/json");
+                    const data = isJson ? await response.json() : {};
+
+                    if (!response.ok) {
+                        // Laravel validation error (422)
+                        if (response.status === 422 && data.errors) {
+                            for (const field in data.errors) {
+                                const input = document.querySelector(`[name="${field}"]`);
+                                if (input) {
+                                    input.classList.add("is-invalid");
+
+                                    const errorDiv = document.createElement("div");
+                                    errorDiv.classList.add("invalid-feedback");
+                                    errorDiv.innerText = data.errors[field][0];
+
+                                    input.parentNode.appendChild(errorDiv);
+                                }
+                            }
+
+                            Swal.close(); // Close loading popup
+                            return; // Skip the catch
+                        }
+
+                        // For non-validation errors, show general message
+                        throw new Error(data.message || "An error occurred while submitting the form.");
+                    }
+
+                    return data;
+                })
+                .then(data => {
+                    if (data?.success) {
+                        Swal.fire({
+                            title: "Success!",
+                            text: "Participant registered and email sent successfully!",
+                            icon: "success"
+                        }).then(() => {
+                            window.location.href = "{{ route('coop.index') }}";
+                        });
+                    } else if (data) {
+                        Swal.fire({
+                            title: "Error!",
+                            text: "The email address is already in use. Please provide a different one.",
+                            icon: "error"
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    Swal.fire({
+                        title: "Error!",
+                        text: error.message ||
+                            "Failed to send email. Please check your internet connection and try again.",
+                        icon: "error",
+                        showCancelButton: true,
+                        confirmButtonText: 'Retry',
+                        cancelButtonText: 'Cancel',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.reload();
+                        }
+                    });
+                });
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let isMspOfficer = document.getElementById("is_msp_officer");
+            let mspOfficerPosition = document.getElementById("msp_officer_position");
+
+            function togglePositionField() {
+                if (isMspOfficer.value === "Yes") {
+                    mspOfficerPosition.removeAttribute("disabled");
+                    mspOfficerPosition.setAttribute("required", "required");
+                } else {
+                    mspOfficerPosition.setAttribute("disabled", "disabled");
+                    mspOfficerPosition.removeAttribute("required");
+                    mspOfficerPosition.value = "";
+                }
+            }
+
+            // Run on page load to set initial state
+            togglePositionField();
+
+            // Add event listener to the dropdown
+            isMspOfficer.addEventListener("change", togglePositionField);
+        });
+    </script>
+
+    <!-- Scripts -->
+    <script>
+        const updateSelectedEvents = () => {
+            const selectedCheckboxes = document.querySelectorAll('.event-checkbox:checked');
+            const selected = Array.from(selectedCheckboxes).map(cb => cb.parentElement.textContent.trim());
+
+            const button = document.getElementById('selectedEventsBtn');
+
+            if (selected.length === 0) {
+                button.textContent = 'Select Congresses';
+                button.removeAttribute('title');
+            } else {
+                // Show first 2 selected, then "+X more"
+                const visible = selected.slice(0, 2);
+                const extra = selected.length - visible.length;
+                button.textContent = extra > 0 ?
+                    `${visible.join(', ')} +${extra} more` :
+                    visible.join(', ');
+
+                // Tooltip for full list (optional)
+                button.title = selected.join(', ');
+            }
+        };
+
+        document.querySelectorAll('.event-checkbox').forEach(cb => {
+            cb.addEventListener('change', updateSelectedEvents);
+        });
+
+        function filterEvents(input) {
+            const filter = input.value.toLowerCase();
+            document.querySelectorAll('.event-item').forEach(item => {
+                const text = item.textContent.toLowerCase();
+                item.style.display = text.includes(filter) ? '' : 'none';
+            });
+        }
+
+        // Optional: Enable Bootstrap tooltips
+        document.addEventListener('DOMContentLoaded', () => {
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(t => new bootstrap.Tooltip(t));
+        });
+    </script>
 
     @include('layouts.links')
 </body>
