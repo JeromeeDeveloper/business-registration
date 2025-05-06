@@ -353,7 +353,7 @@
                                                             value="{{ old('phone_number', $participant->phone_number) }}">
                                                     </div>
                                                 </div>
-                                                
+
                                                 <!-- Gender -->
                                                 <div class="col-md-6 col-lg-4">
                                                     <div class="form-group">
@@ -443,6 +443,7 @@
                                                                                 type="checkbox" name="event_ids[]"
                                                                                 value="{{ $event->event_id }}"
                                                                                 id="event_{{ $event->event_id }}"
+                                                                                data-exclusive="{{ in_array($event->event_id, [14, 15]) ? 'gender-youth' : '' }}"
                                                                                 {{ $isChecked ? 'checked' : '' }}
                                                                                 {{ $isEventFull ? 'disabled' : '' }}>
                                                                             <span>
@@ -464,51 +465,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
-
-
-
-                                                <script>
-                                                    const updateSelectedEvents = () => {
-                                                        const selectedCheckboxes = document.querySelectorAll('.event-checkbox:checked');
-                                                        const selected = Array.from(selectedCheckboxes).map(cb => cb.parentElement.textContent.trim());
-
-                                                        const button = document.getElementById('selectedEventsBtn');
-
-                                                        if (selected.length === 0) {
-                                                            button.textContent = 'Select Congresses';
-                                                            button.removeAttribute('title');
-                                                        } else {
-                                                            const visible = selected.slice(0, 2);
-                                                            const extra = selected.length - visible.length;
-                                                            button.textContent = extra > 0 ?
-                                                                `${visible.join(', ')} +${extra} more` :
-                                                                visible.join(', ');
-
-                                                            button.title = selected.join(', ');
-                                                        }
-                                                    };
-
-                                                    document.querySelectorAll('.event-checkbox').forEach(cb => {
-                                                        cb.addEventListener('change', updateSelectedEvents);
-                                                    });
-
-                                                    function filterEvents(input) {
-                                                        const filter = input.value.toLowerCase();
-                                                        document.querySelectorAll('.event-item').forEach(item => {
-                                                            const text = item.textContent.toLowerCase();
-                                                            item.style.display = text.includes(filter) ? '' : 'none';
-                                                        });
-                                                    }
-
-                                                    // Bootstrap tooltip (if you're using Bootstrap 5+)
-                                                    document.addEventListener('DOMContentLoaded', () => {
-                                                        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-                                                        tooltipTriggerList.map(t => new bootstrap.Tooltip(t));
-                                                        updateSelectedEvents(); // initial load
-                                                    });
-                                                </script>
-
 
                                                 <!-- Is MSP Officer -->
                                                 <div class="col-md-6 col-lg-4">
@@ -577,19 +533,7 @@
                                                     </div>
                                                 </div>
 
-                                                <script>
-                                                    // Set the cutoff date (update as needed)
-                                                    const cutoffDate = '2025-05-10'; // Example cutoff date (YYYY-MM-DD)
 
-                                                    // Get current date in YYYY-MM-DD format
-                                                    const currentDate = new Date().toISOString().split('T')[0];
-
-                                                    // Check if the current date is past the cutoff date
-                                                    if (currentDate > cutoffDate) {
-                                                        // Disable the dropdown if the cutoff date has passed
-                                                        document.getElementById('tshirt_size').disabled = true;
-                                                    }
-                                                </script>
 
 
                                                 <!-- Delegate Type -->
@@ -621,8 +565,7 @@
                                         <div class="card-action g-2">
                                             <button type="button" class="btn btn-label-info btn-round"
                                                 onclick="window.location.href='{{ route('coop.index') }}'">Back</button>
-                                                <button type="submit"
-                                                class="btn btn-primary btn-round">Update</button>
+                                            <button type="submit" class="btn btn-primary btn-round">Update</button>
                                         </div>
                                     </form>
 
@@ -645,6 +588,80 @@
             @include('layouts.adminfooter')
         </div>
     </div>
+
+    <script>
+        // Set the cutoff date (update as needed)
+        const cutoffDate = '2025-05-10'; // Example cutoff date (YYYY-MM-DD)
+
+        // Get current date in YYYY-MM-DD format
+        const currentDate = new Date().toISOString().split('T')[0];
+
+        // Check if the current date is past the cutoff date
+        if (currentDate > cutoffDate) {
+            // Disable the dropdown if the cutoff date has passed
+            document.getElementById('tshirt_size').disabled = true;
+        }
+    </script>
+
+    <script>
+        const updateSelectedEvents = () => {
+            const selectedCheckboxes = document.querySelectorAll('.event-checkbox:checked');
+            const selected = Array.from(selectedCheckboxes).map(cb => cb.parentElement.textContent.trim());
+
+            const button = document.getElementById('selectedEventsBtn');
+
+            if (selected.length === 0) {
+                button.textContent = 'Select Congresses';
+                button.removeAttribute('title');
+            } else {
+                const visible = selected.slice(0, 2);
+                const extra = selected.length - visible.length;
+                button.textContent = extra > 0 ?
+                    `${visible.join(', ')} +${extra} more` :
+                    visible.join(', ');
+
+                button.title = selected.join(', ');
+            }
+        };
+
+        document.querySelectorAll('.event-checkbox').forEach(cb => {
+            cb.addEventListener('change', updateSelectedEvents);
+        });
+
+        function filterEvents(input) {
+            const filter = input.value.toLowerCase();
+            document.querySelectorAll('.event-item').forEach(item => {
+                const text = item.textContent.toLowerCase();
+                item.style.display = text.includes(filter) ? '' : 'none';
+            });
+        }
+
+        // Bootstrap tooltip (if you're using Bootstrap 5+)
+        document.addEventListener('DOMContentLoaded', () => {
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(t => new bootstrap.Tooltip(t));
+            updateSelectedEvents(); // initial load
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('.event-checkbox');
+
+            checkboxes.forEach(cb => {
+                cb.addEventListener('change', function() {
+                    if (this.dataset.exclusive === 'gender-youth' && this.checked) {
+                        checkboxes.forEach(otherCb => {
+                            if (otherCb !== this &&
+                                otherCb.dataset.exclusive === 'gender-youth') {
+                                otherCb.checked = false;
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
     <script>
         // Function to close the floating notice
         function closeNotice() {

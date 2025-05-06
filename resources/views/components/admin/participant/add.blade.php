@@ -383,10 +383,13 @@
                                                         <label for="event_{{ $event->event_id }}"
                                                                class="d-flex align-items-center gap-2 py-1 px-2 rounded hover-shadow-sm w-100"
                                                                style="cursor: pointer;">
-                                                            <input class="form-check-input event-checkbox me-2"
-                                                                   type="checkbox" name="event_ids[]"
-                                                                   value="{{ $event->event_id }}"
-                                                                   id="event_{{ $event->event_id }}">
+                                                               <input class="form-check-input event-checkbox me-2"
+                                                               type="checkbox" name="event_ids[]"
+                                                               value="{{ $event->event_id }}"
+                                                               id="event_{{ $event->event_id }}"
+                                                               data-exclusive="{{ in_array($event->event_id, [14, 15]) ? 'gender-youth' : '' }}">
+
+
                                                             <span>
                                                                 {{ $event->title }}
                                                             </span>
@@ -570,6 +573,26 @@
         });
     });
 </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const checkboxes = document.querySelectorAll('.event-checkbox');
+
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', function () {
+                if (this.dataset.exclusive === 'gender-youth' && this.checked) {
+                    checkboxes.forEach(otherCb => {
+                        if (otherCb !== this &&
+                            otherCb.dataset.exclusive === 'gender-youth') {
+                            otherCb.checked = false;
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>
+
 
 
     @include('layouts.links')
