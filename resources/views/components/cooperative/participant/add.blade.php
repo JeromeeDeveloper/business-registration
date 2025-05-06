@@ -46,33 +46,33 @@
                         </li>
 
                         @php
-                        // Check if the current date is May 22
-                        $isMay22 = now()->format('m-d') === '05-22';
+                            // Check if the current date is May 22
+                            $isMay22 = now()->format('m-d') === '05-22';
 
-                        // Check if the participant count exceeds 1000
-                        $participantCount = \App\Models\Participant::whereNotNull('coop_id')->count();
-                        $isMaxedParticipants = $participantCount >= 1000;
-                    @endphp
+                            // Check if the participant count exceeds 1000
+                            $participantCount = \App\Models\Participant::whereNotNull('coop_id')->count();
+                            $isMaxedParticipants = $participantCount >= 1000;
+                        @endphp
 
-                    <li class="nav-item">
-                        <a data-bs-toggle="collapse" href="#participant"
-                           class="{{ $isMay22 || $isMaxedParticipants ? 'disabled' : '' }}"
-                           aria-disabled="{{ $isMay22 || $isMaxedParticipants ? 'true' : 'false' }}">
-                            <i class="fas fa-users"></i>
-                            <p>Participant</p>
-                            <span class="caret"></span>
-                        </a>
-                        <div class="collapse show" id="participant">
-                            <ul class="nav nav-collapse">
-                                <li class="active">
-                                    <a href="{{ $isMay22 || $isMaxedParticipants ? '#' : route('coop.index') }}"
-                                       class="{{ $isMay22 || $isMaxedParticipants ? 'disabled' : '' }}">
-                                        <span class="sub-item">Participants</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
+                        <li class="nav-item">
+                            <a data-bs-toggle="collapse" href="#participant"
+                                class="{{ $isMay22 || $isMaxedParticipants ? 'disabled' : '' }}"
+                                aria-disabled="{{ $isMay22 || $isMaxedParticipants ? 'true' : 'false' }}">
+                                <i class="fas fa-users"></i>
+                                <p>Participant</p>
+                                <span class="caret"></span>
+                            </a>
+                            <div class="collapse show" id="participant">
+                                <ul class="nav nav-collapse">
+                                    <li class="active">
+                                        <a href="{{ $isMay22 || $isMaxedParticipants ? '#' : route('coop.index') }}"
+                                            class="{{ $isMay22 || $isMaxedParticipants ? 'disabled' : '' }}">
+                                            <span class="sub-item">Participants</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
 
 
                         <li class="nav-item">
@@ -110,7 +110,8 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="https://mass-specc.coop/2025-coopvention-registration/" class="nav-link" title="Register for Coopvention" target="_blank">
+                            <a href="https://mass-specc.coop/2025-coopvention-registration/" class="nav-link"
+                                title="Register for Coopvention" target="_blank">
                                 <i class="fas fa-building"></i>
                                 <p>Hotel Accomodation</p>
                             </a>
@@ -216,7 +217,7 @@
                                                     ];
                                                 @endphp
 
-                                                   <div class="d-flex flex-wrap gap-3 mb-3">
+                                                <div class="d-flex flex-wrap gap-3 mb-3">
                                                     @foreach ([14, 15, 18, 13] as $eventId)
                                                         @if (isset($eventStatus[$eventId]))
                                                             @php
@@ -405,37 +406,55 @@
 
                                                         <div class="dropdown">
                                                             <!-- Dropdown Toggle Button -->
-                                                            <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start" type="button"
-                                                                    data-bs-toggle="dropdown" aria-expanded="false" id="selectedEventsBtn"
-                                                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Selected Congresses">
+                                                            <button
+                                                                class="btn btn-outline-secondary dropdown-toggle w-100 text-start"
+                                                                type="button" data-bs-toggle="dropdown"
+                                                                aria-expanded="false" id="selectedEventsBtn"
+                                                                data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                title="Selected Congresses">
                                                                 Select Congresses
                                                             </button>
 
                                                             <!-- Dropdown Menu -->
-                                                            <ul class="dropdown-menu p-3 shadow w-100" style="max-height: 300px; overflow-y: auto;" onclick="event.stopPropagation();">
+                                                            <ul class="dropdown-menu p-3 shadow w-100"
+                                                                style="max-height: 300px; overflow-y: auto;"
+                                                                onclick="event.stopPropagation();">
 
                                                                 <!-- Search Input -->
                                                                 <li class="mb-3">
-                                                                    <input type="text" class="form-control form-control-sm" placeholder="Search..." onkeyup="filterEvents(this)">
+                                                                    <input type="text"
+                                                                        class="form-control form-control-sm"
+                                                                        placeholder="Search..."
+                                                                        onkeyup="filterEvents(this)">
                                                                 </li>
 
                                                                 @foreach ($events as $event)
                                                                     @php
-                                                                        $status = $eventStatus[$event->event_id] ?? null;
+                                                                        $status =
+                                                                            $eventStatus[$event->event_id] ?? null;
                                                                         $isFull = $status['full'] ?? false;
                                                                         $remaining = $status['remaining'] ?? null;
                                                                         $total = $status['total'] ?? null;
                                                                     @endphp
 
                                                                     <li class="mb-2 event-item">
-                                                                        <label for="event_{{ $event->event_id }}" class="d-flex align-items-center gap-2 py-1 px-2 rounded hover-shadow-sm w-100 {{ $isFull ? 'bg-light text-muted' : '' }}" style="cursor: pointer;">
-                                                                            <input class="form-check-input event-checkbox me-2" type="checkbox" name="event_ids[]"
-                                                                                   value="{{ $event->event_id }}" id="event_{{ $event->event_id }}"
-                                                                                   @disabled($isFull)>
+                                                                        <label for="event_{{ $event->event_id }}"
+                                                                            class="d-flex align-items-center gap-2 py-1 px-2 rounded hover-shadow-sm w-100 {{ $isFull ? 'bg-light text-muted' : '' }}"
+                                                                            style="cursor: pointer;">
+                                                                            <input
+                                                                                class="form-check-input event-checkbox me-2"
+                                                                                type="checkbox" name="event_ids[]"
+                                                                                value="{{ $event->event_id }}"
+                                                                                id="event_{{ $event->event_id }}"
+                                                                                data-exclusive="{{ in_array($event->event_id, [14, 15]) ? 'gender-youth' : '' }}"
+                                                                                @disabled($isFull)>
+
                                                                             <span>
                                                                                 {{ $event->title }}
                                                                                 @if ($status)
-                                                                                    ({{ $remaining }} / {{ $total }} slots{{ $isFull ? ' - Full' : '' }})
+                                                                                    ({{ $remaining }} /
+                                                                                    {{ $total }}
+                                                                                    slots{{ $isFull ? ' - Full' : '' }})
                                                                                 @endif
                                                                             </span>
                                                                         </label>
@@ -445,55 +464,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
-
-
-                                                <!-- Scripts -->
-                                                <script>
-                                                    const updateSelectedEvents = () => {
-                                                        const selectedCheckboxes = document.querySelectorAll('.event-checkbox:checked');
-                                                        const selected = Array.from(selectedCheckboxes).map(cb => cb.parentElement.textContent.trim());
-
-                                                        const button = document.getElementById('selectedEventsBtn');
-
-                                                        if (selected.length === 0) {
-                                                            button.textContent = 'Select Congresses';
-                                                            button.removeAttribute('title');
-                                                        } else {
-                                                            // Show first 2 selected, then "+X more"
-                                                            const visible = selected.slice(0, 2);
-                                                            const extra = selected.length - visible.length;
-                                                            button.textContent = extra > 0
-                                                                ? `${visible.join(', ')} +${extra} more`
-                                                                : visible.join(', ');
-
-                                                            // Tooltip for full list (optional)
-                                                            button.title = selected.join(', ');
-                                                        }
-                                                    };
-
-                                                    document.querySelectorAll('.event-checkbox').forEach(cb => {
-                                                        cb.addEventListener('change', updateSelectedEvents);
-                                                    });
-
-                                                    function filterEvents(input) {
-                                                        const filter = input.value.toLowerCase();
-                                                        document.querySelectorAll('.event-item').forEach(item => {
-                                                            const text = item.textContent.toLowerCase();
-                                                            item.style.display = text.includes(filter) ? '' : 'none';
-                                                        });
-                                                    }
-
-                                                    // Optional: Enable Bootstrap tooltips
-                                                    document.addEventListener('DOMContentLoaded', () => {
-                                                        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-                                                        tooltipTriggerList.map(t => new bootstrap.Tooltip(t));
-                                                    });
-                                                </script>
-
-
-
-
 
                                                 <!-- T-shirt Size -->
                                                 <div class="col-md-6 col-lg-4">
@@ -626,7 +596,7 @@
 
                                                 <div class="card-action">
                                                     <button type="button" class="btn btn-label-info btn-round"
-                                                    onclick="window.location.href='{{ url()->previous() }}'">Back</button>
+                                                        onclick="window.location.href='{{ url()->previous() }}'">Back</button>
                                                     <button type="submit"
                                                         class="btn btn-primary btn-round">Submit</button>
 
@@ -638,33 +608,26 @@
 
                                     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-                                    {{-- <script>
-                        document.getElementById('delegate_type').addEventListener('change', function () {
-                            const selectedValue = this.value;
-                            const canAddVoting = {{ $canAddVoting ? 'true' : 'false' }};
-                            const votes = {{ $votes }};
-                            const remainingVotes = Math.max(5 - votes, 0);
+                                    <script>
+                                        document.addEventListener('DOMContentLoaded', function () {
+                                            const checkboxes = document.querySelectorAll('.event-checkbox');
 
-                            if (selectedValue === 'Voting' && !canAddVoting) {
-                                document.getElementById('modalMessage').innerHTML = `
-                                    You have reached the maximum limit of voting participants (<strong>${votes}</strong>).
-                                    No additional voting delegates can be added. Please select 'Non-Voting' or contact support if needed.
-                                `;
-                                const modal = new bootstrap.Modal(document.getElementById('limitReachedModal'));
-                                modal.show();
-                                this.value = ''; // Reset selection
-                            } else if (selectedValue === 'Voting') {
-                                const message = votes === 5
-                                    ? `You have reached the maximum of <strong>5 voting privileges</strong>. No additional votes can be added.`
-                                    : `You currently have <strong>${votes} voting privilege${votes > 1 ? 's' : ''}</strong>.
-                                       You can add up to <strong>${remainingVotes} more vote${remainingVotes > 1 ? 's' : ''}</strong> if eligible.`;
+                                            checkboxes.forEach(cb => {
+                                                cb.addEventListener('change', function () {
+                                                    // If current checkbox is marked as "gender-youth" and checked
+                                                    if (this.dataset.exclusive === 'gender-youth' && this.checked) {
+                                                        checkboxes.forEach(otherCb => {
+                                                            // Uncheck other checkboxes with the same exclusive group
+                                                            if (otherCb !== this && otherCb.dataset.exclusive === 'gender-youth') {
+                                                                otherCb.checked = false;
+                                                            }
+                                                        });
+                                                    }
+                                                });
+                                            });
+                                        });
+                                    </script>
 
-                                document.getElementById('modalMessage').innerHTML = message;
-                                const modal = new bootstrap.Modal(document.getElementById('limitReachedModal'));
-                                modal.show();
-                            }
-                        });
-                        </script> --}}
                                     <script>
                                         $(document).ready(function() {
                                             $('#event_ids').select2({
@@ -694,75 +657,76 @@
                                             let formData = new FormData(this);
 
                                             fetch("{{ route('coopparticipantadd') }}", {
-                                                method: "POST",
-                                                body: formData,
-                                                headers: {
-                                                    "X-CSRF-TOKEN": document.querySelector('input[name="_token"]').value
-                                                }
-                                            })
-                                            .then(async response => {
-                                                const contentType = response.headers.get("content-type");
-                                                const isJson = contentType && contentType.includes("application/json");
-                                                const data = isJson ? await response.json() : {};
+                                                    method: "POST",
+                                                    body: formData,
+                                                    headers: {
+                                                        "X-CSRF-TOKEN": document.querySelector('input[name="_token"]').value
+                                                    }
+                                                })
+                                                .then(async response => {
+                                                    const contentType = response.headers.get("content-type");
+                                                    const isJson = contentType && contentType.includes("application/json");
+                                                    const data = isJson ? await response.json() : {};
 
-                                                if (!response.ok) {
-                                                    // Laravel validation error (422)
-                                                    if (response.status === 422 && data.errors) {
-                                                        for (const field in data.errors) {
-                                                            const input = document.querySelector(`[name="${field}"]`);
-                                                            if (input) {
-                                                                input.classList.add("is-invalid");
+                                                    if (!response.ok) {
+                                                        // Laravel validation error (422)
+                                                        if (response.status === 422 && data.errors) {
+                                                            for (const field in data.errors) {
+                                                                const input = document.querySelector(`[name="${field}"]`);
+                                                                if (input) {
+                                                                    input.classList.add("is-invalid");
 
-                                                                const errorDiv = document.createElement("div");
-                                                                errorDiv.classList.add("invalid-feedback");
-                                                                errorDiv.innerText = data.errors[field][0];
+                                                                    const errorDiv = document.createElement("div");
+                                                                    errorDiv.classList.add("invalid-feedback");
+                                                                    errorDiv.innerText = data.errors[field][0];
 
-                                                                input.parentNode.appendChild(errorDiv);
+                                                                    input.parentNode.appendChild(errorDiv);
+                                                                }
                                                             }
+
+                                                            Swal.close(); // Close loading popup
+                                                            return; // Skip the catch
                                                         }
 
-                                                        Swal.close(); // Close loading popup
-                                                        return; // Skip the catch
+                                                        // For non-validation errors, show general message
+                                                        throw new Error(data.message || "An error occurred while submitting the form.");
                                                     }
 
-                                                    // For non-validation errors, show general message
-                                                    throw new Error(data.message || "An error occurred while submitting the form.");
-                                                }
-
-                                                return data;
-                                            })
-                                            .then(data => {
-                                                if (data?.success) {
-                                                    Swal.fire({
-                                                        title: "Success!",
-                                                        text: "Participant registered and email sent successfully!",
-                                                        icon: "success"
-                                                    }).then(() => {
-                                                        window.location.href = "{{ route('coop.index') }}";
-                                                    });
-                                                } else if (data) {
+                                                    return data;
+                                                })
+                                                .then(data => {
+                                                    if (data?.success) {
+                                                        Swal.fire({
+                                                            title: "Success!",
+                                                            text: "Participant registered and email sent successfully!",
+                                                            icon: "success"
+                                                        }).then(() => {
+                                                            window.location.href = "{{ route('coop.index') }}";
+                                                        });
+                                                    } else if (data) {
+                                                        Swal.fire({
+                                                            title: "Error!",
+                                                            text: "The email address is already in use. Please provide a different one.",
+                                                            icon: "error"
+                                                        });
+                                                    }
+                                                })
+                                                .catch(error => {
+                                                    console.error("Error:", error);
                                                     Swal.fire({
                                                         title: "Error!",
-                                                        text: "The email address is already in use. Please provide a different one.",
-                                                        icon: "error"
+                                                        text: error.message ||
+                                                            "Failed to send email. Please check your internet connection and try again.",
+                                                        icon: "error",
+                                                        showCancelButton: true,
+                                                        confirmButtonText: 'Retry',
+                                                        cancelButtonText: 'Cancel',
+                                                    }).then((result) => {
+                                                        if (result.isConfirmed) {
+                                                            window.location.reload();
+                                                        }
                                                     });
-                                                }
-                                            })
-                                            .catch(error => {
-                                                console.error("Error:", error);
-                                                Swal.fire({
-                                                    title: "Error!",
-                                                    text: error.message || "Failed to send email. Please check your internet connection and try again.",
-                                                    icon: "error",
-                                                    showCancelButton: true,
-                                                    confirmButtonText: 'Retry',
-                                                    cancelButtonText: 'Cancel',
-                                                }).then((result) => {
-                                                    if (result.isConfirmed) {
-                                                        window.location.reload();
-                                                    }
                                                 });
-                                            });
                                         });
                                     </script>
 
@@ -790,9 +754,49 @@
                                         });
                                     </script>
 
-                                    {{-- <div class="d-flex justify-content-center mt-3">
-                        {{ $participants->appends(['search' => request('search')])->links('pagination::bootstrap-4') }}
-                    </div> --}}
+                                    <!-- Scripts -->
+                                    <script>
+                                        const updateSelectedEvents = () => {
+                                            const selectedCheckboxes = document.querySelectorAll('.event-checkbox:checked');
+                                            const selected = Array.from(selectedCheckboxes).map(cb => cb.parentElement.textContent.trim());
+
+                                            const button = document.getElementById('selectedEventsBtn');
+
+                                            if (selected.length === 0) {
+                                                button.textContent = 'Select Congresses';
+                                                button.removeAttribute('title');
+                                            } else {
+                                                // Show first 2 selected, then "+X more"
+                                                const visible = selected.slice(0, 2);
+                                                const extra = selected.length - visible.length;
+                                                button.textContent = extra > 0 ?
+                                                    `${visible.join(', ')} +${extra} more` :
+                                                    visible.join(', ');
+
+                                                // Tooltip for full list (optional)
+                                                button.title = selected.join(', ');
+                                            }
+                                        };
+
+                                        document.querySelectorAll('.event-checkbox').forEach(cb => {
+                                            cb.addEventListener('change', updateSelectedEvents);
+                                        });
+
+                                        function filterEvents(input) {
+                                            const filter = input.value.toLowerCase();
+                                            document.querySelectorAll('.event-item').forEach(item => {
+                                                const text = item.textContent.toLowerCase();
+                                                item.style.display = text.includes(filter) ? '' : 'none';
+                                            });
+                                        }
+
+                                        // Optional: Enable Bootstrap tooltips
+                                        document.addEventListener('DOMContentLoaded', () => {
+                                            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                                            tooltipTriggerList.map(t => new bootstrap.Tooltip(t));
+                                        });
+                                    </script>
+
                                 </div>
                             </div>
                         </div>
