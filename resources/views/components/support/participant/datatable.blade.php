@@ -273,12 +273,19 @@
                                             <i class="fa fa-print"></i>
                                           </button>
 
-                                          <button type="button" class="btn btn-primary text-white"
-                                          data-bs-toggle="tooltip"
-                                          title="Print All Participant IDs"
-                                          onclick="window.open('{{ route('generateids') }}', '_blank')">
-                                      <i class="fa fa-id-card"></i>
-                                  </button>
+                                          <button type="button" class="btn btn-success text-white"
+                                                data-bs-toggle="tooltip"
+                                                title="Print MSP Officers Only"
+                                                onclick="window.open('{{ route('generateids', ['type' => 'msp']) }}', '_blank')">
+                                            <i class="fa fa-id-card"></i> MSP Officers
+                                        </button>
+
+                                        <button type="button" class="btn btn-info text-white"
+                                                data-bs-toggle="tooltip"
+                                                title="Print Non-MSP Participants Only"
+                                                onclick="window.open('{{ route('generateids', ['type' => 'non']) }}', '_blank')">
+                                            <i class="fa fa-id-card"></i> Non-MSP
+                                        </button>
 
                                         </form>
                                       </div>

@@ -516,12 +516,23 @@ public function tshirtlist()
     return view('components.admin.reports.documents_status', compact('documentsByRegion'));
 }
 
-public function generateIds()
+public function generateIds(Request $request)
 {
-    $participants = Participant::with('cooperative')->get();
+    $type = $request->query('type');
+
+    $query = Participant::with('cooperative');
+
+    if ($type === 'msp') {
+        $query->where('is_msp_officer', 'Yes');
+    } elseif ($type === 'non') {
+        $query->where('is_msp_officer', 'No');
+    }
+
+    $participants = $query->get();
 
     return view('components.admin.reports.generate_ids', compact('participants'));
 }
+
 
 
 

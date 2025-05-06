@@ -238,19 +238,19 @@
                                                     onclick="location.href='{{ route('participantadd') }}'">
                                                     <i class="fa fa-plus"></i>
                                                 </button>
-                                                {{-- <button type="button" onclick="printAllParticipantIDs()"
-                                                    class="btn btn-primary d-flex align-items-center justify-content-center shadow-sm"
-                                                    data-bs-toggle="tooltip" title="Print All Participant IDs">
-                                                    <i class="fa fa-id-card"></i>
-                                                </button> --}}
-                                                <button type="button" class="btn btn-primary text-white"
+                                                <button type="button" class="btn btn-success text-white"
                                                 data-bs-toggle="tooltip"
-                                                title="Print All Participant IDs"
-                                                onclick="window.open('{{ route('generateids') }}', '_blank')">
-                                            <i class="fa fa-id-card"></i>
+                                                title="Print MSP Officers Only"
+                                                onclick="window.open('{{ route('generateids', ['type' => 'msp']) }}', '_blank')">
+                                            <i class="fa fa-id-card"></i> MSP Officers
                                         </button>
 
-
+                                        <button type="button" class="btn btn-info text-white"
+                                                data-bs-toggle="tooltip"
+                                                title="Print Non-MSP Participants Only"
+                                                onclick="window.open('{{ route('generateids', ['type' => 'non']) }}', '_blank')">
+                                            <i class="fa fa-id-card"></i> Non-MSP
+                                        </button>
                                             </div>
                                         </form>
                                     </div>
