@@ -467,9 +467,10 @@
 
                                 </div>
                                 <div class="card-action">
-                                    <button type="button" class="btn btn-label-info btn-round me-2" id="submitParticipant">Submit</button>
+                                    <button type="button" class="btn btn-label-info btn-round" onclick="window.location.href='{{ route('participants.index') }}'">Back</button>
 
-                                    <button type="button" class="btn btn-primary btn-round" onclick="window.location.href='{{ route('participants.index') }}'">Back</button>
+                                    <button type="button" class="btn btn-primary btn-round me-2" id="submitParticipant">Submit</button>
+
                                 </div>
                             </div>
 
@@ -490,7 +491,9 @@
             const form = document.getElementById('participantForm');
             const submitBtn = document.getElementById('submitParticipant');
 
-            submitBtn.addEventListener('click', function () {
+            submitBtn.addEventListener('click', function (e) {
+                e.preventDefault(); // Prevent form submission until validation is done
+
                 const checkboxes = document.querySelectorAll('.event-checkbox:not(:disabled)');
                 const isChecked = Array.from(checkboxes).some(cb => cb.checked);
 
@@ -504,11 +507,25 @@
                     document.getElementById('selectedEventsBtn').classList.add('is-invalid');
                 } else {
                     document.getElementById('selectedEventsBtn').classList.remove('is-invalid');
-                    form.submit(); // ✅ only submit after validation passes
+
+                    // Show SweetAlert loading spinner without "OK" button
+                    Swal.fire({
+                        title: 'Submitting...',
+                        text: 'Please wait while we process your request.',
+                        allowOutsideClick: false, // Prevent clicking outside the modal
+                        showConfirmButton: false, // Hide the "OK" button
+                        willOpen: () => {
+                            Swal.showLoading(); // Show the loading spinner
+                        }
+                    });
+
+                    // Submit the form after showing the loader
+                    form.submit(); // This can be removed if you are handling submission with Ajax
                 }
             });
         });
     </script>
+
 
 
 
