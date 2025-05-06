@@ -230,17 +230,17 @@
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <div class="d-flex justify-content-between text-center gap-2">
+                                    <div class="row text-center g-2">
                                         @foreach ($eventStatus as $status)
-                                            <div class="alert {{ $status['full'] ? 'alert-danger' : 'alert-info' }}"
-                                                role="alert">
-                                                <strong>{{ $status['name'] }}:</strong>
-                                                @if ($status['full'])
-                                                    Full ({{ $status['total'] }} slots)
-                                                @else
-                                                    {{ $status['remaining'] }} slots remaining out of
-                                                    {{ $status['total'] }}
-                                                @endif
+                                            <div class="col-12 col-sm-6 col-md-4">
+                                                <div class="alert {{ $status['full'] ? 'alert-danger' : 'alert-info' }} mb-0">
+                                                    <strong>{{ $status['name'] }}:</strong>
+                                                    @if ($status['full'])
+                                                        Full ({{ $status['total'] }} slots)
+                                                    @else
+                                                        {{ $status['remaining'] }} slots remaining out of {{ $status['total'] }}
+                                                    @endif
+                                                </div>
                                             </div>
                                         @endforeach
                                     </div>
@@ -269,17 +269,6 @@
                                                     </select>
                                                 </div>
                                             </div>
-
-
-
-                                            <!-- User Display -->
-                                            {{-- <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="user_id">User Account</label>
-                                        <input type="text" class="form-control" value="{{ $participant->user->name ?? 'N/A' }}" disabled>
-                                    </div>
-                                </div> --}}
-
                                             <!-- First Name -->
                                             <div class="col-md-6 col-lg-4">
                                                 <div class="form-group">
@@ -443,9 +432,6 @@
                                                 </div>
                                             </div>
 
-
-
-
                                             <!-- Is MSP Officer -->
                                             <div class="col-md-6 col-lg-4">
                                                 <div class="form-group">
@@ -473,14 +459,6 @@
                                                         {{ old('is_msp_officer', $participant->is_msp_officer) == 'Yes' ? '' : 'disabled' }}>
                                                 </div>
                                             </div>
-
-                                            <!-- Religious Affiliation -->
-                                            {{-- <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="religious_affiliation">Religious Affiliation</label>
-                                        <input type="text" class="form-control" name="religious_affiliation" value="{{ old('religious_affiliation', $participant->religious_affiliation) }}">
-                                    </div>
-                                </div> --}}
 
                                             <!-- T-Shirt Size -->
                                             <div class="col-md-6 col-lg-4">
@@ -531,12 +509,13 @@
                                     </div>
 
                                     <div class="card-action">
-                                        <button type="submit" class="btn btn-label-info btn-round">Update</button>
-                                        <button type="button" class="btn btn-primary btn-round"
-                                            onclick="window.location.href='{{ route('participants.index') }}'">Back</button>
+                                        <button type="button" class="btn btn-label-info btn-round"
+                                        onclick="window.location.href='{{ route('participants.index') }}'">Back</button>
+                                        <button type="submit" class="btn btn-primary btn-round">Update</button>
+
                                     </div>
                                 </form>
-
+                            </div>
                             </div>
                         </div>
                     </div>

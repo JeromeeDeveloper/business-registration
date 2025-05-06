@@ -272,21 +272,6 @@
                                           <button type="button" onclick="printAttendance()" class="btn btn-primary text-white" data-bs-toggle="tooltip" title="Print Participant List">
                                             <i class="fa fa-print"></i>
                                           </button>
-
-                                          <button type="button" class="btn btn-success text-white"
-                                                data-bs-toggle="tooltip"
-                                                title="Print MSP Officers Only"
-                                                onclick="window.open('{{ route('generateids', ['type' => 'msp']) }}', '_blank')">
-                                            <i class="fa fa-id-card"></i> MSP Officers
-                                        </button>
-
-                                        <button type="button" class="btn btn-info text-white"
-                                                data-bs-toggle="tooltip"
-                                                title="Print Non-MSP Participants Only"
-                                                onclick="window.open('{{ route('generateids', ['type' => 'non']) }}', '_blank')">
-                                            <i class="fa fa-id-card"></i> Non-MSP
-                                        </button>
-
                                         </form>
                                       </div>
 
@@ -294,21 +279,31 @@
 
 
                                 <div class="card-body">
-                                    <div class="d-flex justify-content-between mb-3">
+                                    <div class="d-flex flex-column flex-md-row justify-content-between gap-2 mb-3">
                                         <div>
                                             <label>Show
-                                                <select id="showEntries" class="form-select form-select-sm"
-                                                    style="width: auto; display: inline;">
-                                                    <option value="5"
-                                                        {{ request('limit') == 5 ? 'selected' : '' }}>5</option>
-                                                    <option value="10"
-                                                        {{ request('limit') == 10 ? 'selected' : '' }}>10</option>
-                                                    <option value="25"
-                                                        {{ request('limit') == 25 ? 'selected' : '' }}>25</option>
-                                                    <option value="50"
-                                                        {{ request('limit') == 50 ? 'selected' : '' }}>50</option>
+                                                <select id="showEntries" class="form-select form-select-sm d-inline w-auto">
+                                                    <option value="5" {{ request('limit') == 5 ? 'selected' : '' }}>5</option>
+                                                    <option value="10" {{ request('limit') == 10 ? 'selected' : '' }}>10</option>
+                                                    <option value="25" {{ request('limit') == 25 ? 'selected' : '' }}>25</option>
+                                                    <option value="50" {{ request('limit') == 50 ? 'selected' : '' }}>50</option>
                                                 </select> entries
                                             </label>
+                                        </div>
+                                        <div class="d-flex flex-wrap justify-content-center justify-content-md-end gap-2">
+                                            <button type="button" class="btn btn-success text-white"
+                                                    data-bs-toggle="tooltip"
+                                                    title="Print MSP Officers Only"
+                                                    onclick="window.open('{{ route('generateids', ['type' => 'msp']) }}', '_blank')">
+                                                <i class="fa fa-id-card"></i> MSP Officers
+                                            </button>
+
+                                            <button type="button" class="btn btn-info text-white"
+                                                    data-bs-toggle="tooltip"
+                                                    title="Print Non-MSP Participants Only"
+                                                    onclick="window.open('{{ route('generateids', ['type' => 'non']) }}', '_blank')">
+                                                <i class="fa fa-id-card"></i> Non-MSP
+                                            </button>
                                         </div>
                                     </div>
                                     <div class="table-responsive">
