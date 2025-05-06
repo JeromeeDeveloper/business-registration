@@ -4,11 +4,7 @@
     <title>Print All IDs</title>
     <style>
         .page {
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+          
             page-break-after: always;
         }
 

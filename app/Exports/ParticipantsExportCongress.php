@@ -22,11 +22,7 @@ class ParticipantsExportCongress implements FromCollection, WithHeadings
             ->leftJoin('cooperatives', 'participants.coop_id', '=', 'cooperatives.coop_id')
             ->leftJoin('event_participant', 'participants.participant_id', '=', 'event_participant.participant_id')
             ->leftJoin('events', 'event_participant.event_id', '=', 'events.event_id')
-            ->where('participants.delegate_type', 'Voting')
-            ->whereHas('cooperative.gaRegistration', function ($query) {
-                $query->where('membership_status', 'Migs')
-                      ->where('registration_status', 'Fully Registered');
-            })
+        
             ->groupBy('participants.participant_id',
                       'participants.first_name',
                       'participants.middle_name',
