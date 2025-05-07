@@ -36,9 +36,9 @@ class CoopRegistrationExport implements FromCollection, WithHeadings, WithMappin
             'Free 2 pax for MIGS',
             'Free half for 1/2 CETF',
             'Free pax for every 100k CETF',
-            'Less CETF Balance',
-            'Less Pre-reg payment',
-            'Regristration Fee payable',
+            'Charge to CETF Usage',
+            'Cash Paid Reg Fee',
+            'Registration Fee payable',
             'Remarks'
         ];
     }
