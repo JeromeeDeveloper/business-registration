@@ -534,8 +534,6 @@
                                                 </div>
 
 
-
-
                                                 <!-- Delegate Type -->
                                                 <div class="col-md-6 col-lg-4">
                                                     <div class="form-group">

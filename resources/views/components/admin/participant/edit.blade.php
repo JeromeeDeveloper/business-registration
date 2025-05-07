@@ -246,6 +246,21 @@
                                     </div>
                                 </div>
 
+                                @if (!$canAddVoting && $participant->delegate_type !== 'Voting')
+                                <div class="alert alert-warning mt-2">
+                                    The maximum number of Voting delegates ({{ $votes }})
+                                    has
+                                    been reached.
+                                    You cannot change this participant to Voting status.
+                                </div>
+                            @elseif($participant->delegate_type === 'Voting')
+                                <div class="alert alert-info mt-2">
+                                    This participant is currently a Voting delegate. Total votes
+                                    allowed: {{ $votes }}.
+                                    You may change their delegate type if necessary.
+                                </div>
+                            @endif
+
 
                                 <form id="participantForm"
                                     action="{{ route('participants.update', $participant->participant_id) }}"
@@ -490,20 +505,27 @@
                                                 </div>
                                             </div>
 
+
+
                                             <!-- Delegate Type -->
                                             <div class="col-md-6 col-lg-4">
                                                 <div class="form-group">
                                                     <label for="delegate_type">Delegate Type</label>
-                                                    <select class="form-control" name="delegate_type">
+                                                    <select class="form-control" name="delegate_type"
+                                                        id="delegate_type">
                                                         <option value="Voting"
-                                                            {{ old('delegate_type', $participant->delegate_type) == 'Voting' ? 'selected' : '' }}>
-                                                            Voting</option>
+                                                            {{ old('delegate_type', $participant->delegate_type) == 'Voting' ? 'selected' : '' }}
+                                                            {{ !$canAddVoting && $participant->delegate_type !== 'Voting' ? 'disabled' : '' }}>
+                                                            Voting
+                                                        </option>
                                                         <option value="Non-Voting"
                                                             {{ old('delegate_type', $participant->delegate_type) == 'Non-Voting' ? 'selected' : '' }}>
-                                                            Non-Voting</option>
+                                                            Non-Voting
+                                                        </option>
                                                     </select>
                                                 </div>
                                             </div>
+
 
                                         </div>
                                     </div>

@@ -308,11 +308,34 @@ public function store(Request $request)
            ];
        }
 
+       // ✅ Voting logic
+       $shareCapital = $participant->cooperative->share_capital_balance ?? 0;
+       $votes = 0;
+
+       if ($shareCapital >= 25000) {
+           $votes = 1;
+       }
+
+       if ($shareCapital >= 100000) {
+           $votes += floor(($shareCapital - 25000) / 100000);
+       }
+
+       $votes = min($votes, 5);
+
+       $currentVotingCount = Participant::where('coop_id', $participant->coop_id)
+           ->where('delegate_type', 'Voting')
+           ->where('participant_id', '!=', $participant->participant_id)
+           ->count();
+
+       $canAddVoting = $currentVotingCount < $votes || $participant->delegate_type === 'Voting';
+
        return view('components.admin.participant.edit', compact(
            'participant',
            'cooperatives',
            'events',
-           'eventStatus'
+           'eventStatus',
+           'canAddVoting',
+           'votes'
        ));
    }
 
