@@ -66,16 +66,16 @@
                     <tr>
                         <th>Cooperative Name</th>
                         <th>CETF</th>
-                        <th># of Delegates</th>
+                        <th>No. of Delegates</th>
                         <th>Region</th>
                         <th>Share Capital Balance</th>
                         <th>No. of Entitled Votes</th>
-                        <th>MSP Officer Fee</th>
-                        <th>1/2 CETF</th>
-                        <th>Free 4500</th>
-                        <th>CHARGE TO CETF</th>
-                        <th>CASH PAID REGFEE</th>
-                        <th>PAYABLE</th>
+                        <th>Free for MSP Officer</th>
+                        <th>Free half for 1/2 CETF</th>
+                        <th>Free pax for every 100k CETF</th>
+                        <th>Less CETF Balance</th>
+                        <th>Less Pre-reg payment</th>
+                        <th>Regristration Fee payable</th>
                         <th>Remarks</th>
                     </tr>
                 </thead>

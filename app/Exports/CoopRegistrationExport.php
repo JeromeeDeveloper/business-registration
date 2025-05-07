@@ -3,9 +3,10 @@
 namespace App\Exports;
 
 use App\Models\Cooperative;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
+use App\Models\GARegistration;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\FromCollection;
 
 class CoopRegistrationExport implements FromCollection, WithHeadings, WithMapping
 {
@@ -19,7 +20,7 @@ class CoopRegistrationExport implements FromCollection, WithHeadings, WithMappin
         return [
             'Cooperative Name',
             'CETF',
-            '# OF DELEGATE',
+            'No. of Delegates',
             'Region',
             'Total Asset',
             'Loan Balance',
@@ -31,12 +32,13 @@ class CoopRegistrationExport implements FromCollection, WithHeadings, WithMappin
             'CETF Required',
             'Share Capital Balance',
             'No. of Entitled Votes',
-            'MSP Officer Fee',
-            '1/2 CETF',
-            'Free 4500',
-            'CHARGE TO CETF',
-            'CASH PAID REGFEE',
-            'PAYABLE',
+            'Free for MSP Officer',
+            'Free 2 pax for MIGS',
+            'Free half for 1/2 CETF',
+            'Free pax for every 100k CETF',
+            'Less CETF Balance',
+            'Less Pre-reg payment',
+            'Regristration Fee payable',
             'Remarks'
         ];
     }
@@ -47,14 +49,14 @@ class CoopRegistrationExport implements FromCollection, WithHeadings, WithMappin
         $participantCount = $coop->participants()->count() ?? 0;
 
         // Check for MSP Officer Fee
-        $hasMspOfficer = $coop->free_migs_pax == 4500;
-        $mspOfficerFee = $hasMspOfficer ? $coop->free_migs_pax : 0;
+
+        $mspOfficerFee = $coop->free_migs_pax ? $coop->free_migs_pax * 4500 : 0;
 
         // Calculate half CETF, but only if CETF remittance is less than 100,000
         $halfCetf = ($coop->cetf_remittance < 100000 && $coop->cetf_remittance >= 50000) ? 4500 / 2 : 0;
 
         // Calculate Free 4500
-        $free4500 = ($coop->cetf_remittance >= 100000) ? 4500 : 0;
+        $free4500 = floor($coop->cetf_remittance / 100000) * 4500;
 
         $shareCapitalBalance = $coop->share_capital_balance;
 
@@ -71,6 +73,12 @@ class CoopRegistrationExport implements FromCollection, WithHeadings, WithMappin
 
         // Cap the votes at 5
         $entitledVotes = min($votes, 5);
+
+        $migsCount = GARegistration::where('coop_id', $coop->coop_id)
+        ->where('membership_status', 'Migs')
+        ->count();
+
+        $migsStatusValue = $migsCount > 0 ? 9000 : 0;
 
         // Return mapped data
         return [
@@ -89,6 +97,7 @@ class CoopRegistrationExport implements FromCollection, WithHeadings, WithMappin
             $coop->share_capital_balance,
             $entitledVotes,
             $mspOfficerFee,
+            $migsStatusValue,
             $halfCetf,
             $free4500,
             $coop->less_cetf_balance,
