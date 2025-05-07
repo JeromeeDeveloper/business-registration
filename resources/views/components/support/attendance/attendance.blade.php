@@ -488,7 +488,13 @@
                                                                 </a>
                                                             </div>
                                                         </td>
-
+                                                        {{-- <form action="{{ route('participants.destroy', $eventParticipant->participant->participant_id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this participant?');">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-link btn-danger btn-lg" data-bs-toggle="tooltip" title="Delete Participant">
+                                                                <i class="fa fa-trash"></i>
+                                                            </button>
+                                                        </form> --}}
                                                     </tr>
                                                 @empty
                                                     <tr>

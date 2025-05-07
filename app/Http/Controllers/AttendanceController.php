@@ -86,5 +86,12 @@ class AttendanceController extends Controller
         return view('components.admin.attendance.attendance_print', compact('participants'));
     }
 
+    public function destroy($id)
+    {
+        $eventParticipant = EventParticipant::findOrFail($id);
+        $eventParticipant->delete();
+
+        return redirect()->back()->with('success', 'Attendance record deleted successfully.');
+    }
 
 }
