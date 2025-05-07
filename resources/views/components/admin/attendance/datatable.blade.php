@@ -447,10 +447,10 @@
                                                                     <i class="fa fa-eye"></i>
                                                                 </a>
 
-                                                                <form action="{{ route('attendance.destroy', $eventParticipant->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this attendance?');">
+                                                                <form class="delete-attendance-form" data-id="{{ $eventParticipant->id }}" method="POST">
                                                                     @csrf
                                                                     @method('DELETE')
-                                                                    <button type="submit" class="btn btn-link btn-danger btn-lg" data-bs-toggle="tooltip" title="Delete Attendance">
+                                                                    <button type="button" class="btn btn-link btn-danger btn-lg delete-attendance-btn" data-bs-toggle="tooltip" title="Delete Attendance">
                                                                         <i class="fa fa-trash"></i>
                                                                     </button>
                                                                 </form>
@@ -537,6 +537,32 @@
 
     <!-- Flatpickr JS -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.delete-attendance-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const form = this.closest('form');
+                    const attendanceId = form.getAttribute('data-id');
+
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "This will permanently delete the attendance record.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#e3342f',
+                        cancelButtonColor: '#6c757d',
+                        confirmButtonText: 'Yes, delete it!',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.setAttribute('action', `/attendance/${attendanceId}`);
+                            form.submit();
+                        }
+                    });
+                });
+            });
+        });
+    </script>
     <script>
         const dateRangePicker = flatpickr("#date-range", {
             mode: "range",

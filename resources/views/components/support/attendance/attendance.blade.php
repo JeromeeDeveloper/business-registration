@@ -487,16 +487,16 @@
                                                                     <i class="fa fa-eye"></i>
                                                                 </a>
 
+                                                                <form class="delete-attendance-form" data-id="{{ $eventParticipant->id }}" method="POST">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button type="button" class="btn btn-link btn-danger btn-lg delete-attendance-btn" data-bs-toggle="tooltip" title="Delete Attendance">
+                                                                        <i class="fa fa-trash"></i>
+                                                                    </button>
+                                                                </form>
+                                                            </div>
+                                                        </td>
 
-                                                        <form action="{{ route('attendance.destroy', $eventParticipant->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this attendance?');">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn btn-link btn-danger btn-lg" data-bs-toggle="tooltip" title="Delete Attendance">
-                                                                <i class="fa fa-trash"></i>
-                                                            </button>
-                                                        </form>
-                                                    </div>
-                                                    </td>
                                                     </tr>
                                                 @empty
                                                     <tr>
@@ -553,6 +553,31 @@
         </div>
     </div>
     @include('layouts.links')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.delete-attendance-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const form = this.closest('form');
+                    const attendanceId = form.getAttribute('data-id');
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You are about to delete this attendance.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#e3342f',
+                        cancelButtonColor: '#6c757d',
+                        confirmButtonText: 'Yes, delete it!',
+                        cancelButtonText: 'No, cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.setAttribute('action', `/attendance/${attendanceId}`);
+                            form.submit();
+                        }
+                    });
+                });
+            });
+        });
+    </script>
     <script>
         document.getElementById('showEntries').addEventListener('change', function() {
             let url = new URL(window.location.href);
