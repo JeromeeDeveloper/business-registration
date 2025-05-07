@@ -89,9 +89,13 @@ class AttendanceController extends Controller
     public function destroy($id)
     {
         $eventParticipant = EventParticipant::findOrFail($id);
-        $eventParticipant->delete();
 
-        return redirect()->back()->with('success', 'Attendance record deleted successfully.');
+        // Set only the attendance_datetime to null
+        $eventParticipant->attendance_datetime = null;
+        $eventParticipant->save();
+
+        return redirect()->back()->with('success', 'Attendance timestamp cleared successfully.');
     }
+
 
 }
