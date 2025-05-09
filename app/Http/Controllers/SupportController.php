@@ -111,7 +111,7 @@ class SupportController extends Controller
                     ->from('ga_registrations')
                     ->where('membership_status', 'Migs');
             })
-            ->distinct('participants.coop_id') // Counts MIGS coop only once
+            ->distinct('participants.coop_id') 
             ->count('participants.coop_id');
 
         $totalNonMigsAttended = DB::table('participants')
@@ -125,7 +125,12 @@ class SupportController extends Controller
             ->distinct('participants.coop_id') // Counts Non-MIGS coop only once
             ->count('participants.coop_id');
 
-        $totalVoting = Participant::where('delegate_type', 'Voting')->count();
+            $totalVoting = Participant::where('delegate_type', 'Voting')
+            ->whereHas('cooperative.gaRegistration', function ($query) {
+                $query->where('membership_status', 'Migs')
+                    ->where('registration_status', 'Fully Registered');
+            })
+            ->count();
 
         // Attended Participants with Voting Delegate Type
         $totalVotingParticipants = EventParticipant::whereNotNull('attendance_datetime')
