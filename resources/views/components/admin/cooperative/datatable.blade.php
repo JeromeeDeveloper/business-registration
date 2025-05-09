@@ -368,12 +368,15 @@
                                                 <div class="modal-body d-flex flex-column gap-3 text-center">
 
                                                     <!-- Notify via Email -->
-                                                    <form>
-                                                        <button
+                                                    <form action="{{ route('cooperatives.canvas') }}"
+                                                        method="POST"
+                                                        onsubmit="showSwalLoader(event, this, 'Sending Canvas Credentials...')">
+                                                        @csrf
+                                                        <button type="submit"
                                                             class="btn btn-outline-info w-100 d-flex align-items-center justify-content-center px-4 py-2 fw-semibold"
-                                                            onclick="openGmail()" data-bs-toggle="tooltip"
-                                                            title="Notify via Email">
-                                                            <i class="fa fa-envelope me-2"></i> Manual Email Invitation
+                                                            data-bs-toggle="tooltip"
+                                                            title="Send Canvas Credentials">
+                                                            <i class="fa fa-bell me-2"></i>Cooperative Canvas Credentials Notification
                                                         </button>
                                                     </form>
 

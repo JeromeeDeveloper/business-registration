@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Mail\CooperativeNotification;
 use Illuminate\Support\Facades\Storage;
+use App\Mail\CooperativeNotificationCanvas;
 use App\Mail\CooperativeNotificationsingle;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Exports\ReportsExport; // If using Excel
@@ -85,6 +86,52 @@ class DashboardController extends Controller
         }
     }
 
+    public function canvasnotif()
+{
+    try {
+        \Log::info('Notification request received for all cooperatives.');
+
+        // Retrieve all cooperatives
+        $cooperatives = Cooperative::all();
+
+        if ($cooperatives->isEmpty()) {
+            return back()->with('error', 'No cooperatives found.');
+        }
+
+        // Get the latest event
+        $event = Event::oldest()->first();
+
+        if (!$event) {
+            return back()->with('error', 'No event found to notify.');
+        }
+
+        // Send email to each cooperative
+        foreach ($cooperatives as $coop) {
+            // Look for GARegistration with relevant statuses
+            $gaRegistration = GARegistration::where('coop_id', $coop->coop_id)
+                ->whereIn('registration_status', ['Fully Registered', 'Partial Registered'])
+                ->latest()
+                ->first();
+
+            if ($gaRegistration) {
+                // Retrieve users related to the cooperative
+                $users = User::where('coop_id', $coop->coop_id)->get();
+
+                // Queue email
+                Mail::to($coop->email)->queue(
+                    new CooperativeNotificationCanvas($coop, $event, $gaRegistration, $users)
+                );
+
+                \Log::info('Notification sent to: ' . $coop->email);
+            }
+        }
+
+        return redirect()->route('adminview')->with('success', 'Notification sent to all cooperatives!');
+    } catch (\Exception $e) {
+        \Log::error('Error sending notifications: ' . $e->getMessage());
+        return back()->with('error', 'Error sending notifications. Please try again.');
+    }
+}
 
 
 
