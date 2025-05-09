@@ -26,7 +26,7 @@
 
             <p>You can log in at: <a href="https://mass-specc.instructure.com/" target="_blank">https://mass-specc.instructure.com/</a></p>
 
-            <p>If you need any assistance, feel free to reach out to ICS at <strong>0917-133-5218</strong>. We're here to help!</p>
+            <p>If you need any assistance, feel free to reach out to our Institute of Cooperatives (ICS) Team at <strong>0966 442 5724/ 0917 142 5284/ 0916 135 5984.</strong>. We're here to help!</p>
 
             <p><em>This is a system-generated email. Please do not reply.</em></p>
         </div>
