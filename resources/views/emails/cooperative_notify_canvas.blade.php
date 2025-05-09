@@ -26,9 +26,7 @@
 
             <p>You can log in at: <a href="https://mass-specc.instructure.com/" target="_blank">https://mass-specc.instructure.com/</a></p>
 
-            <p>If you need any assistance, feel free to reach out to our Member Support Unit at <strong>0917-133-5218</strong>. We're here to help!</p>
-
-            <p>We look forward to your participation in the upcoming CO-OPvention!</p>
+            <p>If you need any assistance, feel free to reach out to ICS at <strong>0917-133-5218</strong>. We're here to help!</p>
 
             <p><em>This is a system-generated email. Please do not reply.</em></p>
         </div>

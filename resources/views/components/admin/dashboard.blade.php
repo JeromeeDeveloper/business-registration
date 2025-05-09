@@ -6,7 +6,6 @@
     <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
 </head>
 
-
 <body>
     <div class="wrapper">
         <div class="sidebar" data-background-color="dark">

@@ -7,10 +7,8 @@
 
 <body>
     <div class="wrapper">
-        <!-- Sidebar -->
         <div class="sidebar" data-background-color="dark">
             <div class="sidebar-logo">
-                <!-- Logo Header -->
                 <div class="logo-header" data-background-color="dark">
                     <a href="{{ route('adminDashboard') }}" class="logo">
                         <img class="logo-mass-specc" src="{{ asset('images/logo.png') }}" alt="">
@@ -27,7 +25,6 @@
                         <i class="gg-more-vertical-alt"></i>
                     </button>
                 </div>
-                <!-- End Logo Header -->
             </div>
             <div class="sidebar-wrapper scrollbar scrollbar-inner">
                 <div class="sidebar-content">
@@ -163,11 +160,11 @@
                 </div>
             </div>
         </div>
-        <!-- End Sidebar -->
+
         <div class="main-panel">
             <div class="main-header">
                 <div class="main-header-logo">
-                    <!-- Logo Header -->
+
                     <div class="logo-header" data-background-color="dark">
                         <a href="{{ route('adminDashboard') }}" class="logo">
                             <img class="logo-mass-specc" src="{{ asset('images/logo.png') }}" alt="">
@@ -184,11 +181,11 @@
                             <i class="gg-more-vertical-alt"></i>
                         </button>
                     </div>
-                    <!-- End Logo Header -->
+
                 </div>
-                <!-- Navbar Header -->
+
                 @include('layouts.adminnav')
-                <!-- End Navbar -->
+
             </div>
             <div class="container">
                 <div class="page-inner">
@@ -218,16 +215,15 @@
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header">
-
                                     <div
                                         class="d-flex flex-column flex-md-row align-items-stretch align-items-md-center gap-2">
-                                        <!-- Title -->
+
                                         <h4 class="card-title mb-0 flex-shrink-0">Cooperative</h4>
-                                        <!-- Search Form -->
+
                                         <form method="GET" action="{{ route('adminview') }}"
                                             class="d-flex flex-column flex-md-row align-items-stretch align-items-md-center gap-2 flex-grow-1"
                                             id="searchForm">
-                                            <!-- Search Input and Filter -->
+
                                             <div class="input-group">
                                                 <input type="text" name="search" class="form-control"
                                                     placeholder="Search..." value="{{ request('search') }}">
@@ -235,7 +231,7 @@
                                                 <button type="submit" class="btn btn-primary"><i
                                                         class="fa fa-search"></i></button>
                                             </div>
-                                            <!-- Action Buttons -->
+
                                             <div class="d-flex flex-row gap-2">
                                                 <a href="{{ route('adminregister') }}" class="btn btn-primary"
                                                     data-bs-toggle="tooltip" title="Add Cooperative">
@@ -257,12 +253,10 @@
                                     </div>
                                 </div>
 
-
                                 <div class="card-body">
                                     <div
                                         class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
 
-                                        <!-- Show Entries -->
                                         <div>
                                             <label class="mb-0">Show
                                                 <select id="showEntries"
@@ -279,7 +273,6 @@
                                             </label>
                                         </div>
 
-                                        <!-- Notifications Button -->
                                         <div class="d-flex flex-wrap gap-2 justify-content-center align-items-center">
                                             <button
                                                 class="btn btn-label-info btn-round fw-bold d-flex align-items-center px-4 py-2"
@@ -297,7 +290,6 @@
                                                 <i class="fa fa-download me-2"></i> Download All Documents
                                             </button>
                                         </div>
-
 
                                         <div class="modal fade" id="cooperativeModal" tabindex="-1"
                                             aria-labelledby="cooperativeModalLabel" aria-hidden="true">
@@ -330,7 +322,6 @@
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary"
                                                                     data-bs-dismiss="modal">Close</button>
-                                                                {{-- <button type="submit" class="btn btn-primary">Generate PDF</button> --}}
                                                                 <button type="button" class="btn btn-success"
                                                                     onclick="printReport()">Print or Export as
                                                                     PDF</button>
@@ -349,12 +340,8 @@
                                                     aria-label="Close"></button>
                                             </div>
                                         @endif
-
                                     </div>
 
-                                    <!-- Other page content here -->
-
-                                    <!-- Notifications Modal (place near the end of the page) -->
                                     <div class="modal fade" id="notifyModal" tabindex="-1"
                                         aria-labelledby="notifyModalLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered">
@@ -363,24 +350,20 @@
                                                     <h5 class="modal-title" id="notifyModalLabel">
                                                         <i class="fa fa-bell me-2"></i> Notifications Center
                                                     </h5>
-
                                                 </div>
                                                 <div class="modal-body d-flex flex-column gap-3 text-center">
 
-                                                    <!-- Notify via Email -->
-                                                    <form action="{{ route('cooperatives.canvas') }}"
-                                                        method="POST"
+                                                    <form action="{{ route('cooperatives.canvas') }}" method="POST"
                                                         onsubmit="showSwalLoader(event, this, 'Sending Canvas Credentials...')">
                                                         @csrf
                                                         <button type="submit"
                                                             class="btn btn-outline-info w-100 d-flex align-items-center justify-content-center px-4 py-2 fw-semibold"
-                                                            data-bs-toggle="tooltip"
-                                                            title="Send Canvas Credentials">
-                                                            <i class="fa fa-bell me-2"></i>Cooperative Canvas Credentials Notification
+                                                            data-bs-toggle="tooltip" title="Send Canvas Credentials">
+                                                            <i class="fa fa-bell me-2"></i>Cooperative Canvas
+                                                            Credentials Notification
                                                         </button>
                                                     </form>
 
-                                                    <!-- Status & Invitation Form -->
                                                     <form action="{{ route('cooperatives.notifyAll') }}"
                                                         method="POST"
                                                         onsubmit="showSwalLoader(event, this, 'Sending Status & Invitation...')">
@@ -407,19 +390,6 @@
                                                         </button>
                                                     </form>
 
-
-                                                    <!-- Credentials Form -->
-                                                    {{-- <form action="{{ route('cooperatives.notifyCredentialsAll') }}"
-                                                        method="POST"
-                                                        onsubmit="showSwalLoader(event, this, 'Sending Login Credentials...')">
-                                                        @csrf
-                                                        <button type="submit"
-                                                            class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center px-4 py-2 fw-semibold"
-                                                            data-bs-toggle="tooltip" title="Send Login Credentials">
-                                                            <i class="fa fa-lock me-2"></i> Credentials
-                                                        </button>
-                                                    </form> --}}
-
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn-label-info btn-round w-25 h-100"
@@ -430,9 +400,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- End Modal -->
 
-                                    <!-- Table with Cooperatives -->
                                     <div class="table-responsive">
                                         <table id="add-row" class="display table table-striped table-hover">
                                             <thead>
@@ -454,7 +422,6 @@
                                                         <td>{{ $coop->registered_voting_participants }}</td>
                                                         <td>{{ $coop->votes ?? 0 }}</td>
 
-                                                        <!-- Registration Status -->
                                                         <td class="p-2 align-middle text-center">
                                                             @php
                                                                 $status = optional($coop->gaRegistration)
@@ -469,7 +436,6 @@
                                                                     default => 'text-primary',
                                                                 };
 
-                                                                // White background and thick gray border
                                                                 $commonStyle =
                                                                     'bg-white border border-gray-600 border-2';
                                                             @endphp
@@ -480,7 +446,6 @@
                                                             </span>
                                                         </td>
 
-                                                        <!-- Membership Status -->
                                                         <td class="p-2 align-middle text-center">
                                                             @php
                                                                 $membershipStatus = strtoupper(
@@ -492,7 +457,6 @@
                                                                     default => 'text-success',
                                                                 };
 
-                                                                // White background and thick gray border
                                                                 $commonStyle =
                                                                     'bg-white border border-gray-600 border-2';
                                                             @endphp
@@ -503,11 +467,9 @@
                                                             </span>
                                                         </td>
 
-
                                                         <td class="no-print">
                                                             <div class="form-button-action">
 
-                                                                <!-- Notify Form -->
                                                                 @if (session('error'))
                                                                     <div class="alert alert-danger">
                                                                         {{ session('error') }}
@@ -534,7 +496,6 @@
                                                                     <i class="fa fa-file"></i>
                                                                 </a>
 
-                                                                <!-- View Coop Details -->
                                                                 <a href="{{ route('cooperatives.show', $coop->coop_id) }}"
                                                                     class="btn btn-link btn-info btn-lg"
                                                                     data-bs-toggle="tooltip"
@@ -542,7 +503,6 @@
                                                                     <i class="fa fa-eye"></i>
                                                                 </a>
 
-                                                                <!-- Edit Coop -->
                                                                 <button type="button"
                                                                     class="btn btn-link btn-info btn-lg"
                                                                     data-bs-toggle="tooltip" title="Edit Coop">
@@ -552,7 +512,6 @@
                                                                     </a>
                                                                 </button>
 
-                                                                <!-- Delete Coop -->
                                                                 <form
                                                                     action="{{ route('cooperatives.destroy', $coop->coop_id) }}"
                                                                     method="POST" class="delete-form"
@@ -567,7 +526,6 @@
                                                                         <i class="fa fa-times"></i>
                                                                     </button>
                                                                 </form>
-
 
                                                             </div>
                                                         </td>
@@ -602,7 +560,6 @@
                                     </small>
                                 </div>
 
-                                <!-- Mobile responsive + centered pagination -->
                                 <div class="d-flex justify-content-center mt-3">
                                     <div class="w-100" style="overflow-x: auto;">
                                         <div class="d-flex justify-content-center" style="min-width: max-content;">
@@ -610,53 +567,37 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
-
                         </div>
-
-
                     </div>
-
                 </div>
-
             </div>
-
             @include('layouts.adminfooter')
-
         </div>
-
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             let showEntries = document.getElementById("showEntries");
             if (showEntries) {
                 showEntries.addEventListener("change", function() {
                     let url = new URL(window.location.href);
-                    url.searchParams.set("limit", this.value); // Set 'limit' parameter
-                    window.location.href = url.toString(); // Update the URL
+                    url.searchParams.set("limit", this.value);
+                    window.location.href = url.toString();
                 });
             }
         });
     </script>
-
-
-
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         function printAttendance() {
             var tableClone = document.querySelector("table tbody").cloneNode(true);
-
-            // Convert dropdowns to text before printing
             tableClone.querySelectorAll("select").forEach(select => {
                 var selectedText = select.options[select.selectedIndex].text;
                 var textNode = document.createTextNode(selectedText);
                 select.parentNode.replaceChild(textNode, select);
             });
-
-            // Remove action buttons before printing
             tableClone.querySelectorAll(".no-print").forEach(el => el.remove());
-
             var printWindow = window.open('', '', 'width=800,height=600');
             printWindow.document.write(`
         <html>
@@ -701,8 +642,7 @@
     </script>
     <script>
         function showSwalLoader(event, form, message) {
-            event.preventDefault(); // Stop normal form submission
-
+            event.preventDefault();
             Swal.fire({
                 title: 'Processing...',
                 text: message,
@@ -711,19 +651,16 @@
                 showConfirmButton: false,
                 didOpen: () => {
                     Swal.showLoading();
-
-                    // Submit the form after showing the loader
                     setTimeout(() => {
                         form.submit();
-                    }, 2000); // Adjust the delay as needed
+                    }, 2000);
                 }
             });
         }
     </script>
     <script>
         function showSwalLoader(event, form, message) {
-            event.preventDefault(); // Stop normal form submission
-
+            event.preventDefault();
             Swal.fire({
                 title: 'Processing...',
                 text: message,
@@ -732,43 +669,30 @@
                 showConfirmButton: false,
                 didOpen: () => {
                     Swal.showLoading();
-
-                    // Submit the form after showing the loader
                     setTimeout(() => {
                         form.submit();
-                    }, 2000); // Adjust the delay as needed
+                    }, 2000);
                 }
             });
         }
     </script>
-
     <script>
         function openGmail() {
-            // Retrieve emails from Laravel and convert to a comma-separated list
             let recipients = @json($emailsall).join(',');
-
             let subject = encodeURIComponent("52nd CO-OP LEADERS CONGRESS & 48th GENERAL ASSEMBLY");
             let body = encodeURIComponent(`Dear Cooperative Members,
-
-We are pleased to invite you to our upcoming event:
-
-Event Name:
-Date:
-Location:
-
-Best Regards,
-MASS-SPECC Cooperative Development Center`);
-
-            // Open Gmail compose window
+            We are pleased to invite you to our upcoming event:
+            Event Name:
+            Date:
+            Location:
+            Best Regards,
+            MASS-SPECC Cooperative Development Center`);
             window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${recipients}&su=${subject}&body=${body}`, '_blank');
         }
     </script>
-
     <script>
         function confirmDelete(event, button) {
-            event.preventDefault(); // Prevent form from submitting
-
-            // Show SweetAlert confirmation dialog
+            event.preventDefault();
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
@@ -780,30 +704,25 @@ MASS-SPECC Cooperative Development Center`);
                 cancelButtonText: 'Cancel'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // If confirmed, submit the form
                     button.closest('form').submit();
                 }
             });
         }
     </script>
-
-    @include('layouts.links')
-</body>
-<script>
-    function printReport() {
-        const selectedFilter = document.getElementById('filter').value;
-        const printUrl = `{{ route('cooperative.print') }}?filter=${selectedFilter}`;
-        const printWindow = window.open(printUrl, '_blank');
-
-        printWindow.onload = function() {
-            printWindow.print();
-
-            // Add a cancel option by listening for when the print dialog is closed
-            printWindow.onafterprint = function() {
-                printWindow.close();
+    <script>
+        function printReport() {
+            const selectedFilter = document.getElementById('filter').value;
+            const printUrl = `{{ route('cooperative.print') }}?filter=${selectedFilter}`;
+            const printWindow = window.open(printUrl, '_blank');
+            printWindow.onload = function() {
+                printWindow.print();
+                printWindow.onafterprint = function() {
+                    printWindow.close();
+                };
             };
-        };
-    }
-</script>
+        }
+    </script>
+    @include('layouts.links')
 
+</body>
 </html>

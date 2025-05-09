@@ -7,10 +7,8 @@
 
 <body>
     <div class="wrapper">
-        <!-- Sidebar -->
         <div class="sidebar" data-background-color="dark">
             <div class="sidebar-logo">
-                <!-- Logo Header -->
                 <div class="logo-header" data-background-color="dark">
                     <a href="{{ route('adminDashboard') }}" class="logo">
                         <img class="logo-mass-specc" src="{{ asset('images/logo.png') }}" alt="">
@@ -27,7 +25,6 @@
                         <i class="gg-more-vertical-alt"></i>
                     </button>
                 </div>
-                <!-- End Logo Header -->
             </div>
             <div class="sidebar-wrapper scrollbar scrollbar-inner">
                 <div class="sidebar-content">
@@ -39,14 +36,12 @@
                                 <p>Dashboard</p>
                             </a>
                         </li>
-
                         <li class="nav-section">
                             <span class="sidebar-mini-icon">
                                 <i class="fa fa-ellipsis-h"></i>
                             </span>
                             <h4 class="text-section">Components</h4>
                         </li>
-
                         <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#cooperative">
                                 <i class="fas fa-users"></i>
@@ -79,7 +74,6 @@
                                 </ul>
                             </div>
                         </li>
-
                         <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#attendance">
                                 <i class="fas fa-calendar"></i>
@@ -93,11 +87,9 @@
                                             <span class="sub-item">Manage attendance</span>
                                         </a>
                                     </li>
-
                                 </ul>
                             </div>
                         </li>
-
                         <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#user">
                                 <i class="fas fa-user"></i>
@@ -114,7 +106,6 @@
                                 </ul>
                             </div>
                         </li>
-
                         <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#speaker">
                                 <i class="fas fa-microphone"></i>
@@ -128,11 +119,9 @@
                                             <span class="sub-item">Manage Speaker</span>
                                         </a>
                                     </li>
-
                                 </ul>
                             </div>
                         </li>
-
                         <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#events">
                                 <i class="fas fa-calendar"></i>
@@ -149,7 +138,6 @@
                                 </ul>
                             </div>
                         </li>
-
                         <li class="nav-item">
                             <a href="https://mass-specc.coop/2025-coopvention-registration/" class="nav-link"
                                 title="Register for Coopvention" target="_blank">
@@ -157,17 +145,13 @@
                                 <p>Hotel Accomodation</p>
                             </a>
                         </li>
-
                     </ul>
                 </div>
             </div>
         </div>
-        <!-- End Sidebar -->
-
         <div class="main-panel">
             <div class="main-header">
                 <div class="main-header-logo">
-                    <!-- Logo Header -->
                     <div class="logo-header" data-background-color="dark">
                         <a href="{{ route('adminDashboard') }}" class="logo">
                             <img class="logo-mass-specc" src="{{ asset('images/logo.png') }}" alt="">
@@ -183,13 +167,9 @@
                                 <i class="gg-more-vertical-alt"></i>
                             </button>
                     </div>
-                    <!-- End Logo Header -->
                 </div>
-                <!-- Navbar Header -->
                 @include('layouts.adminnav')
-                <!-- End Navbar -->
             </div>
-
             <div class="container">
                 <div class="page-inner">
                     <div class="page-header">
@@ -224,18 +204,15 @@
                                 <div class="card-header d-flex justify-content-between align-items-center">
                                     <div class="card-title">Cooperative Edit Form</div>
                                     <button type="button" class="btn btn-primary btn-round"
-                                        onclick="window.location.href='{{route('adminview')}}'">
+                                        onclick="window.location.href='{{ route('adminview') }}'">
                                         <i class="fas fa-arrow-left"></i>
                                     </button>
                                 </div>
-
-
                                 <form action="{{ route('cooperatives.update', $coop->coop_id) }}" method="POST">
                                     @csrf
                                     @method('PUT')
                                     <div class="card-body">
                                         <div class="row">
-                                            <!-- Coop Name -->
                                             <div class="col-md-6 col-lg-4">
                                                 <div class="form-group">
                                                     <label for="name">Cooperative Name</label>
@@ -244,8 +221,6 @@
                                                         placeholder="Enter Cooperative Name" />
                                                 </div>
                                             </div>
-
-                                            <!-- Contact Person -->
                                             <div class="col-md-6 col-lg-4">
                                                 <div class="form-group">
                                                     <label for="contact_person">Contact Person</label>
@@ -254,8 +229,6 @@
                                                         placeholder="Enter Contact Person" />
                                                 </div>
                                             </div>
-
-                                            <!-- Cooperative Type -->
                                             <div class="col-md-6 col-lg-4">
                                                 <div class="form-group">
                                                     <label for="type">Cooperative Type</label>
@@ -264,8 +237,6 @@
                                                         placeholder="Enter Cooperative Type" />
                                                 </div>
                                             </div>
-
-                                            <!-- Address -->
                                             <div class="col-md-6 col-lg-4">
                                                 <div class="form-group">
                                                     <label for="address">Address</label>
@@ -273,8 +244,6 @@
                                                         value="{{ $coop->address }}" placeholder="Enter Address" />
                                                 </div>
                                             </div>
-
-                                            <!-- Region -->
                                             <div class="col-md-6 col-lg-4">
                                                 <div class="form-group">
                                                     <label for="region">Region</label>
@@ -289,9 +258,6 @@
                                                     </select>
                                                 </div>
                                             </div>
-
-
-                                            <!-- Phone Number -->
                                             <div class="col-md-6 col-lg-4">
                                                 <div class="form-group">
                                                     <label for="phone_number">Phone Number</label>
@@ -301,11 +267,6 @@
                                                         placeholder="Enter Phone Number" />
                                                 </div>
                                             </div>
-
-
-
-
-                                            <!-- Email -->
                                             <div class="col-md-6 col-lg-4">
                                                 <div class="form-group">
                                                     <label for="email">Email</label>
@@ -314,8 +275,6 @@
                                                         name="email" id="email"
                                                         value="{{ old('email', $coop->email) }}"
                                                         placeholder="Enter Email" />
-
-                                                    {{-- Show error only if the email is different from the cooperative's current email --}}
                                                     @if ($errors->has('email') && old('email') !== $coop->email)
                                                         <div class="alert alert-danger">
                                                             {{ $errors->first('email') }}
@@ -323,10 +282,6 @@
                                                     @endif
                                                 </div>
                                             </div>
-
-
-
-                                            <!-- TIN -->
                                             <div class="col-md-6 col-lg-4">
                                                 <div class="form-group">
                                                     <label for="tin">TIN</label>
@@ -335,8 +290,6 @@
                                                         placeholder="Enter TIN" />
                                                 </div>
                                             </div>
-
-                                            <!-- Coop Identification No -->
                                             <div class="col-md-6 col-lg-4">
                                                 <div class="form-group">
                                                     <label for="coop_identification_no">Cooperative ID</label>
@@ -346,8 +299,6 @@
                                                         placeholder="Enter Coop ID" />
                                                 </div>
                                             </div>
-
-                                            <!-- BOD Chairperson -->
                                             <div class="col-md-6 col-lg-4">
                                                 <div class="form-group">
                                                     <label for="bod_chairperson">BOD Chairperson</label>
@@ -356,8 +307,6 @@
                                                         placeholder="Enter BOD Chairperson" />
                                                 </div>
                                             </div>
-
-                                            <!-- General Manager/CEO -->
                                             <div class="col-md-6 col-lg-4">
                                                 <div class="form-group">
                                                     <label for="general_manager_ceo">General Manager/CEO</label>
@@ -367,29 +316,6 @@
                                                         placeholder="Enter Manager/CEO" />
                                                 </div>
                                             </div>
-
-
-                                            <!-- Number of Entitled Votes -->
-                                            {{-- <div class="col-md-6 col-lg-4">
-                                                <div class="form-group">
-                                                    <label for="no_of_entitled_votes">No of Entitled Votes</label>
-                                                    <input type="number" class="form-control"
-                                                        name="no_of_entitled_votes" id="no_of_entitled_votes"
-                                                        value="{{ $coop->no_of_entitled_votes }}"
-                                                        placeholder="Enter No of Entitled Votes" />
-                                                </div>
-                                            </div> --}}
-
-                                            {{-- <div class="col-md-6 col-lg-4">
-                                                <div class="form-group">
-                                                    <label for="total_income">Total Income</label>
-                                                    <input type="number" class="form-control"
-                                                        name="total_income" id="total_income"
-                                                        value="{{ $coop->total_income }}"
-                                                        placeholder="Enter Total Income">
-                                                </div>
-                                            </div> --}}
-
                                             <div class="col-md-6 col-lg-4">
                                                 <div class="form-group">
                                                     <label for="ga_remark">Remark</label>
@@ -401,12 +327,11 @@
                                                 <h4 class="mt-4">Verifier</h4>
                                                 <hr>
                                             </div>
-                                            <!-- First Column: MIGS/ Voting Delegate Requirements -->
+
                                             <div class="col-lg-4">
                                                 <div class="card shadow-sm p-3">
                                                     <h5 class="text-primary">MIGS / Voting Delegate Requirements</h5>
                                                     <hr>
-
                                                     <div class="form-group">
                                                         <label for="share_capital_balance">Share Capital</label>
                                                         <input type="number" class="form-control"
@@ -415,8 +340,6 @@
                                                             placeholder="0" step="0.01">
                                                         <span class="formatted-number" id="formatted-value"></span>
                                                     </div>
-
-
                                                     <div class="form-group">
                                                         <label for="no_of_entitled_votes">Complied SC Req. / # Voting
                                                             Delegate</label>
@@ -425,9 +348,6 @@
                                                             value="{{ $coop->no_of_entitled_votes ?? '' }}"
                                                             placeholder="Enter Complied SC Req." disabled>
                                                     </div>
-
-
-
                                                     <div class="form-group">
                                                         <label for="loan_balance">Loan Balance</label>
                                                         <input type="number" class="form-control"
@@ -435,7 +355,6 @@
                                                             value="{{ $coop->loan_balance }}"
                                                             placeholder="Enter Loan Balance" step="0.01">
                                                     </div>
-
                                                     <div class="form-group">
                                                         <label for="total_overdue">Loan Overdue</label>
                                                         <input type="number" class="form-control"
@@ -443,7 +362,6 @@
                                                             value="{{ $coop->total_overdue }}"
                                                             placeholder="Enter Loan Overdue" step="0.01">
                                                     </div>
-
                                                     <div class="form-group">
                                                         <label for="time_deposit">Time Deposit</label>
                                                         <input type="number" class="form-control"
@@ -451,7 +369,6 @@
                                                             value="{{ $coop->time_deposit }}"
                                                             placeholder="Enter Time Deposit" step="0.01">
                                                     </div>
-
                                                     <div class="form-group">
                                                         <label for="accounts_receivable">Accounts Receivable</label>
                                                         <input type="number" class="form-control"
@@ -459,15 +376,12 @@
                                                             value="{{ $coop->accounts_receivable }}"
                                                             placeholder="Enter Accounts Receivable" step="0.01">
                                                     </div>
-
                                                     <div class="form-group">
                                                         <label for="savings">Savings</label>
                                                         <input type="number" class="form-control" name="savings"
                                                             id="savings" value="{{ $coop->savings }}"
                                                             placeholder="Enter Savings" step="0.01">
                                                     </div>
-
-
                                                     <div class="form-group">
                                                         <label for="services_availed">Services Availed</label>
                                                         <div class="dropdown">
@@ -479,12 +393,10 @@
                                                             </button>
                                                             <ul class="dropdown-menu w-100 p-2" id="dropdownMenu">
                                                                 @php
-                                                                    // Decode JSON array properly
                                                                     $selectedServices =
                                                                         json_decode($coop->services_availed, true) ??
                                                                         [];
                                                                 @endphp
-
                                                                 @foreach (['CF', 'IT', 'MSU', 'ICS', 'MCU', 'ADMIN', 'GAD', 'YOUTH', 'SCOOPS', 'YAKAP', 'AGRIBEST'] as $service)
                                                                     <li>
                                                                         <label class="dropdown-item">
@@ -505,7 +417,6 @@
                                                     </div>
 
                                                     <h6 class="mt-3 text-secondary">Membership Status:</h6>
-
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="checkbox"
                                                             name="membership_status" id="membership_status" disabled
@@ -514,7 +425,6 @@
                                                             class="form-check-label text-uppercase fw-bold text-dark opacity-75"
                                                             for="membership_status">Migs</label>
                                                     </div>
-
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="checkbox"
                                                             name="membership_status_non_migs"
@@ -524,8 +434,6 @@
                                                             class="form-check-label text-uppercase fw-bold text-danger opacity-75"
                                                             for="membership_status_non_migs">Non-migs</label>
                                                     </div>
-
-                                                    <!-- Instructions on how to become a Migs member -->
                                                     <div>
                                                         <h6 class="text-secondary">How to become a MIGS members:</h6>
                                                         <ul class="text-muted">
@@ -538,10 +446,10 @@
                                                             <li>CETF remittance is not blank or zero.</li>
                                                             <li>CETF balance is zero (means fully paid).</li>
                                                             <li>The CETF required amount must be greater than ₱0.</li>
-                                                            <li>Required Documents (Financial Statement) is uploaded and accepted.</li>
+                                                            <li>Required Documents (Financial Statement) is uploaded and
+                                                                accepted.</li>
                                                         </ul>
                                                     </div>
-
                                                     <div>
                                                         <h6 class="text-secondary">How to become Fully Registered</h6>
                                                         <ul class="text-muted">
@@ -549,16 +457,12 @@
                                                             <li>GA RegFee Payable is zero (means fully paid)</li>
                                                         </ul>
                                                     </div>
-
                                                 </div>
                                             </div>
-
-                                            <!-- Second Column: CETF Requirement Computation -->
                                             <div class="col-md-6 col-lg-4">
                                                 <div class="card shadow-sm p-3">
                                                     <h5 class="text-primary">CETF Requirement Computation</h5>
                                                     <hr>
-
                                                     <div class="form-group">
                                                         <label for="fs_status">FS (YES/NO)</label>
                                                         <select class="form-control" id="fs_status" disabled>
@@ -569,12 +473,9 @@
                                                                 {{ $hasFinancialStatement == false ? 'selected' : '' }}>
                                                                 No</option>
                                                         </select>
-                                                        <!-- Hidden input to store value -->
                                                         <input type="hidden" name="fs_status"
                                                             value="{{ $hasFinancialStatement ? 'yes' : 'no' }}">
                                                     </div>
-
-
                                                     <div class="form-group">
                                                         <label for="delinquent">Delinquent</label>
                                                         <select class="form-control" id="delinquent_display" disabled>
@@ -586,26 +487,20 @@
                                                                 Non-Delinquent</option>
                                                         </select>
                                                     </div>
-
-                                                    <!-- Hidden input for storing the actual delinquent value -->
                                                     <input type="hidden" name="delinquent" id="delinquent"
                                                         value="{{ $coop->total_overdue > 0 ? 'yes' : 'no' }}">
-
                                                     <div class="form-group">
                                                         <label for="total_asset">Total Assets</label>
                                                         <input type="number" class="form-control" name="total_asset"
                                                             id="total_asset" value="{{ $coop->total_asset }}"
                                                             placeholder="Enter Total Asset" step="0.01">
                                                     </div>
-
                                                     <div class="form-group">
                                                         <label for="net_surplus">Net Surplus</label>
                                                         <input type="number" class="form-control" name="net_surplus"
                                                             id="net_surplus" value="{{ $coop->net_surplus }}"
                                                             placeholder="Enter Net Surplus" step="0.01">
                                                     </div>
-
-
                                                     <div class="form-group">
                                                         <label for="cetf_due_to_apex">CETF Due to Apex</label>
                                                         <input type="number" class="form-control"
@@ -613,7 +508,6 @@
                                                             value="{{ $coop->cetf_due_to_apex }}"
                                                             placeholder="Enter CETF Due to Apex" step="0.01">
                                                     </div>
-
                                                     <div class="form-group">
                                                         <label for="cetf_required">Required CETF</label>
                                                         <input type="number" class="form-control"
@@ -621,7 +515,6 @@
                                                             value="{{ $coop->cetf_required }}"
                                                             placeholder="Enter Required CETF" readonly>
                                                     </div>
-
                                                     <div class="form-group">
                                                         <label for="cetf_remittance">CETF Remittance</label>
                                                         <input type="number" class="form-control"
@@ -629,7 +522,6 @@
                                                             value="{{ $coop->cetf_remittance }}"
                                                             placeholder="Enter CETF Remittance" step="0.01">
                                                     </div>
-
                                                     <div class="form-group">
                                                         <label for="additional_cetf">Additional CETF</label>
                                                         <input type="number" class="form-control"
@@ -637,7 +529,6 @@
                                                             value="{{ $coop->additional_cetf }}"
                                                             placeholder="Enter Additional CETF" step="0.01">
                                                     </div>
-
                                                     <div class="form-group">
                                                         <label for="cetf_undertaking">CETF Undertaking</label>
                                                         <input type="text" class="form-control"
@@ -645,7 +536,6 @@
                                                             value="{{ $coop->cetf_undertaking }}"
                                                             placeholder="Enter CETF Undertaking" step="0.01">
                                                     </div>
-
                                                     <div class="form-group">
                                                         <label for="total_remittance">Total Remittance</label>
                                                         <input type="number" class="form-control"
@@ -653,7 +543,6 @@
                                                             value="{{ $coop->total_remittance }}"
                                                             placeholder="Enter Total Remittance" readonly>
                                                     </div>
-
                                                     <div class="form-group">
                                                         <label for="full_cetf_remitted">Full CETF Remitted</label>
                                                         <select class="form-control" name="full_cetf_remitted"
@@ -666,7 +555,6 @@
                                                                 No</option>
                                                         </select>
                                                     </div>
-
                                                     <div class="form-group">
                                                         <label for="cetf_balance">CETF Balance</label>
                                                         <input type="number" class="form-control"
@@ -674,16 +562,13 @@
                                                             value="{{ $coop->cetf_balance }}"
                                                             placeholder="CETF Balance" readonly>
                                                     </div>
-
                                                 </div>
                                             </div>
-
                                             <div class="col-md-6 col-lg-4">
                                                 <div class="card shadow-sm p-3">
                                                     <h5 class="text-primary">Registration Fee
                                                     </h5>
                                                     <hr>
-
                                                     <div class="form-group">
                                                         <label for="registration_date_paid">Registration Date
                                                             [Paid]</label>
@@ -691,7 +576,6 @@
                                                             name="registration_date_paid" id="registration_date_paid"
                                                             value="{{ $coop->registration_date_paid }}">
                                                     </div>
-
                                                     <div class="form-group">
                                                         <label for="registration_fee">Registration Fee</label>
                                                         <input type="number" class="form-control"
@@ -699,9 +583,6 @@
                                                             value="4500" placeholder="Enter Registration Fee"
                                                             readonly>
                                                     </div>
-
-
-
                                                     <div class="form-group">
                                                         <label for="num_participants"># of Participants</label>
                                                         <input type="number" class="form-control"
@@ -709,7 +590,6 @@
                                                             value="{{ $coop->participants()->count() }}"
                                                             placeholder="Enter # of Participants" disabled>
                                                     </div>
-
                                                     <div class="form-group">
                                                         <label for="total_reg_fee">Total Registration Fee</label>
                                                         <input type="number" class="form-control"
@@ -717,10 +597,8 @@
                                                             value="{{ $coop->total_reg_fee }}"
                                                             placeholder="Enter Total Registration Fee" readonly>
                                                     </div>
-
                                                     <div class="form-group">
                                                         <label>Checklist Automate:</label>
-
                                                         <div class="form-check">
                                                             <input class="form-check-input" type="checkbox"
                                                                 name="free_2pax_migs" id="free_2pax_migs"
@@ -729,26 +607,25 @@
                                                             <label class="form-check-label" for="free_2pax_migs">Free
                                                                 2 Pax for MIGS</label>
                                                         </div>
-
                                                         @php
-                                                        $freePaxCount = isset($cetfRemittance) && $cetfRemittance > 0 ? floor($cetfRemittance / 100000) : 'N/A';
-                                                    @endphp
-
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox"
-                                                            name="free_100k_cetf" id="free_100k_cetf"
-                                                            value="1" {{ $free100kCETF ? 'checked' : '' }}
-                                                            disabled>
-                                                        <label class="form-check-label" for="free_100k_cetf">
-                                                            1 Pax Free for every 100K CETF
-                                                            <span id="free_100k_cetf_label" class="text-primary fw-bold ms-2">
-                                                                {{ is_numeric($freePaxCount) ? $freePaxCount . ' Pax' : 'N/A' }}
-                                                            </span>
-                                                        </label>
-                                                    </div>
-
-
-
+                                                            $freePaxCount =
+                                                                isset($cetfRemittance) && $cetfRemittance > 0
+                                                                    ? floor($cetfRemittance / 100000)
+                                                                    : 'N/A';
+                                                        @endphp
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                name="free_100k_cetf" id="free_100k_cetf"
+                                                                value="1" {{ $free100kCETF ? 'checked' : '' }}
+                                                                disabled>
+                                                            <label class="form-check-label" for="free_100k_cetf">
+                                                                1 Pax Free for every 100K CETF
+                                                                <span id="free_100k_cetf_label"
+                                                                    class="text-primary fw-bold ms-2">
+                                                                    {{ is_numeric($freePaxCount) ? $freePaxCount . ' Pax' : 'N/A' }}
+                                                                </span>
+                                                            </label>
+                                                        </div>
                                                         <div class="form-check">
                                                             <input class="form-check-input" type="checkbox"
                                                                 name="half_based_cetf" id="half_based_cetf"
@@ -757,24 +634,18 @@
                                                             <label class="form-check-label" for="half_based_cetf">1/2
                                                                 Based on CETF</label>
                                                         </div>
-
-
                                                         <div class="form-group">
                                                             <label>Free Officer Pax:</label>
                                                             <div class="input-group">
-                                                                <input type="number"
-                                                                class="form-control"
-                                                                name="free_migs_pax"
-                                                                id="free_migs_pax"
-                                                                min="0"
-                                                                value="{{ old('free_migs_pax', (int) ($coop->free_migs_pax ?? 0)) }}">
+                                                                <input type="number" class="form-control"
+                                                                    name="free_migs_pax" id="free_migs_pax"
+                                                                    min="0"
+                                                                    value="{{ old('free_migs_pax', (int) ($coop->free_migs_pax ?? 0)) }}">
 
                                                                 <span class="input-group-text">Pax</span>
                                                             </div>
                                                             <small class="text-muted">Amount per pax: ₱4,500</small>
                                                         </div>
-
-
                                                         <div class="form-group">
                                                             <label for="net_required_regfee">Net Required
                                                                 RegFee</label>
@@ -783,7 +654,6 @@
                                                                 value="{{ $coop->net_required_reg_fee }}"
                                                                 placeholder="Enter Net Required RegFee" readonly>
                                                         </div>
-
                                                         <div class="form-group">
                                                             <label for="less_prereg_payment">Less: PreReg
                                                                 Payment</label>
@@ -793,7 +663,6 @@
                                                                 placeholder="Enter PreReg Payment Deduction"
                                                                 step="0.01">
                                                         </div>
-
                                                         <div class="form-group">
                                                             <label for="less_cetf_balance">Less: CETF
                                                                 Utilization</label>
@@ -803,7 +672,6 @@
                                                                 placeholder="Enter CETF Balance Deduction"
                                                                 step="0.01">
                                                         </div>
-
                                                         <div class="form-group">
                                                             <label for="reg_fee_payable">GA RegFee Payable</label>
                                                             <input type="number" class="form-control"
@@ -811,11 +679,7 @@
                                                                 value="{{ $coop->reg_fee_payable }}"
                                                                 placeholder="Enter GA RegFee Payable" readonly>
                                                         </div>
-
-
-
                                                         <h6 class="mt-3 text-secondary">Registration Status:</h6>
-
                                                         <div class="form-check">
                                                             <input class="form-check-input" type="checkbox"
                                                                 name="registration_status" id="registration_status"
@@ -827,7 +691,6 @@
                                                                 Fully Registered
                                                             </label>
                                                         </div>
-
                                                         <div class="form-check">
                                                             <input class="form-check-input" type="checkbox"
                                                                 name="registration_status_partial"
@@ -839,7 +702,6 @@
                                                                 Partially Registered
                                                             </label>
                                                         </div>
-
                                                         <div class="form-check">
                                                             <input class="form-check-input" type="checkbox"
                                                                 name="registration_status_rejected"
@@ -855,7 +717,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div class="card-action">
                                             <button class="btn btn-primary btn-round me-2" type="submit">Submit
                                                 Information</button>
@@ -875,9 +736,7 @@
                                         <h4 class="">Manage Documents for
                                             {{ $coop->name }}</h4>
                                         <hr>
-
                                         <div class="row">
-                                            <!-- Financial Statement (Left Column) -->
                                             <div class="col-md-6 mb-4">
                                                 <label for="documents[Financial Statement]" class="form-label">Audited
                                                     Financial Statement</label>
@@ -885,7 +744,6 @@
                                                     id="financialStatementFile"
                                                     accept=".jpg,.jpeg,.png,.pdf,.xlsx,.xls,.csv,.zip"
                                                     class="form-control mb-2">
-
                                                 @if ($coop->uploadedDocuments()->where('document_type', 'Financial Statement')->exists())
                                                     <p class="text-info">Current File:
                                                         {{ $coop->uploadedDocuments()->where('document_type', 'Financial Statement')->first()->file_name }}
@@ -895,8 +753,6 @@
                                                 @endif
                                                 <small class="form-text text-muted">Accepted formats: jpg, jpeg, png,
                                                     pdf (no file size limit).</small>
-
-                                                <!-- Checklist for Marking as Done -->
                                                 <div class="form-check mt-2">
                                                     <input class="form-check-input" type="checkbox"
                                                         id="markAsDoneFinancial"
@@ -907,9 +763,6 @@
                                                     </label>
                                                 </div>
                                             </div>
-
-
-                                            <!-- Resolution for Voting Delegates (Right Column) -->
                                             <div class="col-md-6 mb-4">
                                                 <label for="documents[Resolution for Voting Delegates]"
                                                     class="form-label">Resolution for Voting Delegates</label>
@@ -926,8 +779,6 @@
                                                 @endif
                                                 <small class="form-text text-muted">Accepted formats: jpg, jpeg, png,
                                                     pdf (no file size limit).</small>
-
-                                                <!-- Checklist for Marking as Done -->
                                                 <div class="form-check mt-2">
                                                     <input class="form-check-input" type="checkbox"
                                                         id="markAsDoneResolution"
@@ -938,14 +789,10 @@
                                                         Hardcopy Document Submitted
                                                     </label>
                                                 </div>
-
-
-
                                             </div>
                                         </div>
 
                                         <div class="row">
-                                            <!-- Deposit Slip for Registration Fee (Left Column) -->
                                             <div class="col-md-6 mb-4">
                                                 <label for="documents[Deposit Slip for Registration Fee]"
                                                     class="form-label">Deposit
@@ -975,11 +822,7 @@
                                                         Hardcopy Document Submitted
                                                     </label>
                                                 </div>
-
-
                                             </div>
-
-                                            <!-- Deposit Slip for CETF Remittance (Right Column) -->
                                             <div class="col-md-6 mb-4">
                                                 <label for="documents[Deposit Slip for CETF Remittance]"
                                                     class="form-label">Deposit
@@ -1011,9 +854,7 @@
 
                                             </div>
                                         </div>
-
                                         <div class="row">
-                                            <!-- CETF Undertaking (Left Column) -->
                                             <div class="col-md-6 mb-4">
                                                 <label for="documents[CETF Undertaking]" class="form-label">CETF
                                                     Undertaking</label>
@@ -1040,11 +881,7 @@
                                                         Hardcopy Document Submitted
                                                     </label>
                                                 </div>
-
-
                                             </div>
-
-
                                             <div class="col-md-6 mb-4">
                                                 <label for="documents[Certificate of Candidacy]"
                                                     class="form-label">Certificate of
@@ -1077,7 +914,6 @@
                                         </div>
 
                                         <div class="row">
-                                            <!-- CETF Utilization Invoice (Left Column) -->
                                             <div class="col-md-6 mb-4">
                                                 <label for="documents[CETF Utilization invoice]"
                                                     class="form-label">CETF Utilization
@@ -1105,12 +941,8 @@
                                                         Hardcopy Document Submitted
                                                     </label>
                                                 </div>
-
                                             </div>
                                         </div>
-
-                                        <!-- Submit Button -->
-
                                         <div class="card-action">
                                             <button type="submit" class="btn btn-primary btn-round me-2">Upload
                                                 Documents</button>
@@ -1124,7 +956,6 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="row">
-
                                         <div class="col-12">
                                             <h4 class="mt-4">Edit Document Status</h4>
                                             <hr>
@@ -1142,9 +973,9 @@
                                                             <th>File Name</th>
                                                             <th>View</th>
                                                             <th>Download</th>
-                                                            <th>Status</th> <!-- Add this -->
+                                                            <th>Status</th>
                                                             <th>Remarks</th>
-                                                            <th>Action</th> <!-- Add this -->
+                                                            <th>Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -1153,7 +984,6 @@
                                                                 <td>
                                                                     {{ $document->document_type === 'Financial Statement' ? 'Audited ' : '' }}{{ $document->document_type }}
                                                                 </td>
-
                                                                 <td>{{ $document->file_name }}</td>
                                                                 <td>
                                                                     <a href="{{ asset('storage/' . $document->file_path) }}"
@@ -1169,7 +999,6 @@
                                                                         <i class="fas fa-download"></i> Download
                                                                     </a>
                                                                 </td>
-                                                                <!-- Status Dropdown -->
                                                                 <td>
                                                                     <form
                                                                         action="{{ route('admin.documents.updateStatus', $document->document_id) }}"
@@ -1196,13 +1025,11 @@
                                                                         value="{{ $document->remarks ?? '' }}"
                                                                         @if ($document->status === 'Approved' && $document->remarks === 'Hardcopy') readonly @endif>
                                                                 </td>
-
                                                                 <td>
                                                                     <button type="submit"
                                                                         class="btn btn-sm btn-outline-secondary">Update</button>
                                                                     </form>
                                                                 </td>
-
                                                             </tr>
                                                         @endforeach
                                                     </tbody>
@@ -1213,17 +1040,13 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
     </div>
-
     </div>
-
     </div>
     @if (session('success'))
         <script>
@@ -1259,7 +1082,6 @@
             const totalOverdue = parseFloat(this.value) || 0;
             const delinquentSelect = document.getElementById('delinquent_display');
             const delinquentInput = document.getElementById('delinquent');
-
             if (totalOverdue > 0) {
                 delinquentSelect.value = 'yes';
                 delinquentInput.value = 'yes';
@@ -1273,42 +1095,29 @@
         document.addEventListener('DOMContentLoaded', function() {
             const shareCapitalInput = document.getElementById('share_capital_balance');
             const entitledVotesInput = document.getElementById('no_of_entitled_votes');
-
-            // Function to calculate the number of entitled votes
             function calculateEntitledVotes(shareCapital) {
                 let votes = 0;
-
                 if (shareCapital >= 25000) {
                     if (shareCapital >= 100000) {
-                        votes = Math.floor(shareCapital / 100000); // Every ₱100,000 = 1 vote
+                        votes = Math.floor(shareCapital / 100000);
                         const remaining = shareCapital % 100000;
 
                         if (remaining >= 25000) {
-                            votes += 1; // Add 1 more vote for remaining ₱25,000+
+                            votes += 1;
                         }
                     } else {
-                        votes = 1; // ₱25,000 to ₱99,999 = 1 vote
+                        votes = 1;
                     }
-
-                    // Cap the votes at 5
                     votes = Math.min(votes, 5);
                 }
-
                 return votes;
             }
-
-
-            // Function to update the entitled votes based on share capital
             function updateEntitledVotes() {
-                const shareCapital = parseFloat(shareCapitalInput.value) || 0; // Get the value from the input field
+                const shareCapital = parseFloat(shareCapitalInput.value) || 0;
                 const entitledVotes = calculateEntitledVotes(shareCapital);
                 entitledVotesInput.value = entitledVotes;
             }
-
-            // Initial calculation on page load
             updateEntitledVotes();
-
-            // Listen for changes in the share capital input field to update entitled votes
             shareCapitalInput.addEventListener('input', function() {
                 updateEntitledVotes();
             });
@@ -1320,108 +1129,80 @@
             let cetfRequired = document.getElementById('cetf_required');
             let totalRemittance = document.getElementById('total_remittance');
             let cetfBalance = document.getElementById('cetf_balance');
-
             function updateCetfBalance() {
                 let required = parseFloat(cetfRequired.value) || 0;
                 let remitted = parseFloat(totalRemittance.value) || 0;
                 let balance = (required - remitted).toFixed(2);
-
                 cetfBalance.value = balance;
             }
-
             cetfRequired.addEventListener('input', updateCetfBalance);
             totalRemittance.addEventListener('input', updateCetfBalance);
-            updateCetfBalance(); // Initialize on page load
+            updateCetfBalance();
         });
     </script>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        function calculateFees() {
-            let regFee = parseFloat(document.getElementById('registration_fee').value) || 0;
-            let numParticipants = parseInt(document.getElementById('num_participants').value) || 0;
-            let preregPayment = parseFloat(document.getElementById('less_prereg_payment').value) || 0;
-            let cetfBalance = parseFloat(document.getElementById('less_cetf_balance').value) || 0;
-            let totalRemittance = parseFloat(document.getElementById('total_remittance').value) || 0;
-            // let totalRemittance = parseFloat(document.getElementById('total_remittance').value) || 0;
-            // let totalRemittance = document.getElementById('total_remittance');
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            function calculateFees() {
+                let regFee = parseFloat(document.getElementById('registration_fee').value) || 0;
+                let numParticipants = parseInt(document.getElementById('num_participants').value) || 0;
+                let preregPayment = parseFloat(document.getElementById('less_prereg_payment').value) || 0;
+                let cetfBalance = parseFloat(document.getElementById('less_cetf_balance').value) || 0;
+                let totalRemittance = parseFloat(document.getElementById('total_remittance').value) || 0;
+                let free100kCetf = document.getElementById('free_100k_cetf');
+                let halfBasedCetf = document.getElementById('half_based_cetf');
 
-            let free100kCetf = document.getElementById('free_100k_cetf');
-            let halfBasedCetf = document.getElementById('half_based_cetf');
+                halfBasedCetf.disabled = true;
+                let free100kCount = Math.floor(totalRemittance / 100000);
 
-            // Always keep half_based_cetf disabled
-            halfBasedCetf.disabled = true;
+                if (free100kCetf) {
+                    free100kCetf.checked = free100kCount > 0;
+                }
 
-            // Calculate how many free pax based on every 100k remittance
-            let free100kCount = Math.floor(totalRemittance / 100000);
+                let cetfLabel = document.getElementById('free_100k_cetf_label');
+                if (cetfLabel) {
+                    cetfLabel.textContent = `${free100kCount} Pax`;
+                }
 
-            // Update checkbox state and label text
-            if (free100kCetf) {
-                free100kCetf.checked = free100kCount > 0;
+                if (free100kCetf.checked) {
+                    halfBasedCetf.checked = false;
+                }
+
+                let totalRegFee = numParticipants * regFee;
+                let freeAmount = 0;
+                if (document.getElementById('free_2pax_migs').checked) {
+                    freeAmount += 9000;
+                }
+                let freeMigsPax = parseInt(document.getElementById('free_migs_pax').value) || 0;
+                freeAmount += freeMigsPax * 4500;
+
+                if (free100kCetf.checked && free100kCount > 0) {
+                    freeAmount += free100kCount * 4500;
+                }
+                if (halfBasedCetf.checked) {
+                    freeAmount += 2250;
+                }
+                let netRequiredRegFee = totalRegFee - freeAmount;
+                let regFeePayable = netRequiredRegFee - (preregPayment + cetfBalance);
+                document.getElementById('total_reg_fee').value = totalRegFee.toFixed(2);
+                document.getElementById('net_required_reg_fee').value = netRequiredRegFee.toFixed(2);
+                document.getElementById('reg_fee_payable').value = regFeePayable.toFixed(2);
             }
-
-            let cetfLabel = document.getElementById('free_100k_cetf_label');
-            if (cetfLabel) {
-                cetfLabel.textContent = `${free100kCount} Pax`;
-            }
-
-            // Uncheck half CETF if 100k free is active
-            if (free100kCetf.checked) {
-                halfBasedCetf.checked = false;
-            }
-
-            // Total Registration Fee
-            let totalRegFee = numParticipants * regFee;
-
-            // Calculate Free Amounts
-            let freeAmount = 0;
-            if (document.getElementById('free_2pax_migs').checked) {
-                freeAmount += 9000;
-            }
-
-            let freeMigsPax = parseInt(document.getElementById('free_migs_pax').value) || 0;
-            freeAmount += freeMigsPax * 4500;
-
-            if (free100kCetf.checked && free100kCount > 0) {
-                freeAmount += free100kCount * 4500;
-            }
-
-
-            if (halfBasedCetf.checked) {
-                freeAmount += 2250;
-            }
-
-            // Net Required Registration Fee
-            let netRequiredRegFee = totalRegFee - freeAmount;
-
-            // Final Payable Fee
-            let regFeePayable = netRequiredRegFee - (preregPayment + cetfBalance);
-
-            // Update Fields
-            document.getElementById('total_reg_fee').value = totalRegFee.toFixed(2);
-            document.getElementById('net_required_reg_fee').value = netRequiredRegFee.toFixed(2);
-            document.getElementById('reg_fee_payable').value = regFeePayable.toFixed(2);
-        }
-
-        // Event Listeners
-        let fields = [
-            'registration_fee', 'num_participants', 'less_prereg_payment', 'less_cetf_balance',
-            'free_2pax_migs', 'free_migs_pax', 'free_100k_cetf', 'half_based_cetf', 'cetf_remittance', 'total_remittance'
-        ];
-
-        fields.forEach(id => {
-            let el = document.getElementById(id);
-            if (el) {
-                el.addEventListener('input', calculateFees);
-                el.addEventListener('change', calculateFees);
-            }
+            let fields = [
+                'registration_fee', 'num_participants', 'less_prereg_payment', 'less_cetf_balance',
+                'free_2pax_migs', 'free_migs_pax', 'free_100k_cetf', 'half_based_cetf', 'cetf_remittance',
+                'total_remittance'
+            ];
+            fields.forEach(id => {
+                let el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('input', calculateFees);
+                    el.addEventListener('change', calculateFees);
+                }
+            });
+            calculateFees();
         });
-
-        // Run on load
-        calculateFees();
-    });
-</script>
-
+    </script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             let cetfRemittance = document.getElementById('cetf_remittance');
@@ -1430,38 +1211,29 @@
             let totalRemittance = document.getElementById('total_remittance');
             let fullCetfRemitted = document.getElementById('full_cetf_remitted');
             let cetfRequired = document.getElementById('cetf_required');
-
             function calculateTotalRemittance() {
                 let remittance = parseFloat(cetfRemittance.value) || 0;
                 let additional = parseFloat(additionalCetf.value) || 0;
                 let undertaking = parseFloat(cetfUndertaking.value) || 0;
                 let total = (remittance + additional + undertaking).toFixed(2);
-
                 totalRemittance.value = total;
                 totalRemittance.dispatchEvent(new Event('input'));
                 updateFullCetfRemitted(parseFloat(total));
             }
-
             function updateFullCetfRemitted(total) {
                 let required = parseFloat(cetfRequired.value) || 0;
-
-                // If cetf_required is 0 or null, set fullCetfRemitted to "no"
                 if (required <= 0) {
                     fullCetfRemitted.value = "no";
                     return;
                 }
-
-                // Otherwise, check if total remittance meets or exceeds the requirement
                 fullCetfRemitted.value = total >= required ? "yes" : "no";
             }
-
             cetfRemittance.addEventListener('input', calculateTotalRemittance);
             additionalCetf.addEventListener('input', calculateTotalRemittance);
             cetfUndertaking.addEventListener('input', calculateTotalRemittance);
-            calculateTotalRemittance(); // Initialize on page load
+            calculateTotalRemittance();
         });
     </script>
-
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             let cetfDueToApexInput = document.getElementById('cetf_due_to_apex');
@@ -1471,62 +1243,47 @@
             function updateCetfRequired() {
                 let dueToApex = parseFloat(cetfDueToApexInput.value) || 0;
                 let netSurplus = parseFloat(netSurplusInput.value) || 0;
-
-                // Check if net_surplus is negative, if so, override cetf_required to 3000
                 if (netSurplus < 0) {
-                    cetfRequiredInput.value = "3000.00"; // Override to 3000
+                    cetfRequiredInput.value = "3000.00";
                 } else {
-                    let cetfRequired = (dueToApex * 0.30).toFixed(2); // Normal calculation
+                    let cetfRequired = (dueToApex * 0.30).toFixed(2);
                     cetfRequiredInput.value = cetfRequired;
                 }
             }
-
             cetfDueToApexInput.addEventListener('input', updateCetfRequired);
-            netSurplusInput.addEventListener('input', updateCetfRequired); // Recalculate when net_surplus changes
-            updateCetfRequired(); // Initialize on page load
+            netSurplusInput.addEventListener('input', updateCetfRequired);
+            updateCetfRequired();
         });
     </script>
-
-
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const dropdownButton = document.getElementById("servicesDropdown");
             const dropdownMenu = document.getElementById("dropdownMenu");
             const checkboxes = dropdownMenu.querySelectorAll('input[type="checkbox"]');
             const hiddenInput = document.getElementById("services_availed_json");
-
-
             dropdownMenu.addEventListener("click", function(event) {
                 event.stopPropagation();
             });
-
             dropdownButton.addEventListener("click", function(event) {
                 event.stopPropagation();
                 dropdownMenu.classList.toggle("show");
             });
-
             document.addEventListener("click", function(event) {
                 if (!dropdownMenu.contains(event.target) && event.target !== dropdownButton) {
                     dropdownMenu.classList.remove("show");
                 }
             });
-
             function updateDropdownText() {
                 let selected = Array.from(checkboxes)
                     .filter(i => i.checked)
                     .map(i => i.value)
                     .join(", ");
-
                 dropdownButton.innerText = selected ? selected : "Select Services";
                 hiddenInput.value = JSON.stringify(selected.split(", ").filter(Boolean)); // Store as JSON
             }
-
-            // Update on checkbox change
             checkboxes.forEach(checkbox => {
                 checkbox.addEventListener("change", updateDropdownText);
             });
-
-            // Load preselected values
             updateDropdownText();
         });
     </script>
@@ -1542,8 +1299,7 @@
                 });
     </script>
     @endif
-    </script>
     @include('layouts.links')
-</body>
 
+</body>
 </html>
