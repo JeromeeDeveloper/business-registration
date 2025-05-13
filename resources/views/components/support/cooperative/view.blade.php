@@ -441,29 +441,12 @@
                                                 </div>
                                             </div>
 
-
                                             <div class="col-md-6 col-lg-4">
                                                 <div class="form-group">
                                                     <label for="total_overdue">Loan Overdue</label>
                                                     <p>{{ number_format($coop->total_overdue, 2) }}</p>
                                                 </div>
                                             </div>
-
-                                            <div class="col-md-6 col-lg-4">
-                                                <div class="form-group">
-                                                    <label for="net_surplus">Net Surplus</label>
-                                                    <p>{{ number_format($coop->net_surplus, 2) }}</p>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-6 col-lg-4">
-                                                <div class="form-group">
-                                                    <label for="registration_fee">Total Registration Fee</label>
-                                                    <p>{{ number_format($coop->registration_fee * $coop->participants->count(), 2) ?? 'N/A' }}
-                                                    </p>
-                                                </div>
-                                            </div>
-
 
 
                                             <div class="col-md-6 col-lg-4">
@@ -504,14 +487,6 @@
 
                                             <div class="col-md-6 col-lg-4">
                                                 <div class="form-group">
-                                                    <label for="net_required_reg_fee">Net Required Registration
-                                                        Fee</label>
-                                                    <p>{{ number_format($coop->net_required_reg_fee, 2) }}</p>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-6 col-lg-4">
-                                                <div class="form-group">
                                                     <label for="savings">Savings</label>
                                                     <p>{{ number_format($coop->savings, 2) }}</p>
                                                 </div>
@@ -523,6 +498,18 @@
                                                     <p>{{ number_format($coop->cetf_remittance, 2) }}</p>
                                                 </div>
                                             </div>
+
+                                            <div class="col-md-6 col-lg-4">
+                                                <div class="form-group">
+                                                    <label for="net_required_reg_fee">Net Required Registration
+                                                        Fee</label>
+                                                    <p>{{ number_format($coop->net_required_reg_fee, 2) }}</p>
+                                                </div>
+                                            </div>
+
+
+
+
 
                                             <div class="col-md-6 col-lg-4">
                                                 <div class="form-group">
