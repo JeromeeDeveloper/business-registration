@@ -1421,7 +1421,7 @@
                     item.classList.add('active');
 
                     // Update the button text with the selected region
-                    const regionText = selectedRegion ? selectedRegion : 'None';
+                    const regionText = selectedRegion ? selectedRegion : 'All Region';
                     document.getElementById('selectedRegion').textContent = `(${regionText})`;
                 });
             });
