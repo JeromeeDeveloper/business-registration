@@ -285,16 +285,17 @@
                                                 </a>
 
                                                 <a href="{{ route('admin.reports.tshirt_sizes') }}"
-                                                class="list-group-item list-group-item-action py-3 fw-semibold"
-                                                data-report-type="tshirt_sizes">
-                                                <i class="fas fa-tshirt me-2"></i> T-Shirt Sizes (All or Per
-                                                Congress)
+                                                    class="list-group-item list-group-item-action py-3 fw-semibold"
+                                                    data-report-type="tshirt_sizes">
+                                                    <i class="fas fa-tshirt me-2"></i> T-Shirt Sizes (All or Per
+                                                    Congress)
                                                 </a>
 
                                                 <a href="{{ route('admin.reports.tshirt_sizes_list') }}"
                                                     class="list-group-item list-group-item-action py-3 fw-semibold"
                                                     data-report-type="tshirt_sizeslist">
-                                                    <i class="fas fa-tshirt me-2"></i> T-Shirt Sizes List (All Participants)
+                                                    <i class="fas fa-tshirt me-2"></i> T-Shirt Sizes List (All
+                                                    Participants)
                                                 </a>
 
 
@@ -305,17 +306,26 @@
                                                     Breakdown
                                                 </a>
 
-                                                <a href="{{ route('admin.reports.participants_list') }}"
-                                                    class="list-group-item list-group-item-action py-3 fw-semibold"
-                                                    data-report-type="participants_list">
-                                                    <i class="fas fa-users me-2"></i> List of Voting Delegates
-                                                </a>
+                                                    <a href="{{ route('admin.reports.coop_status_list') }}"
+                                                        class="list-group-item list-group-item-action py-3 fw-semibold"
+                                                        data-report-type="coop_status">
+                                                        <i class="fas fa-clipboard-list me-2"></i> List of Coop
+                                                        Registration Status
+                                                    </a>
+
+                                                     <button type="button"
+                                                        class="list-group-item list-group-item-action py-3 fw-semibold"
+                                                        id="filterRegionBtn2" data-bs-toggle="modal"
+                                                        data-bs-target="#regionFilterModal2">
+                                                        <i class="fas fa-check me-2"></i> List of Voting Delegates
+                                                    </button>
 
                                                 <a href="{{ route('admin.reports.participants_list_congress') }}"
-                                                class="list-group-item list-group-item-action py-3 fw-semibold"
-                                                data-report-type="participants_list_congress">
-                                                <i class="fas fa-users me-2"></i> List of Registered Delagate Congresses
-                                            </a>
+                                                    class="list-group-item list-group-item-action py-3 fw-semibold"
+                                                    data-report-type="participants_list_congress">
+                                                    <i class="fas fa-users me-2"></i> List of Registered Delagate
+                                                    Congresses
+                                                </a>
 
                                                 <div class="d-flex gap-3">
 
@@ -376,6 +386,68 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Modal for Region Filter -->
+ <div class="modal fade" id="regionFilterModal2" tabindex="-1" aria-labelledby="regionFilterModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="regionFilterModalLabel">Filter Voting Delegates by Region</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="dropdown">
+                    <!-- The button now shows the selected region -->
+                    <button class="btn btn-secondary dropdown-toggle w-100" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        Select Region <span id="selectedRegion" class="text-muted">(All Region)</span>
+                    </button>
+                    <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" href="#" data-region="all">All Regions</a></li>
+
+                        @php
+                            $regions = [
+                                'Region I', 'Region II', 'Region III', 'Region IV-A', 'Region IV-B',
+                                'Region V', 'Region VI', 'Region VII', 'Region VIII', 'Region IX',
+                                'Region X', 'Region XI', 'Region XII', 'Region XIII', 'NCR',
+                                'CAR', 'BARMM', 'ZBST', 'LUZON',
+                            ];
+                        @endphp
+
+                        @foreach ($regions as $region)
+                            <li><a class="dropdown-item" href="#" data-region="{{ $region }}">{{ $region }}</a></li>
+                        @endforeach
+                    </ul>
+                </div>
+
+                <!-- Export and Preview Options -->
+                <div class="mt-3">
+                    <!-- Preview Button -->
+                    <a id="previewButton" href="#" class="btn btn-info w-100">
+                        <i class="fas fa-eye me-2"></i> Preview Report
+                    </a>
+
+                    <!-- Export as Excel Button -->
+                    <a id="exportButton" href="#" class="btn btn-success w-100 mt-2">
+                        <i class="fas fa-file-excel me-2"></i> Export as Excel
+                    </a>
+                </div>
+
+                <!-- Container to show the preview content -->
+                <div id="previewContent" class="mt-3" style="display: none;">
+                    <div class="text-center">
+                        <i class="fas fa-spinner fa-spin"></i> Loading preview...
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 
                         <div class="modal fade" id="regionFilterModal" tabindex="-1"
                             aria-labelledby="regionFilterLabel" aria-hidden="true">
@@ -674,13 +746,19 @@
                                                 <div class="card border-0 shadow-sm text-center h-100">
                                                     <div class="card-body d-flex flex-column">
                                                         <div class="mb-3">
-                                                            <div class="rounded-circle mx-auto d-flex justify-content-center align-items-center {{ $status['full'] ? 'bg-danger' : 'bg-info' }}" style="width: 60px; height: 60px;">
+                                                            <div class="rounded-circle mx-auto d-flex justify-content-center align-items-center {{ $status['full'] ? 'bg-danger' : 'bg-info' }}"
+                                                                style="width: 60px; height: 60px;">
                                                                 <i class="fas fa-calendar-alt fa-lg text-white"></i>
                                                             </div>
                                                         </div>
-                                                        <h6 class="text-muted mb-1">{{ $status['name'] ?? 'Event ' . $eventId }}</h6>
-                                                        <h5 class="mb-1 text-dark">{{ $status['full'] ? 'Full' : $status['remaining'] . ' left' }}</h5>
-                                                        <span class="badge mt-auto {{ $status['full'] ? 'bg-danger' : 'bg-secondary' }}">{{ $status['total'] }} total</span>
+                                                        <h6 class="text-muted mb-1">
+                                                            {{ $status['name'] ?? 'Event ' . $eventId }}</h6>
+                                                        <h5 class="mb-1 text-dark">
+                                                            {{ $status['full'] ? 'Full' : $status['remaining'] . ' left' }}
+                                                        </h5>
+                                                        <span
+                                                            class="badge mt-auto {{ $status['full'] ? 'bg-danger' : 'bg-secondary' }}">{{ $status['total'] }}
+                                                            total</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -690,13 +768,17 @@
                                             <div class="card border-0 shadow-sm text-center h-100">
                                                 <div class="card-body d-flex flex-column">
                                                     <div class="mb-3">
-                                                        <div class="rounded-circle mx-auto d-flex justify-content-center align-items-center {{ $registeredParticipants >= 1000 ? 'bg-danger' : 'bg-info' }}" style="width: 60px; height: 60px;">
+                                                        <div class="rounded-circle mx-auto d-flex justify-content-center align-items-center {{ $registeredParticipants >= 1000 ? 'bg-danger' : 'bg-info' }}"
+                                                            style="width: 60px; height: 60px;">
                                                             <i class="fas fa-calendar-alt fa-lg text-white"></i>
                                                         </div>
                                                     </div>
                                                     <h6 class="text-muted mb-1">Registered Participants</h6>
-                                                    <h5 class="mb-1 text-dark">{{ 1000 - $registeredParticipants }} left</h5>
-                                                    <span class="badge mt-auto {{ $registeredParticipants >= 1000 ? 'bg-danger' : 'bg-secondary' }}">1000 total</span>
+                                                    <h5 class="mb-1 text-dark">{{ 1000 - $registeredParticipants }}
+                                                        left</h5>
+                                                    <span
+                                                        class="badge mt-auto {{ $registeredParticipants >= 1000 ? 'bg-danger' : 'bg-secondary' }}">1000
+                                                        total</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -1182,6 +1264,7 @@
                 });
             });
         });
+
         function printReport() {
             var iframe = document.getElementById('reportFrame').contentWindow;
             iframe.focus();
@@ -1293,5 +1376,69 @@
             }, 180000);
         });
     </script>
+
+    <script>
+document.addEventListener('DOMContentLoaded', function () {
+    let selectedRegion = null;
+
+    // Dropdown item click event
+    document.querySelectorAll('.dropdown-item').forEach(function (item) {
+        item.addEventListener('click', function (event) {
+            event.preventDefault();
+            selectedRegion = item.getAttribute('data-region') === 'all' ? null : item.getAttribute('data-region');
+
+            // Highlight the selected region (optional)
+            document.querySelectorAll('.dropdown-item').forEach(function (el) {
+                el.classList.remove('active');
+            });
+            item.classList.add('active');
+
+            // Update the button text with the selected region
+            const regionText = selectedRegion ? selectedRegion : 'None';
+            document.getElementById('selectedRegion').textContent = `(${regionText})`;
+        });
+    });
+
+    // Preview button click event
+    document.getElementById('previewButton').addEventListener('click', function (event) {
+        event.preventDefault();
+
+        // Show loading spinner inside the preview content container
+        const previewContent = document.getElementById('previewContent');
+        previewContent.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Loading preview...</div>';
+        previewContent.style.display = 'block'; // Show the preview content container
+
+        // Fetch the preview data from the server
+        const regionParam = selectedRegion ? `region=${selectedRegion}` : '';
+        fetch(`{{ route('admin.reports.participants_list') }}?${regionParam}`)
+            .then(response => response.text())
+            .then(html => {
+                // Only insert the body content from the response (avoid adding any unwanted Bootstrap structure)
+                const previewBody = html.match(/<body.*?>(.*?)<\/body>/s);
+                if (previewBody && previewBody[1]) {
+                    previewContent.innerHTML = previewBody[1]; // Insert only the inner body content
+                } else {
+                    previewContent.innerHTML = 'Failed to load preview content.';
+                }
+            })
+            .catch(err => {
+                previewContent.innerHTML = 'Failed to load preview.';
+            });
+    });
+
+    // Export button click event
+    document.getElementById('exportButton').addEventListener('click', function (event) {
+        event.preventDefault();
+        if (selectedRegion !== null) {
+            window.location.href = `{{ route('admin.reports.export_participants') }}?region=${selectedRegion}`;
+        } else {
+            window.location.href = `{{ route('admin.reports.export_participants') }}`;
+        }
+    });
+});
+
+
+    </script>
 </body>
+
 </html>

@@ -323,18 +323,39 @@ public function generatePDF(Request $request)
         return redirect()->back()->with('error', 'Invalid export type.');
     }
 
-    public function participantsList()
+  public function participantsList(Request $request)
 {
-    $participants = Participant::with('cooperative')
-    ->where('delegate_type', 'Voting')
-    ->whereHas('cooperative.gaRegistration', function ($query) {
-        $query->where('membership_status', 'Migs')
-              ->where('registration_status', 'Fully Registered');
-    })
-    ->get();
+    $region = $request->query('region');
 
-    return view('components.admin.reports.participants_list', compact('participants'));
+    $participants = Participant::with('cooperative')
+        ->where('delegate_type', 'Voting')
+        ->whereHas('cooperative.gaRegistration', function ($query) {
+            $query->where('membership_status', 'Migs')
+                  ->where('registration_status', 'Fully Registered');
+        });
+
+    if ($region) {
+        $participants->whereHas('cooperative', function ($query) use ($region) {
+            $query->where('region', $region);
+        });
+    }
+
+    return view('components.admin.reports.participants_list', [
+        'participants' => $participants->get(),
+        'region' => $region,
+    ]);
 }
+
+ public function exportParticipants(Request $request)
+{
+    // Get the region from the query parameter
+    $region = $request->get('region');
+
+    // Export the data using the ParticipantsExport class
+    return Excel::download(new ParticipantsExport($region), 'participants.xlsx');
+}
+
+
 
 public function participantsListcongress()
 {

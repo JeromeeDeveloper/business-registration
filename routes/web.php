@@ -105,6 +105,8 @@ Route::middleware([AdminOrSupportMiddleware::class])->group(function () {
 
     Route::delete('/attendance/{id}', [AttendanceController::class, 'destroy'])->name('attendance.destroy');
 
+    Route::get('admin/reports/export_participants', [ReportsController::class, 'exportParticipants'])->name('admin.reports.export_participants');
+
     // In your web.php (routes file)
     // Route::get('/get-participant-count/{coop_id}', [YourController::class, 'getParticipantCount']);
 });

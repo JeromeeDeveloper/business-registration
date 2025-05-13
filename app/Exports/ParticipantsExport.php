@@ -8,9 +8,18 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class ParticipantsExport implements FromCollection, WithHeadings
 {
+    protected $region;
+
+    // Constructor to accept the region filter
+    public function __construct($region = null)
+    {
+        $this->region = $region;
+    }
+
+    // Fetch participants based on region (if provided) or all participants
     public function collection()
     {
-        return Participant::selectRaw("
+        $query = Participant::selectRaw("
                 CONCAT(participants.first_name, ' ', IFNULL(CONCAT(participants.middle_name, ' '), ''), participants.last_name) as full_name,
                 participants.reference_number,
                 IFNULL(cooperatives.name, 'N/A') as cooperative_name,
@@ -23,10 +32,17 @@ class ParticipantsExport implements FromCollection, WithHeadings
             ->whereHas('cooperative.gaRegistration', function ($query) {
                 $query->where('membership_status', 'Migs')
                       ->where('registration_status', 'Fully Registered');
-            })
-            ->get();
+            });
+
+        // Apply region filter if a region is provided
+        if ($this->region) {
+            $query->where('cooperatives.region', $this->region);
+        }
+
+        return $query->get();
     }
 
+    // Define the headings for the exported Excel file
     public function headings(): array
     {
         return [
