@@ -8,6 +8,7 @@
 </head>
 
 <body>
+    
     <div class="container" style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
 
         {{-- <img src="https://i.imgur.com/gsBSpUs.jpeg" alt="Banner Image" style="max-width: 70%; height: auto;" /> --}}
