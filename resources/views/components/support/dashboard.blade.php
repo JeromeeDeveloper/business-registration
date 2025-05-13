@@ -319,11 +319,13 @@
 
 
 
-                                                <a href="{{ route('admin.reports.participants_list') }}"
-                                                    class="list-group-item list-group-item-action py-3 fw-semibold"
-                                                    data-report-type="participants_list">
-                                                    <i class="fas fa-users me-2"></i> List of Voting Delegates
-                                                </a>
+                                                <button type="button"
+                                                class="list-group-item list-group-item-action py-3 fw-semibold"
+                                                id="filterRegionBtn2" data-bs-toggle="modal"
+                                                data-bs-target="#regionFilterModal2">
+                                                <i class="fas fa-check me-2"></i> List of Voting Delegates
+                                            </button>
+
 
                                                 <a href="{{ route('admin.reports.participants_list_congress') }}"
                                                 class="list-group-item list-group-item-action py-3 fw-semibold"
@@ -399,6 +401,90 @@
                             </div>
 
                         </div>
+
+                        <div class="modal fade" id="regionFilterModal2" tabindex="-1"
+                        aria-labelledby="regionFilterModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg"> <!-- or modal-xl -->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="regionFilterModalLabel">Filter Voting Delegates by
+                                        Region</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="dropdown">
+                                        <!-- The button now shows the selected region -->
+                                        <button class="btn btn-secondary dropdown-toggle w-100" type="button"
+                                            id="dropdownMenuButton" data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                            Select Region <span id="selectedRegion" class="text-muted">(All
+                                                Region)</span>
+                                        </button>
+                                        <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+                                            <li><a class="dropdown-item" href="#" data-region="all">All
+                                                    Regions</a></li>
+
+                                            @php
+                                                $regions = [
+                                                    'Region I',
+                                                    'Region II',
+                                                    'Region III',
+                                                    'Region IV-A',
+                                                    'Region IV-B',
+                                                    'Region V',
+                                                    'Region VI',
+                                                    'Region VII',
+                                                    'Region VIII',
+                                                    'Region IX',
+                                                    'Region X',
+                                                    'Region XI',
+                                                    'Region XII',
+                                                    'Region XIII',
+                                                    'NCR',
+                                                    'CAR',
+                                                    'BARMM',
+                                                    'ZBST',
+                                                    'LUZON',
+                                                ];
+                                            @endphp
+
+                                            @foreach ($regions as $region)
+                                                <li><a class="dropdown-item" href="#"
+                                                        data-region="{{ $region }}">{{ $region }}</a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+
+                                    <!-- Export and Preview Options -->
+                                    <div class="mt-3">
+                                        <!-- Preview Button -->
+                                        <a id="previewButton" href="#" class="btn btn-info w-100">
+                                            <i class="fas fa-eye me-2"></i> Preview Report
+                                        </a>
+
+                                        <!-- Export as Excel Button -->
+                                        <a id="exportButton" href="#" class="btn btn-success w-100 mt-2">
+                                            <i class="fas fa-file-excel me-2"></i> Export as Excel
+                                        </a>
+                                    </div>
+
+                                    <!-- Container to show the preview content -->
+                                    <div id="previewContent" class="mt-3"
+                                        style="max-height: 500px; overflow-y: auto; display: none; border: 1px solid #ccc; padding: 15px;">
+                                        <div class="text-center">
+                                            <i class="fas fa-spinner fa-spin"></i> Loading preview...
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                         <div class="modal fade" id="regionFilterModal" tabindex="-1"
                             aria-labelledby="regionFilterLabel" aria-hidden="true">
@@ -1356,6 +1442,71 @@
             });
         });
     </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let selectedRegion = null;
+
+        // Dropdown item click event
+        document.querySelectorAll('.dropdown-item').forEach(function(item) {
+            item.addEventListener('click', function(event) {
+                event.preventDefault();
+                selectedRegion = item.getAttribute('data-region') === 'all' ? null : item
+                    .getAttribute('data-region');
+
+                // Highlight the selected region (optional)
+                document.querySelectorAll('.dropdown-item').forEach(function(el) {
+                    el.classList.remove('active');
+                });
+                item.classList.add('active');
+
+                // Update the button text with the selected region
+                const regionText = selectedRegion ? selectedRegion : 'All Region';
+                document.getElementById('selectedRegion').textContent = `(${regionText})`;
+            });
+        });
+
+        // Preview button click event
+        document.getElementById('previewButton').addEventListener('click', function(event) {
+            event.preventDefault();
+
+            // Show loading spinner inside the preview content container
+            const previewContent = document.getElementById('previewContent');
+            previewContent.innerHTML =
+                '<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Loading preview...</div>';
+            previewContent.style.display = 'block'; // Show the preview content container
+
+            // Fetch the preview data from the server
+            const regionParam = selectedRegion ? `region=${selectedRegion}` : '';
+            fetch(`{{ route('admin.reports.participants_list') }}?${regionParam}`)
+                .then(response => response.text())
+                .then(html => {
+                    // Only insert the body content from the response (avoid adding any unwanted Bootstrap structure)
+                    const previewBody = html.match(/<body.*?>(.*?)<\/body>/s);
+                    if (previewBody && previewBody[1]) {
+                        previewContent.innerHTML = previewBody[
+                        1]; // Insert only the inner body content
+                    } else {
+                        previewContent.innerHTML = 'Failed to load preview content.';
+                    }
+                })
+                .catch(err => {
+                    previewContent.innerHTML = 'Failed to load preview.';
+                });
+        });
+
+        // Export button click event
+        document.getElementById('exportButton').addEventListener('click', function(event) {
+            event.preventDefault();
+            if (selectedRegion !== null) {
+                window.location.href =
+                    `{{ route('admin.reports.export_participants') }}?region=${selectedRegion}`;
+            } else {
+                window.location.href = `{{ route('admin.reports.export_participants') }}`;
+            }
+        });
+    });
+</script>
 </body>
 
 </html>
