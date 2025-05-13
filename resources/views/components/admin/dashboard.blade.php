@@ -390,7 +390,7 @@
                         <!-- Modal for Region Filter -->
                         <div class="modal fade" id="regionFilterModal2" tabindex="-1"
                             aria-labelledby="regionFilterModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-xl">
+                            <div class="modal-dialog modal-lg"> <!-- or modal-xl -->
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="regionFilterModalLabel">Filter Voting Delegates by
