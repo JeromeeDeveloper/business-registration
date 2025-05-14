@@ -10,13 +10,17 @@ class ParticipantsExport implements FromCollection, WithHeadings
 {
     protected $region;
 
-    // Constructor to accept the region filter
+    protected $regionOrder = [
+        'Region I', 'Region II', 'Region III', 'Region IV-A', 'Region IV-B', 'Region V',
+        'Region VI', 'Region VII', 'Region VIII', 'Region IX', 'Region X', 'Region XI',
+        'Region XII', 'Region XIII', 'NCR', 'CAR', 'BARMM', 'ZBST', 'LUZON'
+    ];
+
     public function __construct($region = null)
     {
         $this->region = $region;
     }
 
-    // Fetch participants based on region (if provided) or all participants
     public function collection()
     {
         $query = Participant::selectRaw("
@@ -34,15 +38,17 @@ class ParticipantsExport implements FromCollection, WithHeadings
                       ->where('registration_status', 'Fully Registered');
             });
 
-        // Apply region filter if a region is provided
         if ($this->region) {
             $query->where('cooperatives.region', $this->region);
         }
 
+        // Apply custom region ordering
+        $orderByField = "FIELD(cooperatives.region, '" . implode("','", $this->regionOrder) . "')";
+        $query->orderByRaw($orderByField);
+
         return $query->get();
     }
 
-    // Define the headings for the exported Excel file
     public function headings(): array
     {
         return [
