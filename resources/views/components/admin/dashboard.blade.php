@@ -287,8 +287,7 @@
                                                 <a href="{{ route('admin.reports.tshirt_sizes') }}"
                                                     class="list-group-item list-group-item-action py-3 fw-semibold"
                                                     data-report-type="tshirt_sizes">
-                                                    <i class="fas fa-tshirt me-2"></i> T-Shirt Sizes (All or Per
-                                                    Congress)
+                                                    <i class="fas fa-tshirt me-2"></i> T-Shirt Sizes Summary
                                                 </a>
 
                                                 <a href="{{ route('admin.reports.tshirt_sizes_list') }}"
@@ -298,6 +297,17 @@
                                                     Participants)
                                                 </a>
 
+                                                {{-- <a href="{{ route('admin.reports.list_of_delegates') }}"
+                                                    class="list-group-item list-group-item-action py-3 fw-semibold"
+                                                    data-report-type="non_msp_id">
+                                                    <i class="fas fa-tshirt me-2"></i> Non-MSP Summary for ID
+                                                </a> --}}
+
+                                                 <a href="{{ route('admin.reports.voting_per_region') }}"
+                                                    class="list-group-item list-group-item-action py-3 fw-semibold"
+                                                    data-report-type="voting_per_region">
+                                                  <i class="fas fa-users me-2"></i> Voting Delegates Summary per Region
+                                                </a>
 
                                                 <a href="{{ route('admin.reports.coop_registration_summary') }}"
                                                     class="list-group-item list-group-item-action py-3 fw-semibold"
