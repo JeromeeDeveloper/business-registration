@@ -12,15 +12,14 @@ class VotingperRegionExport implements FromCollection, WithHeadings, ShouldAutoS
 {
     public function collection()
     {
-        // Define the region order
         $orderedRegions = [
             'Region I', 'Region II', 'Region III', 'Region IV-A', 'Region IV-B', 'Region V',
             'Region VI', 'Region VII', 'Region VIII', 'Region IX', 'Region X', 'Region XI',
             'Region XII', 'Region XIII', 'NCR', 'CAR', 'BARMM', 'ZBST', 'LUZON'
         ];
 
-        // Fetch data
-        $results = Participant::selectRaw('cooperatives.region as region, COUNT(*) as total')
+        // Fetch total voting participants per region
+        $totals = Participant::selectRaw('cooperatives.region, COUNT(*) as total')
             ->leftJoin('cooperatives', 'participants.coop_id', '=', 'cooperatives.coop_id')
             ->where('participants.delegate_type', 'Voting')
             ->whereHas('cooperative.gaRegistration', function ($query) {
@@ -30,12 +29,33 @@ class VotingperRegionExport implements FromCollection, WithHeadings, ShouldAutoS
             ->groupBy('cooperatives.region')
             ->get();
 
-        // Sort results based on predefined region order
-        $sorted = collect($orderedRegions)->map(function ($region) use ($results) {
-            $match = $results->firstWhere('region', $region);
+        // Fetch participants who have voted
+        $voted = Participant::selectRaw('cooperatives.region, COUNT(*) as total_voted')
+            ->leftJoin('cooperatives', 'participants.coop_id', '=', 'cooperatives.coop_id')
+            ->where('participants.delegate_type', 'Voting')
+            ->where('participants.voting_status', 'Voted')
+            ->whereHas('cooperative.gaRegistration', function ($query) {
+                $query->where('membership_status', 'Migs')
+                      ->where('registration_status', 'Fully Registered');
+            })
+            ->groupBy('cooperatives.region')
+            ->get()
+            ->keyBy('region');
+
+        // Merge and sort
+        $sorted = collect($orderedRegions)->map(function ($region) use ($totals, $voted) {
+            $totalEntry = $totals->firstWhere('region', $region);
+            $votedEntry = $voted->get($region);
+
+            $total = $totalEntry ? $totalEntry->total : 0;
+            $totalVoted = $votedEntry ? $votedEntry->total_voted : 0;
+            $turnout = $total > 0 ? round(($totalVoted / $total) * 100, 2) . '%' : '0%';
+
             return [
                 'region' => $region,
-                'total' => $match ? $match->total : 0
+                'total' => $total,
+                'total_voted' => $totalVoted,
+                'turnout' => $turnout,
             ];
         });
 
@@ -46,7 +66,9 @@ class VotingperRegionExport implements FromCollection, WithHeadings, ShouldAutoS
     {
         return [
             'Region',
-            'Total Voting Participants'
+            'Total Voting Participants',
+            'Voted Participants',
+            'Turnout %',
         ];
     }
 }

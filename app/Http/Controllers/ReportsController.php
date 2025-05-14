@@ -358,7 +358,7 @@ class ReportsController extends Controller
         return Excel::download(new ParticipantsExport($region), 'participants.xlsx');
     }
 
-    public function votingParticipantsPerRegion(Request $request)
+   public function votingParticipantsPerRegion(Request $request)
 {
     $region = $request->query('region');
 
@@ -367,7 +367,8 @@ class ReportsController extends Controller
         ->join('ga_registrations', 'cooperatives.coop_id', '=', 'ga_registrations.coop_id')
         ->select(
             'cooperatives.region',
-            DB::raw('COUNT(participants.participant_id) as total')
+            DB::raw('COUNT(participants.participant_id) as total'),
+            DB::raw("SUM(CASE WHEN participants.voting_status = 'Voted' THEN 1 ELSE 0 END) as total_voted")
         )
         ->where('participants.delegate_type', 'Voting')
         ->where('ga_registrations.membership_status', 'Migs')
@@ -385,6 +386,7 @@ class ReportsController extends Controller
         'region' => $region,
     ]);
 }
+
 
 
 

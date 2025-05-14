@@ -83,7 +83,8 @@
                 <thead class="bg-gradient bg-dark text-white">
                     <tr>
                         <th>Region</th>
-                        <th>Total Voting Participants</th>
+                        <th>Voting Participants</th>
+                        <th>Voted Participants</th>
                     </tr>
                 </thead>
                 <tbody class="bg-light">
@@ -91,6 +92,7 @@
                         <tr>
                             <td class="fw-semibold text-primary">{{ $region->region ?? 'N/A' }}</td>
                             <td>{{ $region->total }}</td>
+                            <td>{{ $region->total_voted }}</td>
                         </tr>
                     @endforeach
                 </tbody>
