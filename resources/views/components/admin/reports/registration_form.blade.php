@@ -221,27 +221,22 @@
                                 ->count();
                             $registrationFee = $participantCount * 4500;
 
-                            $hasMspOfficer = $registration->cooperative->free_migs_pax == 4500;
-                            $mspOfficerFee = $hasMspOfficer ? 4500 : 0;
+                            $mspOfficerFee = $registration->cooperative->free_migs_pax * 4500;
 
-                            $cetfRemittance = $registration->cooperative->cetf_remittance;
+                            $cetfRemittance = $registration->cooperative->total_remittance;
 
                             // New: Calculate how many full 100K chunks (₱4500 free per chunk)
                             $free100kPax = floor($cetfRemittance / 100000);
                             $free4500 = $free100kPax * 4500;
 
                             // No more need to compute halfCetf since it's exclusive
-$halfCetf = 0;
+                            $halfCetf = ($cetfRemittance == 50000) ? 2250 : 0;
 
-$migsFree = $registration->membership_status === 'Migs' ? 9000 : 0;
+                            $migsFree = $registration->membership_status === 'Migs' ? 9000 : 0;
 
                             $totalFreeRegistration = $mspOfficerFee + $halfCetf + $free4500 + $migsFree;
 
-                            $regPayable =
-                                $registrationFee -
-                                ($totalFreeRegistration +
-                                    $registration->cooperative->less_prereg_payment +
-                                    $registration->cooperative->less_cetf_balance);
+                            $regPayable = $registrationFee - ($totalFreeRegistration + $registration->cooperative->less_prereg_payment + $registration->cooperative->less_cetf_balance);
                         @endphp
 
 
@@ -252,7 +247,7 @@ $migsFree = $registration->membership_status === 'Migs' ? 9000 : 0;
 
                         <td>Reg. Payable:</td>
                         <td class="text-right underline-box-med">
-                            {{ number_format($regPayable, 2) }}
+                            {{ number_format($registration->cooperative->reg_fee_payable, 2) }}
                         </td>
                     </tr>
                 </table>
