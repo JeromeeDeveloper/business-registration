@@ -286,6 +286,22 @@ class DashboardController extends Controller
         $latestEvent = Event::with('speakers')->orderBy('start_date', 'desc')->first();
         $latestEvents = Event::with('speakers')->orderBy('start_date', 'desc')->take(5)->get();
 
+        $votingDelegatesPerRegion = Participant::where('delegate_type', 'Voting')
+            ->whereHas('cooperative.gaRegistration', function ($query) {
+                $query->where('membership_status', 'Migs')
+                    ->where('registration_status', 'Fully Registered');
+            })
+            ->whereHas('cooperative')
+            ->with('cooperative')
+            ->get()
+            ->groupBy(function ($participant) {
+                return $participant->cooperative->region ?? 'Unknown';
+            })
+            ->map(function ($group) {
+                return $group->count();
+            });
+
+
         $totalMigsParticipants = Participant::whereHas('cooperative.gaRegistration', function ($query) {
             $query->where('membership_status', 'Migs');
         })->count();
@@ -433,7 +449,8 @@ class DashboardController extends Controller
             'registeredParticipants',
             'votedDelegates',
             'eventStatus',
-            'totalAttendedParticipants'
+            'totalAttendedParticipants',
+            'votingDelegatesPerRegion'
         ));
     }
 

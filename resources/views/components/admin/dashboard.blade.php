@@ -959,6 +959,42 @@
                                     </div>
                                 </div>
                             </div>
+
+                          <div class="card card-round shadow-lg">
+    <h3 class="p-4 text-center text-white bg-primary rounded-top">Voting Delegates Summary</h3>
+    <div class="card-body p-4">
+        <div class="row">
+            {{-- Total Voted Delegates --}}
+            <div class="col-md-3 mb-3">
+                <div class="card card-body border shadow-sm text-center h-100">
+                    <div class="icon-big text-primary text-center p-3 mb-2">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <p class="text-muted mb-1">Total Voted Delegates</p>
+                    <h4 class="text-dark">{{ $votedDelegates }}</h4>
+                </div>
+            </div>
+
+            {{-- Per Region Counts --}}
+            @forelse($votingDelegatesPerRegion as $region => $count)
+                <div class="col-md-3 mb-3">
+                    <div class="card card-body border shadow-sm text-center h-100">
+                             <div class="icon-big text-primary text-center p-3 mb-2">
+                        <i class="fas fa-building"></i>
+                    </div>
+                        <p class="text-muted mb-1">{{ $region }}</p>
+                        <h4 class="text-dark">{{ $count }}</h4>
+                    </div>
+                </div>
+            @empty
+                <div class="col-12">
+                    <p class="text-muted text-center">No regional data available.</p>
+                </div>
+            @endforelse
+        </div>
+    </div>
+</div>
+
                         </div>
 
                         <div class="modal" tabindex="-1" id="overviewModal">
