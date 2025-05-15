@@ -13,36 +13,49 @@ class VotingperRegionExport implements FromCollection, WithHeadings, ShouldAutoS
     public function collection()
     {
         $orderedRegions = [
-            'Region I', 'Region II', 'Region III', 'Region IV-A', 'Region IV-B', 'Region V',
-            'Region VI', 'Region VII', 'Region VIII', 'Region IX', 'Region X', 'Region XI',
-            'Region XII', 'Region XIII', 'NCR', 'CAR', 'BARMM', 'ZBST', 'LUZON'
+            'Region I',
+            'Region II',
+            'Region III',
+            'Region IV-A',
+            'Region IV-B',
+            'Region V',
+            'Region VI',
+            'Region VII',
+            'Region VIII',
+            'Region IX',
+            'Region X',
+            'Region XI',
+            'Region XII',
+            'Region XIII',
+            'NCR',
+            'CAR',
+            'BARMM',
+            'ZBST',
+            'LUZON'
         ];
 
-        // Fetch total voting participants per region
         $totals = Participant::selectRaw('cooperatives.region, COUNT(*) as total')
             ->leftJoin('cooperatives', 'participants.coop_id', '=', 'cooperatives.coop_id')
             ->where('participants.delegate_type', 'Voting')
             ->whereHas('cooperative.gaRegistration', function ($query) {
                 $query->where('membership_status', 'Migs')
-                      ->where('registration_status', 'Fully Registered');
+                    ->where('registration_status', 'Fully Registered');
             })
             ->groupBy('cooperatives.region')
             ->get();
 
-        // Fetch participants who have voted
         $voted = Participant::selectRaw('cooperatives.region, COUNT(*) as total_voted')
             ->leftJoin('cooperatives', 'participants.coop_id', '=', 'cooperatives.coop_id')
             ->where('participants.delegate_type', 'Voting')
             ->where('participants.voting_status', 'Voted')
             ->whereHas('cooperative.gaRegistration', function ($query) {
                 $query->where('membership_status', 'Migs')
-                      ->where('registration_status', 'Fully Registered');
+                    ->where('registration_status', 'Fully Registered');
             })
             ->groupBy('cooperatives.region')
             ->get()
             ->keyBy('region');
 
-        // Merge and sort
         $sorted = collect($orderedRegions)->map(function ($region) use ($totals, $voted) {
             $totalEntry = $totals->firstWhere('region', $region);
             $votedEntry = $voted->get($region);
@@ -55,20 +68,30 @@ class VotingperRegionExport implements FromCollection, WithHeadings, ShouldAutoS
                 'region' => $region,
                 'total' => $total,
                 'total_voted' => $totalVoted,
-                'turnout' => $turnout,
             ];
         });
 
+        // Calculate totals
+        $sumTotal = $sorted->sum('total');
+        $sumVoted = $sorted->sum('total_voted');
+
+        // Append the total row
+        $sorted->push([
+            'region' => 'Total',
+            'total' => $sumTotal,
+            'total_voted' => $sumVoted,
+        ]);
+
         return $sorted;
     }
+
 
     public function headings(): array
     {
         return [
             'Region',
-            'Total Voting Participants',
+            'Voting Participants',
             'Voted Participants',
-            'Turnout %',
         ];
     }
 }

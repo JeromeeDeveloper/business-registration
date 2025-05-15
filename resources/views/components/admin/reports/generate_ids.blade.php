@@ -4,7 +4,7 @@
     <title>Print All IDs</title>
     <style>
         .page {
-          
+
             page-break-after: always;
         }
 
@@ -27,7 +27,7 @@
             width: 250px;
             height: 400px;
             margin: -30px auto 0;
-            background-image: url('${backgroundUrl}');
+
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -66,12 +66,11 @@
 <body>
     @foreach($participants as $participant)
         @php
-            $backgroundUrl = $participant->is_msp_officer === 'Yes' ? '/img/2.png' : '/img/1.png';
             $qrCodeUrl = 'https://api.qrserver.com/v1/create-qr-code/?data=' . urlencode(route('adminDashboard', ['participant_id' => $participant->participant_id])) . '&size=200x200';
         @endphp
 
         <div class="page">
-            <div class="id-card" style="background-image: url('{{ $backgroundUrl }}');">
+            <div class="id-card">
                 <h2>{{ strtoupper($participant->nickname) }}</h2>
                 <p>
                     <strong>{{ strtoupper($participant->first_name) }},

@@ -571,22 +571,28 @@ class ReportsController extends Controller
         return view('components.admin.reports.documents_status', compact('documentsByRegion'));
     }
 
-    public function generateIds(Request $request)
-    {
-        $type = $request->query('type');
+   public function generateIds(Request $request)
+{
+    $type = $request->query('type');
 
-        $query = Participant::with('cooperative');
+    $query = Participant::with('cooperative')
+        ->where('delegate_type', 'Voting')
+        ->whereHas('cooperative.gaRegistration', function ($query) {
+            $query->where('membership_status', 'Migs')
+                  ->where('registration_status', 'Fully Registered');
+        });
 
-        if ($type === 'msp') {
-            $query->where('is_msp_officer', 'Yes');
-        } elseif ($type === 'non') {
-            $query->where('is_msp_officer', 'No');
-        }
-
-        $participants = $query->get();
-
-        return view('components.admin.reports.generate_ids', compact('participants'));
+    if ($type === 'msp') {
+        $query->where('is_msp_officer', 'Yes');
+    } elseif ($type === 'non') {
+        $query->where('is_msp_officer', 'No');
     }
+
+    $participants = $query->get();
+
+    return view('components.admin.reports.generate_ids', compact('participants'));
+}
+
 
 
 

@@ -1164,7 +1164,7 @@
         const donutCtx = document.getElementById('votingDonutChart').getContext('2d');
         const totalVoting = {{ $totalVoting }};
         const votedDelegates = {{ $votedDelegates }};
-        const targetGoal = 300;
+        const targetGoal = Math.floor(totalVoting * 0.5) + 1;
         const votingDonutChart = new Chart(donutCtx, {
             type: 'doughnut',
             data: {

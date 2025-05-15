@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,6 +16,7 @@
         body {
             background-color: #f8f9fa;
         }
+
         .table-hover tbody tr:hover {
             background-color: #e9ecef !important;
         }
@@ -68,6 +70,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container-fluid mt-4">
 
@@ -78,29 +81,38 @@
         @if ($regionCounts->isEmpty())
             <div class="alert alert-warning" role="alert">No voting participants found.</div>
         @else
-        <div class="table-responsive">
-            <table class="table table-hover align-middle border">
-                <thead class="bg-gradient bg-dark text-white">
-                    <tr>
-                        <th>Region</th>
-                        <th>Voting Participants</th>
-                        <th>Voted Participants</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-light">
-                    @foreach ($regionCounts as $region)
+            <div class="table-responsive">
+                <table class="table table-hover align-middle border">
+                    <thead class="bg-gradient bg-dark text-white">
                         <tr>
-                            <td class="fw-semibold text-primary">{{ $region->region ?? 'N/A' }}</td>
-                            <td>{{ $region->total }}</td>
-                            <td>{{ $region->total_voted }}</td>
+                            <th>Region</th>
+                            <th>Voting Participants</th>
+                            <th>Voted Participants</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody class="bg-light">
+                        @foreach ($regionCounts as $region)
+                            <tr>
+                                <td class="fw-semibold text-primary">{{ $region->region ?? 'N/A' }}</td>
+                                <td>{{ $region->total }}</td>
+                                <td>{{ $region->total_voted }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                    <tfoot class="bg-secondary text-white">
+                        <tr>
+                            <th>Total</th>
+                            <th>{{ $regionCounts->sum('total') }}</th>
+                            <th>{{ $regionCounts->sum('total_voted') }}</th>
+                        </tr>
+                    </tfoot>
+                </table>
+
+            </div>
         @endif
     </div>
 
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </body>
+
 </html>
