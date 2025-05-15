@@ -111,7 +111,7 @@ class SupportController extends Controller
                     ->from('ga_registrations')
                     ->where('membership_status', 'Migs');
             })
-            ->distinct('participants.coop_id') 
+            ->distinct('participants.coop_id')
             ->count('participants.coop_id');
 
         $totalNonMigsAttended = DB::table('participants')
@@ -166,6 +166,22 @@ class SupportController extends Controller
             ];
         }
 
+         $votingDelegatesPerRegion = Participant::where('delegate_type', 'Voting')
+            ->whereHas('cooperative.gaRegistration', function ($query) {
+                $query->where('membership_status', 'Migs')
+                    ->where('registration_status', 'Fully Registered');
+            })
+            ->whereHas('cooperative')
+            ->with('cooperative')
+            ->get()
+            ->groupBy(function ($participant) {
+                return $participant->cooperative->region ?? 'Unknown';
+            })
+            ->map(function ($group) {
+                return $group->count();
+            });
+
+
         return view('components.support.dashboard', compact(
             'regions',
             'totalParticipants',
@@ -195,7 +211,8 @@ class SupportController extends Controller
             'registeredParticipants',
             'votedDelegates',
             'eventStatus',
-            'totalAttendedParticipants'
+            'totalAttendedParticipants',
+            'votingDelegatesPerRegion'
         ));
     }
 

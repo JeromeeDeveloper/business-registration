@@ -305,9 +305,10 @@
                                                 </a>
 
                                                 <a href="{{ route('admin.reports.tshirt_sizes_list') }}"
-                                                class="list-group-item list-group-item-action py-3 fw-semibold"
-                                                data-report-type="tshirt_sizeslist">
-                                                <i class="fas fa-tshirt me-2"></i> T-Shirt Sizes List (All Participants)
+                                                    class="list-group-item list-group-item-action py-3 fw-semibold"
+                                                    data-report-type="tshirt_sizeslist">
+                                                    <i class="fas fa-tshirt me-2"></i> T-Shirt Sizes List (All
+                                                    Participants)
                                                 </a>
 
                                                 <a href="{{ route('admin.reports.coop_registration_summary') }}"
@@ -318,11 +319,11 @@
                                                 </a>
 
                                                 <button type="button"
-                                                class="list-group-item list-group-item-action py-3 fw-semibold"
-                                                id="filterRegionBtn2" data-bs-toggle="modal"
-                                                data-bs-target="#regionFilterModal2">
-                                                <i class="fas fa-check me-2"></i> List of Voting Delegates
-                                                 </button>
+                                                    class="list-group-item list-group-item-action py-3 fw-semibold"
+                                                    id="filterRegionBtn2" data-bs-toggle="modal"
+                                                    data-bs-target="#regionFilterModal2">
+                                                    <i class="fas fa-check me-2"></i> List of Voting Delegates
+                                                </button>
 
                                                 {{-- <a href="{{ route('admin.reports.participants_list') }}"
                                                     class="list-group-item list-group-item-action py-3 fw-semibold"
@@ -402,57 +403,93 @@
                         <style>
                             .dropdown-item2 {
                                 padding: 10px 15px;
-                                background-color: #f8f9fa;  /* Light background color */
-                                color: #007bff;  /* Text color */
-                                border-radius: 5px;  /* Rounded corners */
-                                transition: background-color 0.3s, color 0.3s;  /* Smooth transition for hover effect */
-                                text-decoration: none;  /* Remove underline */
-                                display: block;  /* Ensure it behaves like a block element */
+                                background-color: #f8f9fa;
+                                /* Light background color */
+                                color: #007bff;
+                                /* Text color */
+                                border-radius: 5px;
+                                /* Rounded corners */
+                                transition: background-color 0.3s, color 0.3s;
+                                /* Smooth transition for hover effect */
+                                text-decoration: none;
+                                /* Remove underline */
+                                display: block;
+                                /* Ensure it behaves like a block element */
                             }
 
                             /* Hover effect */
                             .dropdown-item2:hover {
-                                background-color: #007bff;  /* Dark background on hover */
-                                color: #ffffff;  /* White text color on hover */
-                                cursor: pointer;  /* Change cursor to pointer */
+                                background-color: #007bff;
+                                /* Dark background on hover */
+                                color: #ffffff;
+                                /* White text color on hover */
+                                cursor: pointer;
+                                /* Change cursor to pointer */
                             }
 
                             /* Optional: Active state styling (when selected) */
                             .dropdown-item2.active {
-                                background-color: #0056b3;  /* Darker background for active item */
-                                color: #ffffff;  /* White text for active item */
+                                background-color: #0056b3;
+                                /* Darker background for active item */
+                                color: #ffffff;
+                                /* White text for active item */
                             }
                         </style>
 
 
                         <!-- Modal for Region Filter -->
-                        <div class="modal fade" id="regionFilterModal2" tabindex="-1" aria-labelledby="regionFilterModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="regionFilterModal2" tabindex="-1"
+                            aria-labelledby="regionFilterModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-lg"> <!-- or modal-xl -->
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="regionFilterModalLabel">Filter Voting Delegates by Region</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <h5 class="modal-title" id="regionFilterModalLabel">Filter Voting Delegates by
+                                            Region</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
                                         <div class="dropdown">
                                             <!-- The button now shows the selected region -->
-                                            <button class="btn btn-secondary dropdown-toggle w-100" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                                Select Region <span id="selectedRegion" class="text-muted">(All Region)</span>
+                                            <button class="btn btn-secondary dropdown-toggle w-100" type="button"
+                                                id="dropdownMenuButton" data-bs-toggle="dropdown"
+                                                aria-expanded="false">
+                                                Select Region <span id="selectedRegion" class="text-muted">(All
+                                                    Region)</span>
                                             </button>
 
                                             <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
-                                                <li><a class="dropdown-item2" href="#" data-region="all">All Regions</a></li>
+                                                <li><a class="dropdown-item2" href="#" data-region="all">All
+                                                        Regions</a></li>
 
                                                 @php
                                                     $regions = [
-                                                        'Region I', 'Region II', 'Region III', 'Region IV-A', 'Region IV-B', 'Region V',
-                                                        'Region VI', 'Region VII', 'Region VIII', 'Region IX', 'Region X', 'Region XI',
-                                                        'Region XII', 'Region XIII', 'NCR', 'CAR', 'BARMM', 'ZBST', 'LUZON',
+                                                        'Region I',
+                                                        'Region II',
+                                                        'Region III',
+                                                        'Region IV-A',
+                                                        'Region IV-B',
+                                                        'Region V',
+                                                        'Region VI',
+                                                        'Region VII',
+                                                        'Region VIII',
+                                                        'Region IX',
+                                                        'Region X',
+                                                        'Region XI',
+                                                        'Region XII',
+                                                        'Region XIII',
+                                                        'NCR',
+                                                        'CAR',
+                                                        'BARMM',
+                                                        'ZBST',
+                                                        'LUZON',
                                                     ];
                                                 @endphp
 
                                                 @foreach ($regions as $region)
-                                                    <li><a class="dropdown-item2" href="#" data-region="{{ $region }}">{{ $region }}</a></li>
+                                                    <li><a class="dropdown-item2" href="#"
+                                                            data-region="{{ $region }}">{{ $region }}</a>
+                                                    </li>
                                                 @endforeach
                                             </ul>
                                         </div>
@@ -471,14 +508,16 @@
                                         </div>
 
                                         <!-- Container to show the preview content -->
-                                        <div id="previewContent" class="mt-3" style="max-height: 500px; overflow-y: auto; display: none; border: 1px solid #ccc; padding: 15px;">
+                                        <div id="previewContent" class="mt-3"
+                                            style="max-height: 500px; overflow-y: auto; display: none; border: 1px solid #ccc; padding: 15px;">
                                             <div class="text-center">
                                                 <i class="fas fa-spinner fa-spin"></i> Loading preview...
                                             </div>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
                                     </div>
                                 </div>
                             </div>
@@ -798,13 +837,19 @@
                                                 <div class="card border-0 shadow-sm text-center h-100">
                                                     <div class="card-body d-flex flex-column">
                                                         <div class="mb-3">
-                                                            <div class="rounded-circle mx-auto d-flex justify-content-center align-items-center {{ $status['full'] ? 'bg-danger' : 'bg-info' }}" style="width: 60px; height: 60px;">
+                                                            <div class="rounded-circle mx-auto d-flex justify-content-center align-items-center {{ $status['full'] ? 'bg-danger' : 'bg-info' }}"
+                                                                style="width: 60px; height: 60px;">
                                                                 <i class="fas fa-calendar-alt fa-lg text-white"></i>
                                                             </div>
                                                         </div>
-                                                        <h6 class="text-muted mb-1">{{ $status['name'] ?? 'Event ' . $eventId }}</h6>
-                                                        <h5 class="mb-1 text-dark">{{ $status['full'] ? 'Full' : $status['remaining'] . ' left' }}</h5>
-                                                        <span class="badge mt-auto {{ $status['full'] ? 'bg-danger' : 'bg-secondary' }}">{{ $status['total'] }} total</span>
+                                                        <h6 class="text-muted mb-1">
+                                                            {{ $status['name'] ?? 'Event ' . $eventId }}</h6>
+                                                        <h5 class="mb-1 text-dark">
+                                                            {{ $status['full'] ? 'Full' : $status['remaining'] . ' left' }}
+                                                        </h5>
+                                                        <span
+                                                            class="badge mt-auto {{ $status['full'] ? 'bg-danger' : 'bg-secondary' }}">{{ $status['total'] }}
+                                                            total</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -814,13 +859,17 @@
                                             <div class="card border-0 shadow-sm text-center h-100">
                                                 <div class="card-body d-flex flex-column">
                                                     <div class="mb-3">
-                                                        <div class="rounded-circle mx-auto d-flex justify-content-center align-items-center {{ $registeredParticipants >= 1000 ? 'bg-danger' : 'bg-info' }}" style="width: 60px; height: 60px;">
+                                                        <div class="rounded-circle mx-auto d-flex justify-content-center align-items-center {{ $registeredParticipants >= 1000 ? 'bg-danger' : 'bg-info' }}"
+                                                            style="width: 60px; height: 60px;">
                                                             <i class="fas fa-calendar-alt fa-lg text-white"></i>
                                                         </div>
                                                     </div>
                                                     <h6 class="text-muted mb-1">Registered Participants</h6>
-                                                    <h5 class="mb-1 text-dark">{{ 1000 - $registeredParticipants }} left</h5>
-                                                    <span class="badge mt-auto {{ $registeredParticipants >= 1000 ? 'bg-danger' : 'bg-secondary' }}">1000 total</span>
+                                                    <h5 class="mb-1 text-dark">{{ 1000 - $registeredParticipants }}
+                                                        left</h5>
+                                                    <span
+                                                        class="badge mt-auto {{ $registeredParticipants >= 1000 ? 'bg-danger' : 'bg-secondary' }}">1000
+                                                        total</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -978,6 +1027,44 @@
                                             </div>
                                         </div>
 
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="card card-round shadow-lg">
+                                <h3 class="p-4 text-center text-white bg-primary rounded-top">Voting Delegates
+                                    Summary
+                                </h3>
+                                <div class="card-body p-4">
+                                    <div class="row">
+                                        {{-- Total Voted Delegates --}}
+                                        <div class="col-md-3 mb-3">
+                                            <div class="card card-body border shadow-sm text-center h-100">
+                                                <div class="icon-big text-primary text-center p-3 mb-2">
+                                                    <i class="fas fa-user"></i>
+                                                </div>
+                                                <p class="text-muted mb-1">Total Voted Delegates</p>
+                                                <h4 class="text-dark">{{ $votedDelegates }}</h4>
+                                            </div>
+                                        </div>
+
+                                        {{-- Per Region Counts --}}
+                                        @forelse($votingDelegatesPerRegion as $region => $count)
+                                            <div class="col-md-3 mb-3">
+                                                <div class="card card-body border shadow-sm text-center h-100">
+                                                    <div class="icon-big text-primary text-center p-3 mb-2">
+                                                        <i class="fas fa-building"></i>
+                                                    </div>
+                                                    <p class="text-muted mb-1">{{ $region }}</p>
+                                                    <h4 class="text-dark">{{ $count }}</h4>
+                                                </div>
+                                            </div>
+                                        @empty
+                                            <div class="col-12">
+                                                <p class="text-muted text-center">No regional data available.</p>
+                                            </div>
+                                        @endforelse
                                     </div>
                                 </div>
                             </div>
@@ -1150,7 +1237,8 @@
                                 </div>
                             </div>
                             <div class="card mt-4 shadow-lg border-0 rounded-4 overflow-hidden card-transition">
-                                <div class="card-header header-status bg-purple text-white rounded-top-4 position-relative">
+                                <div
+                                    class="card-header header-status bg-purple text-white rounded-top-4 position-relative">
                                     <h5><i class="fas fa-users me-2"></i> Attendance Overview</h5>
                                     <div class="header-overlay"></div>
                                 </div>
@@ -1173,7 +1261,7 @@
         const donutCtx = document.getElementById('votingDonutChart').getContext('2d');
         const totalVoting = {{ $totalVoting }};
         const votedDelegates = {{ $votedDelegates }};
-        const targetGoal = 300;
+        const targetGoal = Math.floor(totalVoting * 0.5) + 1;
         const votingDonutChart = new Chart(donutCtx, {
             type: 'doughnut',
             data: {
@@ -1309,6 +1397,7 @@
                 });
             });
         });
+
         function printReport() {
             var iframe = document.getElementById('reportFrame').contentWindow;
             iframe.focus();
@@ -1420,66 +1509,70 @@
         });
     </script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        let selectedRegion = null;
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let selectedRegion = null;
 
-        // Dropdown item click event
-        document.querySelectorAll('.dropdown-item2').forEach(function(item) {
-            item.addEventListener('click', function(event) {
-                event.preventDefault();
-                selectedRegion = item.getAttribute('data-region') === 'all' ? null : item.getAttribute('data-region');
+            // Dropdown item click event
+            document.querySelectorAll('.dropdown-item2').forEach(function(item) {
+                item.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    selectedRegion = item.getAttribute('data-region') === 'all' ? null : item
+                        .getAttribute('data-region');
 
-                // Highlight the selected region (optional)
-                document.querySelectorAll('.dropdown-item2').forEach(function(el) {
-                    el.classList.remove('active');
+                    // Highlight the selected region (optional)
+                    document.querySelectorAll('.dropdown-item2').forEach(function(el) {
+                        el.classList.remove('active');
+                    });
+                    item.classList.add('active'); // Add active class to the clicked item
+
+                    // Update the button text with the selected region
+                    const regionText = selectedRegion ? selectedRegion : 'All Region';
+                    document.getElementById('selectedRegion').textContent = `(${regionText})`;
                 });
-                item.classList.add('active');  // Add active class to the clicked item
+            });
 
-                // Update the button text with the selected region
-                const regionText = selectedRegion ? selectedRegion : 'All Region';
-                document.getElementById('selectedRegion').textContent = `(${regionText})`;
+            // Preview button click event
+            document.getElementById('previewButton').addEventListener('click', function(event) {
+                event.preventDefault();
+
+                // Show loading spinner inside the preview content container
+                const previewContent = document.getElementById('previewContent');
+                previewContent.innerHTML =
+                    '<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Loading preview...</div>';
+                previewContent.style.display = 'block'; // Show the preview content container
+
+                // Fetch the preview data from the server
+                const regionParam = selectedRegion ? `region=${selectedRegion}` : '';
+                fetch(`{{ route('admin.reports.participants_list') }}?${regionParam}`)
+                    .then(response => response.text())
+                    .then(html => {
+                        // Only insert the body content from the response (avoid adding any unwanted Bootstrap structure)
+                        const previewBody = html.match(/<body.*?>(.*?)<\/body>/s);
+                        if (previewBody && previewBody[1]) {
+                            previewContent.innerHTML = previewBody[
+                                1]; // Insert only the inner body content
+                        } else {
+                            previewContent.innerHTML = 'Failed to load preview content.';
+                        }
+                    })
+                    .catch(err => {
+                        previewContent.innerHTML = 'Failed to load preview.';
+                    });
+            });
+
+            // Export button click event
+            document.getElementById('exportButton').addEventListener('click', function(event) {
+                event.preventDefault();
+                if (selectedRegion !== null) {
+                    window.location.href =
+                        `{{ route('admin.reports.export_participants') }}?region=${selectedRegion}`;
+                } else {
+                    window.location.href = `{{ route('admin.reports.export_participants') }}`;
+                }
             });
         });
-
-        // Preview button click event
-        document.getElementById('previewButton').addEventListener('click', function(event) {
-            event.preventDefault();
-
-            // Show loading spinner inside the preview content container
-            const previewContent = document.getElementById('previewContent');
-            previewContent.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Loading preview...</div>';
-            previewContent.style.display = 'block'; // Show the preview content container
-
-            // Fetch the preview data from the server
-            const regionParam = selectedRegion ? `region=${selectedRegion}` : '';
-            fetch(`{{ route('admin.reports.participants_list') }}?${regionParam}`)
-                .then(response => response.text())
-                .then(html => {
-                    // Only insert the body content from the response (avoid adding any unwanted Bootstrap structure)
-                    const previewBody = html.match(/<body.*?>(.*?)<\/body>/s);
-                    if (previewBody && previewBody[1]) {
-                        previewContent.innerHTML = previewBody[1]; // Insert only the inner body content
-                    } else {
-                        previewContent.innerHTML = 'Failed to load preview content.';
-                    }
-                })
-                .catch(err => {
-                    previewContent.innerHTML = 'Failed to load preview.';
-                });
-        });
-
-        // Export button click event
-        document.getElementById('exportButton').addEventListener('click', function(event) {
-            event.preventDefault();
-            if (selectedRegion !== null) {
-                window.location.href = `{{ route('admin.reports.export_participants') }}?region=${selectedRegion}`;
-            } else {
-                window.location.href = `{{ route('admin.reports.export_participants') }}`;
-            }
-        });
-    });
-</script>
+    </script>
 
 
 </body>
