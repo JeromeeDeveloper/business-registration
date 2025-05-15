@@ -571,27 +571,31 @@ class ReportsController extends Controller
         return view('components.admin.reports.documents_status', compact('documentsByRegion'));
     }
 
-   public function generateIds(Request $request)
+public function generateIds(Request $request)
 {
     $type = $request->query('type');
 
     $query = Participant::with('cooperative')
-        ->where('delegate_type', 'Voting')
-        ->whereHas('cooperative.gaRegistration', function ($query) {
-            $query->where('membership_status', 'Migs')
-                  ->where('registration_status', 'Fully Registered');
-        });
+        ->where('delegate_type', 'Voting');
 
+    // Apply filters based on officer type
     if ($type === 'msp') {
+        // For MSP officers: skip Migs/Fully Registered filter
         $query->where('is_msp_officer', 'Yes');
     } elseif ($type === 'non') {
-        $query->where('is_msp_officer', 'No');
+        // For non-MSP officers: apply Migs and Fully Registered filter
+        $query->where('is_msp_officer', 'No')
+              ->whereHas('cooperative.gaRegistration', function ($query) {
+                  $query->where('membership_status', 'Migs')
+                        ->where('registration_status', 'Fully Registered');
+              });
     }
 
     $participants = $query->get();
 
     return view('components.admin.reports.generate_ids', compact('participants'));
 }
+
 
 
 
