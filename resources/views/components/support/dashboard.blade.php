@@ -1005,28 +1005,6 @@
                                             </div>
                                         @endforeach
 
-                                        <div class="col-md-4 mb-4">
-                                            <div class="card card-stats card-round shadow-sm h-100">
-                                                <div
-                                                    class="card-body d-flex flex-column align-items-center text-center p-3">
-                                                    <div class="col-icon me-3">
-                                                        <div
-                                                            class="icon-big text-primary text-center rounded-circle bg-light p-3">
-                                                            <i class="fas fa-calendar-check fa-lg"></i>
-                                                            <!-- Event Icon -->
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <p class="card-category mb-1 text-muted">
-                                                            Voted Delegates
-                                                        <h4 class="card-title mb-0 text-dark">
-                                                            {{ $votedDelegates }}
-                                                        </h4>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
                                     </div>
                                 </div>
 
@@ -1044,7 +1022,7 @@
                                                 <div class="icon-big text-primary text-center p-3 mb-2">
                                                     <i class="fas fa-user"></i>
                                                 </div>
-                                                <p class="text-muted mb-1">Total Voted Delegates</p>
+                                                <p class="text-muted mb-1">Voted Delegates</p>
                                                 <h4 class="text-dark">{{ $votedDelegates }}</h4>
                                             </div>
                                         </div>
