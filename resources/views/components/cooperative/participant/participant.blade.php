@@ -192,18 +192,60 @@
                                         </div>
 
                                         @php
-                                        $isMay22 = now()->format('m-d') === '05-16';
-                                       @endphp
+                                        use App\Models\Participant;
+                                        use App\Models\Cooperative;
 
-                                       @if ($isMay22)
-                                           <div class="alert alert-warning d-flex align-items-center"
-                                               role="alert">
-                                               <i class="fa fa-exclamation-triangle me-2"></i>
-                                               <div>
-                                                   Registration is closed.
-                                               </div>
-                                           </div>
-                                       @endif
+                                        $isMay16 = now()->format('m-d') === '05-22';
+                                        $participantCount = Participant::whereNotNull('coop_id')->count();
+                                        $isMaxedParticipants = $participantCount >= 1000;
+
+                                        $isAddDisabled = false;
+                                        $tooltipMessage = 'Add Participant';
+
+                                        if (auth()->check() && auth()->user()->role === 'cooperative') {
+                                            $userEmail = auth()->user()->email;
+
+                                            // Find cooperative with GA registration
+                                            $cooperative = Cooperative::where('email', $userEmail)
+                                                ->whereHas('gaRegistration', function ($query) {
+                                                    $query->whereIn('registration_status', ['Partial Registered', 'Fully Registered']);
+                                                })
+                                                ->first();
+
+                                            $isAddDisabled = $isMay16 || $isMaxedParticipants || !is_null($cooperative);
+
+                                            // Set reason for disabling
+                                            if ($isMay16) {
+                                                $tooltipMessage = 'Disabled: Registration is closed (May 22)';
+                                            } elseif ($isMaxedParticipants) {
+                                                $tooltipMessage = 'Disabled: Max 1000 participants reached';
+                                            } elseif (!is_null($cooperative)) {
+                                                $tooltipMessage = 'Disabled: Your cooperative is already registered';
+                                            }
+
+                                        } else {
+                                            $isAddDisabled = $isMay16 || $isMaxedParticipants;
+
+                                            if ($isMay16) {
+                                                $tooltipMessage = 'Disabled: Registration is closed (May 22)';
+                                            } elseif ($isMaxedParticipants) {
+                                                $tooltipMessage = 'Disabled: Max 1000 participants reached';
+                                            }
+                                        }
+                                    @endphp
+
+                                    @if ($isMay16)
+                                        <div class="alert alert-warning d-flex align-items-center" role="alert">
+                                            <i class="fa fa-exclamation-triangle me-2"></i>
+                                            <div>Registration is closed.</div>
+                                        </div>
+                                    @elseif ($isMaxedParticipants)
+                                        <div class="alert alert-danger d-flex align-items-center" role="alert">
+                                            <i class="fa fa-times-circle me-2"></i>
+                                            <div>Maximum number of participants (1000) has been reached.</div>
+                                        </div>
+                                    @endif
+
 
                                         <!-- Right: Search Form + Add Button -->
                                         <form method="GET" class="w-80 w-md-auto">
@@ -219,13 +261,13 @@
 
 
                                                     <button type="button"
-                                                        class="btn btn-primary text-white {{ $isMay22 ? 'disabled' : '' }}"
-                                                        data-bs-toggle="tooltip"
-                                                        title="{{ $isMay22 ? 'Disabled on May 22' : 'Add Participant' }}"
-                                                        {{ $isMay22 ? 'aria-disabled=true' : '' }}
-                                                        onclick="{{ $isMay22 ? 'return false;' : "location.href='" . route('coopparticipantadd') . "'" }}">
-                                                        <i class="fa fa-plus"></i>
-                                                    </button>
+                                                    class="btn btn-primary text-white {{ $isAddDisabled ? 'disabled' : '' }}"
+                                                    data-bs-toggle="tooltip"
+                                                    title="{{ $tooltipMessage }}"
+                                                    {{ $isAddDisabled ? 'aria-disabled=true' : '' }}
+                                                    onclick="{{ $isAddDisabled ? 'return false;' : "location.href='" . route('coopparticipantadd') . "'" }}">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
 
 
                                                     <button type="button" onclick="printAttendance()"

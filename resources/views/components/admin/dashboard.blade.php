@@ -848,10 +848,10 @@
                                                         </div>
                                                     </div>
                                                     <h6 class="text-muted mb-1">Registered Participants</h6>
-                                                    <h5 class="mb-1 text-dark">{{ 1000 - $registeredParticipants }}
+                                                    <h5 class="mb-1 text-dark">{{ 1050 - $registeredParticipants }}
                                                         left</h5>
                                                     <span
-                                                        class="badge mt-auto {{ $registeredParticipants >= 1000 ? 'bg-danger' : 'bg-secondary' }}">1000
+                                                        class="badge mt-auto {{ $registeredParticipants >= 1000 ? 'bg-danger' : 'bg-secondary' }}">1050
                                                         total</span>
                                                 </div>
                                             </div>

@@ -53,7 +53,7 @@
 
                             // Check if the participant count exceeds 1000
                             $participantCount = \App\Models\Participant::whereNotNull('coop_id')->count();
-                            $isMaxedParticipants = $participantCount >= 1000;
+                            $isMaxedParticipants = $participantCount >= 1050;
                         @endphp
 
                         <li class="nav-item">
@@ -215,7 +215,7 @@
                                                     <i class="fa fa-exclamation-triangle me-1"></i>Important Notice
                                                 </h6>
                                                 <p class="mb-0 text-dark">
-                                                    Participant registration will be <strong>disabled on May 22</strong>, and editing will be <strong>disabled on May 13</strong>. Additionally, registration will be <strong>closed once 1000 participants</strong> have been reached. Current total: <strong>{{ $totalParticipantsforall }}</strong>.
+                                                    Participant registration will be <strong>disabled on May 22</strong>, and editing will be <strong>disabled on May 13</strong>. Additionally, registration will be <strong>closed once 1050 participants</strong> have been reached. Current total: <strong>{{ $totalParticipantsforall }}</strong>.
                                                     <span id="cutoff-message" class="mt-2 text-danger fw-bold"></span>
                                                 </p>
 
@@ -245,24 +245,40 @@
 
                             <!-- Register Participants -->
                             @php
-                             $isMay22 = now()->format('m-d') === '05-16';
-                            @endphp
+    use App\Models\Cooperative;
 
-                            @php
-                                // Check if the current date is May 22
-                                $isMay22 = now()->format('m-d') === '05-16';
+    // Date check
+    $isMay16 = now()->format('m-d') === '05-22';
 
-                                // Check if the participant count exceeds 1000
-                                $participantCount = \App\Models\Participant::whereNotNull('coop_id')->count();
-                                $isMaxedParticipants = $participantCount >= 1000;
-                            @endphp
+    // Participant count check
+    $participantCount = \App\Models\Participant::whereNotNull('coop_id')->count();
+    $isMaxedParticipants = $participantCount >= 1050;
 
-                            <a href="{{ $isMay22 || $isMaxedParticipants ? '#' : route('coopparticipantadd') }}"
-                                class="btn btn-primary btn-lg action-btn {{ $isMay22 || $isMaxedParticipants ? 'disabled' : '' }}"
-                                {{ $isMay22 || $isMaxedParticipants ? 'aria-disabled=true' : '' }}
-                                onclick="{{ $isMay22 || $isMaxedParticipants ? 'return false;' : '' }}">
-                                <i class="fas fa-user-plus me-2"></i> Register Participants
-                            </a>
+    // Registration status check
+    $isAddDisabled = false;
+
+    if (auth()->check() && auth()->user()->role === 'cooperative') {
+        $userEmail = auth()->user()->email;
+
+        $cooperative = Cooperative::where('email', $userEmail)
+            ->whereHas('gaRegistration', function ($query) {
+                $query->whereIn('registration_status', ['Partial Registered', 'Fully Registered']);
+            })
+            ->first();
+
+        $isAddDisabled = $isMay16 || $isMaxedParticipants || !is_null($cooperative);
+    } else {
+        $isAddDisabled = $isMay16 || $isMaxedParticipants;
+    }
+@endphp
+
+<a href="{{ $isAddDisabled ? '#' : route('coopparticipantadd') }}"
+    class="btn btn-primary btn-lg action-btn {{ $isAddDisabled ? 'disabled' : '' }}"
+    {{ $isAddDisabled ? 'aria-disabled=true' : '' }}
+    onclick="{{ $isAddDisabled ? 'return false;' : '' }}">
+    <i class="fas fa-user-plus me-2"></i> Register Participants
+</a>
+
 
                             {{-- <a class="btn btn-primary btn-lg action-btn" href="{{ route('coopparticipantadd') }}">add</a> --}}
 
