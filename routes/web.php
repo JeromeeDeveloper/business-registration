@@ -127,6 +127,8 @@ Route::middleware([AdminMiddleware::class])->group(function () {
     //     return response()->json(['message' => 'All cooperatives GA Registration status updated successfully.']);
     // });
 
+    Route::get('/generate-pdf-single/{cooperative_id}', [ReportsController::class, 'printSingleCoopSummary'])->name('admin.generatePDFsingle');
+
     Route::post('/generate-blank-pdf', [CooperativeController::class, 'generateBlankPdf']);
 
     Route::get('/registration-overview-pdf', [ReportsController::class, 'showRegistrationOverview'])->name('registration.overview.pdf');

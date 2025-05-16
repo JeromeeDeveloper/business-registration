@@ -283,6 +283,23 @@ class ReportsController extends Controller
         return $pdf->download('cooperative_report.pdf');
     }
 
+public function printSingleCoopSummary(Request $request, $coopId)
+{
+    $registrations = GARegistration::with('cooperative', 'participant')
+        ->where('coop_id', $coopId)
+        ->get();
+
+    $participants = $registrations->pluck('participant')->filter();
+
+    // Just render the Blade view for printing
+    return view('components.admin.reports.registration_form', compact('registrations', 'participants'));
+}
+
+
+
+
+
+
 
 
     public function export(Request $request)
@@ -594,12 +611,6 @@ public function generateIds(Request $request)
 
     return view('components.admin.reports.generate_ids', compact('participants'));
 }
-
-
-
-
-
-
 
     public function exportDocumentsStatus()
     {

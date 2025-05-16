@@ -476,6 +476,13 @@
                                                                     </div>
                                                                 @endif
 
+                                                                <a href="#"
+                                                                    class="btn btn-link btn-primary btn-lg"
+                                                                    title="Print Coop Summary"
+                                                                    onclick="openPrintWindow({{ $coop->coop_id }}); return false;">
+                                                                    <i class="fa fa-print"></i>
+                                                                </a>
+
                                                                 <form
                                                                     action="{{ route('cooperatives.notify', $coop->coop_id) }}"
                                                                     method="POST" style="display:inline;"
@@ -526,6 +533,7 @@
                                                                         <i class="fa fa-times"></i>
                                                                     </button>
                                                                 </form>
+
 
                                                             </div>
                                                         </td>
@@ -722,7 +730,31 @@
             };
         }
     </script>
+
+
+   <script>
+    function openPrintWindow(coopId) {
+        const url = `/generate-pdf-single/${coopId}`;
+        const printWindow = window.open(url, '_blank');
+
+        printWindow.onload = function() {
+            printWindow.focus(); // Focus the window
+
+            printWindow.print();
+
+            // Close the print window shortly after the print dialog closes
+            setTimeout(() => {
+                printWindow.close();
+            }, 500); // Adjust delay if needed
+        };
+    }
+</script>
+
+
     @include('layouts.links')
 
+
+
 </body>
+
 </html>
