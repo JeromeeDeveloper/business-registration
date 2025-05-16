@@ -47,7 +47,7 @@
 
                         @php
     // Check if the current date is May 22
-    $isMay22 = now()->format('m-d') === '05-22';
+    $isMay22 = now()->format('m-d') === '05-16';
 
     // Check if the participant count exceeds 1000
     $participantCount = \App\Models\Participant::whereNotNull('coop_id')->count();
@@ -65,7 +65,7 @@
     <div class="collapse" id="participant">
         <ul class="nav nav-collapse">
             <li>
-                <a href="{{ $isMay22 || $isMaxedParticipants ? '#' : route('coop.index') }}"
+                <a href="{{route('coop.index') }}"
                    class="{{ $isMay22 || $isMaxedParticipants ? 'disabled' : '' }}">
                     <span class="sub-item">Participants</span>
                 </a>
@@ -609,7 +609,7 @@
                                                                 {{ number_format($cooperative->net_required_reg_fee, 2) ?? 'N/A' }}
                                                             </td>
                                                         </tr>
-                                                        
+
                                                         <tr>
                                                             <td class="fw-bold">Registration Fee Payable:</td>
                                                             <td id="reg_fee_payable">

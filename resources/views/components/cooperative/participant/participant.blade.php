@@ -47,7 +47,7 @@
 
                         @php
     // Check if the current date is May 22
-    $isMay22 = now()->format('m-d') === '05-22';
+    $isMay22 = now()->format('m-d') === '05-16';
 
     // Check if the participant count exceeds 1000
     $participantCount = \App\Models\Participant::whereNotNull('coop_id')->count();
@@ -191,6 +191,19 @@
                                             </h4>
                                         </div>
 
+                                        @php
+                                        $isMay22 = now()->format('m-d') === '05-16';
+                                       @endphp
+
+                                       @if ($isMay22)
+                                           <div class="alert alert-warning d-flex align-items-center"
+                                               role="alert">
+                                               <i class="fa fa-exclamation-triangle me-2"></i>
+                                               <div>
+                                                   Registration is closed.
+                                               </div>
+                                           </div>
+                                       @endif
 
                                         <!-- Right: Search Form + Add Button -->
                                         <form method="GET" class="w-80 w-md-auto">
@@ -203,20 +216,7 @@
                                                     <button type="submit" class="btn btn-primary">
                                                         <i class="fa fa-search"></i>
                                                     </button>
-                                                    @php
-                                                        $isMay22 = now()->format('m-d') === '05-22';
-                                                    @endphp
 
-                                                    @if ($isMay22)
-                                                        <div class="alert alert-warning d-flex align-items-center"
-                                                            role="alert">
-                                                            <i class="fa fa-exclamation-triangle me-2"></i>
-                                                            <div>
-                                                                Registration is closed. You cannot add participants on
-                                                                May 22.
-                                                            </div>
-                                                        </div>
-                                                    @endif
 
                                                     <button type="button"
                                                         class="btn btn-primary text-white {{ $isMay22 ? 'disabled' : '' }}"
