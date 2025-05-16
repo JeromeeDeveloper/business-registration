@@ -974,7 +974,7 @@
                                             </div>
                                         @endforeach
 
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -984,6 +984,16 @@
                                 </h3>
                                 <div class="card-body p-4">
                                     <div class="row">
+
+                                          <div class="col-md-3 mb-3">
+                                            <div class="card card-body border shadow-sm text-center h-100">
+                                                <div class="icon-big text-primary text-center p-3 mb-2">
+                                                    <i class="fas fa-user"></i>
+                                                </div>
+                                                <p class="text-muted mb-1">Voting Delegates</p>
+                                                <h4 class="text-dark">{{ $totalVoting }}</h4>
+                                            </div>
+                                        </div>
                                         {{-- Total Voted Delegates --}}
                                         <div class="col-md-3 mb-3">
                                             <div class="card card-body border shadow-sm text-center h-100">
