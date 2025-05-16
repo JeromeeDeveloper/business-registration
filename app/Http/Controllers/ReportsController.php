@@ -580,10 +580,8 @@ public function generateIds(Request $request)
 
     // Apply filters based on officer type
     if ($type === 'msp') {
-        // For MSP officers: skip Migs/Fully Registered filter
         $query->where('is_msp_officer', 'Yes');
     } elseif ($type === 'non') {
-        // For non-MSP officers: apply Migs and Fully Registered filter
         $query->where('is_msp_officer', 'No')
               ->whereHas('cooperative.gaRegistration', function ($query) {
                   $query->where('membership_status', 'Migs')
@@ -591,10 +589,12 @@ public function generateIds(Request $request)
               });
     }
 
-    $participants = $query->get();
+    // Sort so newest participants are at the bottom
+    $participants = $query->orderBy('created_at', 'asc')->get();
 
     return view('components.admin.reports.generate_ids', compact('participants'));
 }
+
 
 
 
