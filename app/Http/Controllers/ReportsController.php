@@ -292,15 +292,8 @@ public function printSingleCoopSummary(Request $request, $coopId)
     $participants = $registrations->pluck('participant')->filter();
 
     // Just render the Blade view for printing
-    return view('components.admin.reports.registration_form', compact('registrations', 'participants'));
+    return view('components.admin.reports.registration_form_single', compact('registrations', 'participants'));
 }
-
-
-
-
-
-
-
 
     public function export(Request $request)
     {
