@@ -242,7 +242,7 @@
                                     @elseif ($isMaxedParticipants)
                                         <div class="alert alert-danger d-flex align-items-center" role="alert">
                                             <i class="fa fa-times-circle me-2"></i>
-                                            <div>Maximum number of participants (1000) has been reached.</div>
+                                            <div>Maximum number of participants has been reached and Registration is closed.</div>
                                         </div>
                                     @endif
 
