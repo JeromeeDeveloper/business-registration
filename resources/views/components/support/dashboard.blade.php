@@ -975,7 +975,7 @@
 
 
                             <div class="card card-round shadow-lg">
-                                <h3 class="p-4 text-center text-white bg-primary rounded-top">Event Attendance Status
+                                <h3 class="p-4 text-center text-white bg-primary rounded-top">Participant Event Attendance Summary
                                 </h3> <!-- Title -->
 
 
@@ -1027,7 +1027,7 @@
                                                 <h4 class="text-dark">{{ $totalVoting }}</h4>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="col-md-3 mb-3">
                                             <div class="card card-body border shadow-sm text-center h-100">
                                                 <div class="icon-big text-primary text-center p-3 mb-2">

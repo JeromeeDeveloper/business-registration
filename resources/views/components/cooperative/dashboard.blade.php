@@ -53,7 +53,7 @@
 
                             // Check if the participant count exceeds 1000
                             $participantCount = \App\Models\Participant::whereNotNull('coop_id')->count();
-                            $isMaxedParticipants = $participantCount >= 1050;
+                            $isMaxedParticipants = $participantCount >= 1025;
                         @endphp
 
                         <li class="nav-item">
@@ -215,7 +215,7 @@
                                                     <i class="fa fa-exclamation-triangle me-1"></i>Important Notice
                                                 </h6>
                                                 <p class="mb-0 text-dark">
-                                                    Participant registration will be <strong>disabled on May 22</strong>, and editing will be <strong>disabled on May 13</strong>. Additionally, registration will be <strong>closed once 1050 participants</strong> have been reached. Current total: <strong>{{ $totalParticipantsforall }}</strong>.
+                                                    Participant registration will be <strong>disabled on May 22</strong>, and editing will be <strong>disabled on May 13</strong>. Additionally, registration will be <strong>closed once 1025 participants</strong> have been reached. Current total: <strong>{{ $totalParticipantsforall }}</strong>.
                                                     <span id="cutoff-message" class="mt-2 text-danger fw-bold"></span>
                                                 </p>
 
@@ -252,7 +252,7 @@
 
     // Participant count check
     $participantCount = \App\Models\Participant::whereNotNull('coop_id')->count();
-    $isMaxedParticipants = $participantCount >= 1050;
+    $isMaxedParticipants = $participantCount >= 1025;
 
     // Registration status check
     $isAddDisabled = false;
