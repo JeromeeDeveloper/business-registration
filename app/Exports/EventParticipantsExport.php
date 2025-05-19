@@ -20,7 +20,7 @@ class EventParticipantsExport implements FromCollection, WithHeadings, WithStyle
             ->whereNotNull('attendance_datetime') // Only get participants with attendance
             ->get()
             ->groupBy(function ($eventParticipant) {
-                return $eventParticipant->participant->id;
+                return $eventParticipant->participant->participant_id;
             })
             ->map(function ($groupedEventParticipants) use ($events) {
                 $row = [];
