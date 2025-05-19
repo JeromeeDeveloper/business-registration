@@ -49,7 +49,7 @@
 
                         @php
                             // Check if the current date is May 22
-                            $isMay22 = now()->format('m-d') === '05-16';
+                            $isMay22 = now()->format('m-d') === '05-19';
 
                             // Check if the participant count exceeds 1000
                             $participantCount = \App\Models\Participant::whereNotNull('coop_id')->count();
