@@ -720,7 +720,7 @@
         });
     </script>
 
-<script>
+{{-- <script>
     document.addEventListener("DOMContentLoaded", function () {
         function calculateFees() {
             // Fetch numeric values
@@ -793,7 +793,7 @@
 
         calculateFees();
     });
-</script>
+</script> --}}
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {

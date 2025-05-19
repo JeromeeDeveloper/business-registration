@@ -1164,8 +1164,6 @@
                     cetfLabel.textContent = `${free100kCount} Pax`;
                 }
 
-               
-
                 let totalRegFee = numParticipants * regFee;
                 let freeAmount = 0;
                 if (document.getElementById('free_2pax_migs').checked) {
