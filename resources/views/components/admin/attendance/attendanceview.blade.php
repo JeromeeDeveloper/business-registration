@@ -324,7 +324,7 @@
 
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
-                                        <label>Congress Types</label>
+                                        <label>Congresses to Attend</label>
                                         <div class="border p-2 rounded" style="min-height: 45px; background-color: #f8f9fa;">
                                             @if ($participant->events->isNotEmpty())
                                                 @foreach ($participant->events as $event)
