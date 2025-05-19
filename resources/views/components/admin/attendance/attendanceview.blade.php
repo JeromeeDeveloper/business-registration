@@ -243,12 +243,7 @@
                                 </div>
 
                                <!-- User Display -->
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="user_id">User Account</label>
-                                        <div>{{ $participant->user->name ?? 'N/A' }}</div>
-                                    </div>
-                                </div>
+
 
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
@@ -381,16 +376,6 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label for="gender">Attendance</label>
-                                        <div>
-                                            {{ $participant->attendance_datetime
-                                                ? \Carbon\Carbon::parse($participant->attendance_datetime)->format('F j, Y g:i A')
-                                                : 'N/A' }}
-                                        </div>
-                                    </div>
-                                </div>
 
                                 <div class="col-md-6 col-lg-4">
                                     <div class="form-group">
