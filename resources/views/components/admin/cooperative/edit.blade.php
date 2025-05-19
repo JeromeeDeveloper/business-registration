@@ -1152,7 +1152,7 @@
                 let free100kCetf = document.getElementById('free_100k_cetf');
                 let halfBasedCetf = document.getElementById('half_based_cetf');
 
-                halfBasedCetf.disabled = true;
+
                 let free100kCount = Math.floor(totalRemittance / 100000);
 
                 if (free100kCetf) {
@@ -1164,9 +1164,7 @@
                     cetfLabel.textContent = `${free100kCount} Pax`;
                 }
 
-                if (free100kCetf.checked) {
-                    halfBasedCetf.checked = false;
-                }
+               
 
                 let totalRegFee = numParticipants * regFee;
                 let freeAmount = 0;

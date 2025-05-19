@@ -1016,7 +1016,7 @@ class DashboardController extends Controller
         $free100kCETF = $totalRemittance >= 100000;
 
         // Only apply half-based CETF if it's 50K+ but less than 100K
-        $halfBasedCETF = $totalRemittance >= 50000 && $totalRemittance < 100000;
+       $halfBasedCETF = $totalRemittance >= 50000;
 
         // Get the number of participants
         $numParticipants = $coop->participants()->count();
