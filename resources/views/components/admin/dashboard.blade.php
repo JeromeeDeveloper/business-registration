@@ -861,7 +861,7 @@
                             </div>
 
                             <div class="card card-round shadow-lg">
-                                <h3 class="p-4 text-center text-white bg-primary rounded-top">Attendance Status</h3>
+                                <h3 class="p-4 text-center text-white bg-primary rounded-top">Cooperative Attendance Summary</h3>
                                 <div class="card-body p-4">
                                     <div class="row">
                                         <div class="col-md-3 mb-4">
@@ -946,7 +946,7 @@
 
 
                             <div class="card card-round shadow-lg">
-                                <h3 class="p-4 text-center text-white bg-primary rounded-top">Event Attendance Status
+                                <h3 class="p-4 text-center text-white bg-primary rounded-top">Participant Event Attendance Summary
                                 </h3>
                                 <div class="card-body p-4">
                                     <div class="row">
