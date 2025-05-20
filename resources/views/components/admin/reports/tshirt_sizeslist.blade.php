@@ -87,6 +87,7 @@
                             <th>Cooperative Name</th>
                             <th>Gender</th>
                             <th>Participant Name</th>
+                            <th>Region</th>
                             <th>T-Shirt Size</th>
                         </tr>
                     </thead>
@@ -97,6 +98,7 @@
                                     <td>{{ $cooperative->name }}</td>
                                     <td>{{ $participant->gender }}</td>
                                     <td>{{ $participant->first_name }} {{ $participant->middle_name }} {{ $participant->last_name }}</td>
+                                     <td>{{ $cooperative->region }}</td>
                                     <td class="fw-semibold text-primary">{{ $participant->tshirt_size }}</td>
                                 </tr>
                             @endforeach

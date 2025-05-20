@@ -77,8 +77,8 @@ Route::middleware([AdminOrSupportMiddleware::class])->group(function () {
     Route::get('/admin/reports/voting', [ReportsController::class, 'votingParticipantsPerRegion'])
         ->name('admin.reports.voting_per_region');
 
-    Route::get('/admin/reports/Non-MSP', [ReportsController::class, 'non_msp_id'])
-        ->name('admin.reports.non_msp_id');
+    Route::get('/admin/reports/officers', [ReportsController::class, 'officers'])
+        ->name('admin.reports.officers');
 
     Route::get('/admin/reports/tshirt-sizes/list', [ReportsController::class, 'tshirtlist'])
         ->name('admin.reports.tshirt_sizes_list');

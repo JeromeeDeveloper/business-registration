@@ -297,11 +297,11 @@
                                                     Participants)
                                                 </a>
 
-                                                {{-- <a href="{{ route('admin.reports.list_of_delegates') }}"
+                                                <a href="{{ route('admin.reports.officers') }}"
                                                     class="list-group-item list-group-item-action py-3 fw-semibold"
-                                                    data-report-type="non_msp_id">
-                                                    <i class="fas fa-tshirt me-2"></i> Non-MSP Summary for ID
-                                                </a> --}}
+                                                    data-report-type="msp_id">
+                                                    <i class="fas fa-user me-2"></i> List of Officers
+                                                </a>
 
                                                 <a href="{{ route('admin.reports.voting_per_region') }}"
                                                     class="list-group-item list-group-item-action py-3 fw-semibold"

@@ -283,17 +283,17 @@ class ReportsController extends Controller
         return $pdf->download('cooperative_report.pdf');
     }
 
-public function printSingleCoopSummary(Request $request, $coopId)
-{
-    $registrations = GARegistration::with('cooperative', 'participant')
-        ->where('coop_id', $coopId)
-        ->get();
+    public function printSingleCoopSummary(Request $request, $coopId)
+    {
+        $registrations = GARegistration::with('cooperative', 'participant')
+            ->where('coop_id', $coopId)
+            ->get();
 
-    $participants = $registrations->pluck('participant')->filter();
+        $participants = $registrations->pluck('participant')->filter();
 
-    // Just render the Blade view for printing
-    return view('components.admin.reports.registration_form_single', compact('registrations', 'participants'));
-}
+        // Just render the Blade view for printing
+        return view('components.admin.reports.registration_form_single', compact('registrations', 'participants'));
+    }
 
     public function export(Request $request)
     {
@@ -368,38 +368,74 @@ public function printSingleCoopSummary(Request $request, $coopId)
         return Excel::download(new ParticipantsExport($region), 'participants.xlsx');
     }
 
-   public function votingParticipantsPerRegion(Request $request)
+   public function officers(Request $request)
 {
     $region = $request->query('region');
+    $officerType = $request->query('officer_type'); // 'msp' or 'non-msp'
 
-    $query = DB::table('participants')
-        ->join('cooperatives', 'participants.coop_id', '=', 'cooperatives.coop_id')
-        ->join('ga_registrations', 'cooperatives.coop_id', '=', 'ga_registrations.coop_id')
-        ->select(
-            'cooperatives.region',
-            DB::raw('COUNT(participants.participant_id) as total'),
-            DB::raw("SUM(CASE WHEN participants.voting_status = 'Voted' THEN 1 ELSE 0 END) as total_voted")
-        )
-        ->where('participants.delegate_type', 'Voting')
-        ->where('ga_registrations.membership_status', 'Migs')
-        ->where('ga_registrations.registration_status', 'Fully Registered')
-        ->groupBy('cooperatives.region');
+    // Fetch individual participant records (not just region summary)
+   $query = DB::table('participants')
+    ->join('cooperatives', 'participants.coop_id', '=', 'cooperatives.coop_id')
+    ->join('ga_registrations', 'cooperatives.coop_id', '=', 'ga_registrations.coop_id')
+    ->select(
+        'participants.*',
+        'cooperatives.name as coop_name',
+        'cooperatives.region as coop_region'
+    );
 
+
+    // Filter region if set
     if ($region) {
         $query->where('cooperatives.region', $region);
     }
 
-    $regionCounts = $query->orderBy('cooperatives.region')->get();
+    // Officer type filter
+    if ($officerType === 'msp') {
+        $query->where('participants.is_msp_officer', 'Yes');
+    } elseif ($officerType === 'non-msp') {
+        $query->where('participants.is_msp_officer', 'No');
+    }
 
-    return view('components.admin.reports.voting_participants_per_region', [
-        'regionCounts' => $regionCounts,
+    $participants = $query->get();
+
+    return view('components.admin.reports.officers', [
+        'participants' => $participants,
         'region' => $region,
+        'officerType' => $officerType,
     ]);
 }
 
 
 
 
+    public function votingParticipantsPerRegion(Request $request)
+    {
+        $region = $request->query('region');
+
+        $query = DB::table('participants')
+            ->join('cooperatives', 'participants.coop_id', '=', 'cooperatives.coop_id')
+            ->join('ga_registrations', 'cooperatives.coop_id', '=', 'ga_registrations.coop_id')
+            ->select(
+                'cooperatives.region',
+                DB::raw('COUNT(participants.participant_id) as total'),
+                DB::raw("SUM(CASE WHEN participants.voting_status = 'Voted' THEN 1 ELSE 0 END) as total_voted")
+            )
+            ->where('participants.delegate_type', 'Voting')
+            ->where('ga_registrations.membership_status', 'Migs')
+            ->where('ga_registrations.registration_status', 'Fully Registered')
+            ->groupBy('cooperatives.region');
+
+        if ($region) {
+            $query->where('cooperatives.region', $region);
+        }
+
+        $regionCounts = $query->orderBy('cooperatives.region')->get();
+
+        return view('components.admin.reports.voting_participants_per_region', [
+            'regionCounts' => $regionCounts,
+            'region' => $region,
+        ]);
+    }
 
     public function participantsListcongress()
     {
@@ -557,7 +593,7 @@ public function printSingleCoopSummary(Request $request, $coopId)
         // Fetch cooperatives with their participants
         $cooperatives = Cooperative::with(['participants' => function ($query) {
             $query->select('participant_id', 'coop_id', 'first_name', 'middle_name', 'last_name', 'gender', 'tshirt_size');
-        }])->select('coop_id', 'name')->get();
+        }])->select('coop_id', 'name', 'region')->get();
 
         return view('components.admin.reports.tshirt_sizeslist', compact('cooperatives'));
     }
@@ -581,29 +617,29 @@ public function printSingleCoopSummary(Request $request, $coopId)
         return view('components.admin.reports.documents_status', compact('documentsByRegion'));
     }
 
-public function generateIds(Request $request)
-{
-    $type = $request->query('type');
+    public function generateIds(Request $request)
+    {
+        $type = $request->query('type');
 
-    $query = Participant::with('cooperative')
-        ->where('delegate_type', 'Voting');
+        $query = Participant::with('cooperative')
+            ->where('delegate_type', 'Voting');
 
-    // Apply filters based on officer type
-    if ($type === 'msp') {
-        $query->where('is_msp_officer', 'Yes');
-    } elseif ($type === 'non') {
-        $query->where('is_msp_officer', 'No')
-              ->whereHas('cooperative.gaRegistration', function ($query) {
-                  $query->where('membership_status', 'Migs')
+        // Apply filters based on officer type
+        if ($type === 'msp') {
+            $query->where('is_msp_officer', 'Yes');
+        } elseif ($type === 'non') {
+            $query->where('is_msp_officer', 'No')
+                ->whereHas('cooperative.gaRegistration', function ($query) {
+                    $query->where('membership_status', 'Migs')
                         ->where('registration_status', 'Fully Registered');
-              });
+                });
+        }
+
+        // Sort so newest participants are at the bottom
+        $participants = $query->orderBy('created_at', 'asc')->get();
+
+        return view('components.admin.reports.generate_ids', compact('participants'));
     }
-
-    // Sort so newest participants are at the bottom
-    $participants = $query->orderBy('created_at', 'asc')->get();
-
-    return view('components.admin.reports.generate_ids', compact('participants'));
-}
 
     public function exportDocumentsStatus()
     {
