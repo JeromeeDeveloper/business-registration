@@ -1251,112 +1251,148 @@
 
     @include('layouts.links')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        const donutCtx = document.getElementById('votingDonutChart').getContext('2d');
-        const totalVoting = {{ $totalVoting }};
-        const votedDelegates = {{ $votedDelegates }};
-        const targetGoal = Math.floor(totalVoting * 0.5) + 1;
-        const votingDonutChart = new Chart(donutCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Voting Delegates', 'Voted Delegates', 'Target Goal'],
-                datasets: [{
-                    label: 'Voting Stats',
-                    data: [totalVoting, votedDelegates, targetGoal],
-                    backgroundColor: [
-                        'rgba(0, 123, 255, 0.8)',
-                        'rgba(0, 200, 255, 0.8)',
-                        'rgba(255, 99, 132, 0.8)'
-                    ],
-                    borderColor: '#fff',
-                    borderWidth: 3,
-                    hoverOffset: 12
-                }]
-            },
-            options: {
-                responsive: true,
-                cutout: '65%',
-                animation: {
-                    animateRotate: true,
-                    duration: 1500,
-                    easing: 'easeOutQuart'
-                },
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            color: '#333',
-                            font: {
-                                size: 14,
-                                weight: 'bold'
-                            },
-                            padding: 20
+   <script>
+    const barCtx = document.getElementById('votingDonutChart').getContext('2d');
+    const totalVoting = {{ $totalVoting }};
+    const votedDelegates = {{ $votedDelegates }};
+    const targetGoal = Math.floor(totalVoting * 0.5) + 1;
+
+    const votingBarChart = new Chart(barCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Voting Delegates', 'Target Turn out', 'Voted Delegates'],
+            datasets: [{
+                label: 'Voting Stats',
+                data: [totalVoting, targetGoal, votedDelegates],
+                backgroundColor: [
+                    'rgba(0, 123, 255, 0.8)',
+                    'rgba(0, 200, 255, 0.8)',
+                    'rgba(255, 99, 132, 0.8)'
+                ],
+                borderColor: [
+                    'rgba(0, 123, 255, 1)',
+                    'rgba(0, 200, 255, 1)',
+                    'rgba(255, 99, 132, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: '#333',
+                        font: {
+                            size: 14,
+                            weight: 'bold'
                         }
                     },
-                    tooltip: {
-                        backgroundColor: '#1e1e2f',
-                        titleColor: '#fff',
-                        bodyColor: '#eee',
-                        padding: 10,
-                        cornerRadius: 8
+                    grid: {
+                        color: '#e0e0e0'
                     }
-                }
-            }
-        });
-    </script>
-    <script>
-        const donutCtx2 = document.getElementById('attendanceDonutChart').getContext('2d');
-        const registeredParticipants = {{ $registeredParticipants }};
-        const attendedParticipants = {{ $totalAttendedParticipants }};
-        const attendanceTarget = 1000;
-        const attendanceDonutChart = new Chart(donutCtx2, {
-            type: 'doughnut',
-            data: {
-                labels: ['Registered', 'Attended', 'Target Goal'],
-                datasets: [{
-                    label: 'Attendance Stats',
-                    data: [registeredParticipants, attendedParticipants, attendanceTarget],
-                    backgroundColor: [
-                        'rgba(161, 140, 209, 0.85)',
-                        'rgba(142, 45, 226, 0.85)',
-                        'rgba(255, 99, 132, 0.85)'
-                    ],
-                    borderColor: '#fff',
-                    borderWidth: 3,
-                    hoverOffset: 14
-                }]
-            },
-            options: {
-                responsive: true,
-                cutout: '65%',
-                animation: {
-                    animateRotate: true,
-                    duration: 1500,
-                    easing: 'easeOutCirc'
                 },
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            color: '#444',
-                            font: {
-                                size: 14,
-                                weight: 'bold'
-                            },
-                            padding: 20
+                x: {
+                    ticks: {
+                        color: '#333',
+                        font: {
+                            size: 14,
+                            weight: 'bold'
                         }
                     },
-                    tooltip: {
-                        backgroundColor: '#2c284e',
-                        titleColor: '#fff',
-                        bodyColor: '#eee',
-                        cornerRadius: 10,
-                        padding: 12
+                    grid: {
+                        display: false
                     }
                 }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    backgroundColor: '#1e1e2f',
+                    titleColor: '#fff',
+                    bodyColor: '#eee',
+                    padding: 10,
+                    cornerRadius: 8
+                }
             }
-        });
-    </script>
+        }
+    });
+</script>
+
+    <script>
+    const barCtx2 = document.getElementById('attendanceDonutChart').getContext('2d');
+    const registeredMigsCoops = {{ $registeredMigsCoops }};
+    const totalMigsAttended = {{ $totalMigsAttended }};
+    const totalCoopAttended = {{ $totalCoopAttended }};
+
+    const attendanceBarChart = new Chart(barCtx2, {
+        type: 'bar',
+        data: {
+            labels: ['Total MIGS Coops', 'MIGS Attended', 'All Coops Attended'],
+            datasets: [{
+                label: 'Attendance Stats',
+                data: [registeredMigsCoops, totalMigsAttended, totalCoopAttended],
+                backgroundColor: [
+                    'rgba(161, 140, 209, 0.85)',
+                    'rgba(142, 45, 226, 0.85)',
+                    'rgba(255, 99, 132, 0.85)'
+                ],
+                borderColor: [
+                    'rgba(161, 140, 209, 1)',
+                    'rgba(142, 45, 226, 1)',
+                    'rgba(255, 99, 132, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: '#444',
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        }
+                    },
+                    grid: {
+                        color: '#e0e0e0'
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: '#444',
+                        font: {
+                            size: 14,
+                            weight: 'bold'
+                        }
+                    },
+                    grid: {
+                        display: false
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    backgroundColor: '#2c284e',
+                    titleColor: '#fff',
+                    bodyColor: '#eee',
+                    cornerRadius: 10,
+                    padding: 12
+                }
+            }
+        }
+    });
+</script>
+
     <script>
         document.getElementById("printOverview").addEventListener("click", function() {
             var printContent = document.getElementById('overviewContent').innerHTML;
