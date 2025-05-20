@@ -151,7 +151,8 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="https://mass-specc.coop/2025-coopvention-registration/" class="nav-link" title="Register for Coopvention" target="_blank">
+                            <a href="https://mass-specc.coop/2025-coopvention-registration/" class="nav-link"
+                                title="Register for Coopvention" target="_blank">
                                 <i class="fas fa-building"></i>
                                 <p>Hotel Accomodation</p>
                             </a>
@@ -264,6 +265,7 @@
                                                         <th>Cooperative</th>
                                                         <th>Email</th>
                                                         <th>Status</th>
+                                                        <th>Mass-Specc Access key</th>
                                                         <th>Role</th>
                                                         <th>Date Created</th>
                                                         <th style="width: 10%">Action</th>
@@ -287,9 +289,13 @@
                                                                     </span>
                                                                 @else
                                                                     <span class="badge bg-warning text-dark">
-                                                                        <i class="bi bi-exclamation-circle me-1"></i> Unknown
+                                                                        <i class="bi bi-exclamation-circle me-1"></i>
+                                                                        Unknown
                                                                     </span>
                                                                 @endif
+                                                            </td>
+                                                            <td>
+                                                                {{ $user->access_key ? ucfirst($user->access_key) : '-' }}
                                                             </td>
 
                                                             <td>{{ ucfirst($user->role) }}</td>
