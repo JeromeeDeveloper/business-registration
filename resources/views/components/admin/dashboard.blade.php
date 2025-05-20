@@ -366,13 +366,28 @@
 
                                                 <div class="d-flex justify-content-between align-items-center gap-2">
 
+                                                     <form action="{{ route('participants.voted.import') }}"
+                                                            method="POST" enctype="multipart/form-data">
+                                                            @csrf
+                                                            <button class="btn btn-success dropdown-toggle px-4 custom-btn-dropdown" type="button"
+                                                                onclick="document.getElementById('importFile').click()">
+                                                                <i class="fas fa-upload"></i> Import Voted
+                                                            </button>
+                                                            <input type="file" id="importFile" name="import_file"
+                                                                accept=".csv,.xlsx" style="display:none"
+                                                                onchange="this.form.submit()">
+                                                        </form>
+
                                                     <div class="dropdown">
+
                                                         <button
                                                             class="btn btn-success dropdown-toggle px-4 custom-btn-dropdown"
                                                             type="button" id="exportDropdown"
                                                             data-bs-toggle="dropdown" aria-expanded="false">
                                                             <i class="fas fa-download"></i> Export Options
                                                         </button>
+
+
                                                         <ul
                                                             class="dropdown-menu dropdown-menu-end shadow-lg custom-dropdown-menu">
                                                             <li><a class="dropdown-item d-flex align-items-center gap-2"
@@ -861,7 +876,8 @@
                             </div>
 
                             <div class="card card-round shadow-lg">
-                                <h3 class="p-4 text-center text-white bg-primary rounded-top">Cooperative Attendance Summary</h3>
+                                <h3 class="p-4 text-center text-white bg-primary rounded-top">Cooperative Attendance
+                                    Summary</h3>
                                 <div class="card-body p-4">
                                     <div class="row">
                                         <div class="col-md-3 mb-4">
@@ -946,7 +962,8 @@
 
 
                             <div class="card card-round shadow-lg">
-                                <h3 class="p-4 text-center text-white bg-primary rounded-top">Participant Event Attendance Summary
+                                <h3 class="p-4 text-center text-white bg-primary rounded-top">Participant Event
+                                    Attendance Summary
                                 </h3>
                                 <div class="card-body p-4">
                                     <div class="row">
@@ -985,7 +1002,7 @@
                                 <div class="card-body p-4">
                                     <div class="row">
 
-                                          <div class="col-md-3 mb-3">
+                                        <div class="col-md-3 mb-3">
                                             <div class="card card-body border shadow-sm text-center h-100">
                                                 <div class="icon-big text-primary text-center p-3 mb-2">
                                                     <i class="fas fa-user"></i>
@@ -1520,7 +1537,7 @@
                         const previewBody = html.match(/<body.*?>(.*?)<\/body>/s);
                         if (previewBody && previewBody[1]) {
                             previewContent.innerHTML = previewBody[
-                            1]; // Insert only the inner body content
+                                1]; // Insert only the inner body content
                         } else {
                             previewContent.innerHTML = 'Failed to load preview content.';
                         }

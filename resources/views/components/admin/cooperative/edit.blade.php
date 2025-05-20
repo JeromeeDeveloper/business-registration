@@ -626,14 +626,18 @@
                                                                 </span>
                                                             </label>
                                                         </div>
+                                                        <!-- Hidden field to store actual logic -->
+                                                        <input type="hidden" name="half_based_cetf_value"
+                                                            id="half_based_cetf_value" value="0">
+
+                                                        <!-- Disabled checkbox (for display only) -->
                                                         <div class="form-check">
                                                             <input class="form-check-input" type="checkbox"
-                                                                name="half_based_cetf" id="half_based_cetf"
-                                                                value="1" {{ $halfBasedCETF ? 'checked' : '' }}
-                                                                disabled>
+                                                                id="half_based_cetf" disabled>
                                                             <label class="form-check-label" for="half_based_cetf">1/2
                                                                 Based on CETF</label>
                                                         </div>
+
                                                         <div class="form-group">
                                                             <label>Free Officer Pax:</label>
                                                             <div class="input-group">
@@ -1095,6 +1099,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const shareCapitalInput = document.getElementById('share_capital_balance');
             const entitledVotesInput = document.getElementById('no_of_entitled_votes');
+
             function calculateEntitledVotes(shareCapital) {
                 let votes = 0;
                 if (shareCapital >= 25000) {
@@ -1112,6 +1117,7 @@
                 }
                 return votes;
             }
+
             function updateEntitledVotes() {
                 const shareCapital = parseFloat(shareCapitalInput.value) || 0;
                 const entitledVotes = calculateEntitledVotes(shareCapital);
@@ -1129,6 +1135,7 @@
             let cetfRequired = document.getElementById('cetf_required');
             let totalRemittance = document.getElementById('total_remittance');
             let cetfBalance = document.getElementById('cetf_balance');
+
             function updateCetfBalance() {
                 let required = parseFloat(cetfRequired.value) || 0;
                 let remitted = parseFloat(totalRemittance.value) || 0;
@@ -1175,9 +1182,27 @@
                 if (free100kCetf.checked && free100kCount > 0) {
                     freeAmount += free100kCount * 4500;
                 }
-                if (halfBasedCetf.checked) {
+                let remUnder100k = totalRemittance % 100000;
+                let halfBasedEligible = remUnder100k >= 50000;
+
+                // Update the hidden input field
+                let halfBasedValue = document.getElementById('half_based_cetf_value');
+                if (halfBasedValue) {
+                    halfBasedValue.value = halfBasedEligible ? '1' : '0';
+                }
+
+                // Update the visual (disabled) checkbox
+                if (halfBasedCetf) {
+                    halfBasedCetf.checked = halfBasedEligible;
+                }
+
+                // Use the logic for fee deduction
+                if (halfBasedEligible) {
                     freeAmount += 2250;
                 }
+
+
+
                 let netRequiredRegFee = totalRegFee - freeAmount;
                 let regFeePayable = netRequiredRegFee - (preregPayment + cetfBalance);
                 document.getElementById('total_reg_fee').value = totalRegFee.toFixed(2);
@@ -1207,6 +1232,7 @@
             let totalRemittance = document.getElementById('total_remittance');
             let fullCetfRemitted = document.getElementById('full_cetf_remitted');
             let cetfRequired = document.getElementById('cetf_required');
+
             function calculateTotalRemittance() {
                 let remittance = parseFloat(cetfRemittance.value) || 0;
                 let additional = parseFloat(additionalCetf.value) || 0;
@@ -1216,6 +1242,7 @@
                 totalRemittance.dispatchEvent(new Event('input'));
                 updateFullCetfRemitted(parseFloat(total));
             }
+
             function updateFullCetfRemitted(total) {
                 let required = parseFloat(cetfRequired.value) || 0;
                 if (required <= 0) {
@@ -1269,6 +1296,7 @@
                     dropdownMenu.classList.remove("show");
                 }
             });
+
             function updateDropdownText() {
                 let selected = Array.from(checkboxes)
                     .filter(i => i.checked)
@@ -1298,4 +1326,5 @@
     @include('layouts.links')
 
 </body>
+
 </html>

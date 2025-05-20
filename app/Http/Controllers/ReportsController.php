@@ -26,6 +26,7 @@ use App\Exports\TshirtSizesExportlist;
 use App\Exports\VotingperRegionExport;
 use App\Exports\CoopRegistrationExport;
 use App\Exports\SummaryDelegatesExport;
+use Maatwebsite\Excel\HeadingRowImport;
 use App\Exports\CooperativeReportExport;
 use Illuminate\Support\Facades\Response;
 use App\Exports\FilteredCoopStatusExport;
@@ -706,4 +707,48 @@ class ReportsController extends Controller
             return response()->json(['error' => 'Failed to open zip file'], 500);
         }
     }
+
+    public function votedimport(Request $request)
+{
+    $request->validate([
+        'import_file' => 'required|file|mimes:csv,xlsx,xls',
+    ]);
+
+    $path = $request->file('import_file')->getRealPath();
+
+    // Get headers
+    $headings = (new HeadingRowImport)->toArray($request->file('import_file'))[0][0];
+    // Validate expected headers are present
+    if (
+        !in_array('reference_number', $headings) ||
+        !in_array('voting_status', $headings)
+    ) {
+        return back()->with('error', 'Invalid file headers. Please make sure the file has "reference_number" and "voting_status" columns.');
+    }
+
+    // Load all rows except heading row
+    $rows = Excel::toArray([], $request->file('import_file'))[0];
+
+    // Remove heading row
+    array_shift($rows);
+
+    $updatedCount = 0;
+
+    foreach ($rows as $row) {
+        // Assuming columns: A = reference_number, B = voting_status
+        $referenceNumber = trim($row[0]);
+        $votingStatus = trim($row[1]);
+
+        if (strtolower($votingStatus) === 'voted') {
+            $participant = Participant::where('reference_number', $referenceNumber)->first();
+            if ($participant && $participant->voting_status !== 'Voted') {
+                $participant->voting_status = 'Voted';
+                $participant->save();
+                $updatedCount++;
+            }
+        }
+    }
+
+    return back()->with('success', "$updatedCount participant(s) updated to 'Voted'.");
+}
 }

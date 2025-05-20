@@ -83,6 +83,8 @@ Route::middleware([AdminOrSupportMiddleware::class])->group(function () {
     Route::get('/admin/reports/tshirt-sizes/list', [ReportsController::class, 'tshirtlist'])
         ->name('admin.reports.tshirt_sizes_list');
 
+    Route::post('/participants/import', [ReportsController::class, 'votedimport'])->name('participants.voted.import');
+
 
     Route::get('/admin/reports', [ReportsController::class, 'generateReports'])->name('admin.reports');
 
