@@ -36,12 +36,7 @@ class OfficersExport implements FromCollection, WithHeadings
                 participants.email,
                 IFNULL(cooperatives.region, 'N/A') as coop_region
             ")
-            ->leftJoin('cooperatives', 'participants.coop_id', '=', 'cooperatives.coop_id')
-            ->where('participants.delegate_type', 'Voting')
-            ->whereHas('cooperative.gaRegistration', function ($query) {
-                $query->where('membership_status', 'Migs')
-                      ->where('registration_status', 'Fully Registered');
-            });
+            ->leftJoin('cooperatives', 'participants.coop_id', '=', 'cooperatives.coop_id');
 
         if ($this->region) {
             $query->where('cooperatives.region', $this->region);

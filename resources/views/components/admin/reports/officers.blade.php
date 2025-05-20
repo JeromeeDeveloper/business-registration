@@ -75,7 +75,7 @@
 <body>
     <div class="container-fluid mt-4">
         <h2 class="mb-4 fw-bold text-primary text-center">
-            📑 List of Officers
+            📑 List of Officers & Non-Officers
         </h2>
 
         <div class="table-responsive">
