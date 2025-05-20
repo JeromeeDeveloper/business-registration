@@ -13,7 +13,6 @@ class TshirtSizesExportlist implements FromCollection, WithHeadings, ShouldAutoS
     {
         return Participant::with('cooperative:coop_id,name,region') // Include region
             ->select('coop_id', 'first_name', 'middle_name', 'last_name', 'gender', 'tshirt_size')
-            ->whereNotNull('tshirt_size')
             ->get()
             ->map(function ($participant) {
                 return [
