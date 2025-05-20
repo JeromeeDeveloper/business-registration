@@ -75,8 +75,7 @@
 <body>
     <div class="container-fluid mt-4">
         <h2 class="mb-4 fw-bold text-primary text-center">
-            📑 List of
-            {{ request('officer_type') === 'msp' ? 'MSP Officers' : (request('officer_type') === 'non-msp' ? 'Non-MSP Officers' : 'Delegates') }}
+            📑 List of Officers
         </h2>
 
         <div class="table-responsive">

@@ -11,9 +11,10 @@ use App\Models\Participant;
 use Illuminate\Http\Request;
 use App\Exports\ReportsExport;
 use App\Models\GARegistration;
+use App\Exports\OfficersExport;
 use Barryvdh\DomPDF\Facade\Pdf;
-use App\Models\EventParticipant;
 // use Barryvdh\DomPDF\Facade as PDF;
+use App\Models\EventParticipant;
 use App\Models\UploadedDocument;
 use App\Exports\CoopStatusExport;
 use App\Exports\TshirtSizesExport;
@@ -317,6 +318,8 @@ class ReportsController extends Controller
                     return Excel::download(new TshirtSizesExportlist(), 'tshirt_sizeslist.xlsx');
                 case 'voting_per_region':
                     return Excel::download(new VotingperRegionExport(), 'voting_per_region.xlsx');
+                case 'officers':
+                    return Excel::download(new OfficersExport(), 'OfficersExport.xlsx');
                 case 'coop_registration':
                     return Excel::download(new CoopRegistrationExport(), 'coop_registration.xlsx');
                 case 'participants_list':
@@ -368,42 +371,42 @@ class ReportsController extends Controller
         return Excel::download(new ParticipantsExport($region), 'participants.xlsx');
     }
 
-   public function officers(Request $request)
-{
-    $region = $request->query('region');
-    $officerType = $request->query('officer_type'); // 'msp' or 'non-msp'
+    public function officers(Request $request)
+    {
+        $region = $request->query('region');
+        $officerType = $request->query('officer_type'); // 'msp' or 'non-msp'
 
-    // Fetch individual participant records (not just region summary)
-   $query = DB::table('participants')
-    ->join('cooperatives', 'participants.coop_id', '=', 'cooperatives.coop_id')
-    ->join('ga_registrations', 'cooperatives.coop_id', '=', 'ga_registrations.coop_id')
-    ->select(
-        'participants.*',
-        'cooperatives.name as coop_name',
-        'cooperatives.region as coop_region'
-    );
+        // Fetch individual participant records (not just region summary)
+        $query = DB::table('participants')
+            ->join('cooperatives', 'participants.coop_id', '=', 'cooperatives.coop_id')
+            ->join('ga_registrations', 'cooperatives.coop_id', '=', 'ga_registrations.coop_id')
+            ->select(
+                'participants.*',
+                'cooperatives.name as coop_name',
+                'cooperatives.region as coop_region'
+            );
 
 
-    // Filter region if set
-    if ($region) {
-        $query->where('cooperatives.region', $region);
+        // Filter region if set
+        if ($region) {
+            $query->where('cooperatives.region', $region);
+        }
+
+        // Officer type filter
+        if ($officerType === 'msp') {
+            $query->where('participants.is_msp_officer', 'Yes');
+        } elseif ($officerType === 'non-msp') {
+            $query->where('participants.is_msp_officer', 'No');
+        }
+
+        $participants = $query->get();
+
+        return view('components.admin.reports.officers', [
+            'participants' => $participants,
+            'region' => $region,
+            'officerType' => $officerType,
+        ]);
     }
-
-    // Officer type filter
-    if ($officerType === 'msp') {
-        $query->where('participants.is_msp_officer', 'Yes');
-    } elseif ($officerType === 'non-msp') {
-        $query->where('participants.is_msp_officer', 'No');
-    }
-
-    $participants = $query->get();
-
-    return view('components.admin.reports.officers', [
-        'participants' => $participants,
-        'region' => $region,
-        'officerType' => $officerType,
-    ]);
-}
 
 
 
@@ -639,6 +642,18 @@ class ReportsController extends Controller
         $participants = $query->orderBy('created_at', 'asc')->get();
 
         return view('components.admin.reports.generate_ids', compact('participants'));
+    }
+
+    public function generateIdsall(Request $request)
+    {
+        $type = $request->query('type');
+
+        $query = Participant::with('cooperative')
+            ->where('is_msp_officer', 'No');
+
+        $participants = $query->orderBy('created_at', 'asc')->get();
+
+        return view('components.admin.reports.generateIdsall', compact('participants'));
     }
 
     public function exportDocumentsStatus()

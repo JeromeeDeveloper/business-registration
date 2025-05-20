@@ -299,7 +299,7 @@
 
                                                 <a href="{{ route('admin.reports.officers') }}"
                                                     class="list-group-item list-group-item-action py-3 fw-semibold"
-                                                    data-report-type="msp_id">
+                                                    data-report-type="officers">
                                                     <i class="fas fa-user me-2"></i> List of Officers
                                                 </a>
 

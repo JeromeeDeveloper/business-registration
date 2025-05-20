@@ -270,6 +270,14 @@
                                                     onclick="window.open('{{ route('generateids', ['type' => 'non']) }}', '_blank')">
                                                 <i class="fa fa-id-card"></i> Non-MSP
                                             </button>
+
+                                              <button type="button" class="btn btn-info text-white"
+                                                    data-bs-toggle="tooltip"
+                                                    title="Print Participants"
+                                                    onclick="window.open('{{ route('generateIdsall') }}', '_blank')">
+                                                <i class="fa fa-id-card"></i> IDs for All
+                                            </button>
+
                                         </div>
                                     </div>
 
