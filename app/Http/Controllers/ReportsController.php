@@ -650,12 +650,17 @@ class ReportsController extends Controller
         $type = $request->query('type');
 
         $query = Participant::with('cooperative')
-            ->where('is_msp_officer', 'No');
+            ->where('delegate_type', 'Non-Voting')
+            ->where('is_msp_officer', 'No')
+            ->whereHas('cooperative.gaRegistration', function ($query) {
+                $query->where('registration_status', 'Fully Registered');
+            });
 
         $participants = $query->orderBy('created_at', 'asc')->get();
 
         return view('components.admin.reports.generateIdsall', compact('participants'));
     }
+
 
     public function exportDocumentsStatus()
     {
@@ -709,46 +714,37 @@ class ReportsController extends Controller
     }
 
     public function votedimport(Request $request)
-{
-    $request->validate([
-        'import_file' => 'required|file|mimes:csv,xlsx,xls',
-    ]);
+    {
+        $request->validate([
+            'import_file' => 'required|file|mimes:csv,xlsx,xls',
+        ]);
 
-    $path = $request->file('import_file')->getRealPath();
+        try {
+            $rows = Excel::toArray([], $request->file('import_file'))[0];
 
-    // Get headers
-    $headings = (new HeadingRowImport)->toArray($request->file('import_file'))[0][0];
-    // Validate expected headers are present
-    if (
-        !in_array('reference_number', $headings) ||
-        !in_array('voting_status', $headings)
-    ) {
-        return back()->with('error', 'Invalid file headers. Please make sure the file has "reference_number" and "voting_status" columns.');
-    }
+            // Remove header row
+            array_shift($rows);
 
-    // Load all rows except heading row
-    $rows = Excel::toArray([], $request->file('import_file'))[0];
+            $updatedCount = 0;
 
-    // Remove heading row
-    array_shift($rows);
+            foreach ($rows as $row) {
+                $referenceNumber = isset($row[0]) ? trim($row[0]) : null; // A column
+                $votingStatus = isset($row[7]) ? strtolower(trim($row[7])) : null; // H column
 
-    $updatedCount = 0;
+                if ($referenceNumber && $votingStatus === 'voted') {
+                    $participant = Participant::where('reference_number', $referenceNumber)->first();
 
-    foreach ($rows as $row) {
-        // Assuming columns: A = reference_number, B = voting_status
-        $referenceNumber = trim($row[0]);
-        $votingStatus = trim($row[1]);
-
-        if (strtolower($votingStatus) === 'voted') {
-            $participant = Participant::where('reference_number', $referenceNumber)->first();
-            if ($participant && $participant->voting_status !== 'Voted') {
-                $participant->voting_status = 'Voted';
-                $participant->save();
-                $updatedCount++;
+                    if ($participant && strtolower($participant->voting_status) !== 'voted') {
+                        $participant->voting_status = 'Voted';
+                        $participant->save();
+                        $updatedCount++;
+                    }
+                }
             }
+
+            return back()->with('success', "$updatedCount participant(s) updated to 'Voted'.");
+        } catch (\Exception $e) {
+            return back()->with('error', 'Invalid file headers. Please make sure the file has "Identifier" and "Status" columns.');
         }
     }
-
-    return back()->with('success', "$updatedCount participant(s) updated to 'Voted'.");
-}
 }

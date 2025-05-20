@@ -364,43 +364,51 @@
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <h6 class="fw-bold text-secondary mb-0">📊 Report Preview:</h6>
 
-                                                <div class="d-flex justify-content-between align-items-center gap-2">
+                                                <div
+                                                    class="d-flex flex-wrap justify-content-between align-items-center gap-2">
 
-                                                     <form action="{{ route('participants.voted.import') }}"
-                                                            method="POST" enctype="multipart/form-data">
-                                                            @csrf
-                                                            <button class="btn btn-success dropdown-toggle px-4 custom-btn-dropdown" type="button"
-                                                                onclick="document.getElementById('importFile').click()">
-                                                                <i class="fas fa-upload"></i> Import Voted
-                                                            </button>
-                                                            <input type="file" id="importFile" name="import_file"
-                                                                accept=".csv,.xlsx" style="display:none"
-                                                                onchange="this.form.submit()">
-                                                        </form>
-
-                                                    <div class="dropdown">
-
+                                                    <form action="{{ route('participants.voted.import') }}"
+                                                        method="POST" enctype="multipart/form-data"
+                                                        class="flex-grow-1 flex-md-grow-0">
+                                                        @csrf
                                                         <button
-                                                            class="btn btn-success dropdown-toggle px-4 custom-btn-dropdown"
+                                                            class="btn btn-success w-100 w-md-auto dropdown-toggle px-4 custom-btn-dropdown"
+                                                            type="button"
+                                                            onclick="document.getElementById('importFile').click()">
+                                                            <i class="fas fa-upload"></i> Import Voted
+                                                        </button>
+                                                        <input type="file" id="importFile" name="import_file"
+                                                            accept=".csv,.xlsx" style="display:none"
+                                                            onchange="this.form.submit()">
+                                                    </form>
+
+                                                    <div class="dropdown flex-grow-1 flex-md-grow-0">
+                                                        <button
+                                                            class="btn btn-success w-100 w-md-auto dropdown-toggle px-4 custom-btn-dropdown"
                                                             type="button" id="exportDropdown"
                                                             data-bs-toggle="dropdown" aria-expanded="false">
                                                             <i class="fas fa-download"></i> Export Options
                                                         </button>
 
-
                                                         <ul
                                                             class="dropdown-menu dropdown-menu-end shadow-lg custom-dropdown-menu">
-                                                            <li><a class="dropdown-item d-flex align-items-center gap-2"
+                                                            <li>
+                                                                <a class="dropdown-item d-flex align-items-center gap-2"
                                                                     href="#" onclick="printReport()">
                                                                     <i class="fas fa-print"></i> Print or Export as PDF
-                                                                </a></li>
-                                                            <li><a class="dropdown-item d-flex align-items-center gap-2"
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a class="dropdown-item d-flex align-items-center gap-2"
                                                                     href="#" id="exportExcel" target="_blank">
                                                                     <i class="fas fa-file-excel"></i> Export as Excel
-                                                                </a></li>
+                                                                </a>
+                                                            </li>
                                                         </ul>
                                                     </div>
+
                                                 </div>
+
                                             </div>
 
                                             <div class="border rounded-3 overflow-hidden shadow-sm mt-3">
@@ -1559,6 +1567,26 @@
             });
         });
     </script>
+
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Import Complete',
+                text: {!! json_encode(session('success')) !!}
+            });
+        </script>
+    @endif
+
+    @if (session('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Import Failed',
+                text: {!! json_encode(session('error')) !!}
+            });
+        </script>
+    @endif
 
 </body>
 

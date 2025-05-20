@@ -259,23 +259,23 @@
                                         <div class="d-flex flex-wrap justify-content-center justify-content-md-end gap-2">
                                             <button type="button" class="btn btn-success text-white"
                                                     data-bs-toggle="tooltip"
-                                                    title="Print MSP Officers Only"
+                                                    title="Print MSP Officers ID Only"
                                                     onclick="window.open('{{ route('generateids', ['type' => 'msp']) }}', '_blank')">
                                                 <i class="fa fa-id-card"></i> MSP Officers
                                             </button>
 
                                             <button type="button" class="btn btn-info text-white"
                                                     data-bs-toggle="tooltip"
-                                                    title="Print Non-MSP Participants Only"
+                                                    title="Print Non-MSP Participants Voting ID Only"
                                                     onclick="window.open('{{ route('generateids', ['type' => 'non']) }}', '_blank')">
                                                 <i class="fa fa-id-card"></i> Non-MSP
                                             </button>
 
-                                              <button type="button" class="btn btn-info text-white"
+                                              <button type="button" class="btn btn-primary text-white"
                                                     data-bs-toggle="tooltip"
-                                                    title="Print Participants"
+                                                    title="Print Non-Voting Participants ID Only"
                                                     onclick="window.open('{{ route('generateIdsall') }}', '_blank')">
-                                                <i class="fa fa-id-card"></i> IDs for All
+                                                <i class="fa fa-id-card"></i> Non-Voting
                                             </button>
 
                                         </div>
