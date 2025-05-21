@@ -26,11 +26,11 @@ class ParticipantlistExportlist implements FromCollection, WithHeadings, ShouldA
             ->map(function ($participant) {
                 return [
                     'Participant Name' => trim("{$participant->first_name} {$participant->middle_name} {$participant->last_name}"),
-                    'Phone Number' => "'" . (
-                        !empty($participant->phone_number) && $participant->phone_number !== 'N/A'
-                        ? preg_replace('/^0/', '63', $participant->phone_number)
-                        : '63'
-                    ),
+                  'Phone Number' => "'" . (
+    !empty($participant->phone_number) && $participant->phone_number !== 'N/A'
+        ? preg_replace('/^(0|9)/', '63', $participant->phone_number)
+        : '63'
+),
 
                 ];
             });
