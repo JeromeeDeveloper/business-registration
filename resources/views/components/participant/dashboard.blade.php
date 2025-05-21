@@ -311,7 +311,7 @@
                                                 {{ $participant->email }}</li>
                                             <li class="list-group-item"><strong>Gender:</strong>
                                                 {{ $participant->gender }}</li>
-                                            <li class="list-group-item"><strong>T-shirt Size</strong>
+                                            <li class="list-group-item"><strong>T-shirt Size:</strong>
                                                 {{ $participant->tshirt_size }}</li>
                                             <li class="list-group-item"><strong>Phone Number:</strong>
                                                 {{ $participant->phone_number ?? 'N/A' }}</li>
