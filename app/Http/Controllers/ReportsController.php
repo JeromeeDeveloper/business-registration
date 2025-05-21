@@ -30,6 +30,7 @@ use Maatwebsite\Excel\HeadingRowImport;
 use App\Exports\CooperativeReportExport;
 use Illuminate\Support\Facades\Response;
 use App\Exports\FilteredCoopStatusExport;
+use App\Exports\ParticipantlistExportlist;
 use App\Exports\ParticipantsExportCongress;
 
 
@@ -317,6 +318,8 @@ class ReportsController extends Controller
                     return Excel::download(new TshirtSizesExport(), 'tshirt_sizes.xlsx');
                 case 'tshirt_sizeslist':
                     return Excel::download(new TshirtSizesExportlist(), 'tshirt_sizeslist.xlsx');
+                 case 'participantlist':
+                    return Excel::download(new ParticipantlistExportlist(), 'tshirt_sizeslist.xlsx');
                 case 'voting_per_region':
                     return Excel::download(new VotingperRegionExport(), 'voting_per_region.xlsx');
                 case 'officers':
@@ -601,6 +604,20 @@ class ReportsController extends Controller
 
         return view('components.admin.reports.tshirt_sizeslist', compact('cooperatives'));
     }
+
+public function participantlists()
+{
+    // Fetch cooperatives with their participants whose cooperatives are fully registered
+    $cooperatives = Cooperative::with(['participants' => function ($query) {
+        $query->select('participant_id', 'coop_id', 'first_name', 'middle_name', 'last_name', 'tshirt_size', 'phone_number')
+              ->whereHas('cooperative.gaRegistration', function ($q) {
+                  $q->where('registration_status', 'Fully Registered');
+              });
+    }])->select('coop_id', 'name', 'region')->get();
+
+    return view('components.admin.reports.participantlists', compact('cooperatives'));
+}
+
 
 
 

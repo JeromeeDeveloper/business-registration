@@ -297,6 +297,12 @@
                                                     Participants)
                                                 </a>
 
+                                                <a href="{{ route('admin.reports.participants') }}"
+                                                    class="list-group-item list-group-item-action py-3 fw-semibold"
+                                                    data-report-type="participantlist">
+                                                    <i class="fas fa-users me-2"></i> Fully Registered Participants
+                                                </a>
+
                                                 <a href="{{ route('admin.reports.officers') }}"
                                                     class="list-group-item list-group-item-action py-3 fw-semibold"
                                                     data-report-type="officers">
