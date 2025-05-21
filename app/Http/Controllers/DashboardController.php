@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Mail\CooperativeNotification;
+use App\Mail\ParticipantInvitationMail;
 use Illuminate\Support\Facades\Storage;
 use App\Mail\CooperativeNotificationCanvas;
 use App\Mail\CooperativeNotificationsingle;
@@ -132,6 +133,37 @@ class DashboardController extends Controller
         return back()->with('error', 'Error sending notifications. Please try again.');
     }
 }
+
+ public function votingdelegates()
+{
+    try {
+        \Log::info('Notification request received for all voting participants.');
+
+        // Get all Voting participants with a valid email
+        $participants = Participant::where('delegate_type', 'Voting')
+            ->whereNotNull('email')
+            ->get();
+
+        if ($participants->isEmpty()) {
+            return back()->with('error', 'No voting participants found.');
+        }
+
+        foreach ($participants as $participant) {
+            // Queue the email to each participant
+           Mail::to($participant->email)->queue(
+    new ParticipantInvitationMail($participant)
+);
+
+            \Log::info('Invitation sent to: ' . $participant->email);
+        }
+
+        return redirect()->route('adminview')->with('success', 'Invitations sent to all voting participants!');
+    } catch (\Exception $e) {
+        \Log::error('Error sending participant invitations: ' . $e->getMessage());
+        return back()->with('error', 'Error sending invitations. Please try again.');
+    }
+}
+
 
 
 

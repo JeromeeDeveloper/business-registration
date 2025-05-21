@@ -364,6 +364,16 @@
                                                         </button>
                                                     </form>
 
+                                                     <form action="{{ route('votingdelegates') }}" method="POST"
+                                                        onsubmit="showSwalLoader(event, this, 'Sending Invitation ...')">
+                                                        @csrf
+                                                        <button type="submit"
+                                                            class="btn btn-outline-info w-100 d-flex align-items-center justify-content-center px-4 py-2 fw-semibold"
+                                                            data-bs-toggle="tooltip" title="Send Canvas Credentials">
+                                                            <i class="fa fa-bell me-2"></i> Voting Delegates Invitation
+                                                        </button>
+                                                    </form>
+
                                                     <form action="{{ route('cooperatives.notifyAll') }}"
                                                         method="POST"
                                                         onsubmit="showSwalLoader(event, this, 'Sending Status & Invitation...')">

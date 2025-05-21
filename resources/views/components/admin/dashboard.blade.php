@@ -1608,7 +1608,7 @@
         <script>
             Swal.fire({
                 icon: 'success',
-                title: 'Import Complete',
+                title: 'Complete',
                 text: {!! json_encode(session('success')) !!}
             });
         </script>

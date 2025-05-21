@@ -150,6 +150,7 @@ Route::middleware([AdminMiddleware::class])->group(function () {
 
     Route::post('/cooperatives/{coop_id}/notify', [DashboardController::class, 'sendNotification'])->name('cooperatives.notify');
     Route::post('/cooperatives/notify-all/canvas', [DashboardController::class, 'canvasnotif'])->name('cooperatives.canvas');
+      Route::post('/cooperatives/notify-all/voting', [DashboardController::class, 'votingdelegates'])->name('votingdelegates');
     Route::post('/cooperatives/notify-all', [DashboardController::class, 'sendNotificationToAll'])->name('cooperatives.notifyAll');
     Route::post('/cooperatives/credentiasl/notify-all', [DashboardController::class, 'sendCredentialsToAll'])->name('cooperatives.notifyCredentialsAll');
     Route::post('/cooperatives/notify-all/unregistered', [DashboardController::class, 'sendNotificationToAllunregistered'])
