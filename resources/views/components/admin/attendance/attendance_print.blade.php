@@ -27,7 +27,7 @@
                 <th>ID</th>
                 <th>Full Name</th>
                 <th>Designation</th>
-                <th>Congress Type</th>
+               
                 <th>Cooperative</th>
                 <th>Attendance Time</th>
             </tr>
@@ -38,7 +38,7 @@
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $participant->first_name }} {{ $participant->middle_name }} {{ $participant->last_name }}</td>
                     <td>{{ $participant->designation }}</td>
-                    <td>{{ $participant->congress_type ?? 'N/A' }}</td>
+
                     <td>{{ $participant->cooperative->name ?? 'N/A' }}</td>
                     <td>{{ \Carbon\Carbon::parse($participant->attendance_datetime)->format('F j, Y g:i A') }}</td>
                 </tr>

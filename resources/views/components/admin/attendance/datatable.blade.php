@@ -631,7 +631,7 @@
                         <th>Attendance Date & Time</th>
                         <th>First Name</th>
                         <th>Last Name</th>
-                        <th>Congress Type</th>
+                  
                         <th>QR Code</th>
                     </tr>
                 </thead>

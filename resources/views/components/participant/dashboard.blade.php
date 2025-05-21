@@ -305,10 +305,14 @@
                                             <li class="list-group-item"><strong>Name:</strong>
                                                 {{ $participant->first_name }} {{ $participant->middle_name ?? '' }}
                                                 {{ $participant->last_name }}</li>
+                                            <li class="list-group-item"><strong>Nickname:</strong>
+                                                {{ $participant->nickname ?? 'N/A' }}</li>
                                             <li class="list-group-item"><strong>Email:</strong>
                                                 {{ $participant->email }}</li>
                                             <li class="list-group-item"><strong>Gender:</strong>
                                                 {{ $participant->gender }}</li>
+                                            <li class="list-group-item"><strong>T-shirt Size</strong>
+                                                {{ $participant->tshirt_size }}</li>
                                             <li class="list-group-item"><strong>Phone Number:</strong>
                                                 {{ $participant->phone_number ?? 'N/A' }}</li>
                                             <li class="list-group-item"><strong>Designation:</strong>
