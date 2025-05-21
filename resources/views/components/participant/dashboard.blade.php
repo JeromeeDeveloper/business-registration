@@ -298,26 +298,24 @@
                                     </div>
                                     <div id="qr_here" class="card-body">
                                         <ul class="list-group list-group-flush">
-                                            <li class="list-group-item"><strong>Participant ID:</strong>
-                                                {{ $participant->participant_id }}</li>
-                                            <li class="list-group-item"><strong>Access Key:</strong>
-                                                {{ $participant->reference_number }}</li>
-                                            <li class="list-group-item"><strong>Name:</strong>
+                                            <li class="list-group-item"><strong>Name: </strong>&nbsp;
                                                 {{ $participant->first_name }} {{ $participant->middle_name ?? '' }}
                                                 {{ $participant->last_name }}</li>
-                                            <li class="list-group-item"><strong>Nickname:</strong>
+                                            <li class="list-group-item"><strong>Nickname: </strong>&nbsp;
                                                 {{ $participant->nickname ?? 'N/A' }}</li>
-                                            <li class="list-group-item"><strong>Email:</strong>
+                                            <li class="list-group-item"><strong>Access Key: </strong>&nbsp;
+                                                {{ $participant->reference_number }}</li>
+                                            <li class="list-group-item"><strong>Email: </strong>&nbsp;
                                                 {{ $participant->email }}</li>
-                                            <li class="list-group-item"><strong>Gender:</strong>
+                                            <li class="list-group-item"><strong>Gender: </strong>&nbsp;
                                                 {{ $participant->gender }}</li>
-                                            <li class="list-group-item"><strong>T-shirt Size:</strong>
+                                            <li class="list-group-item"><strong>T-shirt Size: </strong>&nbsp;
                                                 {{ $participant->tshirt_size }}</li>
-                                            <li class="list-group-item"><strong>Phone Number:</strong>
+                                            <li class="list-group-item"><strong>Phone Number: </strong>&nbsp;
                                                 {{ $participant->phone_number ?? 'N/A' }}</li>
-                                            <li class="list-group-item"><strong>Designation:</strong>
+                                            <li class="list-group-item"><strong>Designation: </strong>&nbsp;
                                                 {{ $participant->designation ?? 'N/A' }}</li>
-                                            <li class="list-group-item"><strong>Delegate Type:</strong>
+                                            <li class="list-group-item"><strong>Delegate Type: </strong>&nbsp;
                                                 {{ $participant->delegate_type }}</li>
                                         </ul>
                                         <!-- QR Code Section -->
