@@ -113,6 +113,8 @@ Route::middleware([AdminOrSupportMiddleware::class])->group(function () {
 
     Route::get('/reports/ids/all', [ReportsController::class, 'generateIdsall'])->name('generateIdsall');
 
+    Route::get('/reports/ids/all/partial', [ReportsController::class, 'generateIdsallpartial'])->name('generateIdsallpartial');
+
     Route::delete('/attendance/{id}', [AttendanceController::class, 'destroy'])->name('attendance.destroy');
 
     Route::get('admin/reports/export_participants', [ReportsController::class, 'exportParticipants'])->name('admin.reports.export_participants');

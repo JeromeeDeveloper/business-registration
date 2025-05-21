@@ -661,6 +661,26 @@ class ReportsController extends Controller
         return view('components.admin.reports.generateIdsall', compact('participants'));
     }
 
+     public function generateIdsallpartial(Request $request)
+{
+    $type = $request->query('type');
+
+    $query = Participant::with('cooperative')
+        ->where('delegate_type', 'Non-Voting')
+        ->where('is_msp_officer', 'No')
+        ->whereHas('cooperative.gaRegistration', function ($query) {
+            $query->where('registration_status', 'Partial Registered');
+        })
+        ->whereHas('cooperative', function ($query) {
+            $query->where('reg_fee_payable', '<=', 0);
+        });
+
+    $participants = $query->orderBy('created_at', 'asc')->get();
+
+    return view('components.admin.reports.generateIdsallpartial', compact('participants'));
+}
+
+
 
     public function exportDocumentsStatus()
     {

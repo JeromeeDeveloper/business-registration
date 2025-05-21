@@ -278,6 +278,13 @@
                                                 <i class="fa fa-id-card"></i> Non-Voting
                                             </button>
 
+                                             <button type="button" class="btn btn-primary text-white"
+                                                    data-bs-toggle="tooltip"
+                                                    title="Print Partial Participants ID Only"
+                                                    onclick="window.open('{{ route('generateIdsallpartial') }}', '_blank')">
+                                                <i class="fa fa-id-card"></i> Partial Registered ID
+                                            </button>
+
                                         </div>
                                     </div>
 
