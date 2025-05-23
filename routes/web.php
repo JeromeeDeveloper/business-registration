@@ -64,7 +64,9 @@ Route::middleware([AdminOrSupportMiddleware::class])->group(function () {
     Route::get('/download-all-documents', [ReportsController::class, 'downloadAllDocuments'])->name('download.all.documents');
 
     Route::get('export-event-participants', [EventParticipantExportController::class, 'export'])->name('export-event-participants');
-    
+
+    Route::get('export-event-cooperative', [EventParticipantExportController::class, 'export_coop'])->name('export-event-cooperative');
+
     Route::get('/admin/reports/export', [ReportsController::class, 'export'])->name('reports.export');
 
     Route::get('/admin/reports/documents-status', [ReportsController::class, 'documentsStatus'])

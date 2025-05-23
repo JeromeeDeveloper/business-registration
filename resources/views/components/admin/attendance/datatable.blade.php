@@ -343,14 +343,23 @@
                                             <!-- Excel Button -->
                                             <div class="col-12 col-md-2 d-grid">
                                                 <label class="form-label fw-semibold text-muted">Generate
-                                                    Report</label>
+                                                    Report Participant</label>
                                                 <a class="btn btn-outline-success d-flex align-items-center justify-content-center gap-2 shadow-sm"
                                                     href="{{ route('export-event-participants') }}">
                                                     <i class="fas fa-file-excel" style="color: #2a9d8f;"></i> Excel
                                                 </a>
                                             </div>
 
-                                            
+                                              <div class="col-12 col-md-2 d-grid">
+                                                <label class="form-label fw-semibold text-muted">Generate
+                                                    Report Cooperative</label>
+                                                <a class="btn btn-outline-success d-flex align-items-center justify-content-center gap-2 shadow-sm"
+                                                    href="{{ route('export-event-cooperative') }}">
+                                                    <i class="fas fa-file-excel" style="color: #2a9d8f;"></i> Excel
+                                                </a>
+                                            </div>
+
+
                                         </div>
                                     </form>
 
