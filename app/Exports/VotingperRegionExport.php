@@ -46,7 +46,6 @@ class VotingperRegionExport implements FromCollection, WithHeadings, ShouldAutoS
 
         $voted = Participant::selectRaw('cooperatives.region, COUNT(*) as total_voted')
             ->leftJoin('cooperatives', 'participants.coop_id', '=', 'cooperatives.coop_id')
-            ->where('participants.delegate_type', 'Voting')
             ->where('participants.voting_status', 'Voted')
             ->whereHas('cooperative.gaRegistration', function ($query) {
                 $query->where('membership_status', 'Migs')

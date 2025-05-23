@@ -63,8 +63,14 @@ class AttendanceController extends Controller
     ->distinct()
     ->count('participants.participant_id');
 
+    $totalCoopAttended = DB::table('participants')
+    ->join('event_participant', 'participants.participant_id', '=', 'event_participant.participant_id')
+    ->whereNotNull('event_participant.attendance_datetime') // Ensures the participant attended
+    ->distinct('participants.coop_id') // Counts each coop only once
+    ->count('participants.coop_id');
 
-        return view('components.admin.attendance.datatable', compact('participants', 'totalParticipantsWithAttendance', 'event', 'events', 'eventId'));
+
+        return view('components.admin.attendance.datatable', compact('participants', 'totalParticipantsWithAttendance', 'event', 'events', 'eventId', 'totalCoopAttended'));
     }
 
 

@@ -236,6 +236,24 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <div class="col-md-4">
+                                            <label class="form-label fw-semibold text-muted">Present
+                                                Cooperative</label>
+                                            <div class="input-group">
+                                                <div
+                                                    class="d-flex align-items-center justify-content-start gap-3 w-100">
+                                                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
+                                                        style="width: 45px; height: 45px;">
+                                                        <i class="fa fa-users fs-5"></i>
+                                                    </div>
+                                                    <div>
+                                                        <h6 class="fw-bold mb-0">
+                                                            {{ $totalCoopAttended }}</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="card-body">
@@ -331,6 +349,8 @@
                                                     <i class="fas fa-file-excel" style="color: #2a9d8f;"></i> Excel
                                                 </a>
                                             </div>
+
+                                            
                                         </div>
                                     </form>
 
@@ -631,7 +651,7 @@
                         <th>Attendance Date & Time</th>
                         <th>First Name</th>
                         <th>Last Name</th>
-                  
+
                         <th>QR Code</th>
                     </tr>
                 </thead>

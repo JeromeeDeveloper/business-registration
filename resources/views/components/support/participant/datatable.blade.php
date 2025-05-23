@@ -362,22 +362,50 @@
                                                             <div class="form-button-action no-print">
 
                                                                 <button
-                                                                class="btn btn-link btn-success btn-lg no-print"
-                                                                data-bs-toggle="tooltip"
+                                                                class="btn btn-link btn-success btn-lg no-print generate-id-btn"
+                                                                data-participant-id="{{ $participant->participant_id }}"
+                                                                data-first-name="{{ $participant->first_name }}"
+                                                                data-nickname="{{ $participant->nickname }}"
+                                                                data-last-name="{{ $participant->last_name }}"
+                                                                data-middle-name="{{ $participant->middle_name }}"
+                                                                data-designation="{{ $participant->designation ?? 'N/A' }}"
+                                                                data-reference-number="{{ $participant->reference_number ?? 'N/A' }}"
+                                                                data-coop-name="{{ optional($participant->cooperative)->name ?? 'N/A' }}"
+                                                                data-qr-url="{{ 'https://api.qrserver.com/v1/create-qr-code/?data=' . urlencode(route('adminDashboard', ['participant_id' => $participant->participant_id])) . '&size=200x200' }}"
                                                                 title="Generate & Print ID"
-                                                                onclick="printParticipantID(
-                                                                {{ $participant->participant_id }},
-                                                                '{{ $participant->first_name }}',
-                                                                '{{ $participant->nickname }}',
-                                                                '{{ $participant->last_name }}',
-                                                                '{{ $participant->middle_name }}',
-                                                                '{{ $participant->designation ?? 'N/A' }}',
-                                                                '{{ $participant->reference_number ?? 'N/A' }}',
-                                                                '{{ optional($participant->cooperative)->name ?? 'N/A' }}',
-                                                                'https://api.qrserver.com/v1/create-qr-code/?data={{ urlencode(route('adminDashboard', ['participant_id' => $participant->participant_id])) }}&size=200x200'
-                                                            )">
+                                                            >
                                                                 <i class="fa fa-id-card"></i>
                                                             </button>
+
+                                                            <script>
+                                                                document.addEventListener('DOMContentLoaded', function () {
+                                                                    document.querySelectorAll('.generate-id-btn').forEach(button => {
+                                                                        button.addEventListener('click', function () {
+                                                                            const participantId = this.dataset.participantId;
+                                                                            const firstName = this.dataset.firstName;
+                                                                            const nickname = this.dataset.nickname;
+                                                                            const lastName = this.dataset.lastName;
+                                                                            const middleName = this.dataset.middleName;
+                                                                            const designation = this.dataset.designation;
+                                                                            const referenceNumber = this.dataset.referenceNumber;
+                                                                            const coopName = this.dataset.coopName;
+                                                                            const qrUrl = this.dataset.qrUrl;
+
+                                                                            printParticipantID(
+                                                                                participantId,
+                                                                                firstName,
+                                                                                nickname,
+                                                                                lastName,
+                                                                                middleName,
+                                                                                designation,
+                                                                                referenceNumber,
+                                                                                coopName,
+                                                                                qrUrl
+                                                                            );
+                                                                        });
+                                                                    });
+                                                                });
+                                                            </script>
 
 
                                                                 @if ($participant->user && $participant->user->user_id)

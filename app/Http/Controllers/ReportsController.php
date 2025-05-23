@@ -427,9 +427,6 @@ class ReportsController extends Controller
                 DB::raw('COUNT(participants.participant_id) as total'),
                 DB::raw("SUM(CASE WHEN participants.voting_status = 'Voted' THEN 1 ELSE 0 END) as total_voted")
             )
-            ->where('participants.delegate_type', 'Voting')
-            ->where('ga_registrations.membership_status', 'Migs')
-            ->where('ga_registrations.registration_status', 'Fully Registered')
             ->groupBy('cooperatives.region');
 
         if ($region) {

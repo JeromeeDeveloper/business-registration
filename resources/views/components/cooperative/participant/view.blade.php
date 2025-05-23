@@ -321,6 +321,13 @@
                                                         </div>
                                                     </div>
                                                 </div>
+
+                                                <div class="col-md-6 col-lg-4">
+                                                    <div class="form-group">
+                                                        <label for="voting_status">Voting Status</label>
+                                                        <div>{{ $participant->voting_status ?? 'N/A' }}</div>
+                                                    </div>
+                                                </div>
                                                 <!-- Delegate Type -->
                                                 <div class="col-md-6 col-lg-4">
                                                     <div class="form-group">
@@ -354,12 +361,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
-
-
-
-
-
                                             </div>
                                         </div>
                                         <div class="card-action">
