@@ -589,6 +589,8 @@
             justify-content: center;
             align-items: center;
             text-align: center;
+            position: relative;
+            top: 40px;
         }
 
         .id-card h2 {
