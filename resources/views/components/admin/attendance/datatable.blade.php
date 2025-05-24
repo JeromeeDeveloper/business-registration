@@ -258,24 +258,7 @@
                                 </div>
                                 <div class="card-body">
                                     <!-- Modal -->
-                                    <div class="d-flex justify-content-between mb-3">
-                                        <div>
-                                            <label>Show
-                                                <select id="showEntries" class="form-select form-select-sm"
-                                                    style="width: auto; display: inline;">
-                                                    <option value="5"
-                                                        {{ request('limit') == 5 ? 'selected' : '' }}>5</option>
-                                                    <option value="10"
-                                                        {{ request('limit') == 10 ? 'selected' : '' }}>10</option>
-                                                    <option value="25"
-                                                        {{ request('limit') == 25 ? 'selected' : '' }}>25</option>
-                                                    <option value="50"
-                                                        {{ request('limit') == 50 ? 'selected' : '' }}>50</option>
-                                                </select> entries
-                                            </label>
-                                        </div>
 
-                                    </div>
 
                                     <div>
                                         <style>
@@ -294,9 +277,92 @@
 
                                     </div>
 
-                                    <form method="GET" class="p-4 bg-white rounded-3 shadow-sm mb-4">
+
+
+
+
+                                    <div class="p-4 bg-white rounded-3 shadow-sm mb-4">
+                                        <div class="row align-items-center g-3">
+
+                                            <!-- Event Selector -->
+                                            <div class="col-12 col-md-5">
+                                                <label for="eventSelect" class="form-label fw-bold">Select
+                                                    Event</label>
+                                                <select id="eventSelect" name="event_id"
+                                                    class="form-select shadow-sm" required>
+                                                    <option value="" disabled selected>Select event</option>
+                                                    @foreach ($events as $eventOption)
+                                                        <option value="{{ $eventOption->event_id }}"
+                                                            {{ old('event_id') == $eventOption->event_id ? 'selected' : '' }}>
+                                                            {{ $eventOption->title }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
+                                            <!-- Event Link Indicator -->
+                                            <div
+                                                class="col-12 col-md-auto d-flex align-items-center justify-content-center">
+                                                <div class="d-flex flex-column align-items-center gap-1 text-muted">
+                                                    <i class="fa fa-link fs-4"></i>
+                                                    <small class="text-center">Select Event for Scanning</small>
+                                                </div>
+                                            </div>
+
+                                            <!-- QR Scanner Button -->
+                                            <div class="col-12 col-md-5">
+                                                <label class="form-label fw-bold invisible">Open QR Scanner</label>
+                                                <button id="openQRModal"
+                                                    class="btn btn-outline-primary d-flex align-items-center gap-2 shadow-sm w-100"
+                                                    disabled data-bs-toggle="modal" data-bs-target="#qrScannerModal">
+                                                    <i class="fa fa-qrcode"></i> Open QR Scanner
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                      <div class="modal fade" id="qrScannerModal" tabindex="-1" aria-labelledby="qrScannerModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-sm">
+                                          <div class="modal-content rounded-4 shadow-lg border-0">
+                                            <div class="modal-header bg-dark text-white border-0 rounded-top-4">
+                                              <h5 class="modal-title d-flex align-items-center gap-2" id="qrScannerModalLabel">
+                                                <i class="fas fa-qrcode"></i> Scan QR Code
+                                              </h5>
+                                              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body bg-light rounded-bottom-4">
+                                              <div class="text-center p-3">
+                                                <div id="qr-reader"></div>
+                                                <p class="mt-3 text-muted small">Place your QR code within the frame</p>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+
+
+                                      <form method="GET" class="p-4 bg-white rounded-3 shadow-sm mb-4">
                                         <div class="row g-3 align-items-end">
 
+                                            <div class="d-flex justify-content-between mb-3">
+                                                <div>
+                                                    <label>Show
+                                                        <select id="showEntries" class="form-select form-select-sm"
+                                                            style="width: auto; display: inline;">
+                                                            <option value="5"
+                                                                {{ request('limit') == 5 ? 'selected' : '' }}>5</option>
+                                                            <option value="10"
+                                                                {{ request('limit') == 10 ? 'selected' : '' }}>10</option>
+                                                            <option value="25"
+                                                                {{ request('limit') == 25 ? 'selected' : '' }}>25</option>
+                                                            <option value="50"
+                                                                {{ request('limit') == 50 ? 'selected' : '' }}>50</option>
+                                                        </select> entries
+                                                    </label>
+                                                </div>
+
+                                            </div>
                                             <!-- Date Range -->
                                             <div class="col-12 col-md-4">
                                                 <label class="form-label fw-bold">Date Range</label>
@@ -371,71 +437,6 @@
 
                                         </div>
                                     </form>
-
-
-
-                                    <div class="p-4 bg-white rounded-3 shadow-sm mb-4">
-                                        <div class="row align-items-center g-3">
-
-                                            <!-- Event Selector -->
-                                            <div class="col-12 col-md-5">
-                                                <label for="eventSelect" class="form-label fw-bold">Select
-                                                    Event</label>
-                                                <select id="eventSelect" name="event_id"
-                                                    class="form-select shadow-sm" required>
-                                                    <option value="" disabled selected>Select event</option>
-                                                    @foreach ($events as $eventOption)
-                                                        <option value="{{ $eventOption->event_id }}"
-                                                            {{ old('event_id') == $eventOption->event_id ? 'selected' : '' }}>
-                                                            {{ $eventOption->title }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-
-                                            <!-- Event Link Indicator -->
-                                            <div
-                                                class="col-12 col-md-auto d-flex align-items-center justify-content-center">
-                                                <div class="d-flex flex-column align-items-center gap-1 text-muted">
-                                                    <i class="fa fa-link fs-4"></i>
-                                                    <small class="text-center">Select Event for Scanning</small>
-                                                </div>
-                                            </div>
-
-                                            <!-- QR Scanner Button -->
-                                            <div class="col-12 col-md-5">
-                                                <label class="form-label fw-bold invisible">Open QR Scanner</label>
-                                                <button id="openQRModal"
-                                                    class="btn btn-outline-primary d-flex align-items-center gap-2 shadow-sm w-100"
-                                                    disabled data-bs-toggle="modal" data-bs-target="#qrScannerModal">
-                                                    <i class="fa fa-qrcode"></i> Open QR Scanner
-                                                </button>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-                                      <div class="modal fade" id="qrScannerModal" tabindex="-1" aria-labelledby="qrScannerModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered modal-sm">
-                                          <div class="modal-content rounded-4 shadow-lg border-0">
-                                            <div class="modal-header bg-dark text-white border-0 rounded-top-4">
-                                              <h5 class="modal-title d-flex align-items-center gap-2" id="qrScannerModalLabel">
-                                                <i class="fas fa-qrcode"></i> Scan QR Code
-                                              </h5>
-                                              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body bg-light rounded-bottom-4">
-                                              <div class="text-center p-3">
-                                                <div id="qr-reader"></div>
-                                                <p class="mt-3 text-muted small">Place your QR code within the frame</p>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-
-
-
 
                                     <div class="table-responsive">
                                         <table id="add-row" class="display table table-striped table-hover">
