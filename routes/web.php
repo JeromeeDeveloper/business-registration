@@ -67,6 +67,8 @@ Route::middleware([AdminOrSupportMiddleware::class])->group(function () {
 
     Route::get('export-event-cooperative', [EventParticipantExportController::class, 'export_coop'])->name('export-event-cooperative');
 
+    Route::get('export-event-cooperative-total', [EventParticipantExportController::class, 'export_coop_total'])->name('export-event-cooperative-total');
+
     Route::get('/admin/reports/export', [ReportsController::class, 'export'])->name('reports.export');
 
     Route::get('/admin/reports/documents-status', [ReportsController::class, 'documentsStatus'])

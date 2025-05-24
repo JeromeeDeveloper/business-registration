@@ -34,7 +34,7 @@ class ParticipantsExport implements FromCollection, WithHeadings
             ->leftJoin('cooperatives', 'participants.coop_id', '=', 'cooperatives.coop_id')
             ->where('participants.delegate_type', 'Voting')
             ->whereHas('cooperative.gaRegistration', function ($query) {
-                $query->where('membership_status', 'Migs')
+                $query
                       ->where('registration_status', 'Fully Registered');
             });
 
