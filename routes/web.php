@@ -65,6 +65,8 @@ Route::middleware([AdminOrSupportMiddleware::class])->group(function () {
 
     Route::get('export-event-participants', [EventParticipantExportController::class, 'export'])->name('export-event-participants');
 
+    // Route::get('export-event-participants-unattended', [EventParticipantExportController::class, 'export_unattended'])->name('export-event-participants-unattended');
+
     Route::get('export-event-cooperative', [EventParticipantExportController::class, 'export_coop'])->name('export-event-cooperative');
 
     Route::get('export-event-cooperative-total', [EventParticipantExportController::class, 'export_coop_total'])->name('export-event-cooperative-total');

@@ -288,12 +288,12 @@
                                             <div class="col-12 col-md-5">
                                                 <label for="eventSelect" class="form-label fw-bold">Select
                                                     Event</label>
-                                                <select id="eventSelect" name="event_id"
+                                                    <select id="eventSelect" name="event_id"
                                                     class="form-select shadow-sm" required>
-                                                    <option value="" disabled selected>Select event</option>
+                                                    <option value="" disabled>Select event</option>
                                                     @foreach ($events as $eventOption)
                                                         <option value="{{ $eventOption->event_id }}"
-                                                            {{ old('event_id') == $eventOption->event_id ? 'selected' : '' }}>
+                                                            {{ $eventOption->event_id == 19 ? 'selected' : '' }}>
                                                             {{ $eventOption->title }}
                                                         </option>
                                                     @endforeach
@@ -383,19 +383,38 @@
                                             <input type="hidden" name="end_datetime" id="end_datetime"
                                                 value="{{ request('end_datetime') }}">
 
-                                            <!-- Search -->
-                                            <div class="col-12 col-md-4">
-                                                <label class="form-label fw-semibold text-muted">Search
-                                                    Participant</label>
-                                                <div class="input-group shadow-sm">
-                                                    <input type="text" name="search" class="form-control"
-                                                        placeholder="Enter name or ID..."
-                                                        value="{{ request('search') }}">
-                                                    <button type="submit" class="btn btn-primary px-4">
-                                                        <i class="fa fa-search"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
+                                                <form method="GET" action="{{ route('attendance.index') }}" class="row gy-3 align-items-end">
+                                                    <!-- Event Dropdown Filter -->
+                                                    <div class="col-12 col-md-4">
+                                                        <label class="form-label fw-semibold text-muted">Filter by Event</label>
+                                                        <select name="event_id" class="form-select">
+                                                            <option value="">-- Select Event --</option>
+                                                            @foreach ($events as $ev)
+                                                            <option value="{{ $ev->event_id }}" {{ request('event_id') == $ev->event_id ? 'selected' : '' }}>
+                                                                {{ $ev->title }}
+                                                            </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+
+                                                    <!-- Search Input -->
+                                                    <div class="col-12 col-md-4">
+                                                        <label class="form-label fw-semibold text-muted">Search Participant</label>
+                                                        <div class="input-group shadow-sm">
+                                                            <input type="text" name="search" class="form-control" placeholder="Enter name or ID..." value="{{ request('search') }}">
+                                                            <button type="submit" class="btn btn-primary px-4">
+                                                                <i class="fa fa-search"></i> Search
+                                                            </button>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Add submit button for event filter -->
+                                                    {{-- <div class="col-12 col-md-2 d-flex align-items-end">
+                                                        <button type="submit" class="btn btn-secondary w-100">Apply Filter</button>
+                                                    </div> --}}
+                                                </form>
+
+
 
                                             <!-- Print Button -->
                                             <div class="col-12 col-md-2 d-grid">
@@ -540,8 +559,10 @@
                                             <div class="d-flex justify-content-center"
                                                 style="min-width: max-content;">
                                                 {{ $participants->appends([
-                                                        'search' => request('search'),
-                                                    ])->links('pagination::bootstrap-4') }}
+                                                    'search' => request('search'),
+                                                    'event_id' => request('event_id'),
+                                                ])->links('pagination::bootstrap-4') }}
+
                                             </div>
                                         </div>
                                     </div>

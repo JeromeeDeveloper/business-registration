@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use App\Models\Event;
 use App\Models\EventParticipant;
+use App\Models\GARegistration;
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithStyles;
@@ -26,9 +27,18 @@ class EventCooperativeExport implements FromArray, WithHeadings, WithStyles
         foreach ($this->events as $event) {
             $coops = EventParticipant::with('participant.cooperative')
                 ->where('event_id', $event->event_id)
-
                 ->whereNotNull('attendance_datetime')
                 ->get()
+                ->filter(function ($ep) {
+                    $coop = $ep->participant->cooperative;
+                    if (!$coop) {
+                        return false;
+                    }
+                    // Only keep cooperatives that have GARegistration with membership_status 'Migs'
+                    return GARegistration::where('coop_id', $coop->coop_id)
+                        ->where('membership_status', 'Migs')
+                        ->exists();
+                })
                 ->pluck('participant.cooperative.name')
                 ->filter()
                 ->unique()
@@ -41,7 +51,7 @@ class EventCooperativeExport implements FromArray, WithHeadings, WithStyles
             $columns[$event->title][] = "Total: " . $coops->count();
         }
 
-        // Compute the max number of rows to build the grid correctly
+        // Compute max number of rows for the table grid
         $maxRows = max(array_map('count', $columns));
 
         $finalData = [];

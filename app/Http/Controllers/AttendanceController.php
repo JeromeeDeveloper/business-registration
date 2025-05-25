@@ -18,34 +18,40 @@ class AttendanceController extends Controller
         $eventId = $request->input('event_id');
         $event = $eventId ? Event::findOrFail($eventId) : null;
 
-        $participantsQuery = EventParticipant::with(['participant.cooperative', 'participant.user', 'event'])
-            ->whereNotNull('attendance_datetime');
+        $participantsQuery = EventParticipant::with(['participant.cooperative', 'participant.user', 'event']);
 
         if ($eventId) {
             $participantsQuery->where('event_id', $eventId);
         }
 
         if ($request->search) {
-            $participantsQuery->where(function ($query) use ($request) {
-                $query->whereHas('participant', function ($participantQuery) use ($request) {
-                    $participantQuery->where('first_name', 'like', '%' . $request->search . '%')
-                        ->orWhere('last_name', 'like', '%' . $request->search . '%')
-                        ->orWhere('middle_name', 'like', '%' . $request->search . '%')
-                        ->orWhere('email', 'like', '%' . $request->search . '%')
-                        ->orWhere('designation', 'like', '%' . $request->search . '%')
-                        ->orWhereHas('user', function ($userQuery) use ($request) {
-                            $userQuery->where('name', 'like', '%' . $request->search . '%');
-                        })
-                        ->orWhereHas('cooperative', function ($cooperativeQuery) use ($request) {
-                            $cooperativeQuery->where('name', 'like', '%' . $request->search . '%');
-                        });
-                })
-                ->orWhereHas('event', function ($eventQuery) use ($request) {
-                    $eventQuery->where('title', 'like', '%' . $request->search . '%');
-                });
+            $searchTerm = strtolower(trim($request->search));
+
+            $participantsQuery->where(function ($query) use ($searchTerm) {
+                if ($searchTerm === 'not attended') {
+                    // Special case: filter those with null attendance_datetime
+                    $query->whereNull('attendance_datetime');
+                } else {
+                    // Usual search across participant and event fields
+                    $query->whereHas('participant', function ($participantQuery) use ($searchTerm) {
+                        $participantQuery->where('first_name', 'like', '%' . $searchTerm . '%')
+                            ->orWhere('last_name', 'like', '%' . $searchTerm . '%')
+                            ->orWhere('middle_name', 'like', '%' . $searchTerm . '%')
+                            ->orWhere('email', 'like', '%' . $searchTerm . '%')
+                            ->orWhere('designation', 'like', '%' . $searchTerm . '%')
+                            ->orWhereHas('user', function ($userQuery) use ($searchTerm) {
+                                $userQuery->where('name', 'like', '%' . $searchTerm . '%');
+                            })
+                            ->orWhereHas('cooperative', function ($cooperativeQuery) use ($searchTerm) {
+                                $cooperativeQuery->where('name', 'like', '%' . $searchTerm . '%');
+                            });
+                    })
+                    ->orWhereHas('event', function ($eventQuery) use ($searchTerm) {
+                        $eventQuery->where('title', 'like', '%' . $searchTerm . '%');
+                    });
+                }
             });
         }
-
 
         if ($request->filled('start_datetime') && $request->filled('end_datetime')) {
             $participantsQuery->whereBetween('attendance_datetime', [
@@ -58,19 +64,25 @@ class AttendanceController extends Controller
         $participants = $participantsQuery->paginate($perPage);
 
         $totalParticipantsWithAttendance = DB::table('participants')
-    ->join('event_participant', 'participants.participant_id', '=', 'event_participant.participant_id')
-    ->whereNotNull('event_participant.attendance_datetime') // Ensure they attended
-    ->distinct()
-    ->count('participants.participant_id');
+            ->join('event_participant', 'participants.participant_id', '=', 'event_participant.participant_id')
+            ->whereNotNull('event_participant.attendance_datetime')
+            ->distinct()
+            ->count('participants.participant_id');
 
-    $totalCoopAttended = DB::table('participants')
-    ->join('event_participant', 'participants.participant_id', '=', 'event_participant.participant_id')
-    ->whereNotNull('event_participant.attendance_datetime') // Ensures the participant attended
-    ->distinct('participants.coop_id') // Counts each coop only once
-    ->count('participants.coop_id');
+        $totalCoopAttended = DB::table('participants')
+            ->join('event_participant', 'participants.participant_id', '=', 'event_participant.participant_id')
+            ->whereNotNull('event_participant.attendance_datetime')
+            ->distinct('participants.coop_id')
+            ->count('participants.coop_id');
 
-
-        return view('components.admin.attendance.datatable', compact('participants', 'totalParticipantsWithAttendance', 'event', 'events', 'eventId', 'totalCoopAttended'));
+        return view('components.admin.attendance.datatable', compact(
+            'participants',
+            'totalParticipantsWithAttendance',
+            'event',
+            'events',
+            'eventId',
+            'totalCoopAttended'
+        ));
     }
 
 
