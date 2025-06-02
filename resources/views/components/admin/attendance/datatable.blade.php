@@ -416,46 +416,49 @@
 
 
 
-                                            <!-- Print Button -->
-                                            <div class="col-12 col-md-2 d-grid">
-                                                <label class="form-label fw-semibold text-muted">Print List</label>
-                                                <button type="button" onclick="printAttendance()"
-                                                    class="btn btn-outline-primary d-flex align-items-center justify-content-center gap-2 shadow-sm">
-                                                    <i class="fa fa-print"></i> Print
-                                                </button>
-                                            </div>
 
-                                            <!-- Excel Button -->
-                                            <div class="col-12 col-md-2 d-grid">
-                                                <label class="form-label fw-semibold text-muted">Generate
-                                                    Report Participant</label>
-                                                <a class="btn btn-outline-success d-flex align-items-center justify-content-center gap-2 shadow-sm"
-                                                    href="{{ route('export-event-participants') }}">
-                                                    <i class="fas fa-file-excel" style="color: #2a9d8f;"></i> Excel
-                                                </a>
-                                            </div>
-
-                                              <div class="col-12 col-md-2 d-grid">
-                                                <label class="form-label fw-semibold text-muted">Generate
-                                                    Report Cooperative</label>
-                                                <a class="btn btn-outline-success d-flex align-items-center justify-content-center gap-2 shadow-sm"
-                                                    href="{{ route('export-event-cooperative') }}">
-                                                    <i class="fas fa-file-excel" style="color: #2a9d8f;"></i> Excel
-                                                </a>
-                                            </div>
-
-                                            <div class="col-12 col-md-2 d-grid">
-                                                <label class="form-label fw-semibold text-muted">Generate
-                                                    Report Total</label>
-                                                <a class="btn btn-outline-success d-flex align-items-center justify-content-center gap-2 shadow-sm"
-                                                    href="{{ route('export-event-cooperative-total') }}">
-                                                    <i class="fas fa-file-excel" style="color: #2a9d8f;"></i> Excel
-                                                </a>
-                                            </div>
 
 
                                         </div>
                                     </form>
+
+                                    <div class="row gy-3 gx-3 mt-3">
+                                        <!-- Print Button -->
+                                        <div class="col-12 col-md-3 d-grid">
+                                            <label class="form-label fw-semibold text-muted">Print List</label>
+                                            <button type="button" onclick="printAttendance()"
+                                                class="btn btn-outline-primary d-flex align-items-center justify-content-center gap-2 shadow-sm">
+                                                <i class="fa fa-print"></i> Print
+                                            </button>
+                                        </div>
+
+                                        <!-- Excel Report - Participant -->
+                                        <div class="col-12 col-md-3 d-grid">
+                                            <label class="form-label fw-semibold text-muted">Generate Report Participant</label>
+                                            <a class="btn btn-outline-success d-flex align-items-center justify-content-center gap-2 shadow-sm"
+                                                href="{{ route('export-event-participants') }}">
+                                                <i class="fas fa-file-excel" style="color: #2a9d8f;"></i> Excel
+                                            </a>
+                                        </div>
+
+                                        <!-- Excel Report - Cooperative -->
+                                        <div class="col-12 col-md-3 d-grid">
+                                            <label class="form-label fw-semibold text-muted">Generate Report Cooperative</label>
+                                            <a class="btn btn-outline-success d-flex align-items-center justify-content-center gap-2 shadow-sm"
+                                                href="{{ route('export-event-cooperative') }}">
+                                                <i class="fas fa-file-excel" style="color: #2a9d8f;"></i> Excel
+                                            </a>
+                                        </div>
+
+                                        <!-- Excel Report - Total -->
+                                        <div class="col-12 col-md-3 d-grid">
+                                            <label class="form-label fw-semibold text-muted">Generate Report Total</label>
+                                            <a class="btn btn-outline-success d-flex align-items-center justify-content-center gap-2 shadow-sm"
+                                                href="{{ route('export-event-cooperative-total') }}">
+                                                <i class="fas fa-file-excel" style="color: #2a9d8f;"></i> Excel
+                                            </a>
+                                        </div>
+                                    </div>
 
                                     <div class="table-responsive">
                                         <table id="add-row" class="display table table-striped table-hover">
